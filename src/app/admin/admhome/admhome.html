@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="buss-header">
+        <img id="buslogo" src="assets/logo/hbt.PNG" alt="">
+        <header>Hanest Beauty Trends</header>
+    </div>
+    <!-- <section>
+        <p-iconfield>
+            <p-inputicon class="pi pi-search" />
+            <input type="text" pInputText placeholder="Search" />
+        </p-iconfield>
+    </section> -->
+    <p-toolbar>
+        <ng-template #start>
+            <p-button (click)="dropMenu = true" icon="pi pi-bars" label="Menu" />
+        </ng-template>
+    </p-toolbar>
+</div>
+<div class="card flex justify-center">
+    <p-drawer [(visible)]="dropMenu" header="Drawer">
+        <p-button type="button" label="Manage Categories" icon="pi pi-folder-plus" routerLink='addcartegory'
+            styleClass="min-w-48" severity="secondary" />
+        <p-button type="button" label="Manage Product" icon="pi pi-objects-column" routerLink='products'
+            styleClass="min-w-48" severity="secondary" />
+        <p-button icon="pi pi-venus" label="Manage Group" class="mr-2" routerLink="targetgroup" text
+            severity="secondary" styleClass="min-w-48" />
+        <p-button icon="pi pi-venus" label="Manage Brand" class="mr-2" routerLink="productbrand" text
+            severity="secondary" styleClass="min-w-48" />
+        <p-button icon="cedi-icon" label="Pricing" class="mr-2" routerLink="pricing" text severity="secondary"
+            styleClass="min-w-48" />
+    </p-drawer>
+</div>
+<div id="routercontainer">
+    <router-outlet></router-outlet>
+</div>

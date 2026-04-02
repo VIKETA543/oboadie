@@ -1,0 +1,173 @@
+main {
+    margin-top: calc(5%);
+}
+header{
+    padding: 10px;
+    font-size: 1.5vw;
+    font-weight: bold;
+    
+}
+.price-tag{
+::ng-deep {
+
+        .p-drawer{
+            max-width: calc(100% - 0%);
+            width: calc(100%);
+        }
+    }
+}
+
+.edit-price-tag{
+    ::ng-deep{
+            .p-drawer{
+              max-width: calc(100% - 60%);
+            width: calc(50%);
+                height: 70vh;
+           
+            }
+    }
+}
+
+.new-price-container{
+    ::ng-deep{
+            .p-drawer{
+              max-width: calc(100% - 0%);
+            width: calc(100% - 0%);
+            }
+            .edit-price-tag{
+                display: flex;
+                flex: 1;
+                .p-select{
+                    margin: 10px;
+                }
+                .style-padding{
+                    border: 1px solid lightgrey;
+                    
+                    margin: 10px;
+                    width: 100%;
+                    padding: 10px;
+                    
+                    p{
+                        color: rgb(2, 117, 79);
+                    }
+                }
+            }
+    }
+}
+
+.new-pricetag-container {
+    background-color: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    top: 9%;
+    z-index: 28;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.tag-container{
+    margin: 5rem auto;
+    max-width: calc(100% - 70%);
+    min-width: calc((100% - 70%));
+    width: calc(100% - 70%);
+    background-color: white;
+    padding: 0px;
+     height: 37rem;
+      border-radius: .3em;
+    overflow: hidden;
+    header{
+    color: whitesmoke;
+    font-size: 1.5vw;
+    background-color: green;
+    width: calc(100%);
+  
+}
+}
+.select-img{
+max-width: 20px;
+margin-right: 50px;
+}
+.price-input{
+    font-size: 2vw;
+    padding-left: 20px;
+}
+.header-id{
+ padding: 20px;
+ margin: 20px;
+ border-radius: .3em;
+ box-shadow: 0px 0px 1px 1px lightgrey;
+ border:  1px dotted grey;
+ label{
+    display: block;
+    width: calc(48%);
+    color:rgb(3, 52, 80);
+    font-weight: bolder;
+    font-size: 1.5vw;
+
+ }
+}
+.field-input{
+    margin: 10px;
+    width: 97%;
+    font-size: 1.5vw;
+    padding: 10px;
+   p-floatlabel{
+    width: calc(100%);
+
+    p-iconfield{
+        padding-left: 0px;
+    }
+   }
+}
+.inputfields{
+    width: 100%;
+    margin: 10px;
+    padding-right: 20px;
+}
+.enter-animation {
+    animation: slide-fade 1s;
+}
+:host ::ng-deep {
+  .cedi-icon {
+    width: 1rem; /* Adjust size as needed */
+    height: 1rem; /* Adjust size as needed */
+    background-image: url("/assets/icons/cedi.svg");  
+    background-size: contain; /* Ensure the image fits within the bounds */
+    display: inline-block; /* Required for the background to show */
+    padding: 10px;
+        margin-right: 10px;
+
+
+  }
+
+  .describe-icon{
+
+ width: 2rem; /* Adjust size as needed */
+    height: 2rem; /* Adjust size as needed */
+    background-image: url("/assets/icons/describe.svg");  
+    background-size: contain; /* Ensure the image fits within the bounds */
+    display: inline-block; /* Required for the background to show */
+    margin-right: 20px;
+
+    
+  }
+}
+#auth{
+    margin-left: 20px;
+}
+
+.price-label{
+    display: block;
+    width: calc(100% - 70%);
+}
+
+@keyframes slide-fade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,153 @@
+<main>
+    <div>
+        <p-toolbar>
+            <ng-template #start>
+                <p-button icon="pi pi-plus" class="mr-2" text severity="secondary" label="New Cartegory"
+                    (onClick)="shownewCart()" />
+                <p-button icon="pi pi-print" class="mr-2" text severity="secondary" />
+                <p-button icon="pi pi-upload" text severity="secondary" />
+            </ng-template>
+            <ng-template #center>
+                <p-iconfield iconPosition="left">
+                    <p-inputicon class="pi pi-search" />
+                    <input type="text" pInputText placeholder="Search" />
+                </p-iconfield>
+            </ng-template>
+        </p-toolbar>
+        <p-table [value]="categories" [tableStyle]="{ 'min-width': '60rem' }">
+            <ng-template #caption>
+                <!-- <div class="flex items-center justify-between">
+                    <span class="text-xl font-bold">Products</span>
+                    <p-button icon="pi pi-refresh" rounded raised />
+                </div> -->
+            </ng-template>
+            <ng-template #header>
+                <tr>
+                    <th>serial</th>
+                    <th>category</th>
+                    <th>description</th>
+                    <th>image</th>
+                    <th>Reviews</th>
+                    <th>Status</th>
+                    <th>date</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-categories>
+                <tr>
+                    <td>{{ categories.serialnumber }}</td>
+                    <td>{{ categories.category_name }}</td>
+                    <td>{{ categories.description }}</td>
+                    <td>
+                        <img [src]="categories.imageurl" [alt]="categories.category_name" class="w-24 rounded table-img" />
+                    </td>
+                    <td><p-rating [(ngModel)]="categories.Reviews" [readonly]="true" /></td>
+                    <td>
+                        <p-tag [value]="categories.Status" [severity]="getSeverity(categories.Status)" />
+                    </td>
+                    <td>{{ categories.date_updated }}</td>
+                    <td>
+                        <div class="flex items-center justify-between">
+                            <p-toast />
+                            <p-confirmpopup />
+                            <p-button icon="pi pi-trash" label="Del" severity="danger"
+                                (onClick)="dropCart($event,categories.serialnumber)" rounded raised />
+                        </div>
+
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template #footer>
+                <tr>
+                    <td colspan="6">In total there are {{ categories ? categories.length : 0 }} products.</td>
+                    <td>
+                        <div class="flex items-center justify-between">
+                            <p-toast />
+                            <p-confirmpopup />
+                            <p-button icon="pi pi-trash" label="Clear Records" severity="contrast"
+                                (onClick)="clearRecords($event)" rounded raised />
+                        </div>
+                    </td>
+                </tr>
+
+            </ng-template>
+        </p-table>
+
+    </div>
+    @if(shownewcart){
+    <div class="flex new-cart-container" animate.enter="enter-animation">
+        <div class="crt-inner">
+            <header>
+                <span>
+                    Create a new category
+                </span>
+                 <p-button icon="pi pi-times" aria-label="" label="" class="apply" (onClick)="closeCart()" />
+            </header>
+            <section class="card flex justify-center">
+                <label>SERIAL NUMBER &nbsp;&nbsp;</label>
+                <label>{{this.serialnumber}}</label>
+            </section>
+            <section>
+                <p-iconfield>
+                    <p-inputicon class="pi pi-pencil" />
+                    <input type="text" pInputText placeholder="New Cartegory" [(ngModel)]='newCategory' />
+                </p-iconfield>
+            </section>
+            <section>
+                <p-floatlabel variant="in">
+                    <textarea pTextarea id="in_label" [(ngModel)]="description" rows="5" cols="30" style="resize: none"
+                        class="h-full"></textarea>
+                    <label for="in_label">In Label</label>
+                </p-floatlabel>
+            </section>
+
+            <section class="card flex justify-center">
+                <!--  class="card flex justify-center" -->
+                @if(preview){
+                <img [src]="preview" class="preview" animate.enter="enter-animation">
+                }
+                <!-- -->
+                @if(preview){
+                <input type="file" id="pasportImage" accept="image/*" [(ngModel)]="selectedImage" #fileUpload
+                    (change)="uploadFile($event)">
+
+                <div class="card">
+                    <div class="dock-window">
+                        <p-dock [model]="items" [position]="position">
+                            <ng-template #item let-item>
+                                <label for="pasportImage">
+                                    <img [pTooltip]="item.label" tooltipPosition="top" [src]="item.icon"
+                                        [alt]="item.label" width="100%" />
+                                </label>
+                            </ng-template>
+                        </p-dock>
+                    </div>
+                </div>
+                }@else {
+
+                <input type="file" id="pasportImage" accept="image/*" #fileUpload [(ngModel)]="selectedImage"
+                    (change)="uploadFile($event)">
+                     <div class="card dock-container">
+                    <div class="dock-window1">
+                <p-dock [model]="items1" [position]="position1">
+                    <ng-template #item let-item>
+                        <label for="pasportImage">
+                            <img [pTooltip]="item.label" tooltipPosition="top" [src]="item.icon" [alt]="item.label"
+                                width="100%" />
+                        </label>
+                    </ng-template>
+                </p-dock>
+                </div>
+                </div>
+                }
+            </section>
+            @if(preview){
+            <section>
+                <p-button icon="pi pi-upload" aria-label="Apply" label="Apply" class="apply" (onClick)="apply()" />
+            </section>
+            }
+
+        </div>
+    </div>
+    }
+</main>

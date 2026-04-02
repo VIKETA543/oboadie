@@ -1,0 +1,199 @@
+<main>
+    <div class="card gr-bar">
+        <p-toolbar>
+            <ng-template #start>
+
+                <p-button icon="pi pi-print" class="mr-2" text severity="secondary" />
+                <p-button icon="pi pi-upload" text severity="secondary" />
+            </ng-template>
+            <ng-template #center>
+                <p-select [options]="brandList" [(ngModel)]="selectedBrand" (onChange)="selectBrand($event)"
+                    optionLabel="title" [filter]="true" filterBy="title" [showClear]="true" placeholder="Select a Brand"
+                    class="w-full md:w-56">
+                    <ng-template #selectedItem let-brandList>
+                        <div class="flex items-center gap-2">
+                            <img [src]="brandList.imageurl" [alt]="brandList.title" class="w-24 rounded select-img" />
+                            <div>{{ brandList.title }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-brandList #item>
+                        <div class="flex items-center gap-2">
+                            <img [src]="brandList.imageurl" [alt]="brandList.title" class="w-24 rounded select-img" />
+                            <div>{{ brandList.title}}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+                <p-button icon="pi pi-refresh" class="mr-2" label="Reload" severity="secondary"
+                    (onClick)="refreshData()" />
+
+            </ng-template>
+
+            <ng-template #end>
+                <p-button icon="pi pi-plus" class="mr-2" label="Add Brand" severity="secondary"
+                    (onClick)="newBrand()" />
+            </ng-template>
+        </p-toolbar>
+        <header>Manage Product Brand</header>
+    </div>
+
+    <div>
+
+    </div>
+    @if(brandData){
+    <div class="card">
+        <p-table [value]="brandData" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header>
+                <tr>
+                    <th class="w-1/6">Brand ID</th>
+                    <th class="w-1/6"> Brand Name</th>
+                    <th class="w-1/6">image</th>
+                    <th class="w-1/6">Cartegory</th>
+                    <th class="w-1/6">Role</th>
+                    <th class="w-1/6">Details</th>
+                    <th class="w-1/6">Action</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-bradData>
+                <tr>
+                    <td>{{ bradData.brandid }}</td>
+                    <td>{{ bradData.title }}</td>
+                    <td><img [src]="bradData.imageurl" [alt]="bradData.title" class="rounded-border"
+                            [style]="{ width: '2rem', overflow: 'hidden' }" /></td>
+                    <td>{{ bradData.category_name }}</td>
+                    <td>{{ bradData.role }}</td>
+                    <td> <p-button (onClick)="displayBrand(bradData,$event); toggle($event)" icon="pi pi-search"
+                            severity="secondary" rounded /></td>
+                    <td> <p-button (onClick)="dropBrand(bradData)" icon="pi pi-trash" severity="danger" rounded /></td>
+                </tr>
+            </ng-template>
+        </p-table>
+        @if(selectedBrand){
+        <p-popover #op>
+            <div class="flex flex-col gap-4">
+                <div>
+                    <span class="font-medium block mb-2" severity="primary">Details</span>
+                    <p-card [style]="{ width: '25rem', overflow: 'hidden' }">
+                        <ng-template #header>
+                            <hr>
+                            <img [src]="selectedBrand.imageurl" [alt]="selectedBrand.title"
+                                class="w-24 rounded-border " />
+                        </ng-template>
+                        <ng-template #title>Brand info</ng-template>
+                        <ng-template #subtitle>{{selectedBrand.title}} : {{selectedBrand.brandid}}</ng-template>
+                        <ng-template #subtitle>{{selectedBrand.category_name}} </ng-template>
+                        <p>Details : {{selectedBrand.role}}</p>
+                        <hr>
+                        <p>Date Created :{{selectedBrand.date_created}}</p>
+                    </p-card>
+                </div>
+            </div>
+        </p-popover>
+        }
+    </div>
+    }@else {
+
+    }
+
+    @if(isNewBrand){
+    <div class="card flex justify-center new-group-container" animate.enter="enter-animation">
+        <div class="crt-inner">
+            <header>
+                <span class="mr-2" severity="info">New Brand</span>
+                <p-button icon="pi pi-times" class="mr-2" text severity="secondary" (onClick)="closeBrand()" />
+            </header>
+            <div class="t-gr-p">
+                <section>
+                    <label class="g-p-id">BRAND ID</label>
+                    <label class="g-p-id">{{groupID}}</label>
+                </section>
+            </div>
+            <div class="t-gr-p">
+                <section>
+                    <p-floatlabel variant="in">
+                        <input pInputText id="in_label" [(ngModel)]="GroupTitle" autocomplete="on" />
+                        <label for="in_label">Brand Name</label>
+                    </p-floatlabel>
+                </section>
+            </div>
+
+            <div class="t-gr-p">
+                <section>
+                    <div>
+                        <p-select [options]="productCart" [(ngModel)]="selectedCart"
+                            (onChange)="selectionOption($event)" optionLabel="category_name" [filter]="true"
+                            filterBy="category_name" [showClear]="true" placeholder="Select a Category"
+                            class="w-full md:w-56">
+                            <ng-template #selectedItem let-productCart>
+                                <div class="flex items-center gap-2">
+                                    <img [src]="productCart.imageurl" [alt]="productCart.category_name"
+                                        class="w-24 rounded select-img" />
+                                    <div>{{ productCart.category_name }}</div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-productCart #item>
+                                <div class="flex items-center gap-2">
+                                    <img [src]="productCart.imageurl" [alt]="productCart.category_name"
+                                        class="w-24 rounded select-img" />
+                                    <div>{{ productCart.category_name}}</div>
+                                </div>
+                            </ng-template>
+                        </p-select>
+                    </div>
+                </section>
+
+            </div>
+
+
+
+
+
+            <div class="t-gr-p">
+                <section>
+                    <p-floatlabel variant="in">
+                        <textarea pTextarea id="in_label" [(ngModel)]="groupRole" rows="5" cols="30"
+                            style="resize: none" class="h-full"></textarea>
+                        <label for="in_label">Details of this Brand</label>
+                    </p-floatlabel>
+                </section>
+
+                <section>
+                         <label>Add Brand Image</label>
+                    <label for="groupImage">
+
+                        <img id="grp-cam-logo" src="assets/logo/camera-lens.png" alt="">
+                        <input type="file" id="groupImage" accept="image/*" #fileUpload [(ngModel)]="groupImage"
+                            (change)="uploadFile($event)">
+                    </label>
+
+                </section>
+                @if(preview){
+                <div class="bottom-footer" animate.enter="enter-animation">
+
+                    <label>
+                        <img [src]="preview" class="preview" animate.enter="enter-animation">
+                    </label>
+                    <div class="sub-rapper">
+                        <p-button icon="pi pi-upload" class="mr-2" label="Add Brand" severity="primary"
+                            (onClick)="submitBrand()" />
+                        <p-button icon="pi pi-times" class="mr-2" label="" severity="danger"
+                            (onClick)="CloseBrandpre()" />
+                    </div>
+                </div>
+                }
+           
+            </div>
+        </div>
+    </div>
+    }
+    @if(targetgroup){
+
+    }@else {
+    <ng-template>
+        Create a target group to manage product types. e.g. (kids, gilrs, Men etc)
+    </ng-template>
+    }
+
+    <div class="card flex justify-center">
+        <p-toast />
+    </div>
+</main>

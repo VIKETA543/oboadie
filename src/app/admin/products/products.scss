@@ -1,0 +1,216 @@
+main {
+    margin-top: calc(4%);
+}
+.product-bar{
+    header{
+        max-width: calc(100%);
+        background-color: rgb(130, 135, 139);
+        padding: 10px;
+        font-size: 1.5vw;
+        font-weight: bolder;
+        color: gold;
+    }
+}
+
+.select-img{
+max-width: 20px
+}
+.carousel-trends-static {
+    // box-shadow: 0px 0px 5px 2px rgb(138, 137, 137);
+    max-width: cal(100% - 0%);
+    min-width: cal(100% - 60%);
+    margin-top: 20px;
+
+    h3 {
+        color: rgb(2, 75, 50);
+        padding-left: 5ch;
+    }
+
+}
+.new-product-container {
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    top: 9%;
+    z-index: 25;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.crt-inner {
+    position: relative;
+    margin: 20px auto;
+    width: 70%;
+    background-color: rgb(255, 255, 255);
+    border-radius: .3em;
+    box-shadow: 0px 0px 5px 1px rgb(128, 126, 126);
+    max-height: 70vh;
+    overflow-y: auto;
+    header {
+        padding: 10px;
+        border-bottom: 1px solid  rgb(59, 2, 29);
+        margin-bottom: 10px;
+        font-size: 1.5vw;
+        display: flex;
+        span{
+            display: block;
+            max-width: calc(100% - 0%);
+            width: 100%;
+                 color: rgb(59, 2, 29);
+        }
+      
+        ::ng-deep{
+            .p-button{
+                background-color: transparent !important;
+                border: 0px !important;
+                outline:  0px !important;
+                color: rgb(52, 53, 53);
+            }
+        }
+    }
+      #info{
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid  rgb(59, 2, 29);
+            border-radius: .3em;
+            box-shadow: 0px 0px 3px 1px rgb(52, 53, 53);
+            display: block;
+            max-width: 1000%;
+            word-wrap: break-word;
+        }
+    section {
+        margin: 10px auto;
+        // background-color: red;
+        padding: 20px;
+        width: calc(100% - 50%);
+        box-shadow: 0px 0px 10px 2px lightgray;
+
+        ::ng-deep {
+            .p-floatlabel {
+
+                flex: 1;
+
+                ::ng-deep {
+                    textarea {
+                        width: 100%;
+
+                    }
+                }
+            }
+
+            .p-iconfield {
+                padding: 0px;
+
+                ::ng-deep {
+                    input {
+                        width: 100%;
+                        padding-top: 10px;
+                        padding-bottom: 10px;
+                        font-size: 1.5vw;
+
+                    }
+                }
+            }
+        }
+
+        .preview {
+                width: calc(100% - 40%);
+        }
+    }
+    .productCode{
+        border-radius: .3em;
+        margin: 10px;
+        max-width: calc(100% - 2%);
+        min-width: calc((100% - 70%));
+        width: calc(50%);
+    }
+
+}
+.iconwrapper {
+    position: fixed;
+    border-radius: .3em;
+    box-shadow: 0px 0px 10px 2px lightgray;
+    border: 1px solid whitesmoke;
+    padding: 5px;
+    overflow: hidden;
+ background-color: rgba(0, 0, 0, 0.7);
+    #controlsImge {
+
+    position: relative;
+    margin: 0px auto;
+    border-radius: .3em;
+    box-shadow: 0px 0px 10px 2px lightgray;
+    border: 1px solid whitesmoke;
+    width: calc(100% - 1%);
+    padding: 5px;
+    overflow: hidden;
+    opacity: .9;
+
+    
+}
+}
+
+
+#imageInner {
+    display: flex;
+}
+
+#pasportImage {
+    display: none;
+}
+
+#loadImage {
+    font-size: 2vw;
+    overflow: hidden;
+    width: auto;
+    height: auto;
+    margin: 10px auto;
+    color: rgb(255, 255, 255);
+    padding: 0px;
+}
+
+:host ::ng-deep {
+    .dock-window {
+        width: calc(100% - 90%);
+        height: 14vh;
+        position: relative;
+
+        background-image: url('https://primefaces.org/cdn/primeng/images/dock/window.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        overflow: hidden;
+    }
+
+       .dock-window1 {
+        width: calc(100% - 90%);
+        height: 10vh;
+        border-radius: 15em;
+        color: goldenrod;
+        position: absolute;
+        top: 66%;
+        left: 24%;
+         background-image: url('https://primefaces.org/cdn/primeng/images/dock/window.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        overflow: hidden;
+         background-color: rgba(114, 113, 113, 0.7);
+    }
+    .p-dock {
+        z-index: 1000;
+    }
+}
+
+.enter-animation {
+    animation: slide-fade 1s;
+}
+
+@keyframes slide-fade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

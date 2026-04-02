@@ -1,0 +1,496 @@
+<main>
+    <div>
+        <header>Price Control</header>
+    </div>
+    <div class="card">
+        <p-toolbar>
+            <ng-template #start>
+                <p-button icon="pi pi-plus" class="mr-2" label="New Price" text severity="secondary"
+                    (onClick)="newproductPrice()" />
+                <!-- <p-button icon="pi pi-print" class="mr-2" text severity="secondary" />
+                <p-button icon="pi pi-upload" text severity="secondary" /> -->
+            </ng-template>
+
+            <ng-template #center>
+                <p-select [options]="productList" [(ngModel)]="selectedProduct" (onChange)="selectproduct($event)"
+                    optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a product"
+                    class="w-full md:w-56">
+                    <ng-template #selectedItem let-productList>
+                        <div class="flex items-center gap-2">
+                            <img [src]="productList.imageurl" [alt]="productList.name"
+                                class="w-24 rounded select-img" />
+                            <div>{{ productList.name }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-productList #item>
+                        <div class="flex items-center gap-2">
+                            <img [src]="productList.imageurl" [alt]="productList.name"
+                                class="w-24 rounded select-img" />
+                            <div>{{ productList.name}}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+                <p-divider type="solid" />
+                <p-select [options]="prices" [(ngModel)]="selectedprice" (onChange)="selectPrice($event)"
+                    optionLabel="title" [filter]="true" filterBy="title" [showClear]="true" placeholder="Select a price"
+                    class="w-full md:w-56">
+                    <ng-template #selectedItem let-groupData>
+                        <div class="flex items-center gap-2">
+                            <img [src]="groupData.imageurl" [alt]="groupData.title" class="w-24 rounded select-img" />
+                            <div>{{ groupData.title }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-groupData #item>
+                        <div class="flex items-center gap-2">
+                            <img [src]="groupData.imageurl" [alt]="groupData.title" class="w-24 rounded select-img" />
+                            <div>{{ groupData.title}}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+                <p-button icon="pi pi-refresh" class="mr-2" label="Reload" severity="secondary"
+                    (onClick)="refreshData()" />
+            </ng-template>
+            <ng-template #end>
+                <p-button label="Manage Price Tag" icon="pi pi-chevron-left" (onClick)="addpriceTag()" />
+            </ng-template>
+        </p-toolbar>
+    </div>
+
+
+    <!-- setting price tag proframmed -->
+    <div class="card flex justify-center price-tag">
+        <p-drawer [(visible)]="drawerVisibility" header="Price Tag Manager">
+            <div class="card">
+                <p-toolbar>
+                    <ng-template #start>
+                        <p-button icon="pi pi-plus" class="mr-2" label="New Price Tag" (onClick)="newpriceTag()" text
+                            severity="primary" />
+                        <p-button icon="pi pi-print" class="mr-2" text severity="secondary" />
+                    </ng-template>
+                    <ng-template #center>
+                        <p-select [options]="priceTag" [(ngModel)]="selectedTag" (onChange)="selectpriceTag($event)"
+                            optionLabel="pricetag" [filter]="true" filterBy="pricetag" [showClear]="true"
+                            placeholder="Select a price Tag" class="w-full md:w-58">
+                            <ng-template #selectedItem let-priceTag>
+                                <div class="flex items-center gap-4">
+                                    <!-- <img [src]="groupData.imageurl" [alt]="groupData.title" -->
+                                    <!-- class="w-24 rounded select-img" /> -->
+                                    <!-- <p-inputicon class="cedi-icon w-24 rounded select-img" /> -->
+                                    <div>{{ priceTag.pricetag }}</div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-priceTag #item>
+                                <div class="flex items-center gap-4">
+                                    <!-- <p-inputicon class="cedi-icon w-24 rounded select-img" />  -->
+                                    <div>{{ priceTag.pricetag}}</div>
+                                </div>
+                            </ng-template>
+                        </p-select>
+                        <p-button icon="pi pi-refresh" class="mr-2" label="Reload prices" severity="secondary"
+                            (onClick)="refreshPriceTag()" />
+
+                    </ng-template>
+                    <ng-template #end>
+                        <!-- <p-button label="Manage Price Tag" (onClick)="addpriceTag()" /> -->
+                    </ng-template>
+                </p-toolbar>
+            </div>
+
+            @if(pricetagDetails){
+            <div class="card">
+                <p-table [value]="pricetagDetails" [tableStyle]="{ 'min-width': '50rem' }">
+                    <ng-template #header>
+                        <tr>
+                            <th>No</th>
+                            <th>Price ID</th>
+                            <th>Price Tag</th>
+                            <th>Date Added</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-pricetagDetails>
+                        <tr>
+                            <td>{{ pricetagDetails.sn }}</td>
+                            <td>{{ pricetagDetails.pricetagid }}</td>
+                            <td>{{ pricetagDetails.pricetag }}</td>
+                            <td>{{ pricetagDetails.datemodified }}</td>
+                            <td>{{ pricetagDetails.description }}</td>
+                            <td class="card flex justify-center">
+                                <!-- {{ pricetagDetails.auth }} -->
+                                <div class="card flex justify-center">
+                                    <p-toggleswitch [(ngModel)]="pricetagDetails.auth "
+                                        (onChange)="authTag(pricetagDetails,$event)" />
+
+                                </div>
+                                <p-splitbutton severity="info" id="auth" label="Edit"
+                                    (onClick)="setPricetagParam(pricetagDetails)" [model]="items"
+                                    (mouseenter)="eventsetter(pricetagDetails)" />
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            }
+
+
+
+
+            @if(newTag){
+            <div class="card flex justify-center new-pricetag-container" animate.enter="enter-animation">
+                <div class="tag-container">
+                    <header>
+                        <i class="pi pi-tag" style="color: green"></i>
+                        New price Tag
+                    </header>
+                    <section class="flex justify-center header-id">
+                        <label>Price Tag Id</label>
+                        <label>{{pricetagID}}</label>
+                    </section>
+
+                    <div class="card flex flex-wrap justify-center items-end  field-input">
+
+                        <p-floatlabel variant="in">
+                            <p-iconfield>
+                                <!-- <p-inputicon class="describe-icon" /> -->
+                                <input pInputText id="tagName" class="inputfields" [(ngModel)]="pricetagName"
+                                    autocomplete="on" />
+                                <label for="tagName">Enter Price Tag</label>
+                            </p-iconfield>
+                        </p-floatlabel>
+
+
+
+                        <!-- <p>Price quote must be in currency format such as Ghø0.00</p> -->
+                        <div class="card flex flex-wrap justify-center items-end field-input">
+                            <p-floatLabel variant="in">
+                                <p-iconfield>
+                                    <textarea rows="5" cols="30" id="describepricequote" class="inputfields" pTextarea
+                                        [(ngModel)]="describepricequote"></textarea>
+                                    <label for="describepricequote"> Quote Description</label>
+                                </p-iconfield>
+
+                            </p-floatLabel>
+                        </div>
+                        <hr>
+                        <div class="card flex flex-wrap justify-center items-end">
+                            <p-button label="Save" icon="pi pi-check" iconPos="left" (onClick)="submitQuote()" />
+                            <p-button label="Cancel" icon="pi pi-times" iconPos="left" severity="danger"
+                                (onClick)="closePane()" />
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            }
+
+            @if(editselectedPricetag){
+            <div class="edit-price-tag">
+                <p-drawer [(visible)]="visibleBottom" header="Edit price tag" position="right" [modal]="false">
+                    <section class=" card flex justify-center header-id">
+                        <label>Tag ID</label>
+                        <label>{{editselectedPricetag.pricetagid}}</label>
+                    </section>
+                    <div class="card flex flex-wrap justify-center items-end  field-input">
+                        <p-floatlabel variant="in">
+                            <p-iconfield>
+                                <input pInputText id="tagName" class="inputfields"
+                                    value={{editselectedPricetag.pricetag}} [(ngModel)]="editpricetagName"
+                                    autocomplete="on" />
+                                <label for="tagName">Enter Price Tag</label>
+                            </p-iconfield>
+                        </p-floatlabel>
+                        <div class="card flex flex-wrap justify-center items-end field-input">
+                            <p-floatLabel variant="in">
+                                <p-iconfield>
+                                    <textarea rows="5" cols="30" id="describepricequote" class="inputfields" pTextarea
+                                        [(ngModel)]="describepricequote"
+                                        value="{{editselectedPricetag.description}}"></textarea>
+                                    <label for="describepricequote"> Quote Description</label>
+                                </p-iconfield>
+
+                            </p-floatLabel>
+                        </div>
+                        <div class="card flex flex-wrap justify-center items-end">
+                            <p-button label="Update Redords" icon="pi pi-check" iconPos="left"
+                                (onClick)="submitQuote()" />
+
+                        </div>
+
+                    </div>
+                </p-drawer>
+
+            </div>
+            }
+        </p-drawer>
+
+    </div>
+
+    <!-- Setting product prices -->
+
+    @if(priceDetails){
+    <div class="card">
+        <p-table [value]="priceDetails" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header>
+                <tr>
+                    <th>No</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th>Group</th>
+                    <th>Location</th>
+                    <th>price</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+
+            <!-- productid:string,
+    :string,
+    category:string,
+    :string,
+    brand:string,
+    :string,
+    :string,
+    :string,
+    :number,
+    priceid:string -->
+
+            <ng-template #body let-priceDetails>
+                <tr>
+                    <td>{{ rowcounter+1 }}</td>
+                    <td>{{ priceDetails.name }}</td>
+                    <td>{{ priceDetails.category_name }}</td>
+                    <td>{{ priceDetails.title }}</td>
+                    <td>{{ priceDetails.targetgroup }}</td>
+                    <td>{{ priceDetails.grouptitle }}</td>
+                    <td>{{ priceDetails.price }}</td>
+                    <td class="card flex justify-center">
+                        <!-- {{ pricetagDetails.auth }} -->
+
+                        <p-splitbutton severity="info" id="auth" label="Edit"
+                            (onClick)="selectedpricedetails(priceDetails)" [model]="items"
+                            (mouseenter)="selectedPriceeventsetter(priceDetails)" />
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    }@else {
+    <ng-template>
+        <p>{{message}}</p>
+    </ng-template>
+    }
+    <div class="new-price-container">
+        <p-drawer p-drawer [(visible)]="propricedrawer" header="Product Price" position="left" [modal]="false">
+            <div class="edit-price-tag">
+                <div class="card  style-padding">
+                    <p>Use price tag to group prices of products</p>
+                    <p-divider />
+                    <p-select [options]="pricetagList" [(ngModel)]="selectedPriceTagList"
+                        (onChange)="selectpriceTag($event)" optionLabel="pricetag" [filter]="true" filterBy="pricetag"
+                        [showClear]="true" placeholder="Select price group" class="w-full md:w-58">
+                        <ng-template #selectedpricetag let-pricetagList>
+                            <div class="flex items-center gap-4">
+                                <div>{{ pricetagList.pricetag }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-pricetagList #pricetagitem>
+                            <div class="flex items-center gap-4">
+                                <div>{{ pricetagList.pricetag}}</div>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                </div>
+                <div class="card  items-center gap-4 style-padding">
+                    <p>Add product category to this price to idenfity the price status</p>
+                    <p-divider />
+                    <p-select [options]="categories" [(ngModel)]="selectedcategory" (onChange)="selectedCart($event)"
+                        optionLabel="category_name" [filter]="true" filterBy="category_name" [showClear]="true"
+                        placeholder="Select Product Category" class="w-full md:w-58">
+                        <ng-template #selectedcategory let-categories>
+                            <div class="flex items-center gap-4">
+                                <img [src]="categories.imageurl" [alt]="categories.category_name"
+                                    class="w-24 rounded select-img" />
+                                <!-- <p-inputicon class="cedi-icon w-24 rounded select-img" /> -->
+                                <div>{{ categories.category_name }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-categories #categoryitem>
+                            <div class="flex items-center gap-4">
+                                <img [src]="categories.imageurl" [alt]="categories.category_name"
+                                    class="w-24 rounded select-img" />
+                                <!-- <p-inputicon class="cedi-icon w-24 rounded select-img" /> -->
+                                <div>{{ categories.category_name}}</div>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                </div>
+
+
+            </div>
+            <div class="edit-price-tag">
+                <div class="card  items-center gap-4 style-padding">
+                    <p>Assign price to product brand</p>
+                    <p-divider />
+
+                    <p-select [options]="brandList" [(ngModel)]="selectedbrand" (onChange)="selectpriceBrand($event)"
+                        optionLabel="title" [filter]="true" filterBy="title" [showClear]="true"
+                        placeholder="Select Product Brand" class="w-full md:w-58">
+                        <ng-template #selectedbrnd let-brandList>
+                            <div class="flex items-center gap-4">
+                                <img [src]="brandList.imageurl" [alt]="brandList.title"
+                                    class="w-24 rounded select-img" />
+                                <!-- <p-inputicon class="cedi-icon w-24 rounded select-img" /> -->
+                                <div>{{ brandList.title }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-brandList #branditem>
+                            <div class="flex items-center gap-4">
+                                <img [src]="brandList.imageurl" [alt]="brandList.title"
+                                    class="w-24 rounded select-img" />
+                                <div>{{ brandList.title}}</div>
+                            </div>
+                        </ng-template>
+
+                    </p-select>
+                </div>
+
+                <div class="card  items-center gap-4 style-padding">
+                    <p>Assign assign a target grouping to this price object</p>
+                    <p-divider />
+
+                    <p-select [options]="groupList" [(ngModel)]="selectesgroup" (onChange)="selectionGroup($event)"
+                        optionLabel="title" [filter]="true" filterBy="title" [showClear]="true"
+                        placeholder="Select a Category" class="w-full md:w-56">
+                        <ng-template #selectedItem let-groupList>
+                            <div class="flex items-center gap-2">
+                                <img [src]="groupList.imageurl" [alt]="groupList.title"
+                                    class="w-24 rounded select-img" />
+                                <div>{{ groupList.title }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-groupList #item>
+                            <div class="flex items-center gap-2">
+                                <img [src]="groupList.imageurl" [alt]="groupList.title"
+                                    class="w-24 rounded select-img" />
+                                <div>{{ groupList.title}}</div>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                </div>
+            </div>
+            <p-divider />
+            <div class="card flex flex-wrap justify-center gap-4">
+
+                <div>
+                    <p>Price Calculator</p>
+                    <div>
+                        <div class="card flex flex-wrap justify-center gap-4">
+                            <div class="flex items-center">
+                                <p-checkbox inputId="unitCost" name="unitCost" value="unitCost"
+                                    [(ngModel)]="unitCost" />
+                                <label for="unitCost" class="ml-2"> Unit Cost Calculator </label>
+                            </div>
+                            <div class="flex items-center">
+                                <p-checkbox inputId="marginPrices" name="marginPrices" value="marginPrices"
+                                    [(ngModel)]="marginPrices" />
+                                <label for="marginPrices" class="ml-2"> Cost base calculator </label>
+                            </div>
+                            <div class="flex items-center">
+                                <p-checkbox inputId="markupPricing" name="markupPricing" value="markupPricing"
+                                    [(ngModel)]="markupPricing" />
+                                <label for="markupPricing" class="ml-2"> Use Markup price margin </label>
+                            </div>
+
+                        </div>
+                        <p-divider />
+                    </div>
+                    <div #unitCost>
+                        <p>Unit Price calculator <i class="pi pi-question-circle" style="color: slateblue"
+                                pTooltip="This option is responsible for calculating unit prices of items"></i></p>
+                        <p-divider />
+                        <div>
+                            <div class="card flex flex-wrap justify-center gap-4">
+                                <label class="gap-4 price-label" price-label>Enter order Price</label>
+                                <p-iconfield>
+                                    <p-inputicon class="cedi-icon w-24 rounded select-img" />
+
+                                    <p-inputnumber inputId="integeronly" pTooltip="The price from suppliers"
+                                        tooltipPosition="right" [(ngModel)]="orderprice" />
+                                </p-iconfield>
+                            </div>
+
+                            <div class="card flex flex-wrap justify-center gap-4">
+                                <label class="gap-4 price-label">Enter miscellaneous cost </label>
+                                <p-iconfield>
+                                    <p-inputicon class="cedi-icon w-24 rounded select-img" />
+                                    <p-inputnumber inputId="integeronly"
+                                        pTooltip="Miscellaneous cost are other cost put together to be added. if any, that miscellaneous cost must be added. Leave empty if no miscellaneous cost"
+                                        tooltipPosition="right" [(ngModel)]="variableCost" />
+                                </p-iconfield>
+                            </div>
+
+                            <div class="card flex flex-wrap justify-center gap-4">
+                                <label class="gap-4 price-label">Quantity per Box(Carton)</label>
+                                <p-iconfield>
+                                    <p-inputnumber inputId="integeronly"
+                                        pTooltip="Denotes the Quantity of items inside a box (carton)"
+                                        tooltipPosition="right" [(ngModel)]="totalincarton" />
+                                </p-iconfield>
+                            </div>
+                            <p-divider />
+                            <label>Markup value to be added <span class="pi pi-question-circle"
+                                    pTooltip="Markup is the amount to be added as profit, otherwise known as profit margin."></span></label>
+
+
+                                <div class="card flex items-center gap-4"> 
+                            <div class="flex items-center">
+                                <p-checkbox inputId="markupPricing" name="markupPricing" value="markupPricing"
+                                    [(ngModel)]="markuppercentage" />
+                                <label for="unitCost" class="ml-2">Calculate markup on percentage based </label>
+                            </div>
+                            <div class="flex items-center">
+                                <p-checkbox inputId="markupPricing" name="markupPricing" value="markupPricing"
+                                    [(ngModel)]="markuppercentage" />
+                                <label for="unitCost" class="ml-2">Add fixed rate(Amount) </label>
+                            </div>
+                            </div>
+                            <p-divider/>
+                            <div class="card flex flex-wrap justify-center gap-4">
+                                <label class="gap-4 price-label">Enter percentage value</label>
+                                <p-iconfield>
+                                    <p-inputnumber inputId="integeronly"
+                                        pTooltip="The percentage value is converted as profit margin"
+                                        tooltipPosition="right" [(ngModel)]="totalincarton" />
+                                </p-iconfield>
+                            </div>
+
+
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                <label class="gap-4 price-label">Enter  amount</label>
+                                <p-iconfield>
+                                    <p-inputnumber inputId="integeronly"
+                                        pTooltip="The fixed amount to be added added as profit margin"
+                                        tooltipPosition="right" [(ngModel)]="totalincarton" />
+                                </p-iconfield>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <!-- <div class="card flex flex-wrap justify-center gap-4">
+                    <label>Enter Absolute Price</label>
+                    <p-iconfield>
+                        <p-inputicon class="cedi-icon w-24 rounded select-img" />
+                  
+                        <input type="text" pInputText placeholder="Search" />
+                    </p-iconfield>
+                </div> -->
+            </div>
+        </p-drawer>
+    </div>
+    <p-toast />
+</main>

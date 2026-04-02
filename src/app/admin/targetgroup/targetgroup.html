@@ -1,0 +1,207 @@
+<main>
+    <div class="card gr-bar">
+        <p-toolbar>
+            <ng-template #start>
+
+                <p-button icon="pi pi-print" class="mr-2" text severity="secondary" />
+                <p-button icon="pi pi-upload" text severity="secondary" />
+            </ng-template>
+            <ng-template #center>
+              
+                      <p-select [options]="groupData" [(ngModel)]="selectesgroup"
+                            (onChange)="selectionGroup($event)" optionLabel="title" [filter]="true"
+                            filterBy="title" [showClear]="true" placeholder="Select a Category"
+                            class="w-full md:w-56">
+                            <ng-template #selectedItem let-groupData>
+                                <div class="flex items-center gap-2">
+                                    <img [src]="groupData.imageurl" [alt]="groupData.title"
+                                        class="w-24 rounded select-img" />
+                                    <div>{{ groupData.title }}</div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-groupData #item>
+                                <div class="flex items-center gap-2">
+                                    <img [src]="groupData.imageurl" [alt]="groupData.title"
+                                        class="w-24 rounded select-img" />
+                                    <div>{{ groupData.title}}</div>
+                                </div>
+                            </ng-template>
+                        </p-select>
+                          <p-button icon="pi pi-refresh" class="mr-2" label="Reload" severity="secondary"
+                    (onClick)="refreshData()" />
+
+            </ng-template>
+
+            <ng-template #end>
+                <p-button icon="pi pi-plus" class="mr-2" label="Add Group" severity="secondary"
+                    (onClick)="newGroup()" />
+            </ng-template>
+        </p-toolbar>
+        <header>Manage Target Groups</header>
+    </div>
+
+    <div>
+
+    </div>
+    @if(groupList){
+    <div class="card">
+        <p-table [value]="groupList" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header>
+                <tr>
+                    <th class="w-1/6">Group ID</th>
+                    <th class="w-1/6"> Grop</th>
+                    <th class="w-1/6">image</th>
+                    <th class="w-1/6">Cartegory</th>
+                    <th class="w-1/6">Role</th>
+                    <th class="w-1/6">Details</th>
+                        <th class="w-1/6">Action</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-groupList>
+                <tr>
+                    <td>{{ groupList.groupid }}</td>
+                    <td>{{ groupList.title }}</td>
+                    <td><img [src]="groupList.imageurl" [alt]="groupList.title" class="rounded-border"  [style]="{ width: '2rem', overflow: 'hidden' }" /></td>
+                    <td>{{ groupList.category_name }}</td>
+                    <td>{{ groupList.role }}</td>
+                    <td> <p-button (onClick)="displayGroup(groupList,$event); toggle($event)" icon="pi pi-search"
+                            severity="secondary" rounded /></td>
+                             <td> <p-button (onClick)="dropGroup(groupList)" icon="pi pi-trash" severity="danger" rounded /></td>
+                </tr>
+            </ng-template>
+        </p-table>
+        @if(selectedGroup){
+        <p-popover #op>
+            <div class="flex flex-col gap-4">
+                <div>
+                    <span class="font-medium block mb-2" severity="primary">Details</span>
+                    <p-card [style]="{ width: '25rem', overflow: 'hidden' }">
+                        <ng-template #header>
+                            <hr>
+                            <img [src]="selectedGroup.imageurl" [alt]="selectedGroup.title"
+                                class="w-24 rounded-border " />
+                        </ng-template>
+                        <ng-template #title>Group info</ng-template>
+                        <ng-template #subtitle>{{selectedGroup.title}} : {{selectedGroup.groupid}}</ng-template>
+                        <ng-template #subtitle>{{selectedGroup.category_name}} </ng-template>
+                        <p>Details : {{selectedGroup.role}}</p>
+                        <hr>
+                        <p>Date Created :{{selectedGroup.date_created}}</p>
+                    </p-card>
+                </div>
+            </div>
+        </p-popover>
+    }
+    </div>
+    }@else {
+
+    }
+
+    @if(isNewgroup){
+    <div class="card flex justify-center new-group-container" animate.enter="enter-animation">
+        <div class="crt-inner">
+            <header>
+                <span class="mr-2" severity="info">New Group</span>
+                <p-button icon="pi pi-times" class="mr-2" text severity="secondary" (onClick)="closeGroup()" />
+            </header>
+            <div class="t-gr-p">
+                <section>
+                    <label class="g-p-id">GROUP ID</label>
+                    <label class="g-p-id">{{groupID}}</label>
+                </section>
+            </div>
+            <div class="t-gr-p">
+                <section>
+                    <p-floatlabel variant="in">
+                        <input pInputText id="in_label" [(ngModel)]="GroupTitle" autocomplete="on" />
+                        <label for="in_label">Group Name</label>
+                    </p-floatlabel>
+                </section>
+            </div>
+
+            <div class="t-gr-p">
+                <section>
+                    <div>
+                        <p-select [options]="productCart" [(ngModel)]="selectedCart"
+                            (onChange)="selectionOption($event)" optionLabel="category_name" [filter]="true"
+                            filterBy="category_name" [showClear]="true" placeholder="Select a Category"
+                            class="w-full md:w-56">
+                            <ng-template #selectedItem let-productCart>
+                                <div class="flex items-center gap-2">
+                                    <img [src]="productCart.imageurl" [alt]="productCart.category_name"
+                                        class="w-24 rounded select-img" />
+                                    <div>{{ productCart.category_name }}</div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-productCart #item>
+                                <div class="flex items-center gap-2">
+                                    <img [src]="productCart.imageurl" [alt]="productCart.category_name"
+                                        class="w-24 rounded select-img" />
+                                    <div>{{ productCart.category_name}}</div>
+                                </div>
+                            </ng-template>
+                        </p-select>
+                    </div>
+                </section>
+
+            </div>
+
+
+
+
+
+            <div class="t-gr-p">
+                <section>
+                    <p-floatlabel variant="in">
+                        <textarea pTextarea id="in_label" [(ngModel)]="groupRole" rows="5" cols="30"
+                            style="resize: none" class="h-full"></textarea>
+                        <label for="in_label">Role of this group</label>
+                    </p-floatlabel>
+                </section>
+                <h4>
+                    <label>Add group Image</label>
+                </h4>
+
+                <section>
+                    <label for="groupImage">
+                        <img id="grp-cam-logo" src="assets/logo/camera_lens_PNG91.png" alt="">
+                        <input type="file" id="groupImage" accept="image/*" #fileUpload [(ngModel)]="groupImage"
+                            (change)="uploadFile($event)">
+
+
+                    </label>
+
+                </section>
+                @if(preview){
+                <div class="bottom-footer" animate.enter="enter-animation">
+
+                    <label>
+                        <img [src]="preview" class="preview" animate.enter="enter-animation">
+                    </label>
+                    <div class="sub-rapper">
+                        <p-button icon="pi pi-upload" class="mr-2" label="Add group" severity="primary"
+                            (onClick)="submitGrouop()" />
+                        <p-button icon="pi pi-times" class="mr-2" label="" severity="danger"
+                            (onClick)="CloseGrouoppre()" />
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+    }
+
+    @if(targetgroup){
+
+    }@else {
+    <ng-template>
+        Create a target group to manage product types. e.g. (kids, gilrs, Men etc)
+    </ng-template>
+    }
+
+
+
+    <div class="card flex justify-center">
+        <p-toast />
+    </div>
+</main>
