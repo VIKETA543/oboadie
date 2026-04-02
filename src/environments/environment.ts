@@ -1,4 +1,4 @@
 export const environment = {
     production:true,
-  apiUrl:'https://premierprime-backend.vercel.app/',
+  apiUrl:'https://premierprime-backend.vercel.app',
 };
