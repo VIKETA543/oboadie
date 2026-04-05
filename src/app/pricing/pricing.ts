@@ -76,19 +76,28 @@ switchToWeightBased($event: CheckboxChangeEvent) {
 this.weight=$event.checked
   this.unitCost=false;
   this.markupPricing=false;
+  this.yards=false
 }
 switchTounitCost(arg0: any) {
 
 this.weight=false;
 this.markupPricing=false;
-
+this.yards=false
 this.unitCost=arg0.checked
+}
+
+switchToyard($event: CheckboxChangeEvent) {
+this.yards=$event.checked
+  this.unitCost=false;
+  this.markupPricing=false;
+  this.weight=false
 }
 
 selectedcategory: any;
 selectedbrand: any;
 unitCost: boolean=false;
 weight: boolean=false;
+yards:boolean=false;
 markupPricing: boolean=false;
 fixedvaluerate:boolean=false
 
@@ -694,6 +703,7 @@ orderprice:number=0;
 sellingUnitPrice:number=0;
 totalQuantityPrice:number=0
 itemWeight:number=0;
+itemlength:number=0;
 //setting parameters for price objects
 totalCost:number=0;
 markuppricevalue:number=0;
@@ -768,6 +778,25 @@ this.markuppricevalue=this.fixedvalue
   this.cartsellingPrice=this.totalCost+this.markuppricevalue
    
 }
+
+calculatepriceInYards=()=>{
+this.totalCost=(this.orderprice+this.misselaneouscost)
+this.markuppricevalue=(this.markuppercent/100)*this.totalCost
+ this.unitsellingPrice=(this.totalCost+this.markuppricevalue)/this.itemlength
+  this.cartsellingPrice=this.totalCost+this.markuppricevalue
+
+}
+
+calulateperYardusingFixValue=()=>{
+ this.totalCost=(this.orderprice+this.misselaneouscost)
+this.markuppricevalue=this.fixedvalue
+ this.unitsellingPrice=(this.totalCost+this.markuppricevalue)/this.itemlength
+  this.cartsellingPrice=this.totalCost+this.markuppricevalue
+   
+}
+
+
+
 
 
 distructor=()=>{
