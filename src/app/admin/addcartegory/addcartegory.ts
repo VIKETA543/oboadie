@@ -20,6 +20,7 @@ import { DockModule } from 'primeng/dock';
 import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { Products } from '../products/products';
 
 
 
@@ -98,6 +99,8 @@ export class Addcartegory implements OnInit {
 
   }
   categories: CategoryList[] = [];
+  productList:Products[]=[]
+  selectedProduct:Products[]|undefined
   message: any
   description: any;
   previewFlyer: any
@@ -118,6 +121,7 @@ export class Addcartegory implements OnInit {
   ngOnInit(): void {
     this.loadcartlist()
     this.setDocker();
+    // this.loadProductList();
   }
   closeCart=()=>{
     this.shownewcart=undefined
@@ -263,6 +267,7 @@ clearRecords=(event: Event)=>{
       } else {
         if (response?.data) {
           this.categories = response?.data
+          console.log(this.categories)
         } else {
           if (response?.noactivity) {
 
@@ -274,6 +279,7 @@ clearRecords=(event: Event)=>{
       }
     })
   }
+
   getSeverity(status: string) {
     switch (status) {
       case 'INSTOCK':

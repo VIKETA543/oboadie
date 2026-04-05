@@ -11,9 +11,9 @@ import Lara from '@primeuix/themes/lara';
 import Nora from '@primeuix/themes/nora';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 export const appConfig: ApplicationConfig = {
-  providers: [
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }), 
     provideBrowserGlobalErrorListeners(),
-    provideZonelessChangeDetection(),
+     provideZonelessChangeDetection(),
     provideRouter(routes), provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
     providePrimeNG({

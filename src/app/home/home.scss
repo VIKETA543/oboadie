@@ -22,23 +22,28 @@
         background-color: rgb(255, 255, 255);
         color: rgb(4, 55, 102);
         position: relative;
-        width: 80%;
+        width: calc(100% - 0%);
         min-width: 20%;
-        max-width: 80%;
+        max-width: 100%;
         display: flex;
 
-        // border-top-left-radius: 1em;
-        // border-top-right-radius: 1em;
-        // box-shadow: 0px 0px 5px 1px rgb(138, 137, 137);
-
         header {
-            font-size: 2vw;
+       font-size: clamp(1rem, 3vw, 2rem);
             text-align: center;
             padding-top: 20px;
             margin: 0px;
             color: rgb(128, 77, 1);
             text-shadow: 0px 5px 2px lightgrey;
             font-family: 'Edwardian Script ITC';
+
+            span{
+                     display: block;
+            width: calc(100%);
+            }
+            span:first-child{
+                 font-family: 'Arial Black';
+                 font-size: clamp(1rem, 5vw, 3rem);
+            }
         }
 
         h2 {
@@ -63,15 +68,15 @@
     ::ng-deep {
         .p-toolbar {
             border-radius: 0% !important;
-            background-color: rgb(23, 24, 24);
+            background-color: rgb(255, 255, 255);
         }
         .p-button,  .p-splitbutton{
             background-color: transparent !important;
-            color: gold;
+            color: rgb(5, 5, 5);
             border-radius: 0 !important;
             outline: none !important;
             border: 0 !important;
-            box-shadow: 0px 0px 5px 1px rgb(138, 137, 137);
+            // box-shadow: 0px 0px 5px 1px rgb(138, 137, 137);
         }
       
     }

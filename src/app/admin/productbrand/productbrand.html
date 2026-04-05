@@ -107,34 +107,25 @@
                     <label class="g-p-id">{{groupID}}</label>
                 </section>
             </div>
-            <div class="t-gr-p">
-                <section>
-                    <p-floatlabel variant="in">
-                        <input pInputText id="in_label" [(ngModel)]="GroupTitle" autocomplete="on" />
-                        <label for="in_label">Brand Name</label>
-                    </p-floatlabel>
-                </section>
-            </div>
-
-            <div class="t-gr-p">
+                   <div class="t-gr-p">
                 <section>
                     <div>
-                        <p-select [options]="productCart" [(ngModel)]="selectedCart"
-                            (onChange)="selectionOption($event)" optionLabel="category_name" [filter]="true"
-                            filterBy="category_name" [showClear]="true" placeholder="Select a Category"
+                        <p-select [options]="productList" [(ngModel)]="selectedProduct"
+                            (onChange)="selectionOption($event)" optionLabel="name" [filter]="true"
+                            filterBy="name" [showClear]="true" placeholder="Select a product"
                             class="w-full md:w-56">
-                            <ng-template #selectedItem let-productCart>
+                            <ng-template #selectedItem let-productList>
                                 <div class="flex items-center gap-2">
-                                    <img [src]="productCart.imageurl" [alt]="productCart.category_name"
+                                    <img [src]="productList.imageurl" [alt]="productList.name"
                                         class="w-24 rounded select-img" />
-                                    <div>{{ productCart.category_name }}</div>
+                                    <div>{{ productList.name }}</div>
                                 </div>
                             </ng-template>
-                            <ng-template let-productCart #item>
+                            <ng-template let-productList #item>
                                 <div class="flex items-center gap-2">
-                                    <img [src]="productCart.imageurl" [alt]="productCart.category_name"
+                                    <img [src]="productList.imageurl" [alt]="productList.name"
                                         class="w-24 rounded select-img" />
-                                    <div>{{ productCart.category_name}}</div>
+                                    <div>{{ productList.name}}</div>
                                 </div>
                             </ng-template>
                         </p-select>
@@ -142,8 +133,14 @@
                 </section>
 
             </div>
-
-
+                 <div class="t-gr-p">
+                <section>
+                    <p-floatlabel variant="in">
+                        <input pInputText id="in_label" [(ngModel)]="GroupTitle" autocomplete="on" />
+                        <label for="in_label">Brand Name</label>
+                    </p-floatlabel>
+                </section>
+            </div>
 
 
 

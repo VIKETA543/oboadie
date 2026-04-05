@@ -24,6 +24,9 @@ export class productservice {
 
     }
 
+listproductBycartID=(data:any)=>{
+  return this.http.post(this.url + '/display/listproductbyCart', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+}
     
     cartegories() {
         return this.http.get(this.url + '/display/cartegories', { headers: new HttpHeaders().set('contentType', "application/json") })
@@ -73,7 +76,11 @@ dropBrand=(data:any)=>{
  return this.http.post(this.url + '/category/dropbrnd', data, { headers: new HttpHeaders().set('contentType', "application/json") })
 }
 listBrand=()=>{
-     return this.http.get(this.url + '/category/listbrnd', { headers: new HttpHeaders().set('contentType', "application/json") })
+     return this.http.get(this.url + '/category/listbrnd',{ headers: new HttpHeaders().set('contentType', "application/json") })
+}
+
+listBrandByproductID=(data:any)=>{
+     return this.http.post(this.url + '/category/listbrndbyID', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
 }
 addBrand=(data:any)=>{
      return this.http.post(this.url + '/category/addbrnd',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
@@ -92,21 +99,12 @@ submitQuote=(data:any)=>{
     return this.http.post(this.url + '/category/submitquote', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
 }
 
-getpriceTagDetails=()=>{
 
-    return this.http.get(this.url + '/category/priceTagdetails',{ headers: new HttpHeaders().set('contentType', "application/json") })
-}
 
 dropPriceTag=(data:any)=>{
  return this.http.post(this.url + '/category/droppricetag',data,{ headers: new HttpHeaders().set('contentType', "application/json") })
 }
 authTag=(data:any)=>{
    return this.http.post(this.url + '/category/authtag',data,{ headers: new HttpHeaders().set('contentType', "application/json") })  
-}
-loadproductPrices=()=>{
-      return this.http.get(this.url + '/category/propricedetails',{ headers: new HttpHeaders().set('contentType', "application/json") })
-}
-searchproductPrices=(data:any)=>{
-     return this.http.post(this.url + '/category/searchproductprices',data,{ headers: new HttpHeaders().set('contentType', "application/json") })
 }
 }

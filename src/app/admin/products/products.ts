@@ -26,7 +26,8 @@ import { DockModule } from 'primeng/dock';
 import { TooltipModule } from 'primeng/tooltip';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { event } from '@primeuix/themes/aura/timeline';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+
 @Component({
   standalone: true,
   selector: 'products',
@@ -51,7 +52,8 @@ import { event } from '@primeuix/themes/aura/timeline';
     TooltipModule,
        CommonModule,
     ReactiveFormsModule,
-    ToastModule
+    ToastModule,
+    ConfirmPopupModule
   ],
   templateUrl: './products.html',
   styleUrl: './products.scss',
@@ -59,6 +61,9 @@ import { event } from '@primeuix/themes/aura/timeline';
   providers:[MessageService,ConfirmationService]
 })
 export class Products implements OnInit {
+dropCart($event: MouseEvent,arg1: any) {
+throw new Error('Method not implemented.');
+}
 selectGroup($event: SelectChangeEvent) {
 console.log()
 this.groupID=$event.value.groupid
@@ -72,7 +77,7 @@ this.groupID=$event.value.groupid
   productCart: ProductCategory[] | undefined;
   selectedCart: string | undefined;
 
-  product: ProductsList[] | undefined;
+  product: ProductsList[]=[];
   selectedProduct: any;
   
   targetGroup:TargetGroup[]|undefined
@@ -123,7 +128,8 @@ productName:any
       if (response?.data) {
         setTimeout(()=>{
                   this.productCart = response?.data
-        },5000)
+             
+        },1000)
 
       } else {
 
@@ -136,9 +142,9 @@ productName:any
  setTimeout(()=>{
            
         this.product = response?.data
-        },5000)
-
-        // console.log(this.product)
+        console.log(this.product)
+        },1000)
+        // 
       } else {
         this.message = response?.message
       }
@@ -220,14 +226,13 @@ closeProduct=()=>{
       formData.append('productName', this.productName)
       formData.append('description', this.description)
       formData.append('catergory', this.serialnumber)
-      formData.append('groupid',this.groupID)
       formData.append('date', Date())
       this.productservice.addProduct(formData).subscribe((response: any) => {
         if (response?.message) {
           this.message = response?.message
 
           this.messageService.add({ severity: 'info', summary: 'Info', detail: this.message, life: 3000 });
-          setTimeout(() => { this.message = undefined }, 5000)
+          setTimeout(() => { this.message = undefined }, 1000)
           // console.log(this.message)
             this.isNewproduct=false
         } else {
@@ -236,13 +241,15 @@ closeProduct=()=>{
             this.message = response?.success
             this.isNewproduct=false
             this.messageService.add({ severity: 'success', summary: 'success', detail: this.message, life: 3000 });
-            setTimeout(() => { this.message = undefined }, 5000)
+            setTimeout(() => {
+              this.listproduct()
+              this.message = undefined }, 1000)
 
           } else {
             console.log("Unknown error has occured")
             this.message = "Unknown error has occured"
             this.messageService.add({ severity: 'info', summary: 'Info', detail: this.message, life: 3000 });
-            setTimeout(() => { this.message = undefined }, 5000)
+            setTimeout(() => { this.message = undefined }, 1000)
 
             this.preview = undefined
               this.isNewproduct=false
@@ -252,4 +259,51 @@ closeProduct=()=>{
       })
   
     }
+      getSeverity(status: string) {
+    switch (status) {
+      case 'INSTOCK':
+        return 'success';
+      case 'LOWSTOCK':
+        return 'warn';
+      case 'OUTOFSTOCK':
+        return 'danger';
+    }
+    return
+  }
+
+
+  clearRecords=(event: Event)=>{
+  
+    this.confirmationService.confirm({
+      target: event.currentTarget as EventTarget,
+      message: 'Are you sure you want to proceed?',
+      icon: 'pi pi-exclamation-triangle',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        icon: 'pi pi-trash'
+      },
+      accept: () => {
+
+        this.productservice.clearRecords().subscribe((response: any) => {
+          if (response?.success) {
+            this.listproduct()
+            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: response?.success, life: 3000 });
+          } else {
+            this.messageService.add({ severity: 'danger', summary: 'Danger', detail: response?.message, life: 3000 });
+          }
+        })
+
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+      }
+    });
+
+}
+
 }

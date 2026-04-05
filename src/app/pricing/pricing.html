@@ -12,9 +12,9 @@
             </ng-template>
 
             <ng-template #center>
-                <p-select [options]="productList" [(ngModel)]="selectedProduct" (onChange)="selectproduct($event)"
-                    optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a product"
-                    class="w-full md:w-56">
+                <p-select [options]="productList" [(ngModel)]="selectedProduct"
+                    (onChange)="searchPricebyProduct($event)" optionLabel="name" [filter]="true" filterBy="name"
+                    [showClear]="true" placeholder="Select  price by Product" class="w-full md:w-56">
                     <ng-template #selectedItem let-productList>
                         <div class="flex items-center gap-2">
                             <img [src]="productList.imageurl" [alt]="productList.name"
@@ -31,25 +31,50 @@
                     </ng-template>
                 </p-select>
                 <p-divider type="solid" />
-                <p-select [options]="prices" [(ngModel)]="selectedprice" (onChange)="selectPrice($event)"
-                    optionLabel="title" [filter]="true" filterBy="title" [showClear]="true" placeholder="Select a price"
+
+                <!-- selecting prices by category  -->
+                <p-select [options]="categoryList" [(ngModel)]="selectedCategory"
+                    (onChange)="searchPricebyCategory($event)" optionLabel="category_name" [filter]="true"
+                    filterBy="category_name" [showClear]="true" placeholder="Select  price by category"
                     class="w-full md:w-56">
-                    <ng-template #selectedItem let-groupData>
+                    <ng-template #selectedItem let-categoryList>
                         <div class="flex items-center gap-2">
-                            <img [src]="groupData.imageurl" [alt]="groupData.title" class="w-24 rounded select-img" />
-                            <div>{{ groupData.title }}</div>
+                            <img [src]="categoryList.imageurl" [alt]="categoryList.category_name"
+                                class="w-24 rounded select-img" />
+                            <div>{{ categoryList.category_name }}</div>
                         </div>
                     </ng-template>
-                    <ng-template let-groupData #item>
+                    <ng-template let-categoryList #item>
                         <div class="flex items-center gap-2">
-                            <img [src]="groupData.imageurl" [alt]="groupData.title" class="w-24 rounded select-img" />
-                            <div>{{ groupData.title}}</div>
+                            <img [src]="categoryList.imageurl" [alt]="categoryList.category_name"
+                                class="w-24 rounded select-img" />
+                            <div>{{ categoryList.category_name}}</div>
                         </div>
                     </ng-template>
                 </p-select>
-                <p-button icon="pi pi-refresh" class="mr-2" label="Reload" severity="secondary"
+                <p-divider type="solid" />
+                <p-select [options]="prices" [(ngModel)]="selectedprice" (onChange)="selectPrice($event)"
+                    optionLabel="pricetag" [filter]="true" filterBy="pricetag" [showClear]="true"
+                    placeholder="Select price by tag" class="w-full md:w-56">
+                    <ng-template #selectedItem let-prices>
+                        <div class="flex items-center gap-2">
+                            <!-- <img [src]="prices.imageurl" [alt]="prices.pricetag" class="w-24 rounded select-img" /> -->
+                            <div>{{ prices.pricetag }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-prices #item>
+                        <div class="flex items-center gap-2">
+                            <!-- <img [src]="prices.imageurl" [alt]="prices.pricetag" class="w-24 rounded select-img" /> -->
+                            <div>{{ prices.pricetag}}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+                <p-button icon="pi pi-refresh" class="mr-2" label="Reload" severity="primary"
                     (onClick)="refreshData()" />
             </ng-template>
+
+
+
             <ng-template #end>
                 <p-button label="Manage Price Tag" icon="pi pi-chevron-left" (onClick)="addpriceTag()" />
             </ng-template>
@@ -239,23 +264,16 @@
                     <th>Product</th>
                     <th>Category</th>
                     <th>Brand</th>
-                    <th>Group</th>
-                    <th>Location</th>
-                    <th>price</th>
+                    <th>Price Type</th>
+                    <th>Order Price</th>
+                    <th>Miscellaneous</th>
+                    <th>Total Cost</th>
+                    <th>Markup price</th>
+                    <th>Unit Price</th>
+                    <th>Cart price</th>
                     <th>Action</th>
                 </tr>
             </ng-template>
-
-            <!-- productid:string,
-    :string,
-    category:string,
-    :string,
-    brand:string,
-    :string,
-    :string,
-    :string,
-    :number,
-    priceid:string -->
 
             <ng-template #body let-priceDetails>
                 <tr>
@@ -263,9 +281,13 @@
                     <td>{{ priceDetails.name }}</td>
                     <td>{{ priceDetails.category_name }}</td>
                     <td>{{ priceDetails.title }}</td>
-                    <td>{{ priceDetails.targetgroup }}</td>
-                    <td>{{ priceDetails.grouptitle }}</td>
-                    <td>{{ priceDetails.price }}</td>
+                    <td>{{priceDetails.pricetag}}</td>
+                    <td>{{ priceDetails.orderprice }}</td>
+                    <td>{{priceDetails.misslaneousecost}}</td>
+                    <td>{{ priceDetails.totalordercost }}</td>
+                    <td>{{ priceDetails.marupprice }}</td>
+                    <td>{{priceDetails.unitesellingprice}}</td>
+                    <td>{{priceDetails.cartsellingprice}}</td>
                     <td class="card flex justify-center">
                         <!-- {{ pricetagDetails.auth }} -->
 
@@ -283,10 +305,41 @@
     </ng-template>
     }
     <div class="new-price-container">
-        <p-drawer p-drawer [(visible)]="propricedrawer" header="Product Price" position="left" [modal]="false">
+        <p-drawer p-drawer [(visible)]="propricedrawer" header="Price Conditrol Module" position="left" [modal]="false">
+
+            <div class="card  items-center gap-4 style-padding">
+
+                <div class="card flex items-center gap-4 priceid">
+                    <label>PRICE ID: </label><label>{{priceID}}</label>
+                </div>
+                <p-divider />
+                <p>Add product category to this price to idenfity the price status</p>
+                <p-divider />
+                <p-select [options]="categories" [(ngModel)]="selectedcategory" (onChange)="selectedCart($event)"
+                    optionLabel="category_name" [filter]="true" filterBy="category_name" [showClear]="true"
+                    placeholder="Select Product Category" class="w-full md:w-58">
+                    <ng-template #selectedcategory let-categories>
+                        <div class="flex items-center gap-4">
+                            <img [src]="categories.imageurl" [alt]="categories.category_name"
+                                class="w-24 rounded select-img" />
+                            <!-- <p-inputicon class="cedi-icon w-24 rounded select-img" /> -->
+                            <div>{{ categories.category_name }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-categories #categoryitem>
+                        <div class="flex items-center gap-4">
+                            <img [src]="categories.imageurl" [alt]="categories.category_name"
+                                class="w-24 rounded select-img" />
+                            <!-- <p-inputicon class="cedi-icon w-24 rounded select-img" /> -->
+                            <div>{{ categories.category_name}}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+            <p-divider />
             <div class="edit-price-tag">
                 <div class="card  style-padding">
-                    <p>Use price tag to group prices of products</p>
+                    <p>Select price tag</p>
                     <p-divider />
                     <p-select [options]="pricetagList" [(ngModel)]="selectedPriceTagList"
                         (onChange)="selectpriceTag($event)" optionLabel="pricetag" [filter]="true" filterBy="pricetag"
@@ -303,36 +356,28 @@
                         </ng-template>
                     </p-select>
                 </div>
-                <div class="card  items-center gap-4 style-padding">
-                    <p>Add product category to this price to idenfity the price status</p>
-                    <p-divider />
-                    <p-select [options]="categories" [(ngModel)]="selectedcategory" (onChange)="selectedCart($event)"
-                        optionLabel="category_name" [filter]="true" filterBy="category_name" [showClear]="true"
-                        placeholder="Select Product Category" class="w-full md:w-58">
-                        <ng-template #selectedcategory let-categories>
+                <div class="card  style-padding">
+                    <p>Select a product</p>
+                    <p-select [options]="productListByCart" [(ngModel)]="selectedProduct"
+                        (onChange)="selectproduct($event)" optionLabel="name" [filter]="true" filterBy="name"
+                        [showClear]="true" placeholder="Select price group" class="w-full md:w-58">
+                        <ng-template #selectedpricetag let-productListByCart>
                             <div class="flex items-center gap-4">
-                                <img [src]="categories.imageurl" [alt]="categories.category_name"
-                                    class="w-24 rounded select-img" />
-                                <!-- <p-inputicon class="cedi-icon w-24 rounded select-img" /> -->
-                                <div>{{ categories.category_name }}</div>
+                                <div>{{ productListByCart.name }}</div>
                             </div>
                         </ng-template>
-                        <ng-template let-categories #categoryitem>
+                        <ng-template let-productListByCart #pricetagitem>
                             <div class="flex items-center gap-4">
-                                <img [src]="categories.imageurl" [alt]="categories.category_name"
-                                    class="w-24 rounded select-img" />
-                                <!-- <p-inputicon class="cedi-icon w-24 rounded select-img" /> -->
-                                <div>{{ categories.category_name}}</div>
+                                <div>{{ productListByCart.name}}</div>
                             </div>
                         </ng-template>
                     </p-select>
                 </div>
 
-
             </div>
             <div class="edit-price-tag">
                 <div class="card  items-center gap-4 style-padding">
-                    <p>Assign price to product brand</p>
+                    <p>Select product type/brand</p>
                     <p-divider />
 
                     <p-select [options]="brandList" [(ngModel)]="selectedbrand" (onChange)="selectpriceBrand($event)"
@@ -384,111 +429,338 @@
             <p-divider />
             <div class="card flex flex-wrap justify-center gap-4">
 
-                <div>
+                <div class="price-wrapper">
                     <p>Price Calculator</p>
-                    <div>
+                    <div class="card ">
                         <div class="card flex flex-wrap justify-center gap-4">
                             <div class="flex items-center">
-                                <p-checkbox inputId="unitCost" name="unitCost" value="unitCost"
-                                    [(ngModel)]="unitCost" />
-                                <label for="unitCost" class="ml-2"> Unit Cost Calculator </label>
+                                <p-checkbox [(ngModel)]="unitCost" [binary]="true" variant="filled"
+                                    (onChange)="switchTounitCost($event)" id="unitCost" />
+
+                                <label for="unitCost" class="ml-2" for="unitCost"> Unit Cost Calculator </label>
                             </div>
+                            <!-- <div class="flex items-center">
+                                <p-checkbox [(ngModel)]="costBased" [binary]="true" variant="filled"
+                                    (onChange)="switchTocostBased($event)" />
+                                <label for="marginPrices" class="ml-2" for="costBased"> Cost base calculator </label>
+                            </div> -->
                             <div class="flex items-center">
-                                <p-checkbox inputId="marginPrices" name="marginPrices" value="marginPrices"
-                                    [(ngModel)]="marginPrices" />
-                                <label for="marginPrices" class="ml-2"> Cost base calculator </label>
-                            </div>
-                            <div class="flex items-center">
-                                <p-checkbox inputId="markupPricing" name="markupPricing" value="markupPricing"
-                                    [(ngModel)]="markupPricing" />
-                                <label for="markupPricing" class="ml-2"> Use Markup price margin </label>
+                                <p-checkbox [(ngModel)]="weight" [binary]="true" variant="filled" id="weight"
+                                    (onChange)="switchToWeightBased($event)" />
+                                <label for="weight" class="ml-2">Calculate price based on Weight (e.g K.g) </label>
                             </div>
 
                         </div>
                         <p-divider />
                     </div>
-                    <div #unitCost>
+
+                    <!--  -->
+                    <!--  -->
+                    <!-- CALCULATE PRICES BASED ON UNIT COST PRINCIPLE -->
+                    @if(unitCost){
+                    <div class="price-container">
                         <p>Unit Price calculator <i class="pi pi-question-circle" style="color: slateblue"
-                                pTooltip="This option is responsible for calculating unit prices of items"></i></p>
+                                pTooltip="Calculate the price per unit of item. If the pack/box contains 100 items, the unit price will be calculated on each item in the pack"></i>
+                        </p>
                         <p-divider />
-                        <div>
-                            <div class="card flex flex-wrap justify-center gap-4">
-                                <label class="gap-4 price-label" price-label>Enter order Price</label>
-                                <p-iconfield>
-                                    <p-inputicon class="cedi-icon w-24 rounded select-img" />
 
-                                    <p-inputnumber inputId="integeronly" pTooltip="The price from suppliers"
-                                        tooltipPosition="right" [(ngModel)]="orderprice" />
-                                </p-iconfield>
-                            </div>
+                        <div class="price-segement-data">
+                            <div class="price-sections">
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label" price-label>Enter order Price <i
+                                            class="pi pi-question-circle" style="color: slateblue"
+                                            pTooltip="The order price is the same as supplier price."></i></label>
+                                    <p-iconfield>
+                                        <p-inputicon class="cedi-icon w-24 rounded select-img" />
 
-                            <div class="card flex flex-wrap justify-center gap-4">
-                                <label class="gap-4 price-label">Enter miscellaneous cost </label>
-                                <p-iconfield>
-                                    <p-inputicon class="cedi-icon w-24 rounded select-img" />
-                                    <p-inputnumber inputId="integeronly"
-                                        pTooltip="Miscellaneous cost are other cost put together to be added. if any, that miscellaneous cost must be added. Leave empty if no miscellaneous cost"
-                                        tooltipPosition="right" [(ngModel)]="variableCost" />
-                                </p-iconfield>
-                            </div>
-
-                            <div class="card flex flex-wrap justify-center gap-4">
-                                <label class="gap-4 price-label">Quantity per Box(Carton)</label>
-                                <p-iconfield>
-                                    <p-inputnumber inputId="integeronly"
-                                        pTooltip="Denotes the Quantity of items inside a box (carton)"
-                                        tooltipPosition="right" [(ngModel)]="totalincarton" />
-                                </p-iconfield>
-                            </div>
-                            <p-divider />
-                            <label>Markup value to be added <span class="pi pi-question-circle"
-                                    pTooltip="Markup is the amount to be added as profit, otherwise known as profit margin."></span></label>
-
-
-                                <div class="card flex items-center gap-4"> 
-                            <div class="flex items-center">
-                                <p-checkbox inputId="markupPricing" name="markupPricing" value="markupPricing"
-                                    [(ngModel)]="markuppercentage" />
-                                <label for="unitCost" class="ml-2">Calculate markup on percentage based </label>
-                            </div>
-                            <div class="flex items-center">
-                                <p-checkbox inputId="markupPricing" name="markupPricing" value="markupPricing"
-                                    [(ngModel)]="markuppercentage" />
-                                <label for="unitCost" class="ml-2">Add fixed rate(Amount) </label>
-                            </div>
-                            </div>
-                            <p-divider/>
-                            <div class="card flex flex-wrap justify-center gap-4">
-                                <label class="gap-4 price-label">Enter percentage value</label>
-                                <p-iconfield>
-                                    <p-inputnumber inputId="integeronly"
-                                        pTooltip="The percentage value is converted as profit margin"
-                                        tooltipPosition="right" [(ngModel)]="totalincarton" />
-                                </p-iconfield>
-                            </div>
-
+                                        <p-inputnumber inputId="integeronly" pTooltip="The price from suppliers"
+                                            (onInput)="calculateFixedMarkup()" tooltipPosition="right"
+                                            [(ngModel)]="orderprice" />
+                                    </p-iconfield>
+                                </div>
 
                                 <div class="card flex flex-wrap justify-center gap-4">
-                                <label class="gap-4 price-label">Enter  amount</label>
-                                <p-iconfield>
-                                    <p-inputnumber inputId="integeronly"
-                                        pTooltip="The fixed amount to be added added as profit margin"
-                                        tooltipPosition="right" [(ngModel)]="totalincarton" />
-                                </p-iconfield>
+                                    <label class="gap-4 price-label">Enter miscellaneous cost <i
+                                            class="pi pi-question-circle" style="color: slateblue"
+                                            pTooltip="Additional cost expenses incurred on this product"></i> </label>
+                                    <p-iconfield>
+                                        <p-inputicon class="cedi-icon w-24 rounded select-img" />
+                                        <p-inputnumber inputId="integeronly" (onInput)="calculateFixedMarkup()"
+                                            pTooltip="Miscellaneous cost are other cost put together to be added. if any, that miscellaneous cost must be added. Leave empty if no miscellaneous cost"
+                                            tooltipPosition="right" [(ngModel)]="misselaneouscost" />
+                                    </p-iconfield>
+                                </div>
+
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label">Quantity per Box(Carton) <i
+                                            class="pi pi-question-circle" style="color: slateblue"
+                                            pTooltip="The price value affect the unit of item in each pach. Enter the Quantity inside the pack"></i></label>
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" (onInput)="calculateFixedMarkup()"
+                                            pTooltip="Denotes the Quantity of items inside a box (carton)"
+                                            tooltipPosition="right" [(ngModel)]="cartonquantity" />
+                                    </p-iconfield>
+                                </div>
+                                <p-divider />
+                                <label class="markupvaluetobeadded">Markup value to be added <span
+                                        class="pi pi-question-circle"
+                                        pTooltip="Markup is the amount to be added as profit, otherwise known as profit margin."></span></label>
+
+
+                                <div class="card flex items-center gap-4">
+                                    <div class="flex items-center">
+                                        <p-checkbox [(ngModel)]="markuppercentage" id="percentageMarkup"
+                                            (onChange)="switchfixedandPercentage($event)" binary="true" />
+                                        <label for="percentageMarkup" class="ml-2 cal-mode">Calculate markup on
+                                            percentage based <i class="pi pi-question-circle" style="color: slateblue"
+                                                pTooltip="Add the percentage value as markup on the item item to be calculated (e.g. 3%)"></i></label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <p-checkbox [(ngModel)]="fixedvaluerate" binary="true"
+                                            (onChange)="fixedValuerate($event)" />
+                                        <label for="unitCost" class="ml-2 cal-mode">Add fixed rate(Amount) <i
+                                                class="pi pi-question-circle" style="color: slateblue"
+                                                pTooltip="Use fixed value rate for the marukup price. (e.g. Ghø3.0 to be aaded to the supplier price)"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                                <p-divider />
+                                @if(markuppercentage){
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label">Enter percentage value (e.g. 2.5%)
+                                        <i class="pi pi-question-circle" style="color: slateblue"
+                                            pTooltip="Add the value in percentage(e.g. 2.5%)"></i></label>
+
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" (onInput)="calculateMarkup()"
+                                            pTooltip="The percentage value is converted as profit margin"
+                                            tooltipPosition="right" [(ngModel)]="markuppercent" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2" />
+                                    </p-iconfield>
+
+                                </div>
+                                }
+
+                                @if(fixedvaluerate){
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label">Enter amount</label>
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" mode="decimal" locale="en-US"
+                                            [minFractionDigits]="2"
+                                            pTooltip="The fixed amount to be added added as profit margin"
+                                            tooltipPosition="right" [(ngModel)]="fixedvalue"
+                                            (onInput)="calculateFixedMarkup()" />
+                                    </p-iconfield>
+
+                                </div>
+                                }
+                            </div>
+                            <p-divider layout="vertical"></p-divider>
+                            <div class="gen-price">
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label">Total Cost</label>
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" [readonly]="true" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2"
+                                            pTooltip="The fixed amount to be added added as profit margin"
+                                            tooltipPosition="right" [(ngModel)]="totalCost" />
+                                    </p-iconfield>
+
+                                </div>
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label">Markup Value</label>
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" [readonly]="true" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2"
+                                            pTooltip="The fixed amount to be added added as profit margin"
+                                            tooltipPosition="right" [(ngModel)]="markuppricevalue" />
+                                    </p-iconfield>
+
+                                </div>
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label">Unit Selling Price</label>
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" [readonly]="true" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2"
+                                            pTooltip="The fixed amount to be added added as profit margin"
+                                            tooltipPosition="right" [(ngModel)]="unitsellingPrice" />
+                                    </p-iconfield>
+
+                                </div>
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label">Pack Selling Price</label>
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" [readonly]="true" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2"
+                                            pTooltip="The fixed amount to be added added as profit margin"
+                                            tooltipPosition="right" [(ngModel)]="cartsellingPrice" />
+                                    </p-iconfield>
+
+                                </div>
                             </div>
                         </div>
-
-
+                        <div class="card flex justify-center btn-right">
+                            <p-button label="Save Price" (onClick)="savePrice()" />
+                        </div>
                     </div>
+                    }
+                    @if(weight){
+                    <div class="price-container">
+                          <p>Calculate prices based on the Weight of the Product <i class="pi pi-question-circle" style="color: slateblue"
+                                pTooltip="This option enables the calculation prices based on item weight. (E.g 10kg)"></i>
+                        </p>
+                        <p-divider />
+                        <div class="price-sections">
+                        <div class="price-segement-data">
+                            <div class="price-sections">
+                            <div class="card flex flex-wrap justify-center gap-4">
+                                <label>Enter weight  <i class="pi pi-question-circle" style="color: slateblue"
+                                pTooltip="The weight of the item per KG"></i></label>
+                                <p-iconfield>
+                                      <p-inputnumber inputId="integeronly" (onInput)="calculatepriceInKg()"
+                                            pTooltip="The the weight of the item in Killogrames"
+                                            tooltipPosition="right" [(ngModel)]="itemWeight" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2" />
+                                </p-iconfield>
+                            </div>
+
+                            <div class="card flex flex-wrap justify-center gap-4">
+                                <label>Enter order Cost <i class="pi pi-question-circle" style="color: slateblue"
+                                pTooltip="The order cost or supplier cost"></i></label>
+                                <p-iconfield>
+                                        <p-inputicon class="cedi-icon w-24 rounded select-img" />
+                                  <p-inputnumber inputId="integeronly" (onInput)="calculatepriceInKg()"
+                                            pTooltip="Enter the order or supplier price"
+                                            tooltipPosition="right" [(ngModel)]="orderprice" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2" />
+                                </p-iconfield>
+                            </div>
+                            <div class="card flex flex-wrap justify-center gap-4">
+                                <label>Miscellaneous or other cost <i class="pi pi-question-circle" style="color: slateblue"
+                                pTooltip="Miscellaneous and overhead cost are additional cost incured during ordering the product"></i></label>
+                                <p-iconfield>
+                                    <p-inputicon class="cedi-icon w-24 rounded select-img" />
+                                      <p-inputnumber inputId="integeronly" (onInput)="calculatepriceInKg()"
+                                            pTooltip="Additional cost incured in purchasing this item"
+                                            tooltipPosition="right" [(ngModel)]="misselaneouscost" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2" />
+                   
+                                </p-iconfield>
+                            </div>
+
+
+
+
+
+                                <!-- Switching between fix rate and markup for WEIGHT  pricing -->
+                            <div class="card flex items-center gap-4">
+                                <div class="flex items-center">
+                                    <p-checkbox [(ngModel)]="markuppercentage" id="percentageMarkup"
+                                        (onChange)="switchfixedandPercentage($event)" binary="true" />
+                                    <label for="percentageMarkup" class="ml-2 cal-mode">Calculate markup on
+                                        percentage based <i class="pi pi-question-circle" style="color: slateblue"
+                                            pTooltip="Add the percentage value as markup on the item item to be calculated (e.g. 3%)"></i></label>
+                                </div>
+                                <div class="flex items-center">
+                                    <p-checkbox [(ngModel)]="fixedvaluerate" binary="true"
+                                        (onChange)="fixedValuerate($event)" />
+                                    <label for="unitCost" class="ml-2 cal-mode">Add fixed rate(Amount) <i
+                                            class="pi pi-question-circle" style="color: slateblue"
+                                            pTooltip="Use fixed value rate for the marukup price. (e.g. Ghø3.0 to be aaded to the supplier price)"></i>
+                                    </label>
+                                </div>
+                            </div>
+
+
+
+                             @if(markuppercentage){
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label">Enter percentage value (e.g. 2.5%)
+                                        <i class="pi pi-question-circle" style="color: slateblue"
+                                            pTooltip="Add the value in percentage(e.g. 2.5%)"></i></label>
+
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" (onInput)="calculatepriceInKg()"
+                                            pTooltip="The percentage value is converted as profit margin"
+                                            tooltipPosition="right" [(ngModel)]="markuppercent" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2" />
+                                    </p-iconfield>
+
+                                </div>
+                                }
+
+                                @if(fixedvaluerate){
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label">Enter amount</label>
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" mode="decimal" locale="en-US"
+                                            [minFractionDigits]="2"
+                                            pTooltip="The fixed amount to be added added as profit margin"
+                                            tooltipPosition="right" [(ngModel)]="fixedvalue"
+                                            (onInput)="calulateperKgusingFixValue()" />
+                                    </p-iconfield>
+
+                                </div>
+                                }
+                                </div>
+                
+                 
+                         <p-divider layout="vertical"></p-divider>
+                            <div class="gen-price">
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label">Total Cost</label>
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" [readonly]="true" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2"
+                                            pTooltip="The fixed amount to be added added as profit margin"
+                                            tooltipPosition="right" [(ngModel)]="totalCost" />
+                                    </p-iconfield>
+
+                                </div>
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label">Markup Value</label>
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" [readonly]="true" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2"
+                                            pTooltip="The fixed amount to be added added as profit margin"
+                                            tooltipPosition="right" [(ngModel)]="markuppricevalue"  />
+                                    </p-iconfield>
+
+                                </div>
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label"> Selling Price/KG</label>
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" [readonly]="true" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2"
+                                            pTooltip="Selling price/1kg"
+                                            tooltipPosition="right" [(ngModel)]="unitsellingPrice" />
+                                    </p-iconfield>
+
+                                </div>
+                                <div class="card flex flex-wrap justify-center gap-4">
+                                    <label class="gap-4 price-label">Selling Price/Bundle</label>
+                                    <p-iconfield>
+                                        <p-inputnumber inputId="integeronly" [readonly]="true" mode="decimal"
+                                            locale="en-US" [minFractionDigits]="2"
+                                            pTooltip="selling price/bundle"
+                                            tooltipPosition="right" [(ngModel)]="cartsellingPrice" />
+                                    </p-iconfield>
+
+                                </div>
+                            </div>
+                            </div>
+                        
+                    </div>
+
+                  <p-divider/>
+                         <div class="card flex justify-center btn-right">
+                            <p-button label="Save Price" (onClick)="savePrice()" />
+                        </div>
+                          </div>
+                    }
                 </div>
-                <!-- <div class="card flex flex-wrap justify-center gap-4">
-                    <label>Enter Absolute Price</label>
-                    <p-iconfield>
-                        <p-inputicon class="cedi-icon w-24 rounded select-img" />
-                  
-                        <input type="text" pInputText placeholder="Search" />
-                    </p-iconfield>
-                </div> -->
+
+
             </div>
         </p-drawer>
     </div>

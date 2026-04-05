@@ -19,6 +19,8 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ProductCategory, Group, Brand } from '../../interface/products';
 import { productservice } from '../../services/productservice';
+import { Products } from '../products/products';
+
 
 @Component({
   selector: 'productbrand',
@@ -68,9 +70,31 @@ export class Productbrand {
       }
     })
   }
+    loadProductList=()=>{
+    this.productservice.listproduct().subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+      } else {
+        if (response?.data) {
+          this.productList = response?.data
+           console.log(this.productList)
+        } else {
+          if (response?.noactivity) {
+
+          } else {
+            this.message = "Unknown error has occured"
+          }
+
+        }
+      }
+    })
+  }
     @ViewChild('op') op!: Popover;
   message: any
+  
   productCart: ProductCategory[] | undefined;
+  productList:Products[]=[];
+  selectedProduct:Products[]|undefined
   selectedCart: string | undefined;
   groupList: Group[] | undefined;
   selectedGroup: Group | undefined;
@@ -84,6 +108,7 @@ export class Productbrand {
   constructor(private productservice: productservice, private messageService: MessageService, private cdk: ChangeDetectorRef) { }
   selectionOption($event: SelectChangeEvent) {
     this.serialnumber = $event.value.serialnumber
+    console.log($event.value)
   }
   loadBrandList = () => {
     this.productservice.loadBrandList().subscribe((response: any) => {
@@ -110,6 +135,7 @@ export class Productbrand {
     this.productservice.categoryList().subscribe((response: any) => {
       if (response?.data) {
         this.productCart = response?.data
+      
       } else {
         if (response?.message) {
           this.message = response?.success
@@ -192,7 +218,7 @@ export class Productbrand {
     this.loadcartList()
     this.loadBrandData();
     this.listBrand();
-    //  this.cdr.markForCheck()
+   this.loadProductList();
   }
 
   getRandomInt(min: number, max: number): number {

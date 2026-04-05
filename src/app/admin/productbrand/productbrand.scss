@@ -165,7 +165,12 @@ main {
                 }
             }
         }
-      
+      div{
+          
+            max-width: calc(100% - 2%);
+          min-width: calc(100% - 90%);
+             width: calc(100% - 2%);
+      }
     }
     #grp-cam-logo{
      

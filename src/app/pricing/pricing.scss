@@ -1,60 +1,76 @@
 main {
     margin-top: calc(5%);
 }
-header{
+
+header {
     padding: 10px;
     font-size: 1.5vw;
     font-weight: bold;
-    
-}
-.price-tag{
-::ng-deep {
 
-        .p-drawer{
+}
+
+.price-tag {
+    ::ng-deep {
+
+        .p-drawer {
             max-width: calc(100% - 0%);
             width: calc(100%);
         }
     }
 }
 
-.edit-price-tag{
-    ::ng-deep{
-            .p-drawer{
-              max-width: calc(100% - 60%);
+.edit-price-tag {
+    ::ng-deep {
+        .p-drawer {
+            max-width: calc(100% - 60%);
             width: calc(50%);
-                height: 70vh;
-           
-            }
+            height: 70vh;
+
+        }
     }
 }
 
-.new-price-container{
-    ::ng-deep{
-            .p-drawer{
-              max-width: calc(100% - 0%);
+.new-price-container {
+    ::ng-deep {
+        .p-drawer {
+            max-width: calc(100% - 0%);
             width: calc(100% - 0%);
+
+       }
+        .edit-price-tag {
+            display: flex;
+            flex: 1;
+
+            .p-select {
+                margin: 10px;
             }
-            .edit-price-tag{
-                display: flex;
-                flex: 1;
-                .p-select{
-                    margin: 10px;
+
+            .style-padding {
+                border: 1px solid lightgrey;
+
+                margin: 10px;
+                width: 100%;
+                padding: 10px;
+
+                p {
+                    color: rgb(2, 117, 79);
                 }
-                .style-padding{
-                    border: 1px solid lightgrey;
-                    
-                    margin: 10px;
-                    width: 100%;
-                    padding: 10px;
-                    
-                    p{
-                        color: rgb(2, 117, 79);
-                    }
-                }
+
             }
+        }
     }
 }
 
+                .priceid {
+                 
+                    color: rgb(0, 0, 0);
+                    padding: 10px;
+                    max-width: calc(100% - 0%);
+                    min-width: calc(100% - 50%);
+                    width: 100%;
+                
+                    
+                }
 .new-pricetag-container {
     background-color: rgba(0, 0, 0, 0.7);
     position: fixed;
@@ -63,101 +79,196 @@ header{
     left: 0;
     right: 0;
     bottom: 0;
+
 }
-.tag-container{
+
+.tag-container {
     margin: 5rem auto;
     max-width: calc(100% - 70%);
     min-width: calc((100% - 70%));
     width: calc(100% - 70%);
     background-color: white;
     padding: 0px;
-     height: 37rem;
-      border-radius: .3em;
+    height: 37rem;
+    border-radius: .3em;
     overflow: hidden;
-    header{
-    color: whitesmoke;
-    font-size: 1.5vw;
-    background-color: green;
-    width: calc(100%);
-  
+
+    header {
+        color: whitesmoke;
+        font-size: 1.5vw;
+        background-color: green;
+        width: calc(100%);
+
+    }
 }
+
+.select-img {
+    max-width: 20px;
+    margin-right: 50px;
 }
-.select-img{
-max-width: 20px;
-margin-right: 50px;
-}
-.price-input{
+
+.price-input {
     font-size: 2vw;
     padding-left: 20px;
 }
-.header-id{
- padding: 20px;
- margin: 20px;
- border-radius: .3em;
- box-shadow: 0px 0px 1px 1px lightgrey;
- border:  1px dotted grey;
- label{
-    display: block;
-    width: calc(48%);
-    color:rgb(3, 52, 80);
-    font-weight: bolder;
-    font-size: 1.5vw;
 
- }
+.header-id {
+    padding: 20px;
+    margin: 20px;
+    border-radius: .3em;
+    box-shadow: 0px 0px 1px 1px lightgrey;
+    border: 1px dotted grey;
+
+    label {
+        display: block;
+        width: calc(48%);
+        color: rgb(3, 52, 80);
+        font-weight: bolder;
+        font-size: 1.5vw;
+
+    }
 }
-.field-input{
+
+.field-input {
     margin: 10px;
     width: 97%;
     font-size: 1.5vw;
     padding: 10px;
-   p-floatlabel{
-    width: calc(100%);
 
-    p-iconfield{
-        padding-left: 0px;
+    p-floatlabel {
+        width: calc(100%);
+
+        p-iconfield {
+            padding-left: 0px;
+        }
     }
-   }
 }
-.inputfields{
+
+.inputfields {
     width: 100%;
     margin: 10px;
     padding-right: 20px;
 }
+
 .enter-animation {
     animation: slide-fade 1s;
 }
+
 :host ::ng-deep {
-  .cedi-icon {
-    width: 1rem; /* Adjust size as needed */
-    height: 1rem; /* Adjust size as needed */
-    background-image: url("/assets/icons/cedi.svg");  
-    background-size: contain; /* Ensure the image fits within the bounds */
-    display: inline-block; /* Required for the background to show */
-    padding: 10px;
+    .cedi-icon {
+        width: 1rem;
+        /* Adjust size as needed */
+        height: 1rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/cedi.svg");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        /* Required for the background to show */
+        padding: 10px;
         margin-right: 10px;
 
 
-  }
+    }
 
-  .describe-icon{
+    .describe-icon {
 
- width: 2rem; /* Adjust size as needed */
-    height: 2rem; /* Adjust size as needed */
-    background-image: url("/assets/icons/describe.svg");  
-    background-size: contain; /* Ensure the image fits within the bounds */
-    display: inline-block; /* Required for the background to show */
-    margin-right: 20px;
+        width: 2rem;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/describe.svg");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        /* Required for the background to show */
+        margin-right: 20px;
 
-    
-  }
+
+    }
 }
-#auth{
+
+#auth {
     margin-left: 20px;
 }
 
-.price-label{
+.price-label {
     display: block;
-    width: calc(100% - 70%);
+    width: calc(100% - 30%);
+}
+
+.price-wrapper {
+    width: calc(100% - 0%);
+    // border: 1px solid yellow;
+    padding: 10px;
+}
+
+.price-container {
+
+    max-width: calc(100% - 2%);
+    min-width: calc(100% - 70%);
+    width: calc(100% - 0%);
+    margin: 10px auto;
+    padding: 10px;
+
+    p,
+    label {
+        width: calc(100% - 60%);
+        display: block;
+    }
+
+    .btn-right {
+        float: right;
+    }
+
+    .price-segement-data {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        ;
+        max-width: calc(100% - 5%);
+        min-width: calc(100% - 70%);
+        width: calc(100% - 5%);
+        margin: 10px auto;
+        padding: 10px;
+
+        .price-sections {
+            margin: 10px;
+            padding: 10px;
+            width: calc(100% - 40%);
+
+            div {
+                margin: 10px;
+            }
+
+            .markupvaluetobeadded {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+
+        }
+
+        .gen-price {
+            // box-shadow: 0px 0px 15px 2px lightgray;
+            max-width: calc(100% - 20%);
+            min-width: calc(100% - 80%);
+            width: 80%;
+            padding: 20px;
+            margin: 10px;
+            border-radius: .5em;
+
+            div {
+                margin: 20px;
+            }
+        }
+    }
+
+    .cal-mode {
+        width: calc(100% - 0%);
+        // font-weight: bold;
+        // font-size:  clamp(.5em, .2vw, 1rem);
+    }
 }
 
 @keyframes slide-fade {
