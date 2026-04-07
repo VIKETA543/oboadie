@@ -63,7 +63,7 @@ layout: any = 'list';
     responsiveOptions: any[] | undefined;
     message:any
       
-  constructor(private productService: productservice, private router:Router ){
+  constructor(private productService: productservice, private router:Router,private cdr: ChangeDetectorRef ){
       
  
   }
@@ -136,7 +136,8 @@ layout: any = 'list';
 
         setTimeout(()=>{
                 
-                            this.products=response?.arrival
+                           this.products=response?.arrival
+            this.cdr.markForCheck();
             
             },5000)
             }else{
