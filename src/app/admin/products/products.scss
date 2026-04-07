@@ -1,8 +1,9 @@
 main {
     margin-top: calc(4%);
 }
-.product-bar{
-    header{
+
+.product-bar {
+    header {
         max-width: calc(100%);
         background-color: rgb(130, 135, 139);
         padding: 10px;
@@ -12,9 +13,10 @@ main {
     }
 }
 
-.select-img{
-max-width: 20px
+.select-img {
+    max-width: 20px
 }
+
 .carousel-trends-static {
     // box-shadow: 0px 0px 5px 2px rgb(138, 137, 137);
     max-width: cal(100% - 0%);
@@ -27,6 +29,12 @@ max-width: 20px
     }
 
 }
+
+.table-img {
+    width: 100px;
+    height: 70px;
+}
+
 .new-product-container {
     background-color: rgba(0, 0, 0, 0.7);
     position: absolute;
@@ -36,87 +44,138 @@ max-width: 20px
     right: 0;
     bottom: 0;
 }
+
 .crt-inner {
     position: relative;
     margin: 20px auto;
-    width: 70%;
+    width: 50%;
     background-color: rgb(255, 255, 255);
     border-radius: .3em;
-    box-shadow: 0px 0px 5px 1px rgb(128, 126, 126);
-    max-height: 70vh;
-    overflow-y: auto;
+    height: 70vh;
+
+
     header {
         padding: 10px;
-        border-bottom: 1px solid  rgb(59, 2, 29);
+        background-color: rgb(2, 85, 60);
+        border-bottom: 1px solid rgb(59, 2, 29);
         margin-bottom: 10px;
         font-size: 1.5vw;
         display: flex;
-        span{
+
+        span {
             display: block;
             max-width: calc(100% - 0%);
             width: 100%;
-                 color: rgb(59, 2, 29);
+            color: rgb(255, 255, 255);
         }
-      
-        ::ng-deep{
-            .p-button{
+
+        ::ng-deep {
+            .p-button {
                 background-color: transparent !important;
                 border: 0px !important;
-                outline:  0px !important;
+                outline: 0px !important;
                 color: rgb(52, 53, 53);
             }
         }
     }
-      #info{
-            padding: 10px;
-            margin: 10px;
-            border: 1px solid  rgb(59, 2, 29);
-            border-radius: .3em;
-            box-shadow: 0px 0px 3px 1px rgb(52, 53, 53);
-            display: block;
-            max-width: 1000%;
-            word-wrap: break-word;
-        }
-    section {
+
+    #info {
+        padding: 10px;
+        margin: 10px;
+        font-size: clamp(.5em, 1em, 1.5vw);
+        // border: 1px solid rgb(59, 2, 29);
+        border-radius: .3em;
+      color: rgb(3, 129, 129);
+        display: block;
+        max-width: 100%;
+        word-wrap: break-word;
+    }
+
+    .data-wr {
+        width: 90%;
         margin: 10px auto;
-        // background-color: red;
-        padding: 20px;
-        width: calc(100% - 50%);
-        box-shadow: 0px 0px 10px 2px lightgray;
+        display: flex;
+       
+        .data-sr-wrapper {
+       
+            max-width: calc(100% - 0%);
+            min-width: calc(100% - 50%);
+            width: calc(100% - 0%);
+            margin: 10px;
+             
 
-        ::ng-deep {
-            .p-floatlabel {
-
-                flex: 1;
+            section {
+                margin: 0px auto;
+                // background-color: red;
+                padding: 20px;
+                width: calc(100% - 0%);
+                border: 1px dotted gray;
 
                 ::ng-deep {
+                    .p-floatlabel {
+
+                        input {
+                            width: 100%;
+                        }
+
+                        flex: 1;
+
+                    }
+
+                    .p-iconfield {
+                        padding: 0px;
+
+                        ::ng-deep {
+                            input {
+                                width: 100%;
+                                padding-top: 10px;
+                                padding-bottom: 10px;
+                                font-size: 1.5vw;
+
+                            }
+                        }
+                    }
+                }
+
+                .preview {
+                    width: calc(100% - 0%);
+                }
+
+                div {
                     textarea {
                         width: 100%;
 
-                    }
-                }
-            }
-
-            .p-iconfield {
-                padding: 0px;
-
-                ::ng-deep {
-                    input {
-                        width: 100%;
-                        padding-top: 10px;
-                        padding-bottom: 10px;
-                        font-size: 1.5vw;
 
                     }
                 }
             }
         }
-
-        .preview {
-                width: calc(100% - 40%);
+       
+        #dwr-2nd {
+            max-width: calc(100% - 100%);
+            min-width: calc(100% - 60%);
+            width: calc(100% - 0%);
+             background-repeat: no-repeat;
+        background-size: cover;
+        overflow: hidden;
+              background-image: url('https://primefaces.org/cdn/primeng/images/dock/window.jpg');
+             box-shadow: 0px 0px 3px 1px rgb(255, 255, 255);
         }
+
     }
-    .productCode{
+ #btn-submit{
+            background-color: rgb(21, 22, 22);
+            position: absolute;
+            bottom: 0px;
+            width: 100%;
+            padding: 10px;
+            :ng-deep{
+                .p-button{
+                    float: righ;
+                }
+            }
+        }
+    .productCode {
         border-radius: .3em;
         margin: 10px;
         max-width: calc(100% - 2%);
@@ -125,6 +184,7 @@ max-width: 20px
     }
 
 }
+
 .iconwrapper {
     position: fixed;
     border-radius: .3em;
@@ -132,21 +192,22 @@ max-width: 20px
     border: 1px solid whitesmoke;
     padding: 5px;
     overflow: hidden;
- background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.7);
+
     #controlsImge {
 
-    position: relative;
-    margin: 0px auto;
-    border-radius: .3em;
-    box-shadow: 0px 0px 10px 2px lightgray;
-    border: 1px solid whitesmoke;
-    width: calc(100% - 1%);
-    padding: 5px;
-    overflow: hidden;
-    opacity: .9;
+        position: relative;
+        margin: 0px auto;
+        border-radius: .3em;
+        box-shadow: 0px 0px 10px 2px lightgray;
+        border: 1px solid whitesmoke;
+        width: calc(100% - 1%);
+        padding: 5px;
+        overflow: hidden;
+        opacity: .9;
 
-    
-}
+
+    }
 }
 
 
@@ -168,36 +229,33 @@ max-width: 20px
     padding: 0px;
 }
 
-:host ::ng-deep {
-    .dock-window {
-        width: calc(100% - 90%);
-        height: 14vh;
-        position: relative;
+:host ::ng-deep  #pDock{
+        background-color: rgba(0, 0, 0, 0.7);
+        max-height:15vh;
+        border-radius: .5em;
+        right: 20%;
+        top: 40vh;
+        position: fixed;
 
-        background-image: url('https://primefaces.org/cdn/primeng/images/dock/window.jpg');
-        background-repeat: no-repeat;
-        background-size: cover;
-        overflow: hidden;
-    }
+}
 
-       .dock-window1 {
-        width: calc(100% - 90%);
+
+    .dock-window1 {
         height: 10vh;
-        border-radius: 15em;
-        color: goldenrod;
-        position: absolute;
-        top: 66%;
-        left: 24%;
+        position: relative;
+ 
+        width: calc(100% - 0%);
          background-image: url('https://primefaces.org/cdn/primeng/images/dock/window.jpg');
         background-repeat: no-repeat;
         background-size: cover;
         overflow: hidden;
-         background-color: rgba(114, 113, 113, 0.7);
-    }
+  
+  }
+
     .p-dock {
         z-index: 1000;
     }
-}
+
 
 .enter-animation {
     animation: slide-fade 1s;

@@ -1,3 +1,4 @@
+
 <div class="container">
     <div class="buss-header">
         <img id="srclogo" src="assets/logo/oboadie.jpeg" alt="">
@@ -6,12 +7,7 @@
         <span>Home of Quality Hardware with affordable prices</span>
         </header>
     </div>
-    <!-- <section>
-        <p-iconfield>
-            <p-inputicon class="pi pi-search" />
-            <input type="text" pInputText placeholder="Search" />
-        </p-iconfield>
-    </section> -->
+   
     <p-toolbar>
     <ng-template #start>
     <p-button (click)="visible1 = true" icon="pi pi-chevron-down" label="Categories" (onClick)="cartegories()" />
@@ -74,7 +70,46 @@
         </div>
     </div>
 </p-popover>
-<div>
+
+@if(products){
+ <div class="card product-display">
+            <p-dataview #dv [value]="products" [layout]="'grid'">
+            
+                <ng-template #grid let-items>
+                    <div class="grid grid-cols-12 gap-4 " >
+                        <div *ngFor="let product of items" class="col-span-12 sm:col-span-6 md:col-span-4 xl:col-span-6 p-2 ">
+                            <div class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded data-style">
+                                <div class="bg-surface-50  justify-center rounded p-4">
+                                    <div class="relative mx-auto">
+                                         <img class="block xl:block mx-auto rounded w-full" [src]="product.imageurl"  style="max-width: 300px"/>
+                                        <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product)" class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />
+                                    </div>
+                                </div>
+                                <div class="pt-6">
+                                    <div class="flex flex-row justify-between products-start gap-2">
+                                        <div>
+                                            <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{ product.category_name }}</span>
+                                            <div class="text-lg font-medium mt-1">
+                                            <span>{{ product.name }}</span> 
+                                            <span>{{ product.title }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col gap-6 mt-6">
+                                        <span class="text-2xl font-semibold">{{ product.unitesellingprice | currency: 'GHS' }}</span>
+                                        <div class="flex gap-2">
+                                            <button pButton icon="pi pi-shopping-cart" label="Buy Now" [disabled]="product.inventoryStatus === 'OUTOFSTOCK'" class="flex-auto whitespace-nowrap"></button>
+                                            <button pButton icon="pi pi-heart" outlined></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template> 
+            </p-dataview>
+        </div>
+    }
 <!-- <div class="footer">
     <h1>Data</h1>
 </div> -->
@@ -85,7 +120,7 @@
 
 <!-- @if(products){ -->
 
-    <div class="card carousel-trends">
+    <!-- <div class="card carousel-trends">
         <h3>New Arrivals</h3>
         <p-carousel [value]="products" [numVisible]="4" [numScroll]="1" [circular]="true"
             [responsiveOptions]="responsiveOptions" autoplayInterval="3000">
@@ -110,13 +145,13 @@
                 </div>
             </ng-template>
         </p-carousel>
-    </div>
+    </div> -->
 <!-- }@else {
     <ng-template>
         <p>No </p>
     </ng-template>
 } -->
-@if(productTrend){
+<!-- @if(productTrend){
 <div class="card carousel-trends-static">
         <h3>TRENDING</h3>
         <p-carousel [value]="productTrend" [numVisible]="4" [numScroll]="1" [circular]="false"
@@ -144,4 +179,4 @@
         </p-carousel>
     </div>
 }
-  
+   -->

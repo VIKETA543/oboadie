@@ -121,10 +121,10 @@
                 <span class="mr-2" severity="info">Add Product</span>
                 <p-button icon="pi pi-times" class="mr-2" text severity="secondary" (onClick)="closeProduct()" />
             </header>
-            <label id="info">Create an new product for display <strong>Product can only be created once. to add quantity
-                    use the top - up module</strong></label>
-
+            <label id="info">Add a new product details.</label>
+            <p-divider/>
             <div class="data-wr">
+                <div class="data-sr-wrapper">
                 <section class="flex justify-center ">
                     <label class="productCode">
                         product Code: 
@@ -166,14 +166,12 @@
                         <textarea rows="5" cols="30" placeholder="Enter product discription" pTextarea [autoResize]="true" [(ngModel)]="description"></textarea>
                     </div>
                 </section>
-                @if(preview){
-                <section>
-                    <p-button icon="pi pi-upload" aria-label="Apply" label="Apply" class="apply" (onClick)="apply()" />
-                </section>
-                }
-            </div>
-            <div>
-                <section class="card flex justify-center">
+               
+                </div>
+
+
+                <div id="dwr-2nd">
+
                     <!--  class="card flex justify-center" -->
                     @if(preview){
                     <img [src]="preview" class="preview" animate.enter="enter-animation">
@@ -184,23 +182,36 @@
                         (change)="uploadFile($event)">
 
                     <div class="card">
-                        <div class="dock-window">
-                            <p-dock [model]="items" [position]="position">
+                       
+                            <p-dock [model]="items" [position]="position" id="pDock">
                                 <ng-template #item let-item>
-                                    <label for="pasportImage">
+                                    <label for="pasportImage" >
                                         <img [pTooltip]="item.label" tooltipPosition="top" [src]="item.icon"
                                             [alt]="item.label" width="100%" />
                                     </label>
                                 </ng-template>
                             </p-dock>
-                        </div>
+                      
                     </div>
                     }@else {
-                    <input type="file" id="pasportImage" accept="image/*" #fileUpload [(ngModel)]="selectedImage"
-                        (change)="uploadFile($event)">
-                    <div class="card dock-container">
+                    
+                    
+                    }
+     
+
+            </div>
+            </div>
+             @if(preview){
+                <section id="btn-submit">
+                    <p-button icon="pi pi-upload" aria-label="Apply" label="Apply" class="apply" (onClick)="apply()" />
+                </section>
+                }@else {
+                 
+           
                         <div class="dock-window1">
-                            <p-dock [model]="items1" [position]="position1">
+                               <input type="file" id="pasportImage" accept="image/*" #fileUpload [(ngModel)]="selectedImage"
+                        (change)="uploadFile($event)">
+                            <p-dock [model]="items1" [position]="position1" id="pDock1">
                                 <ng-template #item let-item>
                                     <label for="pasportImage">
                                         <img [pTooltip]="item.label" tooltipPosition="top" [src]="item.icon"
@@ -209,11 +220,8 @@
                                 </ng-template>
                             </p-dock>
                         </div>
-                    </div>
-                    }
-                </section>
 
-            </div>
+                }
             </div>
         </div>
     }

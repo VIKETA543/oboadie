@@ -5,30 +5,67 @@ main {
 .new-cart-container {
     background-color: rgba(0, 0, 0, 0.7);
     position: absolute;
-    top: 5%;
+    top: 1%;
     z-index: 25;
     left: 0;
     right: 0;
     bottom: 0;
-}
+    overflow: hidden;
 
+}
+.main-header{
+    header{
+        background-color: rgb(1, 75, 75);
+        color: whitesmoke;
+        font-size: clamp(.8vw,1rem, 2vw);
+        padding: 10px;
+    }
+}
 .crt-inner {
     position: relative;
-    margin: 20px auto;
-    width: 60%;
-    height: auto;
+    margin: 100px auto;
+    max-width: calc(100% - 50%);
+    min-width: calc(100% - 60%);
+    width: 50%;
+    height: 55vh;
     background-color: rgb(255, 255, 255);
     border-radius: .3em;
     box-shadow: 0px 0px 5px 1px rgb(128, 126, 126);
+    border-radius: .5em;
+    overflow: hidden;
+    .in-fl-cl{
+        display: flex;
+        flex: 1;
 
+        .data-i-c{
+            margin: 20px;
+            max-width: calc(100% - 0%);
+            min-width: calc(100% - 60%);
+            width: 100%;
+    
+      
+        }
+        .pic-h-c{
+          
+                  padding: 10px;
+            .bottom-items{
+                // display: flex;
+              
+            }
+     }
+    }
     header {
         padding: 10px;
         border-bottom: 1px solid lightgrey;
         margin-bottom: 10px;
+        display: flex;
+        
+              background-color: rgb(1, 58, 30);
         font-size: 1.5vw;
         span{
             display: block;
-            width: calc(100% - 10%);
+            width: calc(100% - 1%);
+            color: white;
         }
         ::ng-deep{
             .p-button{
@@ -44,7 +81,6 @@ main {
         margin: 10px auto;
         // background-color: red;
         padding: 20px;
-        width: calc(100% - 50%);
         box-shadow: 0px 0px 10px 2px lightgray;
 
         ::ng-deep {
@@ -108,16 +144,16 @@ max-width: calc(100% - 90%);
 }
 
 :host ::ng-deep {
-    .dock-window {
-        width: calc(100% - 90%);
-        height: 12vh;
-        position: absolute;
-
-        background-image: url('https://primefaces.org/cdn/primeng/images/dock/window.jpg');
-        background-repeat: no-repeat;
-        background-size: cover;
-        overflow: hidden;
-    }
+//     .dock-window {
+//         width: calc(100% - 80%);
+//         height: 12vh;
+//         //  position: absolute;
+// display: flex;
+//         background-image: url('https://primefaces.org/cdn/primeng/images/dock/window.jpg');
+//         background-repeat: no-repeat;
+//         background-size: cover;
+//         overflow: hidden;
+//     }
 
        .dock-window1 {
         width: calc(100% - 90%);
@@ -125,8 +161,8 @@ max-width: calc(100% - 90%);
         border-radius: 15em;
         color: goldenrod;
         position: absolute;
-        top: 46%;
-        left: 24%;
+        bottom: 2%;
+        right: 1%;
          background-image: url('https://primefaces.org/cdn/primeng/images/dock/window.jpg');
         background-repeat: no-repeat;
         background-size: cover;
@@ -137,7 +173,11 @@ max-width: calc(100% - 90%);
         z-index: 1000;
     }
 }
-
+.p-dock-items{
+ background-color: rgba(114, 113, 113, 0.7);
+   display: inline-flex;
+   border-radius: .3em;
+}
 
 
 

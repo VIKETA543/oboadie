@@ -21,6 +21,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { Products } from '../products/products';
+import { Divider } from "primeng/divider";
 
 
 
@@ -44,8 +45,7 @@ import { Products } from '../products/products';
     ImageModule,
     DockModule,
     TooltipModule,
-    ConfirmPopupModule
-  ],
+    ConfirmPopupModule],
   providers: [MessageService,ConfirmationService],
   templateUrl: './addcartegory.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

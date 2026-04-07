@@ -10,7 +10,7 @@ export class productservice {
     url = environment.apiUrl;
     constructor(private http: HttpClient) { }
     getProductsData() {
-        return this.http.get(this.url + '/display/display', { headers: new HttpHeaders().set('contentType', "application/json") })
+        return this.http.get(this.url + '/display/displayProducts', { headers: new HttpHeaders().set('contentType', "application/json") })
 
     }
 

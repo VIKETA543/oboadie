@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, signal, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, ChangeDetectionStrategy, Component, NgZone, OnInit, signal, ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CarouselModule } from 'primeng/carousel';
 import { DrawerModule } from 'primeng/drawer';
@@ -15,6 +15,9 @@ import { ProductsList, ProductCategory, ProductsTrends } from '../interface/prod
 import { productservice } from '../services/productservice';
 import { Router } from '@angular/router';
 import { DividerModule } from 'primeng/divider'; 
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { DataViewModule } from 'primeng/dataview';
+import { FormsModule } from '@angular/forms';
 @Component({
   standalone:true,
   selector: 'home',
@@ -24,23 +27,34 @@ import { DividerModule } from 'primeng/divider';
     Toolbar,
     PopoverModule,
     InputTextModule,
-    InputIcon, 
-    IconField,
+    // InputIcon, 
+    // IconField,
+    SelectButtonModule,
+    DataViewModule,
     SplitButtonModule,
     ToastModule,
     CarouselModule,
     ButtonModule,
-    TagModule],
+    FormsModule,
+    TagModule,
+],
   templateUrl: './home.html',
   styleUrl: './home.scss',
+ changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Home implements OnInit {
+
+selectedLayout: any
+
+    options: any[] = ['list', 'grid'];
+
 showSelectedCart(arg0: string) {
 throw new Error('Method not implemented.');
 }
 
     @ViewChild('op') op!: Popover;
 //   protected readonly title = signal('premierprime');
+layout: any = 'list';
   items:any
  visible1: boolean = false;
   products: ProductsList[]=[];
@@ -48,8 +62,10 @@ throw new Error('Method not implemented.');
   productcart:ProductCategory[]=[]
     responsiveOptions: any[] | undefined;
     message:any
-  constructor(private productService: productservice, private router:Router,  private mfc:ChangeDetectorRef){
       
+  constructor(private productService: productservice, private router:Router ){
+      
+ 
   }
   setResponsiveOptions(){
      this.responsiveOptions = [
@@ -98,12 +114,16 @@ throw new Error('Method not implemented.');
         ];
   }
   ngOnInit(): void {
-         this.setProducts();
-   
-          this.cartegories();
-        this.setResponsiveOptions();
+         
 
-        this.setTrending()  
+
+           this.setProducts();
+  
+
+           this.cartegories();
+        // this.setResponsiveOptions();
+
+        // this.setTrending()  
   }
   
   setProducts=()=>{
@@ -114,13 +134,11 @@ throw new Error('Method not implemented.');
         }else{
             if(response?.arrival){
 
-        
-                   setTimeout(()=>{
+        setTimeout(()=>{
+                
                             this.products=response?.arrival
-        this.mfc.markForCheck()
-        // 
-    },1000)
-                // console.log(  this.products)
+            
+            },5000)
             }else{
                  this.message="unknown error has occured"
                  setTimeout(()=>{this.message=undefined},5000)

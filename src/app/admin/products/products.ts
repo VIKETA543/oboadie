@@ -27,6 +27,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { Divider } from "primeng/divider";
 
 @Component({
   standalone: true,
@@ -50,11 +51,12 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     TextareaModule,
     DockModule,
     TooltipModule,
-       CommonModule,
+    CommonModule,
     ReactiveFormsModule,
     ToastModule,
-    ConfirmPopupModule
-  ],
+    ConfirmPopupModule,
+    Divider
+],
   templateUrl: './products.html',
   styleUrl: './products.scss',
   changeDetection: ChangeDetectionStrategy.Default,
