@@ -40,7 +40,7 @@ import { FormsModule } from '@angular/forms';
 ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
- changeDetection: ChangeDetectionStrategy.OnPush
+ changeDetection: ChangeDetectionStrategy.Default
 })
 export class Home implements OnInit {
 
@@ -126,20 +126,22 @@ layout: any = 'list';
         // this.setTrending()  
   }
   
-  setProducts=()=>{
-    this.productService.getProductsData().subscribe((response:any)=>{
+  async setProducts(){
+    await this.productService.getProductsData().subscribe((response:any)=>{
         if(response?.message){
              this.message=response?.message
              setTimeout(()=>{this.message=undefined},5000)
         }else{
             if(response?.arrival){
 
-        setTimeout(()=>{
+
+            
                 
                            this.products=response?.arrival
-            this.cdr.markForCheck();
-            
-            },5000)
+                        // console.log(this.products)
+             this.cdr.markForCheck();
+
+
             }else{
                  this.message="unknown error has occured"
                  setTimeout(()=>{this.message=undefined},5000)
@@ -167,8 +169,8 @@ setTrending=()=>{
   }
 
   
-  cartegories=()=>{
-     this.productService.cartegories().subscribe((response:any)=>{
+  async cartegories(){
+   await  this.productService.cartegories().subscribe((response:any)=>{
         if(response?.message){
           this.message=response?.message
             //  console.log(response?.message)
@@ -176,9 +178,9 @@ setTrending=()=>{
         }else{
             if(response?.data){
              
-                setTimeout(()=>{
+           
               this.productcart=response?.data
-                },5000)
+                this.cdr.markForCheck();
             }else{
               setTimeout(()=>{this.message=undefined},5000)
                  this.message="unknown error has occured"
@@ -193,7 +195,7 @@ setTrending=()=>{
                 return 'success';
             case 'LOWSTOCK':
                 return 'warn';
-            case 'OUTOFSTOCK':
+            case 'OUT OF STOCK':
                 return 'danger';
         }
         return
