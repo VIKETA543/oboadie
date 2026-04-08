@@ -117,8 +117,7 @@
                                 <img [src]="preview" class="preview" animate.enter="enter-animation">
                         }@else {
 
-                        <input type="file" id="pasportImage" accept="image/*" #fileUpload [(ngModel)]="selectedImage"
-                            (change)="uploadFile($event)">
+                        <input type="file" id="pasportImage" accept="image/*" #fileUpload (change)="uploadFile($event)">
                         <div class="card dock-container">
                             <div class="dock-window1">
                                 <p-dock [model]="items1" [position]="position1">
@@ -138,7 +137,7 @@
                     <div class="bottom-items">
                     <p-button icon="pi pi-upload" aria-label="Apply" label="Apply" class="apply" (onClick)="apply()" />
                             <div class="card flex flex-wrap justify-center items-end" >
-                             <input type="file" id="pasportImage" accept="image/*" [(ngModel)]="selectedImage" #fileUpload
+                             <input type="file" id="pasportImage" accept="image/*"  #fileUpload
                             (change)="uploadFile($event)">
                             <div class="dock-window">
                                 <p-dock [model]="items" [position]="position">
