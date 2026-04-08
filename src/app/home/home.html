@@ -9,110 +9,168 @@
 
     <p-toolbar>
         <ng-template #start>
+              @if(isHandset){
             <p-button (click)="visible1 = true" icon="pi pi-chevron-down" label="Categories"
                 (onClick)="cartegories()" />
-            <p-button type="button" icon="pi pi-user" (onClick)="toggle($event)" styleClass="min-w-48" />
-            <p-splitbutton label="Help" dropdownIcon="pi pi-question" [model]="items" />
+              }
+            <p-button type="button" icon="pi pi-user" label="Account" (onClick)="toggle($event)"
+                styleClass="min-w-48" />
+                   <button pButton icon="pi pi-shopping-cart" label="My Cart" class="flex-auto whitespace-nowrap"></button>
+            <!-- <p-splitbutton label="Help" dropdownIcon="pi pi-question" [model]="items" /> -->
         </ng-template>
     </p-toolbar>
 </div>
 
-<p-drawer header="CATEGORIES" [(visible)]="visible1" position="left" severity="info">
-    <p-divider />
+                    <p-select [options]="products" [(ngModel)]="selectedItem" (onChange)="searchItem($event)"
+                        optionLabel="title" [filter]="true" filterBy="title" [showClear]="true"
+                        placeholder="search Item" class="w-full md:w-58">
+                        <ng-template #selectedbrnd let-products>
+                            <div class="flex items-center gap-4">
+                                <img [src]="products.imageurl" [alt]="products.title"
+                                    class="w-24 rounded select-img" />
+                                <!-- <p-inputicon class="cedi-icon w-24 rounded select-img" /> -->
+                                <div>{{ products.title }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-products #branditem>
+                            <div class="flex items-center gap-4">
+                                <img [src]="products.imageurl" [alt]="products.title"
+                                    class="w-24 rounded select-img" />
+                                <div>{{ products.title}}</div>
+                            </div>
+                        </ng-template>
+
+                    </p-select>
+<!-- position="left" -->
+
+<div class="main">
+
     @if(productcart){
-    <ul>
-        @for (cat of productcart; track $index) {
-        <li (click)="showSelectedCart(cat.serialnumber)">
-            <section class="flex items-center gap-2 px-2 py-3 hover:bg-emphasis cursor-pointer rounded-border">
-                @if(cat.imageurl){
-                <img [src]="cat.imageurl" [alt]="cat.category_name" class="w-24 rounded table-img" />
-                }@else{
-                <img src="assets/logo/hbt.PNG" alt="">
+
+
+
+    @if(isHandset){
+    <p-drawer header="CATEGORIES" [(visible)]="visible1" [modal]="true" [dismissible]="true" [showCloseIcon]="true"
+        severity="info">
+        <ul>
+            @for (cat of productcart; track $index) {
+            <li (click)="showSelectedCart(cat.serialnumber)">
+                <section class="flex items-center gap-2 px-2 py-3 hover:bg-emphasis cursor-pointer rounded-border">
+                    @if(cat.imageurl){
+                    <img [src]="cat.imageurl" [alt]="cat.category_name" class="w-24 rounded table-img" />
+                    }@else{
+                    <img src="assets/logo/hbt.PNG" alt="">
+                    }
+                    <span>{{cat.category_name}}</span>
+                </section>
+            </li>
+            }
+        </ul>
+    </p-drawer>
+
+    }@else{
+    <div class="left-aside">
+        <header class="aside-header">
+            <span>CATEGORIES</span>
+        </header>
+            <ul>
+                @for (cat of productcart; track $index) {
+                <li (click)="showSelectedCart(cat.serialnumber)">
+                    <section class="flex items-center gap-2 px-2 py-3 hover:bg-emphasis cursor-pointer rounded-border">
+                        @if(cat.imageurl){
+                        <img [src]="cat.imageurl" [alt]="cat.category_name" class="w-24 rounded table-img" />
+                        }@else{
+                        <img src="assets/logo/hbt.PNG" alt="">
+                        }
+                        <span>{{cat.category_name}}</span>
+                    </section>
+                </li>
                 }
-                <span>{{cat.category_name}}</span>
-            </section>
-        </li>
-        }
-    </ul>
+            </ul>
+    </div>
+
+    }
     }@else{
     <p>
         {{message}}
     </p>
     }
-</p-drawer>
 
-<div>
 
-</div>
-<p-popover #op>
-    <div class="flex flex-col gap-4">
-        <div>
-            <span class="font-medium block mb-2">Account</span>
-            <hr>
-            <ul class="list-none p-0 m-0 ">
-                <!-- flex flex-col -->
-                <li class="flex items-center gap-2 px-2 py-3 hover:bg-emphasis cursor-pointer rounded-border"
-                    (click)="signup()">
-                    <i class="pi pi-sign-out" style="font-size: 1rem"></i>
-                    <!-- <img [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + member.image" style="width: 32px" /> -->
-                    <div>
-                        <span class="font-medium">Signup</span>
-                    </div>
-                </li>
-                <li class="flex items-center gap-2 px-2 py-3 hover:bg-emphasis cursor-pointer rounded-border"
-                    (click)="Login()">
-                    <i class="pi pi-sign-in" style="font-size: 1rem"></i>
-                    <!-- <img [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + member.image" style="width: 32px" /> -->
-                    <div>
-                        <span class="font-medium">Login</span>
+    <p-popover #op>
+        <div class="flex flex-col gap-4">
+            <div>
+                <span class="font-medium block mb-2">Account</span>
+                <hr>
+                <ul class="list-none p-0 m-0 ">
+                    <!-- flex flex-col -->
+                    <li class="flex items-center gap-2 px-2 py-3 hover:bg-emphasis cursor-pointer rounded-border"
+                        (click)="signup()">
+                        <i class="pi pi-sign-out" style="font-size: 1rem"></i>
+                        <!-- <img [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + member.image" style="width: 32px" /> -->
+                        <div>
+                            <span class="font-medium">Signup</span>
+                        </div>
+                    </li>
+                    <li class="flex items-center gap-2 px-2 py-3 hover:bg-emphasis cursor-pointer rounded-border"
+                        (click)="Login()">
+                        <i class="pi pi-sign-in" style="font-size: 1rem"></i>
+                        <!-- <img [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + member.image" style="width: 32px" /> -->
+                        <div>
+                            <span class="font-medium">Login</span>
 
-                    </div>
-                </li>
-            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</p-popover>
+    </p-popover>
 
-@if(products){
-<div class="card product-display">
-    <p-dataview #dv [value]="products" [layout]="'grid'">
+    @if(products){
+    <div class="card product-display">
+        <p-dataview #dv [value]="products" [layout]="'grid'">
 
-        <ng-template #grid let-items>
-            <div class="grid grid-cols-12 data-holder">
-                <div *ngFor="let product of items" class="col-span-12 sm:col-span-6 md:col-span-4 xl:col-span-6 p-3  ">
-                    <div class="p-3 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded data-style">
+            <ng-template #grid let-items>
+                <div class="grid grid-cols-12 data-holder">
+                    <div *ngFor="let product of items"
+                        class="col-span-12 sm:col-span-6 md:col-span-4 xl:col-span-6 p-3  ">
+                        <div
+                            class="p-3 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded data-style">
 
                             <div class="relative mx-auto img-container">
                                 <img class="block xl:block mx-auto rounded w-full data-img " [src]="product.imageurl" />
-                                <p-tag [value]="product.inventorystatus" [severity]="getSeverity(product)" class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />                   
-                        </div>
-                        <p-divider class="my-4" />
-                        <div >
-                                <span>{{ product.description }}</span>
-                            <div class="flex flex-row justify-between products-start gap-2">
-                                <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{
-                                    product.category_name }}</span>
-                                <p-divider layout="vertical" class="mx-2" />
-                                <!-- <span>{{ product.name }}</span>  -->
-                                <span>{{ product.title }}</span>
+                                <p-tag [value]="product.inventorystatus" [severity]="getSeverity(product)"
+                                    class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />
                             </div>
-                            <div class="flex flex-col ">
-                                <span class="text-2xl font-semibold">{{ product.unitesellingprice | currency: 'GHS'}}</span>
-                                <div class="flex gap-2">
-                                    <button pButton icon="pi pi-shopping-cart" label="Buy Now"
-                                        [disabled]="product.inventorystatus === 'OUTOFSTOCK'"
-                                        class="flex-auto whitespace-nowrap"></button>
-                                    <button pButton icon="pi pi-heart" outlined></button>
+                            <p-divider class="my-4" />
+                            <div>
+                                <span>{{ product.description }}</span>
+                                <div class="flex flex-row justify-between products-start gap-2">
+                                    <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{
+                                        product.category_name }}</span>
+                                    <p-divider layout="vertical" class="mx-2" />
+                                    <!-- <span>{{ product.name }}</span>  -->
+                                    <span>{{ product.title }}</span>
+                                </div>
+                                <div class="flex flex-col ">
+                                    <span class="text-2xl font-semibold">{{ product.unitesellingprice | currency:
+                                        'GHS'}}</span>
+                                    <div class="flex gap-2">
+                                        <button pButton icon="pi pi-shopping-cart" label="Buy Now"
+                                            [disabled]="product.inventorystatus === 'OUTOFSTOCK'"
+                                            class="flex-auto whitespace-nowrap"></button>
+                                        <button pButton icon="pi pi-heart" outlined></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </ng-template>
-    </p-dataview>
+            </ng-template>
+        </p-dataview>
+    </div>
+    }
 </div>
-}
 <!-- <div class="footer">
     <h1>Data</h1>
 </div> -->

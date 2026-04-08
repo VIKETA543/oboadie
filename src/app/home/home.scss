@@ -1,13 +1,30 @@
+// .container,.main{
+//     display: block;
+// }
+.main{
+    display: flex;
+position: relative;
+     color: rgb(238, 233, 233);
+     background-color: rgb(255, 255, 255);
+overflow: hidden;
+}
+.left-aside{
+    max-width: calc(100% - 80%);
+    min-width: calc(100% - 85%);
+    width: calc(100% - 85%);
+    margin: 10px;
+    color:  rgb(17, 17, 17);
+    float: left;
+      border: 1px solid  #e5e5ec;
+}
 .product-display{
-position: absolute;
-top: 15vh;
-width: 97%;
-
+position: relative;
+max-width: calc(100% - 15%);
 
 }
 .data-style{
-    border: 1px solid rgb(136, 133, 133);
-
+    border: 1px solid rgb(218, 215, 215);
+position: relative;
         padding: 0px;
     transition: 1s;
     background-color: rgba(255, 255, 255, 0.4);
@@ -25,32 +42,29 @@ max-width: 100%;
 max-height: 30vh;
   aspect-ratio: 0.9; 
 }
-.img-container{
-    background-color: green;
-}
 .container {
     width: 100%;
+    // max-height: 20vh;
+    // min-height: 10vh;
+    // height: 50vh;
     padding: 0px;
-    margin-bottom: 30rem;
-    background-color: rgb(4, 55, 102);
+    margin-bottom: 1rem;
+
     color: whitesmoke;
     // border-top-left-radius: 1em;
     // border-top-right-radius: 1em;
     box-shadow: 0px 0px 5px 1px rgb(138, 137, 137);
     display: flex;
-    position: fixed;
-    top: 0px;
+
 
     header {
-        font-size: 3vw;
+         font-size: clamp(0.8rem, 2vw, 1.5rem);
         font-weight: bolder;
 
     }
 
     .buss-header {
-
-        background-color: rgb(255, 255, 255);
-        color: rgb(4, 55, 102);
+        background-color: rgb(1, 17, 32);
         position: relative;
         width: calc(100% - 0%);
         min-width: 20%;
@@ -58,13 +72,13 @@ max-height: 30vh;
         display: flex;
 
         header {
-        font-size: clamp(0.8rem, 2vw, 1.5rem);
-            text-align: center;
-            padding-top: 20px;
+        font-size: clamp(0.8rem, 1.5vw, 12rem);
+            text-align: left;
+            padding-top: 10px;
             margin: 0px;
-            color: rgb(128, 77, 1);
-            text-shadow: 0px 5px 2px lightgrey;
+            color: rgb(255, 255, 255);
             font-family: 'Edwardian Script ITC';
+            width: 100%;
 
             span{
                      display: block;
@@ -72,22 +86,26 @@ max-height: 30vh;
             }
             span:first-child{
                  font-family: 'Arial Black';
-                 font-size: clamp(1rem, 5vw, 3rem);
+                 font-size: clamp(1rem, 2vw, 3rem);
             }
         }
 
         h2 {
-            font-size: 2vw;
+               font-size: clamp(0.8rem, 1vw, 1.5rem);
             text-align: center;
             padding: 0px;
             margin: 0px;
             color: rgb(4, 55, 102);
         }
 
-        img {
-            width: calc(8%);
+        #srclogo {
+            width: 100px;
+            height: 100px;
+            aspect-ratio: .5;
+            margin-right: 10px;
         }
     }
+
 
     section {
         background-color: rgb(255, 255, 255);
@@ -98,11 +116,15 @@ max-height: 30vh;
     ::ng-deep {
         .p-toolbar {
             border-radius: 0% !important;
-            background-color: rgb(255, 255, 255);
+     width:15%;
+    background-color: #e5e5ec; /* Change to your desired color */
+    border: 1px solid #e5e5ec;
+    color: #ffffff; /* Sets default text color */
+
         }
         .p-button,  .p-splitbutton{
             background-color: transparent !important;
-            color: rgb(5, 5, 5);
+            color: rgb(2, 110, 20);
             border-radius: 0 !important;
             outline: none !important;
             border: 0 !important;
@@ -111,7 +133,14 @@ max-height: 30vh;
       
     }
 }
-
+.aside-header{
+        background-color: #e5e5ec; /* Change to your desired color */
+    border: 1px solid #e5e5ec;
+    color: #181717; /* Sets default text color */
+    border-bottom:  #e5e5ec 1px solid;
+    padding: 10px;
+  
+}
 .carousel-trends {
      max-width: cal(100% - 0%);
     min-width: cal(100% - 60%);
@@ -159,18 +188,44 @@ max-height: 30vh;
         padding:0px;
         li{
                    padding:0px;
-           border-bottom: 1px dotted rgb(187, 248, 248);
+           border-bottom: 1px solid  #e5e5ec;
               overflow: hidden;
             section{
               img{
-                width: calc(100% - 85%);
+                width: 30px;
+                height: 30px;
+                aspect-ratio: .5;
               }
               span{
-                color:  rgb(241, 241, 241);
-                margin-top: 10px;
-                font-size: clamp(0.8rem, 2vw, 1.5rem);
+                color:  rgb(43, 42, 42);
+                margin-top: 1px;
+                font-size: clamp(0.5em, 1vw, 1.5em);
               }
             }
         }
     }
+    .search-bar{
+        position: relative;
+        padding: 0px;
+        transition: 1s;
+        background-color: rgba(34, 1, 1, 0.4);
+        max-width: calc(100% - 86%);
+        min-width: calc(100% - 86%);
+        width: calc(100% - 86%);
+        margin: 0px auto;
+        overflow: hidden;
+        ::ng-deep{
+            .p-toolbar{
+                  background-color: rgb(1, 17, 32);
+
+            }
+        }
+    }
+ :host ::ng-deep .p-iconfield {
+    width: 100%;
+    input{
+    width: 100%;
+}
+
+}
 

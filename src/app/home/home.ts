@@ -18,6 +18,12 @@ import { DividerModule } from 'primeng/divider';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { DataViewModule } from 'primeng/dataview';
 import { FormsModule } from '@angular/forms';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
+import { SelectChangeEvent, SelectModule } from 'primeng/select';
+
+
+
 @Component({
   standalone:true,
   selector: 'home',
@@ -27,8 +33,6 @@ import { FormsModule } from '@angular/forms';
     Toolbar,
     PopoverModule,
     InputTextModule,
-    // InputIcon, 
-    // IconField,
     SelectButtonModule,
     DataViewModule,
     SplitButtonModule,
@@ -37,16 +41,25 @@ import { FormsModule } from '@angular/forms';
     ButtonModule,
     FormsModule,
     TagModule,
+    AutoCompleteModule,
+    SelectModule
 ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
- changeDetection: ChangeDetectionStrategy.Default
+//  changeDetection: ChangeDetectionStrategy.Default
 })
 export class Home implements OnInit {
+searchItem($event: SelectChangeEvent) {
+throw new Error('Method not implemented.');
+}
+search($event: AutoCompleteCompleteEvent) {
+throw new Error('Method not implemented.');
+}
 
 selectedLayout: any
 
     options: any[] = ['list', 'grid'];
+selectedItem: any;
 
 showSelectedCart(arg0: string) {
 throw new Error('Method not implemented.');
@@ -57,14 +70,22 @@ throw new Error('Method not implemented.');
 layout: any = 'list';
   items:any
  visible1: boolean = false;
+ dismissable:boolean=false;
   products: ProductsList[]=[];
   productTrend:ProductsTrends[]=[];
   productcart:ProductCategory[]=[]
     responsiveOptions: any[] | undefined;
     message:any
-      
-  constructor(private productService: productservice, private router:Router,private cdr: ChangeDetectorRef ){
-      
+      isHandset:any
+  constructor(private productService: productservice, private router:Router,private cdr: ChangeDetectorRef,private breakpointObserver:BreakpointObserver  ){
+  this.breakpointObserver.observe(Breakpoints.Handset).subscribe((h: any) => {
+    if (h.matches) {
+      this.isHandset = h.matches
+
+    } else {
+
+    }
+  })
  
   }
   setResponsiveOptions(){
