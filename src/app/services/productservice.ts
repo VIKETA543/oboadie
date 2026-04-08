@@ -83,7 +83,7 @@ listBrandByproductID=(data:any)=>{
      return this.http.post(this.url + '/category/listbrndbyID', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
 }
 addBrand=(data:any)=>{
-     return this.http.post(this.url + '/category/addbrnd',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+     return this.http.post(this.url + '/category/addbrnd',data,{ headers: new HttpHeaders().set('contentType', "multipart/form-data") }) 
 }
 loadSelectedBrand=(data:any)=>{
      return this.http.post(this.url + '/category/selbrnd',data, { headers: new HttpHeaders().set('contentType', "application/json") })
