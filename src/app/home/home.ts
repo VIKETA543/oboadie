@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
+import { Tooltip } from "primeng/tooltip";
 
 
 
@@ -42,8 +43,7 @@ import { SelectChangeEvent, SelectModule } from 'primeng/select';
     FormsModule,
     TagModule,
     AutoCompleteModule,
-    SelectModule
-],
+    SelectModule, Tooltip],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 //  changeDetection: ChangeDetectionStrategy.Default
@@ -198,8 +198,7 @@ setTrending=()=>{
             setTimeout(()=>{this.message=undefined},5000)
         }else{
             if(response?.data){
-             
-           
+             console.log(response?.data)
               this.productcart=response?.data
                 this.cdr.markForCheck();
             }else{

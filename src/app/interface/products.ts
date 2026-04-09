@@ -29,7 +29,8 @@ export interface ProductCategory {
     serialnumber: string
     category_name: string
     image: string;
-    imageurl:string
+    imageurl:string;
+    description:string  
 
 }
 export interface CategoryList {
