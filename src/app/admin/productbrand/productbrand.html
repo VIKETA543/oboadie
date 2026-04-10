@@ -147,14 +147,15 @@
             <div class="t-gr-p">
                 <section>
                     <p-floatlabel variant="in">
-                        <textarea pTextarea id="in_label" [(ngModel)]="groupRole" rows="5" cols="30"
+                        <textarea pTextarea id="in_label" [(ngModel)]="groupRole" rows="2" cols="10"
                             style="resize: none" class="h-full"></textarea>
                         <label for="in_label">Details of this Brand</label>
                     </p-floatlabel>
                 </section>
 
-                <section>
-                         <label>Add Brand Image</label>
+                <section class="image-contaner">
+                         <label class="image-title">Add Brand Image</label>
+                         <p-divider layout="vertical" class="mb-2"/>
                     <label for="groupImage">
 
                         <img id="grp-cam-logo" src="assets/logo/camera-lens.png" alt="">
@@ -172,7 +173,7 @@
                     <div class="sub-rapper">
                         <p-button icon="pi pi-upload" class="mr-2" label="Add Brand" severity="primary"
                             (onClick)="submitBrand()" />
-                        <p-button icon="pi pi-times" class="mr-2" label="" severity="danger"
+                        <p-button icon="pi pi-times" class="mr-2" label="Cancel" severity="danger"
                             (onClick)="CloseBrandpre()" />
                     </div>
                 </div>

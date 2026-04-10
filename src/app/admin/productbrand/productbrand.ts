@@ -20,7 +20,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ProductCategory, Group, Brand } from '../../interface/products';
 import { productservice } from '../../services/productservice';
 import { Products } from '../products/products';
-
+import { DividerModule } from 'primeng/divider'; 
 
 @Component({
   selector: 'productbrand',
@@ -42,7 +42,8 @@ import { Products } from '../products/products';
     TableModule,
     PopoverModule,
     TagModule,
-    CardModule
+    CardModule,
+    DividerModule
   ],
   templateUrl: './productbrand.html',
   styleUrl: './productbrand.scss',
@@ -58,10 +59,10 @@ export class Productbrand {
 
     this.productservice.loadSelectedBrand(data).subscribe((response: any) => {
       if (response?.data) {
-        setTimeout(() => {
+
                 this.brandData = response?.data
         this.cdk.markForCheck()
-        }, 1000);
+
       } else {
         if (response?.message) {
           this.message = response?.message
@@ -77,7 +78,7 @@ export class Productbrand {
       } else {
         if (response?.data) {
           this.productList = response?.data
-           console.log(this.productList)
+               this.cdk.markForCheck();
         } else {
           if (response?.noactivity) {
 
@@ -113,10 +114,10 @@ export class Productbrand {
   loadBrandList = () => {
     this.productservice.loadBrandList().subscribe((response: any) => {
       if (response?.data) {
-        setTimeout(()=>{
+
               this.brandList = response?.data
         this.cdk.markForCheck()
-        },1000)
+
       
       
       } else {
@@ -135,7 +136,7 @@ export class Productbrand {
     this.productservice.categoryList().subscribe((response: any) => {
       if (response?.data) {
         this.productCart = response?.data
-      
+             this.cdk.markForCheck();
       } else {
         if (response?.message) {
           this.message = response?.success
@@ -149,7 +150,6 @@ export class Productbrand {
     })
   }
   submitBrand = () => {
-    console.log("Brand data")
     const formData = new FormData()
     formData.append('BrandId', this.groupID)
     formData.append('BrandName', this.GroupTitle),
@@ -187,10 +187,9 @@ export class Productbrand {
       for (let i = 0; i < numberOfFiles; i++) {
         const reader = new FileReader();
         reader.onload = (e: any) => {
-          setTimeout(() => {
             this.preview = e.target.result
             this.cdk.markForCheck()
-          }, 1000)
+
         }
         reader.readAsDataURL(this.selectedFile[i]);
         this.selectedFileNames.push(this.selectedFile[i].name);
@@ -245,12 +244,9 @@ export class Productbrand {
   loadBrandData = () => {
     this.productservice.loadBrandData().subscribe((response: any) => {
       if (response?.data) {
-        setTimeout(()=>{
-
                 this.brandData = response?.data
         this.cdk.markForCheck()
-        },1000)
-  
+ 
       } else {
         if (response?.message) {
           this.message = response?.message
@@ -313,9 +309,9 @@ console.log(this.selectedBrand)
   listBrand = () => {
     this.productservice.listBrand().subscribe((response: any) => {
       if (response?.data) {
-        setTimeout(()=>{
+        
               this.brandList = response?.data
-        },5000)      
+            this.cdk.markForCheck();
       } else {
         if (response?.message) {
           this.message = response?.message

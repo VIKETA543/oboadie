@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit,signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit,signal } from '@angular/core';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { Toolbar } from 'primeng/toolbar';
@@ -104,7 +104,7 @@ productName:any
 
 
 
-  constructor(private productservice: productservice,private confirmationService: ConfirmationService, private messageService: MessageService,) { }
+  constructor(private productservice: productservice,private confirmationService: ConfirmationService, private messageService: MessageService,private cdr: ChangeDetectorRef) { }
   ngOnInit(): void {
       this.isShown.update((isShown) => !isShown);
     this.loadcartList()
@@ -116,7 +116,7 @@ productName:any
     this.productservice.loadTargetgrpup().subscribe((response: any) => {
       if (response?.data) {
         this.targetGroup = response?.data
-        // console.log(this.targetGroup)
+     this.cdr.markForCheck();
       } else {
         if (response?.message) {
           this.message = response?.message
@@ -128,10 +128,10 @@ productName:any
   loadcartList = () => {
     this.productservice.categoryList().subscribe((response: any) => {
       if (response?.data) {
-        setTimeout(()=>{
+
                   this.productCart = response?.data
-             
-        },1000)
+             this.cdr.markForCheck();
+
 
       } else {
 
@@ -141,11 +141,11 @@ productName:any
   listproduct = () => {
     this.productservice.listproduct().subscribe((response: any) => {
       if (response?.data) {
- setTimeout(()=>{
+
            
         this.product = response?.data
-        console.log(this.product)
-        },1000)
+               this.cdr.markForCheck();
+
         // 
       } else {
         this.message = response?.message
@@ -243,9 +243,10 @@ closeProduct=()=>{
             this.message = response?.success
             this.isNewproduct=false
             this.messageService.add({ severity: 'success', summary: 'success', detail: this.message, life: 3000 });
-            setTimeout(() => {
+  
               this.listproduct()
-              this.message = undefined }, 1000)
+                     this.cdr.markForCheck();
+              this.message = undefined 
 
           } else {
             console.log("Unknown error has occured")

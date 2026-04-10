@@ -71,12 +71,16 @@ fixedValuerate($event: CheckboxChangeEvent) {
 console.log($event.checked)
 this.markuppercentage=false
 this.fixedvaluerate=$event.checked
+// this.singleItems=false
 }
 switchToWeightBased($event: CheckboxChangeEvent) {
 this.weight=$event.checked
   this.unitCost=false;
   this.markupPricing=false;
   this.yards=false
+  this.singleItems=false
+    this.fixedPricing=false
+    this.distructor()
 }
 switchTounitCost(arg0: any) {
 
@@ -84,6 +88,9 @@ this.weight=false;
 this.markupPricing=false;
 this.yards=false
 this.unitCost=arg0.checked
+this.singleItems=false
+  this.fixedPricing=false
+  this.distructor()
 }
 
 switchToyard($event: CheckboxChangeEvent) {
@@ -91,13 +98,38 @@ this.yards=$event.checked
   this.unitCost=false;
   this.markupPricing=false;
   this.weight=false
+  this.singleItems=false
+    this.fixedPricing=false
+    this.distructor()
+}
+switchToSingle($event: CheckboxChangeEvent) {
+this.singleItems=$event.checked
+  this.unitCost=false;
+  this.markupPricing=false;
+  this.weight=false
+  this.yards=false
+
+  this.fixedPricing=false
+  this.distructor()
+
 }
 
+setFixedPricingMOdule=($event: CheckboxChangeEvent)=>{
+this.singleItems=false
+  this.unitCost=false;
+  this.markupPricing=false;
+  this.weight=false
+  this.yards=false
+  this.distructor()
+this.fixedPricing=$event.checked
+}
 selectedcategory: any;
 selectedbrand: any;
 unitCost: boolean=false;
 weight: boolean=false;
 yards:boolean=false;
+singleItems:boolean=false
+fixedPricing:boolean=false
 markupPricing: boolean=false;
 fixedvaluerate:boolean=false
 
@@ -119,7 +151,7 @@ markuppercentage: boolean=false;
 
 
           this.pricetagDetails = await response?.data
-
+           this.cdr.markForCheck()
         } else {
           this.message = "Unknown error occured"
           this.messageService.add({ severity: 'error', summary: 'Message', detail: this.message });
@@ -167,12 +199,12 @@ markuppercentage: boolean=false;
   }
 
   getpriceTagDetails = () => {
-    this.priceservice.getpriceTagDetails().subscribe((response: any) => {
+    this.priceservice.getpriceTagDetails().subscribe(async (response: any) => {
       if (response.data) {
-        setTimeout(async () => {
+     
 
           this.pricetagDetails = await response?.data
-        }, 1000)
+   this.cdr.markForCheck()
       } else {
         this.message = response?.message
         this.messageService.add({ severity: 'error', summary: 'Message', detail: this.message });
@@ -208,10 +240,9 @@ listpricesByTag=()=>{
         this.messageService.add({ severity: 'error', summary: 'Message', detail: this.message });
     }else{
       if(response?.data){
-        setTimeout(()=>{
-          console.log(response?.data)
+  
           this.prices=response?.data
-        },250)
+      this.cdr.markForCheck()
       }else{
              this.prices=undefined
         this.message=response?.message
@@ -226,13 +257,11 @@ listpricesByTag=()=>{
 let data={
   pricetagid:$event.value.pricetagid
 }
-   this.priceservice.searchPricesbyTag(data).subscribe((response: any) => {
+   this.priceservice.searchPricesbyTag(data).subscribe(async (response: any) => {
       if (response.data) {
-        setTimeout(async () => {
-        
+           
           this.priceDetails = await response?.data
-            console.log(this.priceDetails)
-        }, 250)
+ this.cdr.markForCheck()
       } else {
         this.message = response?.message
         this.messageService.add({ severity: 'error', summary: 'Message', detail: this.message });
@@ -271,8 +300,6 @@ this.loadproductPrices();
   listpriceTag = async () => {
     this.productservice.listPriceTag().subscribe(async (response: any) => {
       if (response?.data) {
-        console.log("Price Tag", response?.data)
-        
          this.priceTag =await response?.data
           this.cdr.markForCheck()
       } else {
@@ -318,17 +345,14 @@ this.loadproductPrices();
       taggedID: this.taggedpriceTag
     }
 
-    this.productservice.dropPriceTag(data).subscribe((response: any) => {
+    this.productservice.dropPriceTag(data).subscribe(async (response: any) => {
       if (response?.success) {
         this.message = response?.success
         this.messageService.add({ severity: 'info', summary: 'Success', detail: this.message });
 
-        setTimeout(async () => {
-
-          this.pricetagDetails = await response?.data
+             this.pricetagDetails = await response?.data
           this.cdr.markForCheck()
-          // console.log(this.pricetagDetails)
-        }, 5000)
+  
       } else {
         this.messageService.add({ severity: 'error', summary: 'Message', detail: "Unknwon error has occured" });
       }
@@ -371,11 +395,9 @@ if (response?.message) {
 this.priceDetails=undefined
       } else {
         if (response?.data) {
-          setTimeout(()=>{
+
                 this.priceDetails=response?.data
-          },250)
-          
-           
+                  this.cdr.markForCheck()
         } else {
           this.messageService.add({ severity: 'error', summary: 'Message', detail: "Unknwon error has occured" });
         }
@@ -391,8 +413,9 @@ loadCategory=()=>{
           this.messageService.add({ severity: 'info', summary: 'Success', detail: this.message });
     }else{
       if(response?.data){
-        console.log('The cart: ',response?.data)
+
         this.categoryList=response?.data
+         this.cdr.markForCheck()
       }else{
          this.message = response?.success
                   this.messageService.add({ severity: 'info', summary: 'Success', detail: this.message });
@@ -405,23 +428,21 @@ loadCategory=()=>{
 
 
   loadproducts = () => {
-    this.productservice.listproduct().subscribe((response: any) => {
+    this.productservice.listproduct().subscribe(async (response: any) => {
       if (response?.data) {
-        setTimeout(()=>{
+        
             this.productList = response?.data
-        },1000)
+         this.cdr.markForCheck()
       
       } else {
         if (response?.message) {
           this.message = response?.success
           this.messageService.add({ severity: 'info', summary: 'Success', detail: this.message });
 
-          setTimeout(async () => {
+
 
             this.pricetagDetails = await response?.data
-          
-            // console.log(this.pricetagDetails)
-          }, 1000)
+           this.cdr.markForCheck()
         } else {
           this.messageService.add({ severity: 'error', summary: 'Message', detail: "Unknwon error has occured" });
         }
@@ -437,7 +458,7 @@ loadCategory=()=>{
       } else {
         if (response?.data) {
               this.priceDetails=response?.data
-              console.log(this.priceDetails)    
+            this.cdr.markForCheck()  
         } else {
           this.messageService.add({ severity: 'error', summary: 'Message', detail: "Unknwon error has occured" });
         }
@@ -451,13 +472,6 @@ loadCategory=()=>{
     this.taggedpriceTag = arg0;
     this.editselectedPricetag = arg0
     this.visibleBottom = true
-    //       this.cdr.detectChanges();
-    // this.zone.run(()=>{
-
-    // })
-
-    // this.editpricetagName="hjopss"
-
   }
 
     selectedPriceeventsetter = (data: any) => {
@@ -466,24 +480,19 @@ loadCategory=()=>{
   }
   selectproduct($event: SelectChangeEvent) {
     this.productID=$event.value.serialnumber
-    // console.log($event.value.serialnumber)
+
     let data={
       selectedproduct:$event.value.serialnumber
     }
       this.productservice.listBrandByproductID(data).subscribe((response: any) => {
       if (response?.message) {
-        console.log(response?.message)
         this.messageService.add({ severity: 'info', summary: 'Success', detail: this.message });
-
           this.message=response?.message
-
       } else {
         if (response?.data) {
-          console.log(response?.data)
-          setTimeout(()=>{
                 this.brandList=response?.data
-          },1000)
-      
+                 this.cdr.markForCheck()
+        
         } else {
           this.messageService.add({ severity: 'error', summary: 'Message', detail: "Unknwon error has occured" });
         }
@@ -500,18 +509,15 @@ loadCategory=()=>{
     }
       this.priceservice.searchproductPrices(data).subscribe((response: any) => {
       if (response?.message) {
-        console.log(response?.message)
       this.priceDetails=undefined;
          this.message=response?.message
           this.messageService.add({ severity: 'error', summary: 'Message', detail: this.message });
 
-          this.message=response?.message
-
       } else {
         if (response?.data) {
-         setTimeout(()=>{
+
              this.priceDetails=response?.data
-         },250)      
+              this.cdr.markForCheck()   
         } else {
            this.priceDetails=undefined;
          this.message=response?.message
@@ -533,7 +539,6 @@ newproductPrice=()=>{
     this.loadcartlist();
     this.runPriceIg()
     // this.loadTargetgrpup()
-
       if(this.propricedrawer===false){
 
   this.propricedrawer=true;
@@ -561,7 +566,6 @@ priceTagData=() => {
    
         
          this.pricetagList =await response?.data
-              console.log("Price Tag",this.pricetagList)
           this.cdr.markForCheck()
       } else {
         if (response?.message) {
@@ -589,7 +593,6 @@ priceTagData=() => {
           this.productservice.listBrandByproductID(data).subscribe((response: any) => {
       if (response?.data) {
         this.brandList = response?.data
-              console.log("brand data ",this.brandList)
         this.cdr.markForCheck()
         
       } else {
@@ -609,18 +612,15 @@ priceTagData=() => {
         this.message = response?.message
       } else {
         if (response?.data) {
-          console.log("Category", response.data)
-          // setTimeout(()=>{
-
                   this.categories = response?.data
-                  console.log("Loaded=:",this.categories)
                   this.cdr.markForCheck()
-          // },5000)
         } else {
           if (response?.noactivity) {
-            console.log(response?.data)
+            this.message=response?.noactivity
+                  this.messageService.add({ severity: 'danger', summary: 'Attention', detail: this.message, life: 3000 });
           } else {
             this.message = "Unknown error has occured"
+                  this.messageService.add({ severity: 'danger', summary: 'Attention', detail: this.message, life: 3000 });
           }
 
         }
@@ -638,7 +638,7 @@ let data={
   cartID:this.carteforyID
 }
 
-    this.productservice.listproductBycartID(data).subscribe((response: any) => {
+    this.productservice.listproductBycartID(data).subscribe(async (response: any) => {
       if (response?.data) {
         setTimeout(()=>{
             this.productListByCart = response?.data
@@ -649,12 +649,11 @@ let data={
           this.message = response?.message
           this.messageService.add({ severity: 'danger', summary: this.message, detail: this.message });
               this.productListByCart=undefined
-          setTimeout(async () => {
 
             this.pricetagDetails = await response?.data
             this.cdr.markForCheck()
             // console.log(this.pricetagDetails)
-          }, 5000)
+
         } else {
           this.messageService.add({ severity: 'error', summary: 'Message', detail: "Unknwon error has occured" });
         }
@@ -669,7 +668,6 @@ carteforyID:any;
  
   selectpriceBrand($event: SelectChangeEvent) {
 this.selectedBrand=$event.value
-console.log(this.selectedBrand)
 }
 
   groupList: Group[]|undefined;
@@ -677,9 +675,8 @@ console.log(this.selectedBrand)
   loadTargetgrpup = () => {
     this.productservice.loadTargetgrpup().subscribe((response: any) => {
       if (response?.data) {
-        setTimeout(()=>{
               this.groupList = response?.data
-        },5000)
+                     this.cdr.markForCheck();
         // console.log(this.groupList)
       } else {
         if (response?.message) {
@@ -690,8 +687,9 @@ console.log(this.selectedBrand)
     })
   }
   selectionGroup($event: SelectChangeEvent) {
-    console.log($event.value)
+    // console.log($event.value)
     this.productGroup=$event.value.groupid
+           this.cdr.markForCheck();
 }
 productGroup:any
 productID:any
@@ -746,10 +744,12 @@ let data={
   productID:this.productID,
   priceid:this.priceID
 }
+console.log(data)
 this.priceservice.savePrice(data).subscribe((response:any)=>{
    if (response?.success) {
  
               this.groupList = response?.data
+                     this.cdr.markForCheck();
                 this.newTag=false;
       this.message = response?.success
       this.distructor();this.loadproductPrices()
@@ -794,10 +794,102 @@ this.markuppricevalue=this.fixedvalue
   this.cartsellingPrice=this.totalCost+this.markuppricevalue
    
 }
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CALCULATE THE PRICE OF ITEMS IN UNITS 
+
+
+calculateMarkupforUnitItem=(()=>{
+
+ this.totalCost=(this.orderprice+this.misselaneouscost)
+
+ this.markuppricevalue=(this.markuppercent/100) *this.totalCost
+ this.unitsellingPrice=(this.totalCost+this.markuppricevalue)
+ this.cartsellingPrice=this.totalCost+this.markuppricevalue
 
 
 
+})
+calculateUnitPrices=(()=>{
 
+ this.totalCost=(this.orderprice+this.misselaneouscost)
+
+ this.markuppricevalue=(this.markuppercent/100) *this.totalCost
+ this.unitsellingPrice=(this.totalCost+this.markuppricevalue)/this.cartonquantity
+ this.cartsellingPrice=0
+})
+
+calulateUnitPriceusingFixValue=()=>{
+ this.totalCost=(this.orderprice+this.misselaneouscost)
+this.markuppricevalue=this.fixedvalue
+ this.unitsellingPrice=this.totalCost+this.markuppricevalue
+  this.cartsellingPrice=0
+  console.log(this.unitsellingPrice)
+   
+}
+// Pricing fixed items in the modules
+
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+fixedPricePack:boolean=false
+fixedPriceweight:boolean=false
+fixedPriceLenght:boolean=false
+fixedPriceperItem:boolean=false
+
+
+setfixedPricePack($event: CheckboxChangeEvent) {
+this.fixedPricePack=$event.checked
+this.fixedPriceweight=false
+this.fixedPriceLenght=false
+this.fixedPriceperItem=false
+}
+
+setfixedPriceweight($event: CheckboxChangeEvent) {
+this.fixedPricePack=false
+this.fixedPriceweight=$event.checked
+this.fixedPriceLenght=false
+this.fixedPriceperItem=false
+}
+
+setfixedPriceLenght($event: CheckboxChangeEvent) {
+this.fixedPricePack=false
+this.fixedPriceweight=false
+this.fixedPriceLenght=$event.checked
+this.fixedPriceperItem=false
+}
+setfixedPriceperItem($event: CheckboxChangeEvent) {
+this.fixedPricePack=false
+this.fixedPriceweight=false
+this.fixedPriceLenght=false
+this.fixedPriceperItem=$event.checked
+}
+
+
+
+// Calculating prices of items in cart
+calculateFixedModulePrice=()=>{
+  this.totalCost=(this.orderprice+this.markuppricevalue)
+  this.unitsellingPrice=this.totalCost/this.cartonquantity
+  this.cartsellingPrice=this.totalCost
+}
+
+calculatepriceByWeightinKG=()=>{
+this.totalCost=(this.orderprice+this.markuppricevalue)
+ this.unitsellingPrice=(this.totalCost+this.markuppricevalue)/this.itemWeight
+  this.cartsellingPrice=this.totalCost
+
+}
+
+calculatepriceByLengthinYard=()=>{
+this.totalCost=(this.orderprice+this.markuppricevalue)
+ this.unitsellingPrice=(this.totalCost+this.markuppricevalue)/this.itemlength
+  this.cartsellingPrice=this.totalCost
+
+}
 
 distructor=()=>{
   this.totalCost=0;

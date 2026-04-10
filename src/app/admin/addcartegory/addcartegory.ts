@@ -48,7 +48,7 @@ import { Divider } from "primeng/divider";
     ConfirmPopupModule],
   providers: [MessageService,ConfirmationService],
   templateUrl: './addcartegory.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
   styleUrl: './addcartegory.scss',
 })
 export class Addcartegory implements OnInit {
@@ -75,7 +75,7 @@ export class Addcartegory implements OnInit {
         this.message = response?.message
         this.shownewcart = false
         this.messageService.add({ severity: 'warn', summary: 'warn', detail: this.message, life: 3000 });
-        setTimeout(() => { this.message = undefined }, 5000)
+        setTimeout(() => { this.message = undefined }, 1000)
         console.log(this.message)
       } else {
         if (response?.success) {
@@ -252,6 +252,7 @@ clearRecords=(event: Event)=>{
         const reader = new FileReader();
         reader.onload = (e: any) => {
           this.preview = e.target.result
+                 this.cdr.markForCheck();
         }
         reader.readAsDataURL(this.selectedFile[i]);
         this.selectedFileNames.push(this.selectedFile[i].name);
@@ -267,7 +268,7 @@ clearRecords=(event: Event)=>{
       } else {
         if (response?.data) {
           this.categories = response?.data
-          console.log(this.categories)
+                 this.cdr.markForCheck();
         } else {
           if (response?.noactivity) {
 
