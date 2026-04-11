@@ -45,4 +45,8 @@ listPricebytag=()=>{
 searchPricesbyTag=(data:any)=>{
   return this.http.post(this.url + '/prices/searchPricesbyTag',data,{ headers: new HttpHeaders().set('contentType', "application/json") })
 }
+
+loadSupplierPriceByBrand=(data:any)=>{
+   return this.http.post(this.url + '/prices/findsupplierprice',data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+}
 }

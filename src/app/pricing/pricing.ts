@@ -18,7 +18,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FluidModule } from 'primeng/fluid';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -59,11 +59,22 @@ import { Productpriceservice } from '../services/productpriceservice';
   changeDetection:ChangeDetectionStrategy.Default
 })
 export class Pricing implements OnInit {
+   loading = signal(false);
+  searchValue = signal('');
+    activityValues = signal<number[]>([0, 100]);
 
+   
+    clear(table: Table) {
+        table.clear();
+        this.searchValue.set('');
+    }
+
+    
 switchfixedandPercentage($event: CheckboxChangeEvent) {
 console.log($event.checked)
 this.fixedvaluerate=false;
 this.markuppercentage=$event.checked
+this.orderprice=this.supplierprice
 }
 
 
@@ -71,6 +82,7 @@ fixedValuerate($event: CheckboxChangeEvent) {
 console.log($event.checked)
 this.markuppercentage=false
 this.fixedvaluerate=$event.checked
+this.orderprice=this.supplierprice
 // this.singleItems=false
 }
 switchToWeightBased($event: CheckboxChangeEvent) {
@@ -80,6 +92,7 @@ this.weight=$event.checked
   this.yards=false
   this.singleItems=false
     this.fixedPricing=false
+    this.orderprice=this.supplierprice
     this.distructor()
 }
 switchTounitCost(arg0: any) {
@@ -90,6 +103,7 @@ this.yards=false
 this.unitCost=arg0.checked
 this.singleItems=false
   this.fixedPricing=false
+  this.orderprice=this.supplierprice
   this.distructor()
 }
 
@@ -100,6 +114,7 @@ this.yards=$event.checked
   this.weight=false
   this.singleItems=false
     this.fixedPricing=false
+    this.orderprice=this.supplierprice
     this.distructor()
 }
 switchToSingle($event: CheckboxChangeEvent) {
@@ -108,7 +123,7 @@ this.singleItems=$event.checked
   this.markupPricing=false;
   this.weight=false
   this.yards=false
-
+this.orderprice=this.supplierprice
   this.fixedPricing=false
   this.distructor()
 
@@ -122,6 +137,7 @@ this.singleItems=false
   this.yards=false
   this.distructor()
 this.fixedPricing=$event.checked
+this.orderprice=this.supplierprice
 }
 selectedcategory: any;
 selectedbrand: any;
@@ -398,6 +414,7 @@ this.priceDetails=undefined
 
                 this.priceDetails=response?.data
                   this.cdr.markForCheck()
+                            // this.loading.set(false);
         } else {
           this.messageService.add({ severity: 'error', summary: 'Message', detail: "Unknwon error has occured" });
         }
@@ -664,10 +681,31 @@ let data={
 carteforyID:any;
     brandList: Brand[] | undefined;
     selectedBrand: Brand | undefined
-
+supplierprice:number=0;
  
   selectpriceBrand($event: SelectChangeEvent) {
 this.selectedBrand=$event.value
+console.log(this.selectedBrand)
+let data={
+brandid:$event.value.brandid
+
+}
+this.priceservice.loadSupplierPriceByBrand(data).subscribe((response:any)=>{
+  if(response?.message){
+    this.message=response?.message
+        this.messageService.add({ severity: 'danger', summary: 'error', detail: this.message, life: 3000 });
+  }else{
+    if(response?.data){
+      this.supplierprice=response?.data[0].marketprice
+      console.log(this.supplierprice)
+      
+
+    }else{
+      this.message=response?.message
+        this.messageService.add({ severity: 'danger', summary: 'error', detail: this.message, life: 3000 });
+    }
+  }
+})
 }
 
   groupList: Group[]|undefined;
@@ -681,7 +719,7 @@ this.selectedBrand=$event.value
       } else {
         if (response?.message) {
           this.message = response?.message
-          this.messageService.add({ severity: 'info', summary: 'Info', detail: this.message, life: 3000 });
+          this.messageService.add({ severity: 'danger', summary: 'error', detail: this.message, life: 3000 });
         }
       }
     })
@@ -846,6 +884,7 @@ this.fixedPricePack=$event.checked
 this.fixedPriceweight=false
 this.fixedPriceLenght=false
 this.fixedPriceperItem=false
+this.orderprice=this.supplierprice
 }
 
 setfixedPriceweight($event: CheckboxChangeEvent) {
@@ -853,6 +892,7 @@ this.fixedPricePack=false
 this.fixedPriceweight=$event.checked
 this.fixedPriceLenght=false
 this.fixedPriceperItem=false
+this.orderprice=this.supplierprice
 }
 
 setfixedPriceLenght($event: CheckboxChangeEvent) {
@@ -860,12 +900,14 @@ this.fixedPricePack=false
 this.fixedPriceweight=false
 this.fixedPriceLenght=$event.checked
 this.fixedPriceperItem=false
+this.orderprice=this.supplierprice
 }
 setfixedPriceperItem($event: CheckboxChangeEvent) {
 this.fixedPricePack=false
 this.fixedPriceweight=false
 this.fixedPriceLenght=false
 this.fixedPriceperItem=$event.checked
+this.orderprice=this.supplierprice
 }
 
 

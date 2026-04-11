@@ -257,7 +257,22 @@
 
     @if(priceDetails){
     <div class="card">
-        <p-table [value]="priceDetails" [tableStyle]="{ 'min-width': '50rem' }">
+        <p-table #dt1 [value]="priceDetails" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading()" [paginator]="true" 
+        [globalFilterFields]="['name', 'category_name', 'title', 'pricetag',]" showGridlines>
+
+ <ng-template #caption>
+                    <div class="flex">
+                        <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+                        <p-iconfield iconPosition="left" class="ml-auto">
+                            <p-inputicon>
+                                <i class="pi pi-search"></i>
+                            </p-inputicon>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" />
+                        </p-iconfield>
+                    </div>
+                </ng-template>
+
+
             <ng-template #header>
                 <tr>
                     <th>No</th>

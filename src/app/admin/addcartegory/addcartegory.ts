@@ -4,7 +4,7 @@ import { Toolbar } from 'primeng/toolbar';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { RatingModule } from 'primeng/rating';
 import { CategoryList } from '../../interface/products';
@@ -52,6 +52,19 @@ import { Divider } from "primeng/divider";
   styleUrl: './addcartegory.scss',
 })
 export class Addcartegory implements OnInit {
+     loading = signal(false);
+    searchValue = signal('');
+      activityValues = signal<number[]>([0, 100]);
+  
+     
+      clear(table: Table) {
+          table.clear();
+          this.searchValue.set('');
+      }
+  
+  
+  
+  
   isShown = signal(false);
 
 
