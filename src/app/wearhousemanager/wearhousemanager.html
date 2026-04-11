@@ -1,9 +1,8 @@
 <div class="card table-style">
     <p-toolbar>
         <ng-template #start>
-            <p-button icon="pi pi-plus" class="mr-2" text severity="secondary" />
-            <p-button icon="pi pi-print" class="mr-2" text severity="secondary" />
-            <p-button icon="pi pi-upload" text severity="secondary" />
+            <p-button icon="manager" variant="text" label='Manage Identity' class="mr-2" text severity="success"
+                (onClick)="setDrawerVisible()" />
         </ng-template>
         <ng-template #center>
             <div class="card flex justify-center">
@@ -13,11 +12,13 @@
                         label="Manage" />
                     <p-popover #op>
                         <div class="card-wrapper">
-                            <span class="font-medium block mb-2" > <i class="pi pi-cog" style="font-size: 1rem"></i>Options</span>
+                            <span class="font-medium block mb-2"> <i class="pi pi-cog"
+                                    style="font-size: 1rem"></i>Options</span>
                             <p-divider />
                             <div class="btn-pops">
-                                <p-button label="New Identity" icon="pi pi-plus" (onClick)="newIdentity()" severity="secondary" />
-                                <p-button label="New Wearhouse" icon="wearhouse"  severity="secondary"/>
+                                <p-button label="New Identity" icon="pi pi-plus" (onClick)="newIdentity()"
+                                    severity="secondary" />
+                                <p-button label="New Wearhouse" icon="wearhouse" severity="secondary" />
                                 <p-button label="Assign Manager" icon="Manager" iconPos="left" severity="secondary" />
                                 <p-button label="Access" icon="access" iconPos="left" severity="secondary" />
                             </div>
@@ -35,25 +36,85 @@
 
 <p-dialog header="New Identity" [(visible)]="isVisible" [style]="{ width: '30rem' }">
     <span class="p-text-secondary block mb-1">Create a warehouse identity to represent the type of wearhouse</span>
-    <p-divider/>
-      <div class="flex items-center gap-4 mb-4">
-        <label for="username" class="font-semibold w-24">Identity Number <i class="pi pi-sparkles" style="font-size: 1rem; color: gold;" pTooltip="Unique ID to identiy Warehouse object"></i></label>
+    <p-divider />
+    <div class="flex items-center gap-4 mb-4">
+        <label for="username" class="font-semibold w-24">Identity Number <i class="pi pi-sparkles"
+                style="font-size: 1rem; color: gold;" pTooltip="Unique ID to identiy Warehouse object"></i></label>
         <input pInputText id="identity" class="flex-auto" readonly="true" autocomplete="off" [(ngModel)]="identity" />
     </div>
     <div class="flex items-center gap-4 mb-4">
-        <label for="username" class="font-semibold w-24">Identity Title<i class="pi pi-sparkles" style="font-size: 1rem;color: gold;" pTooltip="Use common name for easy memorisation"></i></label>
-        <input pInputText id="username" class="flex-auto" autocomplete="off"[autofocus]="true" [(ngModel)]="identityName" />
+        <label for="username" class="font-semibold w-24">Identity Title<i class="pi pi-sparkles"
+                style="font-size: 1rem;color: gold;" pTooltip="Use common name for easy memorisation"></i></label>
+        <input pInputText id="username" class="flex-auto" autocomplete="off" [autofocus]="true"
+            [(ngModel)]="identityName" />
     </div>
     <div class="flex items-center gap-4 mb-8">
-        <label for="email" class="font-semibold w-24">Description <i class="pi pi-sparkles" style="font-size: 1rem; color: gold;" pTooltip="Provide brief description of your warehouse object"></i></label>
+        <label for="email" class="font-semibold w-24">Description <i class="pi pi-sparkles"
+                style="font-size: 1rem; color: gold;"
+                pTooltip="Provide brief description of your warehouse object"></i></label>
         <textarea rows="5" cols="30" pTextarea [(ngModel)]="identitydescription"></textarea>
     </div>
-    <p-divider/>
+    <p-divider />
     <div class="flex justify-end gap-2 ">
-        <p-button label="Cancel" severity="danger" (click)="isVisible = false"  />
-        <p-button label="Save"  severity="secondary" (click)="saveIdentity(); isVisible = false" />
+        <p-button label="Cancel" severity="danger" (click)="isVisible = false" />
+        <p-button label="Save" severity="secondary" (click)="saveIdentity(); isVisible = false" />
     </div>
 </p-dialog>
 
-<p-toast/>
+<p-toast />
 }
+
+
+<p-drawer [(visible)]="isDrawerVisible" header="WAREHOUSE IDENTITY MANAGER" modal="false">
+
+    <div class="card">
+        <p-table #dt1 [value]="identityList" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+            [loading]="loading()" [paginator]="true" [globalFilterFields]="['id', 'name',  'date']" showGridlines>
+
+            <ng-template #caption>
+                <div class="flex">
+                    <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+                    <p-iconfield iconPosition="left" class="ml-auto">
+                        <p-inputicon>
+                            <i class="pi pi-search"></i>
+                        </p-inputicon>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Search keyword" />
+                    </p-iconfield>
+                </div>
+            </ng-template>
+
+
+            <ng-template #header>
+                <tr>
+                    <th>Identity Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Authprisation</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+
+            <ng-template #body let-identityList>
+                <tr>
+                    <td>{{ identityList.identityid }}</td>
+                    <td>{{ identityList.name }}</td>
+                    <td>{{ identityList.decription }}</td>
+                    <td>{{identityList.date}}</td>
+                    <td>
+                        <div class="card flex justify-center">
+                            <p-toggleswitch [(ngModel)]="identityList.auth" (onChange)="auth($event,identityList)" />
+                        </div>
+                    </td>
+                    <td>
+                            <div class="flex items-center gap-4 mb-1">
+                        <p-button label="Delete" icon="pi pi-trash" severity="danger" (click)="isVisible = false" />
+                        <p-button label="Edit" icon="pi pi-pencil" severity="info"  (click)="saveIdentity(); isVisible = false" />
+                                </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</p-drawer>

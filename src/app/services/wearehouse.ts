@@ -15,4 +15,12 @@ export class Wearehouse {
       console.log(data)
    return this.http.post(this.url + '/warehouse/addidentity',data,{ headers: new HttpHeaders().set('contentType', "application/json") })  
 }
+
+listIdenties=()=>{
+    return this.http.get(this.url + '/warehouse/listidentities',{ headers: new HttpHeaders().set('contentType', "application/json") })  
+}
+
+auth=(data:any)=>{
+  return this.http.post(this.url + '/warehouse/auth',data,{ headers: new HttpHeaders().set('contentType', "application/json") })  
+}
 }
