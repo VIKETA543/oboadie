@@ -1,0 +1,23 @@
+.table-img {
+    width: 50px;
+    height: 50px;
+}
+.table-style{
+  
+    width: calc(98%);
+    margin: 0px auto;
+      margin-top: 10vh;
+      border-radius: .5em;
+      border: 1px solid rgb(4, 51, 122);
+      overflow: hidden;
+    header {
+        font-size: clamp(1.0vw, 1.5vw, 2.0vw);
+        text-align: left;
+        padding-top: 10px;
+        margin: 0px;
+        color: rgb(253, 249, 251);
+        font-family: 'Tahoma';
+        background-color: rgb(4, 51, 122);
+        padding: 10px;
+    }
+}

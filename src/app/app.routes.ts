@@ -7,6 +7,7 @@ import { Products } from './admin/products/products';
 import { Targetgroup } from './admin/targetgroup/targetgroup';
 import { Productbrand } from './admin/productbrand/productbrand';
 import { Pricing } from './pricing/pricing';
+import { Supplierprices } from './admin/supplierprices/supplierprices';
 
 export const routes: Routes = [
     {
@@ -15,7 +16,10 @@ export const routes: Routes = [
             { path: 'products', component: Products },
             { path: 'targetgroup', component: Targetgroup },
             { path: 'productbrand', component: Productbrand },
-            {path: 'pricing',component:Pricing},
+            { path: 'pricing', component: Pricing },
+            { path: 'supplierprices', component: Supplierprices },
+
+
             { path: '', redirectTo: 'products', pathMatch: 'full' }
         ]
     },

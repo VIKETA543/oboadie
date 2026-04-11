@@ -15,8 +15,8 @@
         </ng-template>
     </p-toolbar>
 </div>
-<div class="card flex justify-center">
-    <p-drawer [(visible)]="dropMenu" header="Drawer">
+<div class="card ">
+    <p-drawer [(visible)]="dropMenu" header="Menu">
         <p-button type="button" label="Manage Categories" icon="pi pi-folder-plus" routerLink='addcartegory'
             styleClass="min-w-48" severity="secondary" />
         <p-button type="button" label="Manage Product" icon="pi pi-objects-column" routerLink='products'
@@ -27,8 +27,10 @@
             severity="secondary" styleClass="min-w-48" />
         <p-button icon="cedi-icon" label="Pricing" class="mr-2" routerLink="pricing" text severity="secondary"
             styleClass="min-w-48" />
+                <p-button icon="cedi-icon" label="Manage Supplier Prices" class="mr-2" routerLink="supplierprices" text severity="secondary"
+            styleClass="min-w-48" />
     </p-drawer>
 </div>
 <div id="routercontainer">
     <router-outlet></router-outlet>
-</div>
+</div> 

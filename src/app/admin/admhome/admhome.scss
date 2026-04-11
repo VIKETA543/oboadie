@@ -54,19 +54,22 @@
             min-width: calc(100% - 97%);
             width: calc(100% - 96%);
         }
-        #buslogo{
+
+        #buslogo {
             max-width: calc(100% - 92%);
             min-width: calc(100% - 97%);
             width: calc(100% - 95%);
         }
     }
+
     section {
         background-color: rgb(255, 255, 255);
         padding: 10px;
         border-radius: 0px;
-        .productCode{
+
+        .productCode {
             border-radius: .3em;
-            padding:10px
+            padding: 10px
         }
 
     }
@@ -76,7 +79,9 @@
             border-radius: 0% !important;
             background-color: rgb(23, 24, 24);
         }
-        .p-button,  .p-splitbutton{
+
+        .p-button,
+        .p-splitbutton {
             background-color: transparent !important;
             color: gold;
             border-radius: 0 !important;
@@ -84,16 +89,39 @@
             border: 0 !important;
             box-shadow: 0px 0px 5px 1px rgb(138, 137, 137);
         }
-      
+
     }
-}
-:host ::ng-deep {
-  .cedi-icon {
-    width: 1rem; /* Adjust size as needed */
-    height: 1rem; /* Adjust size as needed */
-    background-image: url("/assets/icons/cedi.svg");  
-    background-size: contain; /* Ensure the image fits within the bounds */
-    display: inline-block; /* Required for the background to show */
-  }
+
 }
 
+:host ::ng-deep {
+    .p-drawer {
+        .p-button {
+            width: calc(100% - 0%);
+            color: rgb(23, 24, 24);
+            transition: 1s;
+        }
+        .p-button:hover {
+            color: rgb(0, 0, 0);
+            border-radius: 0 !important;
+            outline: none !important;
+            border: 0 !important;
+            box-shadow: 0px 0px 5px 1px rgb(138, 137, 137);
+        }
+    }
+
+}
+
+:host ::ng-deep {
+    .cedi-icon {
+        width: 1rem;
+        /* Adjust size as needed */
+        height: 1rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/cedi.svg");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        /* Required for the background to show */
+    }
+}
