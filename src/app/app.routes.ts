@@ -8,6 +8,7 @@ import { Targetgroup } from './admin/targetgroup/targetgroup';
 import { Productbrand } from './admin/productbrand/productbrand';
 import { Pricing } from './pricing/pricing';
 import { Supplierprices } from './admin/supplierprices/supplierprices';
+import { Wearhousemanager } from './wearhousemanager/wearhousemanager';
 
 export const routes: Routes = [
     {
@@ -18,7 +19,7 @@ export const routes: Routes = [
             { path: 'productbrand', component: Productbrand },
             { path: 'pricing', component: Pricing },
             { path: 'supplierprices', component: Supplierprices },
-
+            { path: 'wearhousemanager', component: Wearhousemanager },
 
             { path: '', redirectTo: 'products', pathMatch: 'full' }
         ]

@@ -12,7 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
@@ -50,6 +50,16 @@ import { DividerModule } from 'primeng/divider';
   providers: [MessageService, ConfirmationService],
 })
 export class Productbrand {
+
+       loading = signal(false);
+    searchValue = signal('');
+      activityValues = signal<number[]>([0, 100]);
+  
+     
+      clear(table: Table) {
+          table.clear();
+          this.searchValue.set('');
+      }
   refreshData() {
     this.loadBrandData();
   }

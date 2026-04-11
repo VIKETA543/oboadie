@@ -4,7 +4,6 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { providePrimeNG } from 'primeng/config';
-
 import Aura from '@primeuix/themes/aura';
 import Material from '@primeuix/themes/material';
 import Lara from '@primeuix/themes/lara';
@@ -13,6 +12,7 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 export const appConfig: ApplicationConfig = {
   providers: [
     // provideZoneChangeDetection({ eventCoalescing: true }), 
+  
     provideBrowserGlobalErrorListeners(),
      provideZonelessChangeDetection(),
     provideRouter(routes), provideClientHydration(withEventReplay()),

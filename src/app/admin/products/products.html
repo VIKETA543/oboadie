@@ -6,7 +6,7 @@
                     (onClick)="newProduct()" />
                 <p-button icon="pi pi-print" class="mr-2" text severity="secondary" />
                 <p-button icon="pi pi-upload" text severity="secondary" />
-               
+
             </ng-template>
             <div class="card flex justify-center">
                 <p-select [options]="productCart" [(ngModel)]="selectedCart" (onChange)="selectionOption($event)"
@@ -50,65 +50,75 @@
         </p-toolbar>
         <header>Products</header>
         <div>
-           <p-table [value]="product" [tableStyle]="{ 'min-width': '60rem' }">
-            <ng-template #caption>
-                <!-- <div class="flex items-center justify-between">
-                    <span class="text-xl font-bold">Products</span>
-                    <p-button icon="pi pi-refresh" rounded raised />
-                </div> -->
-            </ng-template>
-            <ng-template #header>
-                <tr>
-                    <th>Product id</th>
-                    <th>name</th>
-                    <th>description</th>
-                    <th>image</th>
-                    <th>Category</th>
-                    <th>Status</th>
-                    <th>date</th>
-                    <th>Action</th>
-                </tr>
-            </ng-template>
-            <ng-template #body let-product>
-                <tr>
-                    <td>{{ product.serialnumber }}</td>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.description }}</td>
-                    <td>
-                        <img [src]="product.imageurl" [alt]="product.name" class="w-24 rounded table-img" />
-                    </td>
-                    <td>
-                        <p-tag [value]="product.category_name" [severity]="getSeverity(product.category_name)" />
-                    </td>
-                    <td></td>
-                    <td>{{ product.date_created }}</td>
-                    
-                    <td>
-                        <div class="flex items-center justify-between">
-                            <p-toast />
-                            <p-confirmpopup />
-                            <p-button icon="pi pi-trash" label="Del" severity="danger"
-                                (onClick)="dropCart($event,product.serialnumber)" rounded raised />
-                        </div>
 
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template #footer>
-                <tr>
-                    <td colspan="6">In total there are {{ product ? product.length : 0 }} products.</td>
-                    <td>
-                        <div class="flex items-center justify-between">
-                            <p-toast />
-                            <p-confirmpopup />
-                            <p-button icon="pi pi-trash" label="Clear Records" severity="contrast"
-                                (onClick)="clearRecords($event)" rounded raised />
-                        </div>
-                    </td>
-                </tr>
+            <p-table #dt1 [value]="product" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+                [loading]="loading()" [paginator]="true" [globalFilterFields]="['serialnumber', 'name','category_name','date_created']"
+                showGridlines>
 
-            </ng-template>
-        </p-table>
+                <ng-template #caption>
+                    <div class="flex">
+                        <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+                        <p-iconfield iconPosition="left" class="ml-auto">
+                            <p-inputicon>
+                                <i class="pi pi-search"></i>
+                            </p-inputicon>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Search keyword" />
+                        </p-iconfield>
+                    </div>
+                </ng-template>
+                <ng-template #header>
+                    <tr>
+                        <th style="width:20%">Product id</th>
+                        <th style="width:20%">name</th>
+                        <th style="width:20%">description</th>
+                        <th>image</th>
+                        <th style="width:20%">Category</th>
+                        <th>Status</th>
+                        <th style="width:20%">date</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-product>
+                    <tr>
+                        <td>{{ product.serialnumber }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.description }}</td>
+                        <td>
+                            <img [src]="product.imageurl" [alt]="product.name" class="w-24 rounded table-img" />
+                        </td>
+                        <td>
+                            <p-tag [value]="product.category_name" [severity]="getSeverity(product.category_name)" />
+                        </td>
+                        <td></td>
+                        <td>{{ product.date_created }}</td>
+
+                        <td>
+                            <div class="flex items-center justify-between">
+                                <p-toast />
+                                <p-confirmpopup />
+                                <p-button icon="pi pi-trash" label="Del" severity="danger"
+                                    (onClick)="dropCart($event,product.serialnumber)" rounded raised />
+                            </div>
+
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template #footer>
+                    <tr>
+                        <td colspan="6">In total there are {{ product ? product.length : 0 }} products.</td>
+                        <td>
+                            <div class="flex items-center justify-between">
+                                <p-toast />
+                                <p-confirmpopup />
+                                <p-button icon="pi pi-trash" label="Clear Records" severity="contrast"
+                                    (onClick)="clearRecords($event)" rounded raised />
+                            </div>
+                        </td>
+                    </tr>
+
+                </ng-template>
+            </p-table>
         </div>
 
     </div>
@@ -122,51 +132,52 @@
                 <p-button icon="pi pi-times" class="mr-2" text severity="secondary" (onClick)="closeProduct()" />
             </header>
             <label id="info">Add a new product details.</label>
-            <p-divider/>
+            <p-divider />
             <div class="data-wr">
                 <div class="data-sr-wrapper">
-                <section class="flex justify-center ">
-                    <label class="productCode">
-                        product Code: 
-                    </label>
-                    <label class="productCode">{{productID}}</label>
-                </section>
-                <section>
-                    <div>
-                        <p-select [options]="productCart" [(ngModel)]="selectedCart"
-                            (onChange)="selectionOption($event)" optionLabel="category_name" [filter]="true"
-                            filterBy="category_name" [showClear]="true" placeholder="Select a Category"
-                            class="w-full md:w-56">
-                            <ng-template #selectedItem let-productCart>
-                                <div class="flex items-center gap-2">
-                                    <img [src]="productCart.imageurl" [alt]="productCart.category_name"
-                                        class="w-24 rounded select-img" />
-                                    <div>{{ productCart.category_name }}</div>
-                                </div>
-                            </ng-template>
-                            <ng-template let-productCart #item>
-                                <div class="flex items-center gap-2">
-                                    <img [src]="productCart.imageurl" [alt]="productCart.category_name"
-                                        class="w-24 rounded select-img" />
-                                    <div>{{ productCart.category_name}}</div>
-                                </div>
-                            </ng-template>
-                        </p-select>
-                    </div>
-                </section>
-               
-                <section>
-                    <p-floatlabel variant="in">
-                        <input pInputText id="in_label" [(ngModel)]="productName" autocomplete="on" />
-                        <label for="in_label">Product Name</label>
-                    </p-floatlabel>
-                </section>
-                <section>
-                    <div class="card flex justify-center">
-                        <textarea rows="5" cols="30" placeholder="Enter product discription" pTextarea [autoResize]="true" [(ngModel)]="description"></textarea>
-                    </div>
-                </section>
-               
+                    <section class="flex justify-center ">
+                        <label class="productCode">
+                            product Code:
+                        </label>
+                        <label class="productCode">{{productID}}</label>
+                    </section>
+                    <section>
+                        <div>
+                            <p-select [options]="productCart" [(ngModel)]="selectedCart"
+                                (onChange)="selectionOption($event)" optionLabel="category_name" [filter]="true"
+                                filterBy="category_name" [showClear]="true" placeholder="Select a Category"
+                                class="w-full md:w-56">
+                                <ng-template #selectedItem let-productCart>
+                                    <div class="flex items-center gap-2">
+                                        <img [src]="productCart.imageurl" [alt]="productCart.category_name"
+                                            class="w-24 rounded select-img" />
+                                        <div>{{ productCart.category_name }}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-productCart #item>
+                                    <div class="flex items-center gap-2">
+                                        <img [src]="productCart.imageurl" [alt]="productCart.category_name"
+                                            class="w-24 rounded select-img" />
+                                        <div>{{ productCart.category_name}}</div>
+                                    </div>
+                                </ng-template>
+                            </p-select>
+                        </div>
+                    </section>
+
+                    <section>
+                        <p-floatlabel variant="in">
+                            <input pInputText id="in_label" [(ngModel)]="productName" autocomplete="on" />
+                            <label for="in_label">Product Name</label>
+                        </p-floatlabel>
+                    </section>
+                    <section>
+                        <div class="card flex justify-center">
+                            <textarea rows="5" cols="30" placeholder="Enter product discription" pTextarea
+                                [autoResize]="true" [(ngModel)]="description"></textarea>
+                        </div>
+                    </section>
+
                 </div>
 
 
@@ -182,48 +193,48 @@
                         (change)="uploadFile($event)">
 
                     <div class="card">
-                       
-                            <p-dock [model]="items" [position]="position" id="pDock">
-                                <ng-template #item let-item>
-                                    <label for="pasportImage" >
-                                        <img [pTooltip]="item.label" tooltipPosition="top" [src]="item.icon"
-                                            [alt]="item.label" width="100%" />
-                                    </label>
-                                </ng-template>
-                            </p-dock>
-                      
+
+                        <p-dock [model]="items" [position]="position" id="pDock">
+                            <ng-template #item let-item>
+                                <label for="pasportImage">
+                                    <img [pTooltip]="item.label" tooltipPosition="top" [src]="item.icon"
+                                        [alt]="item.label" width="100%" />
+                                </label>
+                            </ng-template>
+                        </p-dock>
+
                     </div>
                     }@else {
-                    
-                    
+
+
                     }
-     
 
-            </div>
-            </div>
-             @if(preview){
-                <section id="btn-submit">
-                    <p-button icon="pi pi-upload" aria-label="Apply" label="Apply" class="apply" (onClick)="apply()" />
-                </section>
-                }@else {
-                 
-           
-                        <div class="dock-window1">
-                               <input type="file" id="pasportImage" accept="image/*" #fileUpload [(ngModel)]="selectedImage"
-                        (change)="uploadFile($event)">
-                            <p-dock [model]="items1" [position]="position1" id="pDock1">
-                                <ng-template #item let-item>
-                                    <label for="pasportImage">
-                                        <img [pTooltip]="item.label" tooltipPosition="top" [src]="item.icon"
-                                            [alt]="item.label" width="100%" />
-                                    </label>
-                                </ng-template>
-                            </p-dock>
-                        </div>
 
-                }
+                </div>
             </div>
+            @if(preview){
+            <section id="btn-submit">
+                <p-button icon="pi pi-upload" aria-label="Apply" label="Apply" class="apply" (onClick)="apply()" />
+            </section>
+            }@else {
+
+
+            <div class="dock-window1">
+                <input type="file" id="pasportImage" accept="image/*" #fileUpload [(ngModel)]="selectedImage"
+                    (change)="uploadFile($event)">
+                <p-dock [model]="items1" [position]="position1" id="pDock1">
+                    <ng-template #item let-item>
+                        <label for="pasportImage">
+                            <img [pTooltip]="item.label" tooltipPosition="top" [src]="item.icon" [alt]="item.label"
+                                width="100%" />
+                        </label>
+                    </ng-template>
+                </p-dock>
+            </div>
+
+            }
         </div>
+    </div>
     }
-        <p-toast />
+    <p-toast />
 </main>

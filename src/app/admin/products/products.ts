@@ -5,7 +5,7 @@ import { Toolbar } from 'primeng/toolbar';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { RatingModule } from 'primeng/rating';
 import { SplitButtonModule } from "primeng/splitbutton";
@@ -29,12 +29,15 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { Divider } from "primeng/divider";
 
+
 @Component({
   standalone: true,
   selector: 'products',
   imports: [
     InputTextModule,
     Toolbar,
+    IconField,
+    InputIcon,
     CommonModule,
     ToolbarModule,
     CarouselModule,
@@ -63,6 +66,18 @@ import { Divider } from "primeng/divider";
   providers:[MessageService,ConfirmationService]
 })
 export class Products implements OnInit {
+     loading = signal(false);
+    searchValue = signal('');
+      activityValues = signal<number[]>([0, 100]);
+  
+     
+      clear(table: Table) {
+          table.clear();
+          this.searchValue.set('');
+      }
+
+
+
 dropCart($event: MouseEvent,arg1: any) {
 throw new Error('Method not implemented.');
 }

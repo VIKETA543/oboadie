@@ -1,0 +1,72 @@
+.table-style{
+  
+    width: calc(98%);
+    margin: 0px auto;
+      margin-top: 10vh;
+      border-radius: .5em;
+      overflow: hidden;
+    header {
+        font-size: clamp(1.0vw, 1.5vw, 2.0vw);
+        text-align: left;
+        padding-top: 10px;
+        margin: 0px;
+        color: rgb(253, 249, 251);
+        font-family: 'Tahoma';
+        // background-color: rgb(4, 51, 122);
+        padding: 10px;
+    }
+     
+}
+.wearhouse{
+        width: 1em;
+        /* Adjust size as needed */
+        height: 1rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/wearhouse.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        /* Required for the background to show */
+    }
+    .Manager{
+        width: 1em;
+        /* Adjust size as needed */
+        height: 1rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/manager.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        /* Required for the background to show */
+    }
+       .access{
+        width: 1em;
+        /* Adjust size as needed */
+        height: 1rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/access.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        /* Required for the background to show */
+    }
+    textarea{
+       width: 70%;
+    }
+ 
+    .card-wrapper{
+        max-width: 15rem;
+        min-width: 10rem;
+         .btn-pops{
+        ::ng-deep{
+            .p-button{
+                width:auto;
+                border-radius: 0 !important;
+                margin: 1px;
+                display: block;
+                text-align: left;
+                width: 100%;
+            }
+        }
+    }
+    }
