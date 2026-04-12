@@ -93,12 +93,15 @@
     }
 
 }
-
-:host ::ng-deep {
+.card{
+::ng-deep {
     .p-drawer {
+               width: calc(100% - 85%);
+    
         .p-button {
-            width: calc(100% - 0%);
+            width: 100%;
             color: rgb(23, 24, 24);
+            text-align: left;
             transition: 1s;
         }
         .p-button:hover {
@@ -111,7 +114,7 @@
     }
 
 }
-
+}
 :host ::ng-deep {
     .cedi-icon {
         width: 1rem;

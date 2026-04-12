@@ -18,7 +18,8 @@
                             <div class="btn-pops">
                                 <p-button label="New Identity" icon="pi pi-plus" (onClick)="newIdentity()"
                                     severity="secondary" />
-                                <p-button label="New Wearhouse" icon="wearhouse" severity="secondary" />
+                                <p-button label="New Wearhouse" icon="wearhouse" severity="secondary"
+                                    (onClick)="newWarehouse()" />
                                 <p-button label="Assign Manager" icon="Manager" iconPos="left" severity="secondary" />
                                 <p-button label="Access" icon="access" iconPos="left" severity="secondary" />
                             </div>
@@ -28,9 +29,68 @@
             </div>
         </ng-template>
     </p-toolbar>
-    <header class="table-style wearehouse">
+    <!-- <header class="table-style wearehouse">
         <i class="wearehouse" style="font-size: 2.5rem"></i><span> Wearhouse Manager</span>
-    </header>
+    </header> -->
+    <p-table #dt2 [value]="warehousesData" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading()" [paginator]="true"
+        [globalFilterFields]="['serialnumber','name', 'warehousename', 'location','digitaladdress', 'date']"  stripedRows>
+
+        <ng-template #caption>
+            <div class="flex">
+                <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt2)" />
+                <p-iconfield iconPosition="left" class="ml-auto">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Search keyword" />
+                </p-iconfield>
+            </div>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th>serial</th>
+                <th>Identity</th>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Digital Address</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Opened</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-warehousesData>
+            <tr>
+                <td>{{warehousesData.serialnumber}}</td>
+                <td>{{ warehousesData.name }}</td>
+                <td>{{ warehousesData.warehousename }}</td>
+                <td>{{warehousesData.location}}</td>
+                <td>{{warehousesData.digitaladdress}}</td>
+                <td>{{ warehousesData.decription }}</td>
+                <td>{{warehousesData.date}}</td>
+                <td>
+                    <div class="card flex justify-center">
+                        <p-toggleswitch [(ngModel)]="warehousesData.isopened" (onChange)="auth($event,warehousesData)"
+                            pTooltip="Authorise the selected object to enable usage" />
+                    </div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-4 mb-1">
+                        <p-button label="Delete" icon="pi pi-trash" severity="danger"
+                            (click)="delIdentity(warehousesData)" pTooltip="Delete Object" />
+                        <p-button label="Edit" icon="pi pi-pencil" severity="info"
+                            (click)="editIdentity(warehousesData)" pTooltip="Edit Itendity" />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+
 </div>
 @if(isIdentity()){
 
@@ -69,7 +129,7 @@
 
     <div class="card">
         <p-table #dt1 [value]="identityList" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
-            [loading]="loading()" [paginator]="true" [globalFilterFields]="['id', 'name',  'date']" showGridlines>
+            [loading]="loading()" [paginator]="true" [globalFilterFields]="['id', 'name',  'date']" stripedRows>
 
             <ng-template #caption>
                 <div class="flex">
@@ -104,17 +164,119 @@
                     <td>{{identityList.date}}</td>
                     <td>
                         <div class="card flex justify-center">
-                            <p-toggleswitch [(ngModel)]="identityList.auth" (onChange)="auth($event,identityList)" />
+                            <p-toggleswitch [(ngModel)]="identityList.auth" (onChange)="auth($event,identityList)"
+                                pTooltip="Authorise the selected object to enable usage" />
                         </div>
                     </td>
                     <td>
-                            <div class="flex items-center gap-4 mb-1">
-                        <p-button label="Delete" icon="pi pi-trash" severity="danger" (click)="isVisible = false" />
-                        <p-button label="Edit" icon="pi pi-pencil" severity="info"  (click)="saveIdentity(); isVisible = false" />
-                                </div>
+                        <div class="flex items-center gap-4 mb-1">
+                            <p-button label="Delete" icon="pi pi-trash" severity="danger"
+                                (click)="delIdentity(identityList)" pTooltip="Delete Object" />
+                            <p-button label="Edit" icon="pi pi-pencil" severity="info"
+                                (click)="editIdentity(identityList)" pTooltip="Edit Itendity" />
+                        </div>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
+    @if(isEditIdentity()){
+    <div class="card flex justify-center edit-panel" animation.enter="enter-animation ">
+        <p-panel header="Edit">
+            <span class="p-text-secondary block mb-1">Edit Identity details</span>
+            <p-divider />
+            <div class="flex items-center gap-4 mb-4">
+                <label for="username" class="font-semibold w-24">Identity Number <i class="pi pi-sparkles"
+                        style="font-size: 1rem; color: gold;"
+                        pTooltip="Unique ID to identiy Warehouse object"></i></label>
+                <input pInputText id="identity" class="flex-auto" readonly="true" autocomplete="off"
+                    [(ngModel)]="identity" />
+            </div>
+            <div class="flex items-center gap-4 mb-4">
+                <label for="username" class="font-semibold w-24">Identity Title<i class="pi pi-sparkles"
+                        style="font-size: 1rem;color: gold;"
+                        pTooltip="Use common name for easy memorisation"></i></label>
+                <input pInputText id="username" class="flex-auto" autocomplete="off" [autofocus]="true"
+                    [(ngModel)]="identityName" />
+            </div>
+            <div class="flex items-center gap-4 mb-8">
+                <label for="email" class="font-semibold w-24">Description <i class="pi pi-sparkles"
+                        style="font-size: 1rem; color: gold;"
+                        pTooltip="Provide brief description of your warehouse object"></i></label>
+                <textarea rows="5" cols="30" pTextarea [(ngModel)]="identitydescription"></textarea>
+            </div>
+            <p-divider />
+            <div class="flex justify-end gap-2 ">
+                <p-button label="Cancel" severity="danger" (click)="isVisibleIdentity()" />
+                <p-button label="Save" severity="info" (click)="updateIdentity()" />
+            </div>
+        </p-panel>
+    </div>
+
+    }
 </p-drawer>
+
+@if(isNewwarehouse()){
+<div class="new-warehouse" animation.enter="enter-animation ">
+    <span class="header"> NEW WAREHOUSE</span>
+    <p-panel header="">
+        <div class="flex items-center gap-4 mb-4">
+            <label for="username" class="font-semibold w-24 w-h" >Wearhouse ID<i class="pi pi-sparkles"
+                    style="font-size: 1rem;color: gold;" pTooltip="Warehouse serial number"></i></label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" [autofocus]="false" readonly="true"
+                [(ngModel)]="warehouseSerial" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label for="username" class="font-semibold w-24 w-h">Warehouse Identity<i class="pi pi-sparkles"
+                    style="font-size: 1rem;color: gold;" pTooltip="Use common name for easy memorisation"></i></label>
+            <p-select [options]="identityList" [(ngModel)]="selectedIdentity" (onChange)="selectIdentity($event)"
+                optionLabel="name" [filter]="true" filterBy="name" [showClear]="true"
+                placeholder="Select Warehouse Identity" class="flex-auto">
+                <ng-template #selectedIdentity let-identityList>
+                    <div class="flex items-center gap-4">
+                        <div>{{ identityList.name }}</div>
+                    </div>
+                </ng-template>
+                <ng-template let-identityList #categoryitem>
+                    <div class="flex items-center gap-4">
+                        <div>{{ identityList.name}}</div>
+                    </div>
+                </ng-template>
+            </p-select>
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label for="username" class="font-semibold w-24 w-h">Warehouse Title<i class="pi pi-sparkles"
+                    style="font-size: 1rem;color: gold;" pTooltip="Use common name for easy memorisation"></i></label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" [autofocus]="true"
+                [(ngModel)]="warehouseTitle" />
+        </div>
+
+        <div class="flex items-center gap-4 mb-4">
+            <label for="username" class="font-semibold w-24 w-h">Warehouse Location<i class="pi pi-sparkles"
+                    style="font-size: 1rem;color: gold;" pTooltip="Use common name for easy memorisation"></i></label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" [autofocus]="true"
+                [(ngModel)]="warehouseLocation" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label for="username" class="font-semibold w-24 w-h">Digital Address<i class="pi pi-sparkles"
+                    style="font-size: 1rem;color: gold;" pTooltip="Use common name for easy memorisation"></i></label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" [autofocus]="true"
+                [(ngModel)]="warehousedigialAddress" />
+        </div>
+
+        <div class="flex items-center gap-4 mb-8">
+            <label for="email" class="font-semibold w-24 w-h">Warehouse Description <i class="pi pi-sparkles"
+                    style="font-size: 1rem; color: gold;"
+                    pTooltip="Provide brief description of your warehouse object"></i></label>
+            <textarea rows="5" cols="30" pTextarea [(ngModel)]="warehouseDescription"></textarea>
+        </div>
+
+    </p-panel>
+    
+         <div class="flex justify-end gap-2 header">
+                <p-button label="Cancel" severity="danger" (click)="isVisiblewarehouse()" />
+                <p-button label="Save" severity="info" (click)="saveWearHouse()" />
+            </div>
+</div>
+
+}
