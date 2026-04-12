@@ -42,4 +42,15 @@ saveWearHouse=(data:any)=>{
     return this.http.post(this.url + '/warehouse/saveWearhouse',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
 }
 
+isOpened=(data:any)=>{
+  console.log(data)
+  return this.http.post(this.url + '/warehouse/isopened',data,{ headers: new HttpHeaders().set('contentType', "application/json") })  
+}
+
+dropWarehouse=(data:any)=>{
+  console.log(data)
+  return this.http.post(this.url + '/warehouse/dropwarehouse',data,{ headers: new HttpHeaders().set('contentType', "application/json") })  
+}
+
+
 }

@@ -55,6 +55,39 @@ import { SelectChangeEvent, SelectModule } from 'primeng/select';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class Wearhousemanager implements OnInit {
+dropWarehouse(_t78: any) {
+   let data = {
+      id: _t78.serialnumber
+    }
+    this.warehouseservice.dropWarehouse(data).subscribe((response: any) => {
+      if (response?.success) {
+        this.message = response?.success
+        this.messageservice.add({ severity: 'info', summary: 'Success', detail: this.message, life: 3000 });
+        this.loading.set(true)
+        this.listWarehouses();
+      } else {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
+      }
+    })
+}
+isOpend($event: ToggleSwitchChangeEvent,_t78: any) {
+ let data = {
+      isopened: $event.checked,
+      id: _t78.serialnumber
+    }
+    this.warehouseservice.isOpened(data).subscribe((response: any) => {
+      if (response?.success) {
+        this.message = response?.success
+        this.messageservice.add({ severity: 'info', summary: 'Success', detail: this.message, life: 3000 });
+        this.loading.set(true)
+        this.listWarehouses();
+      } else {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
+      }
+    })
+}
   saveWearHouse() {
     let data = {
       warehouseSerial: this.warehouseSerial,
@@ -69,7 +102,7 @@ export class Wearhousemanager implements OnInit {
     this.warehouseservice.saveWearHouse(data).subscribe((response:any)=>{
         if (response?.success) {
         this.message = response?.success
-
+          this.loading.set(true)
         this.listWarehouses()
         this.destroyParameters()
             this.isNewwarehouse.set(false)
@@ -233,6 +266,7 @@ destroyParameters=()=>{
   @ViewChild('op') op!: Popover;
   constructor(private warehouseservice: Wearehouse, private messageservice: MessageService, private cdr: ChangeDetectorRef) { }
   ngOnInit(): void {
+    this.loading.set(true)
     this.listWarehouses();
 
   }

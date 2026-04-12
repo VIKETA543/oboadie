@@ -74,14 +74,14 @@
                 <td>{{warehousesData.date}}</td>
                 <td>
                     <div class="card flex justify-center">
-                        <p-toggleswitch [(ngModel)]="warehousesData.isopened" (onChange)="auth($event,warehousesData)"
+                        <p-toggleswitch [(ngModel)]="warehousesData.isopened" (onChange)="isOpend($event,warehousesData)"
                             pTooltip="Authorise the selected object to enable usage" />
                     </div>
                 </td>
                 <td>
                     <div class="flex items-center gap-4 mb-1">
                         <p-button label="Delete" icon="pi pi-trash" severity="danger"
-                            (click)="delIdentity(warehousesData)" pTooltip="Delete Object" />
+                            (click)="dropWarehouse(warehousesData)" pTooltip="Delete Object" />
                         <p-button label="Edit" icon="pi pi-pencil" severity="info"
                             (click)="editIdentity(warehousesData)" pTooltip="Edit Itendity" />
                     </div>
