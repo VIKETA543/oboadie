@@ -3,8 +3,11 @@
         <ng-template #start>
             <p-button icon="manager" variant="text" label='Manage Identity' class="mr-2" text severity="success"
                 (onClick)="setDrawerVisible()" />
-            <p-button icon="wh-man" variant="text" label='Stock Operations' class="mr-2" text severity="info"
+            <p-button icon="wh-man" variant="text" label='Open a Warehouse' class="mr-2" text severity="info"
                 (onClick)="warehouseStockOperation()" />
+            <p-button icon="operationcontrol" variant="text" label='Initialize Control' class="mr-2" text
+                severity="info" (onClick)="createControls()" />
+
         </ng-template>
         <ng-template #center>
             <div class="card flex justify-center">
@@ -92,8 +95,8 @@
                             (click)="dropWarehouse(warehousesData)" pTooltip="Delete Object" />
                         <p-button label="Edit" icon="pi pi-pencil" severity="info"
                             (click)="editWarehouse(warehousesData)" pTooltip="Edit Warehouse" />
-                        <p-button label="Open" icon="pi pi-eye" severity="info"
-                            (click)="displayStock(warehousesData)" pTooltip="Show stock" />
+                        <p-button label="Open" icon="pi pi-eye" severity="info" (click)="displayStock(warehousesData)"
+                            pTooltip="Show stock" />
                     </div>
                 </td>
             </tr>
@@ -465,7 +468,7 @@
                             <div class="card flex justify-center">
 
                                 <p-popover #op>
-                                    <div >
+                                    <div>
                                         <p-button class="btn-controls" (onClick)="incomingStock(stockcontrolData)"
                                             variant="text" icon="stock" label="In-Coming stock" severity="primary" />
                                         <p-divider></p-divider>
@@ -530,38 +533,41 @@
                                     <th style="width:25%">Stock ID</th>
                                     <th style="width:25%">Category</th>
                                     <th style="width:25%">Product</th>
-                                    <th style="width:25%">Image</th>
+                                    <th style="width:5%">Image</th>
                                     <th style="width:25%">Brand</th>
                                     <th style="width:25%">Qty Before</th>
                                     <th style="width:25%">Incoming</th>
+                                    <th style="width:25%">Control Qty</th>
+                                    <th style="width:25%">Control Type</th>
                                     <th style="width:25%">Total Available</th>
                                     <th style="width:25%">Date Posted</th>
                                     <th style="width:25%">Opened</th>
                                     <th style="width:25%">Details</th>
                                 </tr>
                             </ng-template>
-                            <ng-template #body let-stockby_by_cartegories let-i="rowIndex">
+                            <ng-template #body let-histpory let-i="rowIndex">
                                 <tr>
                                     <td>{{i+1}}</td>
-                                    <td>{{stockby_by_cartegories.stocknumber}}</td>
-                                    <td>{{stockby_by_cartegories.category_name }}</td>
-                                    <td>{{stockby_by_cartegories.name }}</td>
+                                    <td>{{histpory.stocknumber}}</td>
+                                    <td>{{histpory.category_name }}</td>
+                                    <td>{{histpory.name }}</td>
                                     <td>
-                                        <img [src]="stockby_by_cartegories.imageurl"
-                                            [alt]="stockby_by_cartegories.title" />
+                                        <img [src]="histpory.imageurl" [alt]="histpory.title" />
                                     </td>
-                                    <td>{{ stockby_by_cartegories.title}}</td>
-                                    <td>{{ stockby_by_cartegories.wareshouseproduct_current_quantity}}</td>
-                                    <td>{{ stockby_by_cartegories.warehouse_stock_new_quantity}}</td>
-                                    <td>{{stockby_by_cartegories.warehouse_stock_total_quantity }}</td>
-                                    <td>{{ stockby_by_cartegories.datedopened | date: 'MM/dd/yyyy'}}</td>
+                                    <td>{{ histpory.title}}</td>
+                                    <td>{{ histpory.wareshouseproduct_current_quantity}}</td>
+                                    <td>{{ histpory.warehouse_stock_new_quantity}}</td>
+                                    <td>{{histpory.quantitycontroled}}</td>
+                                    <td>{{histpory.controlname}}</td>
+                                    <td>{{histpory.warehouse_stock_total_quantity }}</td>
+                                    <td>{{ histpory.datedopened | date: 'MM/dd/yyyy'}}</td>
                                     <td>
                                         <div class="card flex justify-center">
-                                            <p-toggleswitch [(ngModel)]="stockby_by_cartegories.isstockopemend" [disabled]="!stockby_by_cartegories.isstockopemend" />
+                                            <p-toggleswitch [(ngModel)]="histpory.isstockopemend" />
                                         </div>
                                     </td>
-                                    <td> <p-button label="History" [rounded]="true" severity="warn"
-                                            (onClick)="showHistroy(stockby_by_cartegories)" /></td>
+                                    <td>{{histpory.comments}}</td>
+                                    <!-- <td>  <p-button label="History" [rounded]="true" severity="warn" (onClick)="showHistroy(stockby_by_cartegories)"/></td> -->
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -607,6 +613,8 @@
                                     <th style="width:25%">Brand</th>
                                     <th style="width:25%">Qty Before</th>
                                     <th style="width:25%">Incoming</th>
+                                    <th style="width:25%">Control Qty</th>
+                                    <th style="width:25%">Control Type</th>
                                     <th style="width:25%">Total Available</th>
                                     <th style="width:25%">Date Posted</th>
                                     <th style="width:25%">Opened</th>
@@ -625,6 +633,8 @@
                                     <td>{{ histpory.title}}</td>
                                     <td>{{ histpory.wareshouseproduct_current_quantity}}</td>
                                     <td>{{ histpory.warehouse_stock_new_quantity}}</td>
+                                    <td>{{histpory.quantitycontroled}}</td>
+                                    <td>{{histpory.controlname}}</td>
                                     <td>{{histpory.warehouse_stock_total_quantity }}</td>
                                     <td>{{ histpory.datedopened | date: 'MM/dd/yyyy'}}</td>
                                     <td>
@@ -632,6 +642,7 @@
                                             <p-toggleswitch [(ngModel)]="histpory.isstockopemend" />
                                         </div>
                                     </td>
+                                    <td>{{histpory.comments}}</td>
                                     <!-- <td>  <p-button label="History" [rounded]="true" severity="warn" (onClick)="showHistroy(stockby_by_cartegories)"/></td> -->
                                 </tr>
                             </ng-template>
@@ -685,6 +696,15 @@
                     <label class="lbl-style">Product</label>
                     <label class="lbl-style">{{stockedSelectedProduct}}</label>
                 </div>
+
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Operation</label>
+                    <label class="lbl-style">{{StockcontrolObject[0].controlname}}</label>
+                </div>
+              <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Supplier Invoice</label>
+            <input type="text" pInputText [(ngModel)]="SupplierInvoiceNumber" placeholder="Invoice number"/>
+        </div>
                 <p-divider></p-divider>
                 <div class="flex items-center gap-4 mb-1">
                     <p-select [options]="stockbrand" [(ngModel)]="selectedproductforStocking" optionLabel="title"
@@ -702,25 +722,20 @@
                         </ng-template>
                     </p-select>
                 </div>
-
-                <p-divider></p-divider>
                 @if(previousQty>=0){
                 <div class="card flex flex-wrap gap-4">
                     <label class="mb-2 font-bold block" for="integeronly">Current Stoc Quantity</label>
                     <p-inputnumber inputId="integeronly" [(ngModel)]="previousQty" readonly="true" />
                 </div>
-                <p-divider></p-divider>
                 <div class="card flex flex-wrap gap-4">
                     <label class="mb-2 font-bold block" for="integeronly">In-commong Quantity</label>
                     <p-inputnumber inputId="integeronly" [(ngModel)]="incomingQuantity" readonly="false"
                         (onInput)="calculateTotalQuantoty($event)" autofocus="true" />
                 </div>
-                <p-divider></p-divider>
                 <div class="card flex flex-wrap gap-4">
                     <label class="mb-2 font-bold block" for="integeronly">In-commong Quantity</label>
                     <p-inputnumber inputId="integeronly" [(ngModel)]="totalQuantity" readonly="true" />
                 </div>
-                <p-divider></p-divider>
                 <div class="card flex justify-center">
                     <label class="mb-2 font-bold block" for="integeronly">Remarks</label>
                     <textarea rows="3" cols="30" pTextarea [(ngModel)]="stockinfo"></textarea>
@@ -953,4 +968,41 @@
 </div>
 }
 
+
+<!-- warehouse control creator -->
+@if(iscreatingcontrol()){
+<div class="card flex justify-center">
+    <p-dialog [modal]="true" [(visible)]="iscreatingcontrol" [style]="{ width: '25rem' }">
+        <ng-template #header>
+            <div class="inline-flex items-center justify-center gap-2">
+                <p-avatar image="/assets/icons/operationcontrol.png" shape="circle" />
+                <span class="font-bold whitespace-nowrap">INITIAL OPERATION CONTROLS</span>
+            </div>
+        </ng-template>
+
+
+        <span class="p-text-secondary block mb-4">STOCK OPERATIONAL CONTROLS</span>
+        <div class="flex items-center gap-4 mb-4">
+            <label>Create a Control object for items to be withdrawn</label>
+            <p-toggleswitch [(ngModel)]="drawals" [disabled]="drawals().valueOf()"
+                (onChange)="createControl($event,'WITHDRAWAL')" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label>Create a Control object for incoming stock</label>
+            <p-toggleswitch [(ngModel)]="incoming" [disabled]="incoming()"
+                (onChange)="createControl($event,'INCOMMING')" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label>Create a Control object for returned items</label>
+            <p-toggleswitch [(ngModel)]="returns" [disabled]="returns()"
+                (onChange)="createControl($event,'RETURNED')" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label>Create a Control object transfered items</label>
+            <p-toggleswitch [(ngModel)]="transfer" [disabled]="transfer()"
+                (onChange)="createControl($event,'TRANSFER')" />
+        </div>
+    </p-dialog>
+</div>
+}
 <p-toast />

@@ -56,7 +56,8 @@ import { AvatarModule } from 'primeng/avatar';
     DatePickerModule,
     InputNumberModule,
     TextareaModule,
-    AvatarModule
+    AvatarModule,
+
 
   ],
 
@@ -66,10 +67,87 @@ import { AvatarModule } from 'primeng/avatar';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class Wearhousemanager implements OnInit {
+SupplierInvoiceNumber: any;
+  createControl($event: ToggleSwitchChangeEvent, arg1: string) {
+    let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
+    this.warehouseStockID = "STKCTRL" + new Date().getDate() + "-" + randomInteger
+    let data = {
+      Auth: $event.checked,
+      control: arg1,
+      date: new Date(),
+      id: this.warehouseStockID
+    }
+    this.warehouseservice.createControl(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.success) {
+          this.iscreatingcontrol.set(false)
+          this.message = response?.success
+          this.messageservice.add({ severity: 'success', summary: 'success', detail: this.message, life: 5000 });
+        } else {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 5000 });
+        }
+
+      }
+
+    })
+  }
+
+  loadControls = () => {
+    this.warehouseservice.loadControls().subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          const controls = response?.data
+          for (const c of controls) {
+        
+            
+            const control=c.controlname
+            switch(control){
+              case 'WITHDRAWAL':
+                this.drawals.set(c.status)
+                break;
+                case 'INCOMMING':
+                    this.incoming.set(c.status)
+                  break;
+                  case 'RETURNED':
+                    this.returns.set(c.status)
+                    break
+                    case 'TRANSFER':
+                      this.transfer.set(c.status)
+                      break;
+
+            }
+                console.log(control);
+          }
+        } else {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
+  }
 
 
- searchValue = signal('');
-    activityValues = signal<number[]>([0, 100]);
+  iscreatingcontrol = signal(false)
+  drawals = signal(false);
+  incoming = signal(false);
+  returns = signal(false);
+  transfer = signal(false);
+
+  createControls() {
+    this.loadControls()
+    this.iscreatingcontrol.set(true)
+  }
+
+
+  searchValue = signal('');
+  activityValues = signal<number[]>([0, 100]);
 
   isStckOpened($event: ToggleSwitchChangeEvent, arg1: any) {
     let data = {
@@ -732,7 +810,7 @@ export class Wearhousemanager implements OnInit {
   stockedSelectedProduct: any
   currentselectedProduct: any
   stockNumber: any
-
+  StockcontrolObject:any
 
 
   incomingStock(_t527: any) {
@@ -742,9 +820,10 @@ export class Wearhousemanager implements OnInit {
 
 
 
-    this.dialogVisible.set(true)
+  
     this.currentselectedProduct = _t527
     this.stockedSelectedProduct = _t527.name;
+  
     let data = {
       stockId: _t527.productid
     }
@@ -757,9 +836,12 @@ export class Wearhousemanager implements OnInit {
         if (response?.data) {
           setTimeout(() => {
             this.stockbrand = response?.data;
-            this.cdr.markForCheck
-            console.log(response?.data)
-
+         
+            console.log(response?.control)
+            this.StockcontrolObject=response?.control
+              this.dialogVisible.set(true)
+               this.cdr.markForCheck
+                 
           }, 100)
 
 
@@ -771,6 +853,8 @@ export class Wearhousemanager implements OnInit {
     })
   }
 
+
+  
   previousQty: any = undefined;
   incomingQuantity: number | undefined
   totalQuantity: number | undefined
@@ -827,10 +911,12 @@ export class Wearhousemanager implements OnInit {
       newQuantity: this.incomingQuantity,
       totalQty: this.totalQuantity,
       details: this.stockinfo,
-      stockNumber: this.stockNumber
-
+      stockNumber: this.stockNumber,
+      controldId: this.StockcontrolObject.controlid,
+      controledQuantity:this.incomingQuantity,
+      SupplierInvoiceNumber:this.SupplierInvoiceNumber
     }
-    console.log(data)
+
     this.warehouseservice.addIncomingStock(data).subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
@@ -855,12 +941,12 @@ export class Wearhousemanager implements OnInit {
     })
   }
 
-     
+
 
   isLoadingbyCategories = signal(false)
-  isstockhistroyLoading=signal(false)
+  isstockhistroyLoading = signal(false)
   stockby_by_cartegories: Stockbycategories[] = []
-  histpory:Stockbycategories[] = []
+  histpory: Stockbycategories[] = []
   first: number = 0;
   rows: number = 10;
   displayStockData(_t526: any) {
@@ -875,7 +961,7 @@ export class Wearhousemanager implements OnInit {
         this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 3000 });
       } else {
         if (response?.data) {
-           console.log(this.stockby_by_cartegories)
+          console.log(this.stockby_by_cartegories)
           this.stockby_by_cartegories = response?.data
           //
           this.isLoadingbyCategories.set(true)
@@ -913,26 +999,26 @@ export class Wearhousemanager implements OnInit {
     return this.stockby_by_cartegories ? this.first === 0 : true;
   }
 
- clear1(table: Table) {
-        table.clear();
-        this.searchValue.set('');
+  clear1(table: Table) {
+    table.clear();
+    this.searchValue.set('');
+  }
+  histcartName: any
+  histcartId: any
+  showHistroy(_t635: any) {
+    this.histcartName = _t635.cartegory_name;
+    this.histcartId = _t635.productstockcartegory
+
+    let data = {
+      category: this.histcartId
     }
-histcartName:any
-histcartId:any
-    showHistroy(_t635: any) {
-     this.histcartName=_t635.cartegory_name;
-     this.histcartId=_t635.productstockcartegory
-    
-      let data={
-        category:this.histcartId
-      }
-      this.warehouseservice. loadstockHistory(data).subscribe((response:any)=>{
-        if (response?.message) {
+    this.warehouseservice.loadstockHistory(data).subscribe((response: any) => {
+      if (response?.message) {
         this.message = response?.success
         this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 3000 });
       } else {
         if (response?.data) {
-        this.isstockhistroyLoading.set(true)
+          this.isstockhistroyLoading.set(true)
           this.histpory = response?.data
           //
           this.isLoadingbyCategories.set(true)
@@ -941,7 +1027,7 @@ histcartId:any
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 3000 });
         }
       }
-    
-      })
-}
+
+    })
+  }
 }

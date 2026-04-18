@@ -139,6 +139,19 @@
         background-repeat: no-repeat;
         /* Required for the background to show */
     }
+
+            .operationcontrol{
+  width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/operationcontrol.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+    }
 }
     textarea{
        width: 70%;
