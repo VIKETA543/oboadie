@@ -52,5 +52,70 @@ dropWarehouse=(data:any)=>{
   return this.http.post(this.url + '/warehouse/dropwarehouse',data,{ headers: new HttpHeaders().set('contentType', "application/json") })  
 }
 
+updateRecords=(data:any)=>{
+
+  return this.http.post(this.url + '/warehouse/updaterecords',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+findwarehouseforOperation=(data:any)=>{
+
+  return this.http.post(this.url + '/warehouse/findwarehouseforOperation',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+
+loadProductInfoCart=()=>{
+    return this.http.post(this.url + '/warehouse/productCartegeory',{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+loadProductInfoProd=(data:any)=>{
+    return this.http.post(this.url + '/warehouse/products',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+loadProductInfoBrand=(data:any)=>{
+    return this.http.post(this.url + '/warehouse/productBrand',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+
+savenewStock=(data:any)=>{
+     return this.http.post(this.url + '/warehouse/savenewstock',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+
+dropstock=(data:any)=>{
+     return this.http.post(this.url + '/warehouse/dropstock',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+
+updateStock=(data:any)=>{
+     return this.http.post(this.url + '/warehouse/updatestock',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+isStckOpened=(data:any)=>{
+     return this.http.post(this.url + '/warehouse/isStckOpened',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+
+
+loadforIncoming=(data:any)=>{
+     return this.http.post(this.url + '/warehouse/loadforIncoming',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+loadPreviousStock=(data:any)=>{
+         return this.http.post(this.url + '/warehouse/loadPreviousStock',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+addIncomingStock=(data:any)=>{
+         return this.http.post(this.url + '/warehouse/addIncomingStock',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+
+loadstockbyBycartegories=(data:any)=>{
+         return this.http.post(this.url + '/warehouse/loadstockbyBycartegories',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+
+loadstockHistory=(data:any)=>{
+         return this.http.post(this.url + '/warehouse/loadstockHistory',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
 
 }

@@ -51,6 +51,94 @@
         display: inline-block;
         /* Required for the background to show */
     }
+       .wh-man{
+        width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/warehousemanager.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+    }
+
+      .stock{
+        width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/stock.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+    }
+    .withdraw{
+        width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/withdraw.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+    }
+
+        .transfer{
+        width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/transfer.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+    }
+
+ .returnstock{
+        width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/returnstock.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+    }
+
+    .product{
+  width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/products.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+    }
+        .product_transparent{
+  width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/products_transparent.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+    }
 }
     textarea{
        width: 70%;
@@ -125,6 +213,31 @@ textarea{
     padding: 10px;
     font-size: clamp(1em,1.5em,1.8em);
     border: 1px solid lightgreen;
+}
+.ware-h-header{
+ font-size: clamp(1em,1.5em,1.8em);
+ color: rgb(1, 32, 88);
+ padding: 10px;
+ width: 30%;
+ font-weight: bold;
+}
+.st-nw-stl{
+font-size: clamp(1em,1.5em,1.8em);
+ color: rgb(1, 32, 88);
+ padding: 10px;
+ width: 50%;
+}
+.btn-controls{
+    max-width:calc(100% - 25%)
+}
+.lbl-style{
+    font-size: clamp(.5em,1em,1.2em);
+ color: rgb(1, 32, 88);
+ padding: 10px;
+ width: 50%;
+}
+img{
+    width: clamp(2em,3em,5em);
 }
 @keyframes slide-fade {
     from {
