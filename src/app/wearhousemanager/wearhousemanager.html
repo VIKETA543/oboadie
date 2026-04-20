@@ -473,8 +473,8 @@
                                             variant="text" icon="stock" label="In-Coming stock" severity="primary" />
                                         <p-divider></p-divider>
 
-                                        <p-button class="btn-controls" (click)="op.toggle($event)" variant="text"
-                                            icon="withdraw" label="Widthdraw stock" severity="info" />
+                                        <p-button class="btn-controls" (click)="makeDrawals(stockcontrolData)" variant="text"
+                                            icon="withdraw" label="Transfer stock Stores" severity="info" />
                                         <p-divider></p-divider>
                                         <p-button class="btn-controls" (click)="op.toggle($event)" variant="text"
                                             icon="transfer" label="Transfer stock" severity="success" />
@@ -727,18 +727,21 @@
                     <label class="mb-2 font-bold block" for="integeronly">Current Stoc Quantity</label>
                     <p-inputnumber inputId="integeronly" [(ngModel)]="previousQty" readonly="true" />
                 </div>
+                  <p-divider></p-divider>
                 <div class="card flex flex-wrap gap-4">
                     <label class="mb-2 font-bold block" for="integeronly">In-commong Quantity</label>
                     <p-inputnumber inputId="integeronly" [(ngModel)]="incomingQuantity" readonly="false"
                         (onInput)="calculateTotalQuantoty($event)" autofocus="true" />
                 </div>
+                  <p-divider></p-divider>
                 <div class="card flex flex-wrap gap-4">
-                    <label class="mb-2 font-bold block" for="integeronly">In-commong Quantity</label>
+                    <label class="mb-2 font-bold block" for="integeronly">Total Quantity</label>
                     <p-inputnumber inputId="integeronly" [(ngModel)]="totalQuantity" readonly="true" />
                 </div>
+                  <p-divider></p-divider>
                 <div class="card flex justify-center">
-                    <label class="mb-2 font-bold block" for="integeronly">Remarks</label>
-                    <textarea rows="3" cols="30" pTextarea [(ngModel)]="stockinfo"></textarea>
+                    <label class="mb-2 font-bold block" for="integeronly">Enter Remarks</label>
+                    <textarea rows="1" cols="5" pTextarea class="details" [(ngModel)]="stockinfo"></textarea>
                 </div>
                 <p-divider></p-divider>
                 @if(incomingQuantity){
@@ -752,11 +755,117 @@
 
         }
 
+<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ............................................................................................................................................................................
+ ............................................................................................................................................................................
+ ............................................................................................................................................................................. -->
+
+@if(withdrawals()){
+        <div class="card  flex justify-center">
+
+            <p-dialog [(visible)]="withdrawals" [modal]="true" [style]="{ width: '35rem' }">
+                <ng-template #header>
+                    <div class="inline-flex items-center justify-center gap-2">
+                        <p-avatar image="/assets/icons/stock.png" shape="circle" />
+                        <span class="font-bold whitespace-nowrap">WITHDRAW PRODUCT</span>
+                    </div>
+                </ng-template>
+
+                <span class="p-text-secondary block mb-1">Withdraw Products to stores</span>
+                <p-divider></p-divider>
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Operation Id</label>
+                    <label class="lbl-style">{{stockwidthdrawalID}}</label>
+                </div>
+
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">From Warehouse </label>
+                    <label class="lbl-style">{{currentselectedProduct.whse_stockid}}</label>
+                </div>
+
+                
 
 
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Product</label>
+                    <label class="lbl-style">{{stockedSelectedProduct}}</label>
+                </div>
+
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Operation</label>
+                    <label class="lbl-style">{{StockcontrolObject[0].controlname}}</label>
+                </div>
+                <p-divider></p-divider>
+                <div class="flex items-center gap-4 mb-1">
+                    <p-select [options]="stores" [(ngModel)]="selectedstore" optionLabel="storename"
+                        [filter]="true" filterBy="storename" appendTo="body" [showClear]="true" placeholder="SELECT A STORE"
+                        class="w-full md:w-56">
+                        <ng-template #selectedItem let-stores>
+                            <div class="flex items-center gap-2">
+                                <div>{{ stores.storename }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-stores #item>
+                            <div class="flex items-center gap-2">
+                                <div>{{ stores.storename }}</div>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                </div>
+              <!-- <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Supplier Invoice</label>
+            <input type="text" pInputText [(ngModel)]="SupplierInvoiceNumber" placeholder="Invoice number"/>
+        </div> -->
+                <p-divider></p-divider>
+                <div class="flex items-center gap-4 mb-1">
+                    <p-select [options]="stockbrand" [(ngModel)]="selectedproductforStocking" optionLabel="title"
+                        [filter]="true" filterBy="title" appendTo="body" [showClear]="true" placeholder="Select a Brand"
+                        class="w-full md:w-56" (onChange)="loadPreviousStock(stockbrand)">
+                        <ng-template #selectedItem let-stockbrand>
+                            <div class="flex items-center gap-2">
+                                <div>{{ stockbrand.title }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-stockbrand #item>
+                            <div class="flex items-center gap-2">
+                                <div>{{ stockbrand.title }}</div>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                </div>
+                @if(previousQty>=0){
+                <div class="card flex flex-wrap gap-4">
+                    <label class="mb-2 font-bold block" for="integeronly">Current Stock Quantity</label>
+                    <p-inputnumber inputId="integeronly" [(ngModel)]="previousQty" readonly="true" />
+                </div>
+                  <p-divider></p-divider>
+                <div class="card flex flex-wrap gap-4">
+                    <label class="mb-2 font-bold block" for="integeronly">Quantity to Transfer</label>
+                    <p-inputnumber inputId="integeronly" [(ngModel)]="incomingQuantity" readonly="false"
+                        (onInput)="calculateTotalQuantoty($event)" autofocus="true" />
+                </div>
+                  <p-divider></p-divider>
+                <div class="card flex flex-wrap gap-4">
+                    <label class="mb-2 font-bold block" for="integeronly">Remaining Quantity</label>
+                    <p-inputnumber inputId="integeronly" [(ngModel)]="totalQuantity" readonly="true" />
+                </div>
+                  <p-divider></p-divider>
+                <div class="card flex justify-center">
+                    <label class="mb-2 font-bold block" for="integeronly">Enter Remarks</label>
+                    <textarea rows="1" cols="5" pTextarea class="details" [(ngModel)]="stockinfo"></textarea>
+                </div>
+                <p-divider></p-divider>
+                @if(incomingQuantity){
+                <p-button class="btn-controls" (click)="submitIncomingStock()" raised="true " label="Submit stock"
+                    severity="success" />
+                }
+                }
+            </p-dialog>
+        </div>
 
 
-
+        }
 
 
 

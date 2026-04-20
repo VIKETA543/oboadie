@@ -9,6 +9,7 @@ import { Productbrand } from './admin/productbrand/productbrand';
 import { Pricing } from './pricing/pricing';
 import { Supplierprices } from './admin/supplierprices/supplierprices';
 import { Wearhousemanager } from './wearhousemanager/wearhousemanager';
+import { StoreManager } from './store-manager/store-manager';
 
 export const routes: Routes = [
     {
@@ -20,6 +21,7 @@ export const routes: Routes = [
             { path: 'pricing', component: Pricing },
             { path: 'supplierprices', component: Supplierprices },
             { path: 'wearhousemanager', component: Wearhousemanager },
+            {path:'store-manager',component:StoreManager},
 
             { path: '', redirectTo: 'products', pathMatch: 'full' }
         ]

@@ -2,7 +2,7 @@
   
     width: calc(98%);
     margin: 0px auto;
-      margin-top: 10vh;
+      margin-top: 1vh;
       border-radius: .5em;
       overflow: hidden;
     header {
@@ -153,10 +153,14 @@
         /* Required for the background to show */
     }
 }
-    textarea{
-       width: 70%;
+    .details{
+       width: 100%;
+       font-size: clamp(.5em,.8em,1em);
     }
- 
+   textarea{
+       width: 100%;
+       font-size: clamp(.5em,.8em,1em);
+    }   
     .card-wrapper{
         max-width: 15rem;
         min-width: 10rem;

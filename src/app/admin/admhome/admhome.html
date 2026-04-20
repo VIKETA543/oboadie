@@ -3,12 +3,6 @@
         <img id="srclogo" src="assets/logo/oboadie.jpeg" alt="">
         <header>Oboadie Nyame Trading Enterprise</header>
     </div>
-    <!-- <section>
-        <p-iconfield>
-            <p-inputicon class="pi pi-search" />
-            <input type="text" pInputText placeholder="Search" />
-        </p-iconfield>
-    </section> -->
     <p-toolbar>
         <ng-template #start>
             <p-button (click)="dropMenu = true" icon="pi pi-bars" label="Menu" />
@@ -18,19 +12,23 @@
 <div class="card ">
     <p-drawer [(visible)]="dropMenu" header="Menu" modal="false">
         <p-button type="button" label="Manage Categories" icon="pi pi-folder-plus" routerLink='addcartegory'
-            styleClass="min-w-48" severity="secondary" />
+            styleClass="min-w-48" severity="secondary"  [style]="{'justify-content': 'flex-start'}"/>
         <p-button type="button" label="Manage Product" icon="pi pi-objects-column" routerLink='products'
-            styleClass="min-w-48" severity="secondary" />
+            styleClass="min-w-48" severity="secondary" [style]="{'justify-content': 'flex-start'}" />
         <p-button icon="pi pi-venus" label="Manage Group" class="mr-2" routerLink="targetgroup" text
-            severity="secondary" styleClass="min-w-48" />
+            severity="secondary" styleClass="min-w-48"  [style]="{'justify-content': 'flex-start'}"/>
         <p-button icon="pi pi-venus" label="Manage Brand" class="mr-2" routerLink="productbrand" text
-            severity="secondary" styleClass="min-w-48" />
+            severity="secondary" styleClass="min-w-48"  [style]="{'justify-content': 'flex-start'}"/>
         <p-button icon="cedi-icon" label="Pricing" class="mr-2" routerLink="pricing" text severity="secondary"
-            styleClass="min-w-48" />
+            styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
         <p-button icon="cedi-icon" label="Manage Supplier Prices" class="mr-2" routerLink="supplierprices" text
-            severity="secondary" styleClass="min-w-48" />
+            severity="secondary" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}"/>
         <p-button icon="wearhouse" label="Wearhouse Manager" class="mr-2" routerLink="wearhousemanager" text
-            severity="secondary" styleClass="min-w-48" />
+            severity="secondary" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
+
+        <p-button icon="storemanager" label="Store Manager" class="mr-2" routerLink="store-manager" text
+            severity="secondary" styleClass="min-w-48"  [style]="{'justify-content': 'flex-start'}"/>
+            
     </p-drawer>
 </div>
 <div id="routercontainer">

@@ -1,15 +1,14 @@
 .container {
     width: 100%;
     padding: 0px;
-    margin-bottom: 30rem;
+    margin-bottom: 0rem;
     background-color: rgb(4, 55, 102);
     color: whitesmoke;
     // border-top-left-radius: 1em;
     // border-top-right-radius: 1em;
     box-shadow: 0px 0px 5px 1px rgb(138, 137, 137);
     display: flex;
-    position: fixed;
-    top: 0px;
+    position: relative;
 
     header {
         font-size: 5vw;
@@ -128,14 +127,28 @@
         /* Required for the background to show */
     }
     .wearhouse{
-        width: 1em;
+        width: 2em;
         /* Adjust size as needed */
-        height: 1rem;
+        height: 2rem;
         /* Adjust size as needed */
         background-image: url("/assets/icons/wearhouse.png");
         background-size: contain;
         /* Ensure the image fits within the bounds */
         display: inline-block;
+           background-repeat: no-repeat;
         /* Required for the background to show */
     }
+.storemanager{
+     width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/storemanager.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+}
+
 }

@@ -1,0 +1,41 @@
+<div class="card table-style">
+    <p-toolbar>
+        <ng-template #start>
+
+
+        </ng-template>
+        <ng-template #center>
+            <div class="card flex justify-center">
+
+                <div class="card flex justify-center">
+                    <p-button type="button" styleClass="min-w-48" icon="storemanager" (onClick)="op.toggle($event)"
+                        variant="text" severity="secondary" label="Manage Store" />
+                    <p-popover #op>
+                        <div class="card-wrapper">
+                            <span class="font-medium block mb-2"> <i class="pi pi-cog"
+                                    style="font-size: 1rem"></i>Options</span>
+                            <p-divider />
+                            <div class="btn-pops">
+                                <p-button label="Store type" icon="store" severity="secondary" />
+                                <p-button label="New Store" icon="storemanager" severity="secondary" />
+                                <p-button icon="manager" variant="text" label='Manage Identity' class="mr-2" text
+                                    severity="success" />
+                                <p-button icon="wh-man" variant="text" label='Open a Store' class="mr-2" text
+                                    severity="info" />
+                                <p-button icon="operationcontrol" variant="text" label='Initialize Control' class="mr-2"
+                                    text severity="info" />
+
+
+                            </div>
+                        </div>
+                    </p-popover>
+                </div>
+            </div>
+        </ng-template>
+    </p-toolbar>
+    <!-- <header class="table-style wearehouse">
+        <i class="wearehouse" style="font-size: 2.5rem"></i><span> Wearhouse Manager</span>
+    </header> -->
+
+
+</div>

@@ -126,5 +126,9 @@ export class Wearehouse {
         return this.http.get(this.url + '/warehouse/loadControls', { headers: new HttpHeaders().set('contentType', "application/json") })
     }
 
+    
+    transfert_To_stores = (data: any) => {
+        return this.http.post(this.url + '/warehouse/tostoretransfer', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+    }
 
 }

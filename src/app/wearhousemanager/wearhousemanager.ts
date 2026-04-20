@@ -834,15 +834,14 @@ SupplierInvoiceNumber: any;
         this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
       } else {
         if (response?.data) {
-          setTimeout(() => {
+
             this.stockbrand = response?.data;
          
-            console.log(response?.control)
             this.StockcontrolObject=response?.control
               this.dialogVisible.set(true)
                this.cdr.markForCheck
-                 
-          }, 100)
+              // console.log(this.StockcontrolObject[0].controlid)
+  
 
 
         } else {
@@ -912,7 +911,7 @@ SupplierInvoiceNumber: any;
       totalQty: this.totalQuantity,
       details: this.stockinfo,
       stockNumber: this.stockNumber,
-      controldId: this.StockcontrolObject.controlid,
+      controldId: this.StockcontrolObject[0].controlid,
       controledQuantity:this.incomingQuantity,
       SupplierInvoiceNumber:this.SupplierInvoiceNumber
     }
@@ -921,19 +920,16 @@ SupplierInvoiceNumber: any;
       if (response?.message) {
         this.message = response?.message
         this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
+            this.destroyincvParam()
       } else {
         if (response?.success) {
           this.message = response?.success
           this.dialogVisible.set(false)
-          this.totalQuantity = 0
-          this.previousQty = 0;
-          this.stockinfo = undefined;
-          this.incomingQuantity = 0
-          this.brandID = undefined
-          this.currentselectedProduct = undefined
+          this.destroyincvParam()
 
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 3000 });
         } else {
+              this.destroyincvParam()
           this.message = response?.message
           this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
         }
@@ -941,7 +937,16 @@ SupplierInvoiceNumber: any;
     })
   }
 
-
+destroyincvParam(){
+    this.totalQuantity = 0
+          this.previousQty = 0;
+          this.stockinfo = undefined;
+          this.incomingQuantity = 0
+          this.brandID = undefined
+          this.currentselectedProduct = undefined
+          this.incomingQuantity=0
+          this.SupplierInvoiceNumber=undefined
+}
 
   isLoadingbyCategories = signal(false)
   isstockhistroyLoading = signal(false)
@@ -1028,6 +1033,48 @@ SupplierInvoiceNumber: any;
         }
       }
 
+    })
+  }
+
+
+  withdrawals=signal(false)
+  stockwidthdrawalID:any
+  stores:any[]=[]
+  selectedstore:any
+  makeDrawals=(_t527: any)=>{
+    this.withdrawals.set(true)
+     let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
+    this.stockwidthdrawalID = "STKD-WD" + new Date().getDate() + "-" + randomInteger
+
+  
+    this.currentselectedProduct = _t527
+    this.stockedSelectedProduct = _t527.name;
+  console.log(this.currentselectedProduct )
+    let data = {
+      stockId: _t527.productid
+    }
+    
+    this.warehouseservice.transfert_To_stores(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
+      } else {
+        if (response?.data) {
+
+            this.stockbrand = response?.data;
+         
+            this.StockcontrolObject=response?.control
+              this.dialogVisible.set(true)
+               this.cdr.markForCheck
+              // console.log(this.StockcontrolObject[0].controlid)
+  
+
+
+        } else {
+          this.message = "Unknown error has occured"
+          this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
+        }
+      }
     })
   }
 }

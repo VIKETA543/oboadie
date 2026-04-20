@@ -1,0 +1,70 @@
+.table-style{
+  
+    width: calc(98%);
+    margin: 0px auto;
+      margin-top: 1vh;
+      border-radius: .5em;
+      overflow: hidden;
+      position: relative;
+    header {
+        font-size: clamp(1.0vw, 1.5vw, 2.0vw);
+        text-align: left;
+        padding-top: 10px;
+        margin: 0px;
+        color: rgb(253, 249, 251);
+        font-family: 'Tahoma';
+        // background-color: rgb(4, 51, 122);
+        padding: 10px;
+    }
+    
+    
+:host ::ng-deep {
+    .cedi-icon {
+        width: 1rem;
+        /* Adjust size as needed */
+        height: 1rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/cedi.svg");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        /* Required for the background to show */
+    }
+    .wearhouse{
+        width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/wearhouse.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+           background-repeat: no-repeat;
+        /* Required for the background to show */
+    }
+.storemanager{
+     width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/storemanager.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+}
+.store{
+     width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/store.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+}
+}
+}
