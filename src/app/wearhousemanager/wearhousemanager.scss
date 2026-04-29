@@ -1,10 +1,11 @@
-.table-style{
-  
+.table-style {
+
     width: calc(98%);
     margin: 0px auto;
-      margin-top: 1vh;
-      border-radius: .5em;
-      overflow: hidden;
+    margin-top: 1vh;
+    border-radius: .5em;
+    overflow: hidden;
+
     header {
         font-size: clamp(1.0vw, 1.5vw, 2.0vw);
         text-align: left;
@@ -15,10 +16,11 @@
         // background-color: rgb(4, 51, 122);
         padding: 10px;
     }
-     
+
 }
+
 :host ::ng-deep {
-.wearhouse{
+    .wearhouse {
         width: 1em;
         /* Adjust size as needed */
         height: 1rem;
@@ -29,7 +31,8 @@
         display: inline-block;
         /* Required for the background to show */
     }
-    .manager{
+
+    .manager {
         width: 2em;
         /* Adjust size as needed */
         height: 2rem;
@@ -40,7 +43,8 @@
         display: inline-block;
         /* Required for the background to show */
     }
-       .access{
+
+    .access {
         width: 1em;
         /* Adjust size as needed */
         height: 1rem;
@@ -51,7 +55,8 @@
         display: inline-block;
         /* Required for the background to show */
     }
-       .wh-man{
+
+    .wh-man {
         width: 2em;
         /* Adjust size as needed */
         height: 2rem;
@@ -64,7 +69,7 @@
         /* Required for the background to show */
     }
 
-      .stock{
+    .stock {
         width: 2em;
         /* Adjust size as needed */
         height: 2rem;
@@ -76,7 +81,8 @@
         background-repeat: no-repeat;
         /* Required for the background to show */
     }
-    .withdraw{
+
+    .withdraw {
         width: 2em;
         /* Adjust size as needed */
         height: 2rem;
@@ -89,7 +95,7 @@
         /* Required for the background to show */
     }
 
-        .transfer{
+    .transfer {
         width: 2em;
         /* Adjust size as needed */
         height: 2rem;
@@ -102,12 +108,12 @@
         /* Required for the background to show */
     }
 
- .returnstock{
+    .returnstock {
         width: 2em;
         /* Adjust size as needed */
         height: 2rem;
         /* Adjust size as needed */
-        background-image: url("/assets/icons/returnstock.png");
+        background-image: url("/assets/icons/return.png");
         background-size: contain;
         /* Ensure the image fits within the bounds */
         display: inline-block;
@@ -115,8 +121,8 @@
         /* Required for the background to show */
     }
 
-    .product{
-  width: 2em;
+    .product {
+        width: 2em;
         /* Adjust size as needed */
         height: 2rem;
         /* Adjust size as needed */
@@ -127,8 +133,9 @@
         background-repeat: no-repeat;
         /* Required for the background to show */
     }
-        .product_transparent{
-  width: 2em;
+
+    .product_transparent {
+        width: 2em;
         /* Adjust size as needed */
         height: 2rem;
         /* Adjust size as needed */
@@ -140,8 +147,24 @@
         /* Required for the background to show */
     }
 
-            .operationcontrol{
-  width: 2em;
+
+
+    .datatransfer {
+        width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/datatransfer.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+    }
+
+
+    .operationcontrol {
+        width: 2em;
         /* Adjust size as needed */
         height: 2rem;
         /* Adjust size as needed */
@@ -152,22 +175,54 @@
         background-repeat: no-repeat;
         /* Required for the background to show */
     }
-}
-    .details{
-       width: 100%;
-       font-size: clamp(.5em,.8em,1em);
+    .warehousetransfer {
+        width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/warehousetransfer.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
     }
-   textarea{
-       width: 100%;
-       font-size: clamp(.5em,.8em,1em);
-    }   
-    .card-wrapper{
-        max-width: 15rem;
-        min-width: 10rem;
-         .btn-pops{
-        ::ng-deep{
-            .p-button{
-                width:auto;
+
+     .stores {
+        width: 2em;
+        /* Adjust size as needed */
+        height: 2rem;
+        /* Adjust size as needed */
+        background-image: url("/assets/icons/stores.png");
+        background-size: contain;
+        /* Ensure the image fits within the bounds */
+        display: inline-block;
+        background-repeat: no-repeat;
+        /* Required for the background to show */
+    }
+
+}
+.controle-data{
+    width: 25rem;
+}
+.details {
+    width: 100%;
+    font-size: clamp(.5em, .8em, 1em);
+}
+
+textarea {
+    width: 100%;
+    font-size: clamp(.5em, .8em, 1em);
+}
+
+.card-wrapper {
+    max-width: 15rem;
+    min-width: 10rem;
+
+    .btn-pops {
+        ::ng-deep {
+            .p-button {
+                width: auto;
                 border-radius: 0 !important;
                 margin: 1px;
                 display: block;
@@ -176,85 +231,106 @@
             }
         }
     }
-    }
- ::ng-deep {
+}
 
-        .p-drawer {
-            max-width: calc(100% - 0%);
-            width: calc(100%);
-            top: 9vh;
-        }
+::ng-deep {
+
+    .p-drawer {
+        max-width: calc(100% - 0%);
+        width: calc(100%);
+        top: 9vh;
     }
-    .edit-panel{
-position: absolute;
-bottom:10vh;
-right: 0;
-box-shadow: 0px 0px 15px 2px lightgray;
-    }
+}
+
+.edit-panel {
+    position: absolute;
+    bottom: 10vh;
+    right: 0;
+    box-shadow: 0px 0px 15px 2px lightgray;
+}
 
 
-    .enter-animation {
+.enter-animation {
     animation: slide-fade 1s;
 }
 
-.new-warehouse{
+.new-warehouse {
 
-position: absolute;
-bottom:1vh;
-left: calc(100% - 80%);
-right:calc(100% - 80%);
-padding: 0px !important;
-box-shadow: 0px 0px 15px 2px lightgray;
-background-color: mintcream;
+    position: absolute;
+    bottom: 1vh;
+    left: calc(100% - 80%);
+    right: calc(100% - 80%);
+    padding: 0px !important;
+    box-shadow: 0px 0px 15px 2px lightgray;
+    background-color: mintcream;
     border-radius: .5em;
-.header{
-    padding: 10px;
-    background-color: rgb(3, 47, 83);
-    color: whitesmoke;
-    width: 100%;
-    display: block;
 
-}
-:host ::ng-deep {
- .p-panel{
+    .header {
+        padding: 10px;
+        background-color: rgb(3, 47, 83);
+        color: whitesmoke;
+        width: 100%;
+        display: block;
 
-        width: 80%;
- }
-}
+    }
+
+    :host ::ng-deep {
+        .p-panel {
+
+            width: 80%;
+        }
+    }
 }
 
-.w-h{
+.w-h {
     width: calc(100% - 80%);
 }
-textarea{
+
+textarea {
     padding: 10px;
-    font-size: clamp(1em,1.5em,1.8em);
+    font-size: clamp(1em, 1.5em, 1.8em);
     border: 1px solid lightgreen;
 }
-.ware-h-header{
- font-size: clamp(1em,1.5em,1.8em);
- color: rgb(1, 32, 88);
- padding: 10px;
- width: 30%;
- font-weight: bold;
+
+.ware-h-header {
+    font-size: clamp(1em, 1.5em, 1.8em);
+    color: rgb(1, 32, 88);
+    padding: 10px;
+    width: 30%;
+    font-weight: bold;
 }
-.st-nw-stl{
-font-size: clamp(1em,1.5em,1.8em);
- color: rgb(1, 32, 88);
- padding: 10px;
- width: 50%;
+
+.st-nw-stl {
+    font-size: clamp(1em, 1.5em, 1.8em);
+    color: rgb(1, 32, 88);
+    padding: 10px;
+    width: 50%;
 }
-.btn-controls{
-    max-width:calc(100% - 25%)
+
+.btn-controls {
+    max-width: calc(100% - 25%)
 }
-.lbl-style{
-    font-size: clamp(.5em,1em,1.2em);
- color: rgb(1, 32, 88);
- padding: 10px;
- width: 50%;
+
+.lbl-style {
+    font-size: clamp(.5em, 1em, 1.2em);
+    color: rgb(1, 32, 88);
+    padding: 10px;
+    width: 50%;
 }
-img{
-    width: clamp(2em,3em,5em);
+
+img {
+    width: clamp(2em, 3em, 5em);
+}
+.req-header{
+    width: 50%;
+     font-size: clamp(.5em, 1em, 1.2em);
+     border: 1px solid rgb(1, 32, 88);;
+         color: rgb(1, 32, 88);
+         margin: 0;
+         label:first-child{
+            padding: 10px;
+            border-right: 1px solid rgb(1, 32, 88);
+         }
 }
 @keyframes slide-fade {
     from {

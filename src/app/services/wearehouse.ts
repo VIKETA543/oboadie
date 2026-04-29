@@ -114,6 +114,12 @@ export class Wearehouse {
     }
 
 
+loadallStock_for_category = (data: any) => {
+        return this.http.post(this.url + '/warehouse/loadallStock_for_category', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+    }
+
+
+    
     loadstockHistory = (data: any) => {
         return this.http.post(this.url + '/warehouse/loadstockHistory', data, { headers: new HttpHeaders().set('contentType', "application/json") })
     }
@@ -131,4 +137,57 @@ export class Wearehouse {
         return this.http.post(this.url + '/warehouse/tostoretransfer', data, { headers: new HttpHeaders().set('contentType', "application/json") })
     }
 
+
+    loadstockcontrol = () => {
+        return this.http.get(this.url + '/warehouse/loadstockcontrol', { headers: new HttpHeaders().set('contentType', "application/json") })
+    }
+
+    loadstockcontrolforwarehouse = () => {
+        return this.http.get(this.url + '/warehouse/loadstockcontrolforwarehouse', { headers: new HttpHeaders().set('contentType', "application/json") })
+    }
+
+    
+ loadstores = () => {
+        return this.http.get(this.url + '/warehouse/loadstores', { headers: new HttpHeaders().set('contentType', "application/json") })
+    }
+
+
+ loadwarehouses = () => {
+        return this.http.get(this.url + '/warehouse/loadwarehouses', { headers: new HttpHeaders().set('contentType', "application/json") })
+    }
+
+    
+  submitToStore=(data:any)=>{
+  return this.http.post(this.url + '/warehouse/transfertostores', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }  
+
+  loadInitialRequest=(data:any)=>{
+    console.log(data)
+     return this.http.post(this.url + '/warehouse/loadInitialRequest', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+  approveRequest=(data:any)=>{
+     return this.http.post(this.url + '/warehouse/approveRequest', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+    transfer_to_Warehouse=(data:any)=>{
+  return this.http.post(this.url + '/warehouse/transfer_to_Warehouse', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }  
+
+    loadWarehouseRequest=(data:any)=>{
+    console.log(data)
+     return this.http.post(this.url + '/warehouse/loadWarehouseRequest', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+    warehouseRequeastapproval=(data:any)=>{
+     return this.http.post(this.url + '/warehouse/warehouseRequeastapproval', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+
+     returnstockcontrols=()=>{
+     return this.http.get(this.url + '/warehouse/returnstockcontrols',{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+  
+  loadStoreProduct_for_selected_store=(data:any)=>{
+    return this.http.post(this.url + '/warehouse/loadStoreProduct_for_selected_store',{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }
 }

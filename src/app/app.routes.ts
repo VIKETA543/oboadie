@@ -10,6 +10,9 @@ import { Pricing } from './pricing/pricing';
 import { Supplierprices } from './admin/supplierprices/supplierprices';
 import { Wearhousemanager } from './wearhousemanager/wearhousemanager';
 import { StoreManager } from './store-manager/store-manager';
+import { StoreReceiveStock } from './store-manager/store-receive-stock/store-receive-stock';
+import { NewStore } from './store-manager/new-store/new-store';
+import { StoreType } from './store-manager/store-type/store-type';
 
 export const routes: Routes = [
     {
@@ -21,7 +24,11 @@ export const routes: Routes = [
             { path: 'pricing', component: Pricing },
             { path: 'supplierprices', component: Supplierprices },
             { path: 'wearhousemanager', component: Wearhousemanager },
-            {path:'store-manager',component:StoreManager},
+            {path:'store-manager',component:StoreManager,children:[
+                {path:'store-receive-stock',component:StoreReceiveStock},
+                {path:'new-store',component:NewStore},
+                {path:'store-type',component:StoreType}
+            ]},
 
             { path: '', redirectTo: 'products', pathMatch: 'full' }
         ]

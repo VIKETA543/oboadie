@@ -1,0 +1,45 @@
+// .container{
+//     max-width: calc(100% - 30%);
+//     min-width: calc(100% - 80%);
+//     width: calc(100% - 30%);
+//     margin: 10px auto;
+//     border: 1px solid lightgrey;
+//     padding: 20px;
+//     box-shadow: 0px 0px 15px 2px lightgrey;
+// }
+
+::ng-deep {
+
+    .p-drawer {
+        max-width: calc(100% - 0%);
+        width: calc(100%);
+        top: 9vh;
+    }
+}
+.controle-data{
+    width: 25rem;
+}
+.details {
+    width: 100%;
+    font-size: clamp(.5em, .8em, 1em);
+}
+
+textarea {
+    width: 100%;
+    font-size: clamp(.5em, .8em, 1em);
+}
+.lbl{
+    label:first-child{
+        width: calc(100% - 20%);
+    
+    }
+     label:last-child{
+        text-align: left;
+    padding: 10px;
+    border: 1px solid lightgrey;
+    border-radius: .3em;
+          width: calc(100% - 20%);
+          background-color: rgb(232, 235, 235);
+    
+    }
+}

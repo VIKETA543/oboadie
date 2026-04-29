@@ -1,0 +1,447 @@
+<div class="card flex justify-center">
+    @if(isNewStore()){
+
+    <p-dialog header="New Identity" [(visible)]="isNewStore" [style]="{ width: '35rem' }">
+        <div class="card container">
+
+            <div class="flex items-center gap-4 mb-4">
+                <label for="username" class="font-semibold w-24 w-h">STORE ID<i class="pi pi-sparkles"
+                        style="font-size: 1rem;color: gold;" pTooltip="Warehouse serial number"></i></label>
+                <input pInputText id="username" class="flex-auto" autocomplete="off" [autofocus]="false" readonly="true"
+                    [(ngModel)]="storeNumber" />
+            </div>
+            <div class="flex items-center gap-4 mb-4">
+                <label for="username" class="font-semibold w-24 w-h">Store Type<i class="pi pi-sparkles"
+                        style="font-size: 1rem;color: gold;"
+                        pTooltip="Use common name for easy memorisation"></i></label>
+                <p-select [options]="stridentityData" [(ngModel)]="selectedStoreType"
+                    (onChange)="selectStoretype($event)" optionLabel="storeidentityname" [filter]="true"
+                    filterBy="storeidentityname" [showClear]="true" placeholder="Select Store type" class="flex-auto">
+                    <ng-template #selectedIdentity let-identityData>
+                        <div class="flex items-center gap-4">
+                            <div>{{ identityData.storeidentityname}}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-identityData #categoryitem>
+                        <div class="flex items-center gap-4">
+                            <div>{{ identityData.storeidentityname}}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+            <div class="flex items-center gap-4 mb-4">
+                <label for="username" class="font-semibold w-24 w-h">Store Name<i class="pi pi-sparkles"
+                        style="font-size: 1rem;color: gold;"
+                        pTooltip="Use common name for easy memorisation"></i></label>
+                <input pInputText id="username" class="flex-auto" autocomplete="off" [autofocus]="true"
+                    [(ngModel)]="StoreName" />
+            </div>
+
+            <div class="flex items-center gap-4 mb-4">
+                <label for="username" class="font-semibold w-24 w-h">Store Location<i class="pi pi-sparkles"
+                        style="font-size: 1rem;color: gold;"
+                        pTooltip="Use common name for easy memorisation"></i></label>
+                <input pInputText id="username" class="flex-auto" autocomplete="off" [autofocus]="true"
+                    [(ngModel)]="StoreLocation" />
+            </div>
+            <div class="flex items-center gap-4 mb-4">
+                <label for="username" class="font-semibold w-24 w-h">Digital Address<i class="pi pi-sparkles"
+                        style="font-size: 1rem;color: gold;"
+                        pTooltip="Use common name for easy memorisation"></i></label>
+                <input pInputText id="username" class="flex-auto" autocomplete="off" [autofocus]="true"
+                    [(ngModel)]="storeDigitalAddress" />
+            </div>
+
+            <div class="flex items-center gap-4 mb-3">
+                <label for="email" class="font-semibold w-24 w-h">Add more information <i class="pi pi-sparkles"
+                        style="font-size: 1rem; color: gold;"
+                        pTooltip="Provide brief description of your warehouse object"></i></label>
+                <textarea rows="2" cols="30" pTextarea [(ngModel)]="storeDescription"></textarea>
+            </div>
+            <p-divider></p-divider>
+            <div class="flex justify-end gap-2 header">
+                <p-button label="Save" severity="info" (click)="saveStore()" />
+            </div>
+
+        </div>
+    </p-dialog>
+    }
+</div>
+<div class="card">
+    <div class="card">
+        <p-table #table3 [value]="storelistData" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true"
+            [tableStyle]="{ 'min-width': '50rem' }"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            (onPage)="pageChange($event)" [rowsPerPageOptions]="[10, 25, 50]"
+            [globalFilterFields]="['storename', 'storenumber','storeidentityname','digitaladdress','datedopened','storedescription']"
+            stripedRows="true">
+
+            <ng-template #caption>
+                <div class="flex ">
+                    <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(table3)" />
+
+
+
+                    <div class="flex items-center gap-4 mb-3">
+                        <p-button label=" New Stores " icon="access" iconPos="left" severity="secondary"
+                            (onClick)="setNewStore()" />
+                    </div>
+                    <p-iconfield iconPosition="left" class="ml-auto">
+                        <p-inputicon class="pi pi-search" />
+                        <input pInputText type="text" (input)="table3.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Search..." />
+                    </p-iconfield>
+                </div>
+            </ng-template>
+            <ng-template #header>
+                <tr>
+                    <th style="width:5%">Serial</th>
+                    <th style="width:15%">STORE NUMBER</th>
+                    <th style="width:25%">STORE NAME</th>
+                    <th style="width:15%">STORE TYPE</th>
+                    <th style="width:25%">STORE LOCATION</th>
+                    <th style="width:15%">DIGITAL ADDRRES</th>
+                    <th style="width:25%">DATE</th>
+                    <th style="width:25%">OPENED</th>
+                    <th style="width:15%">Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-storelistData let-i="rowIndex">
+                <tr pTooltip="{{storelistData.storedescription}}">
+                    <td>{{i+1}}</td>
+                    <td>{{storelistData.storenumber}}</td>
+                    <td>{{storelistData.storename }}</td>
+                    <td>{{storelistData.storeidentityname }}</td>
+                    <td>{{ storelistData.storelacation}}</td>
+                    <td>{{ storelistData.digitaladdress}}</td>
+                    <td>{{ storelistData.datedopened | date: 'MM/dd/yyyy'}}</td>
+                    <td>
+                        <div class="card flex justify-center">
+                            <p-toggleswitch [(ngModel)]="storelistData.isstoreopened" />
+                        </div>
+                    </td>
+                    <td>
+                        <p-button label="visit Store" pTooltip="Select to manage the store" severity="secondary"
+                            severity="info" (onClick)="visitStore(storelistData)" />
+                    </td>
+
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+
+@if(isViewingStore()){
+<div class="card">
+    <p-drawer header="STORE MANAGER" [(visible)]="isViewingStore" position="bottom" [style]="{ height: 'auto' }">
+        <div class="card">
+            <p-toolbar [style]="{ padding: '1rem 1rem 1rem 1.5rem' }">
+                <ng-template #start>
+                    <div class="flex items-center gap-2">
+                        <p-avatar image="/assets/icons/stores.png" [style]="{ width: '32px', height: '32px' }" />
+                        {{storeName}} - {{storeNumber}} - {{storeType}}
+                    </div>
+                </ng-template>
+                <ng-template #center>
+                    <div>
+                        <p-button label="Push Productto Store" severity="info" [raised]="false" variant="text"
+                            (onClick)="initPushproduct()" />
+                    </div>
+                    <p-divider></p-divider>
+                    <div>
+                        <p-button label="Products" severity="info" [raised]="false" variant="text"
+                            (onClick)="listAllProducts()" />
+                    </div>
+                    <p-divider></p-divider>
+                    <div>
+                        <p-button label="Stock Products" severity="info" [raised]="false" variant="text"
+                            (onClick)="StockProducts()" />
+                    </div>
+                </ng-template>
+                <ng-template #end>
+                    <div class="flex items-center gap-2">
+                        <p-button label="Manage" severity="contrast" size="small" (click)="stores.toggle($event)" />
+
+                    </div>
+                </ng-template>
+            </p-toolbar>
+        </div>
+
+    </p-drawer>
+
+</div>
+
+
+<div class="card flex justify-center">
+    <p-popover #stores>
+        <div class="flex flex-col gap-4 w-[25rem]">
+
+
+        </div>
+    </p-popover>
+</div>
+
+@if(isPush()){
+<p-dialog header="Push Products to Store" [modal]="true" appendTo="body" [(visible)]="isPush"
+    [style]="{ width: '40rem' }">
+    <ng-template #header>
+        <div class="inline-flex items-center justify-center gap-2">
+            <p-avatar image="/assets/icons/stores.png" [style]="{ width: '32px', height: '32px' }" />
+            <span class="font-bold whitespace-nowrap">PUSH PRODUCTS TO STORE</span>
+        </div>
+    </ng-template>
+    <div class="flex items-center gap-4  mb-1 lbl">
+        <label>Selected Store</label>
+        <label> {{storeName}} </label>
+    </div>
+    <p-divider></p-divider>
+    <div class="flex items-center gap-2 lbl">
+        <label>Store Type</label>
+        <label> {{storetypeName}} </label>
+    </div>
+    <p-divider></p-divider>
+    <div class="flex items-center gap-2 lbl">
+        <label>Store ID</label>
+        <label> {{storeNumber}} </label>
+    </div>
+    <p-divider></p-divider>
+    <div class="flex items-center gap-4 mb-1 lbl">
+        <label class="st-nw-stl">STOCK NUMBER</label>
+        <label class="st-nw-stl">{{storeStockNumber}}</label>
+    </div>
+    <p-divider></p-divider>
+    <div class="card flex justify-center lbl">
+        <label class="st-nw-stl">Select Category</label>
+        <p-select [options]="cartegory" appendTo="body" (onChange)="selecteCartegory($event)"
+            [(ngModel)]="selectedcartegory" optionLabel="category_name" [filter]="true" filterBy="category_name"
+            [showClear]="true" placeholder="Select a Cartegory" class="w-full md:w-56">
+            <ng-template #selectedItem let-cartegory>
+                <div class="flex items-center gap-2">
+                    <div>{{ cartegory.category_name }}</div>
+                </div>
+            </ng-template>
+            <ng-template let-cartegory #item>
+                <div class="flex items-center gap-2">
+                    <div>{{ cartegory.category_name }}</div>
+                </div>
+            </ng-template>
+        </p-select>
+
+    </div>
+    <p-divider></p-divider>
+
+    <div class="card flex justify-center lbl">
+        <label class="st-nw-stl">Select Product</label>
+        <p-select [options]="product" appendTo="body" (onChange)="selectStoreProduct($event)"
+            [(ngModel)]="selectedproduct" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true"
+            placeholder="Select a Warehouse" class="w-full md:w-56">
+            <ng-template #selectedItem let-product>
+                <div class="flex items-center gap-2">
+                    <div>{{ product.name }}</div>
+                </div>
+            </ng-template>
+            <ng-template let-product #item>
+                <div class="flex items-center gap-2">
+                    <div>{{ product.name }}</div>
+                </div>
+            </ng-template>
+        </p-select>
+
+    </div>
+    <p-divider></p-divider>
+    <div class="card flex justify-center lbl">
+        <label class="st-nw-stl">Set date of Opening</label>
+        <p-datepicker appendTo='body' [(ngModel)]="dateOpened" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy"
+            pInputMask="99/99/9999" />
+    </div>
+
+
+    <p-divider></p-divider>
+
+    <div class="card flex justify-center lbl">
+        <label class="st-nw-stl">Add comment</label>
+        <textarea rows="2" cols="5" pTextarea [(ngModel)]="stockComments"></textarea>
+    </div>
+
+    <p-divider></p-divider>
+    <div class="card flex justify-center lbl">
+        <label class="st-nw-stl">Set as open</label>
+        <p-toggleswitch [(ngModel)]="isStockOpen" (onChange)="openStock($event)" />
+    </div>
+    <p-divider></p-divider>
+    <div class="flex justify-end gap-2 lbl">
+        <p-button label="Cancel" severity="danger" (click)="cancelpush()" />
+        <p-button label="Save" (click)="pushProductToStore()" />
+    </div>
+</p-dialog>
+}
+
+}
+@if(StoreProducts){
+<p-dialog header="Push Products to Store" [modal]="true" appendTo="body" [(visible)]="isListingProducts">
+    <div class="card">
+        <div class="card">
+            <p-table #table3 [value]="StoreProducts" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true"
+                [tableStyle]="{ 'min-width': '70rem' }"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                (onPage)="pageChange($event)" [rowsPerPageOptions]="[10, 25, 50]"
+                [globalFilterFields]="['storename', 'storenumber','storeidentityname','digitaladdress','datedopened','storedescription']"
+                stripedRows="true">
+
+                <ng-template #caption>
+                    <div class="flex ">
+                        <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(table3)" />
+
+                        <p-iconfield iconPosition="left" class="ml-auto">
+                            <p-inputicon class="pi pi-search" />
+                            <input pInputText type="text" (input)="table3.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Search..." />
+                        </p-iconfield>
+                    </div>
+                </ng-template>
+                <ng-template #header>
+                    <tr>
+                        <th style="width:5%">SERIAL</th>
+                        <th style="width:15%">PRODUCT NUMBER</th>
+                        <th style="width:25%">PRODUCT NAME</th>
+                        <th style="width:15%">DATE POSTED</th>
+                        <th style="width:25%">DETAILS</th>
+                        <th style="width:25%">OPENED</th>
+                        <th style="width:15%">Actions</th>
+                    </tr>
+                </ng-template>
+
+                tore_products.product_category, store_products., store_products., store_products.,
+                store_products.store_number, products.name
+                <ng-template #body let-StoreProducts let-i="rowIndex">
+                    <tr pTooltip="{{StoreProducts.details}}">
+                        <td>{{i+1}}</td>
+                        <td>{{StoreProducts.product_number}}</td>
+                        <td>{{StoreProducts.name }}</td>
+                        <td>{{StoreProducts.date_created | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{ StoreProducts.details}}</td>
+                        <td>
+                            <div class="card flex justify-center">
+                                <p-toggleswitch [(ngModel)]="StoreProducts.isopened" />
+                            </div>
+                        </td>
+
+                        <td>
+                            <p-button icon="pi pi-trash" pTooltip="Delete producted" severity="danger"
+                                (onClick)="dropProduct(StoreProducts)" />
+                        </td>
+
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</p-dialog>
+}
+
+
+<!-- 
+
+ @if(isStockingActiviated()){
+
+        <div class="card  flex justify-center">
+
+            <p-dialog [(visible)]="isStockingActiviated" [modal]="true" [style]="{ width: '30rem' }">
+                <ng-template #header>
+                    <div class="inline-flex items-center justify-center gap-2">
+                        <p-avatar image="/assets/icons/stock.png" shape="circle" />
+                        <span class="font-bold whitespace-nowrap">NEW IN-COMING STOCK</span>
+                    </div>
+                </ng-template>
+
+                <span class="p-text-secondary block mb-1">Add incoming stock to warehouse</span>
+                <p-divider></p-divider>
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Stock Number</label>
+                    <label class="lbl-style">{{stockNumber}}</label>
+                </div>
+
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Warehouse </label>
+                    <label class="lbl-style">{{currentselectedProduct.whse_stockid}}</label>
+                </div>
+
+
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Product</label>
+                    <label class="lbl-style">{{stockedSelectedProduct}}</label>
+                </div>
+
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Operation</label>
+                    <label class="lbl-style">{{StockcontrolObject[0].controlname}}</label>
+                </div>
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Supplier Invoice</label>
+                    <input type="text" pInputText [(ngModel)]="SupplierInvoiceNumber" placeholder="Invoice number" />
+                </div>
+                <p-divider></p-divider>
+                <div class="flex items-center gap-4 mb-1">
+                    <p-select [options]="stockbrand" [(ngModel)]="selectedproductforStocking" optionLabel="title"
+                        [filter]="true" filterBy="title" appendTo="body" [showClear]="true" placeholder="Select a Brand"
+                        class="w-full md:w-56" (onChange)="loadPreviousStock(stockbrand)">
+                        <ng-template #selectedItem let-stockbrand>
+                            <div class="flex items-center gap-2">
+                                <div>{{ stockbrand.title }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-stockbrand #item>
+                            <div class="flex items-center gap-2">
+                                <div>{{ stockbrand.title }}</div>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                </div>
+                @if(previousQty>=0){
+                <div class="card flex flex-wrap gap-4">
+                    <label class="mb-2 font-bold block" for="integeronly">Current Stoc Quantity</label>
+                    <p-inputnumber inputId="integeronly" [(ngModel)]="previousQty" readonly="true" />
+                </div>
+                <p-divider></p-divider>
+                <div class="card flex flex-wrap gap-4">
+                    <label class="mb-2 font-bold block" for="integeronly">In-commong Quantity</label>
+                    <p-inputnumber inputId="integeronly" [(ngModel)]="incomingQuantity" readonly="false"
+                        (onInput)="calculateTotalQuantoty($event)" autofocus="true" />
+                </div>
+                <p-divider></p-divider>
+                <div class="card flex flex-wrap gap-4">
+                    <label class="mb-2 font-bold block" for="integeronly">Total Quantity</label>
+                    <p-inputnumber inputId="integeronly" [(ngModel)]="totalQuantity" readonly="true" />
+                </div>
+                <p-divider></p-divider>
+                <div class="card flex justify-center">
+                    <label class="mb-2 font-bold block" for="integeronly">Enter Remarks</label>
+                    <textarea rows="1" cols="5" pTextarea class="details" [(ngModel)]="stockinfo"></textarea>
+                </div>
+                <p-divider></p-divider>
+                @if(incomingQuantity){
+                <p-button class="btn-controls" (click)="submitIncomingStock()" raised="true " label="Submit stock"
+                    severity="success" />
+                }
+                }
+            </p-dialog>
+        </div>
+
+
+        } -->
+
+<!-- 
+<p-button label="New Store Identity" icon="access" iconPos="left" (onClick)="newstrIdentity()">
+
+    <p-button icon="operationcontrol" variant="text" label='Store Manager' class="mr-2" text severity="info"
+        (onClick)="openStoreManager()"/>
+         <div class="flex flex-col gap-4 w-[25rem]">
+        <p-button label="Add product to Warehouse" icon="product" severity="info" variant="text"
+            pTooltip="Use this option to add new products to the selected warehouse. Any new product added will be stored in the selected warehouse."
+            (click)="AddProduct()" />
+        </div>>
+  -->
+
+
+<p-toast />

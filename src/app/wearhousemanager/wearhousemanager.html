@@ -7,7 +7,6 @@
                 (onClick)="warehouseStockOperation()" />
             <p-button icon="operationcontrol" variant="text" label='Initialize Control' class="mr-2" text
                 severity="info" (onClick)="createControls()" />
-
         </ng-template>
         <ng-template #center>
             <div class="card flex justify-center">
@@ -21,12 +20,17 @@
                                     style="font-size: 1rem"></i>Options</span>
                             <p-divider />
                             <div class="btn-pops">
-                                <p-button label="New Identity" icon="pi pi-plus" (onClick)="newIdentity()"
+                                <p-button label="New Warehouse Identity" icon="pi pi-plus" (onClick)="newIdentity()"
                                     severity="secondary" />
                                 <p-button label="New Wearhouse" icon="wearhouse" severity="secondary"
                                     (onClick)="newWarehouse()" />
                                 <p-button label="Assign Manager" icon="Manager" iconPos="left" severity="secondary" />
                                 <p-button label="Access" icon="access" iconPos="left" severity="secondary" />
+
+                            
+                                    severity="secondary" />
+                          
+
                             </div>
                         </div>
                     </p-popover>
@@ -138,7 +142,7 @@
 }
 
 
-<p-drawer [(visible)]="isDrawerVisible" header="WAREHOUSE IDENTITY MANAGER" modal="false">
+<p-drawer [(visible)]="isDrawerVisible" header="WAREHOUSE IDENTITY MANAGER" modal="false" [fullScreen]="true">
 
     <div class="card">
         <p-table #dt1 [value]="identityList" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
@@ -394,7 +398,33 @@
 }
 @if(isStockControlVisisble()){
 <div class="card ">
-    <p-drawer [(visible)]="isStockControlVisisble" header="WAREHOUSE STOCK CONTROL" class="wh-man">
+    <p-drawer [(visible)]="isStockControlVisisble" header="{{selectedwarehousename}}" class="wh-man"
+        [fullScreen]="true">
+
+        <p-toolbar>
+
+            <ng-template #start>
+            
+                <p-divider></p-divider>
+                <div class="flex flex-col gap-4 w-[25rem]">
+                    <p-button label="Authorise Transfer to store" vatriant="text" icon="datatransfer"
+                        severity="secondary" pTooltip="Authorise Transfer to Store" tooltipPosition="left"
+                        (onClick)="inititateAuthorisation()" />
+                </div>
+                <p-divider></p-divider>
+                <div class="flex flex-col gap-4 w-[25rem]">
+                    <p-button label="Authorise Transfer to Warehouse" vatriant="text" icon="warehousetransfer"
+                        severity="secondary" pTooltip="Authorise Transfer to warehouse" tooltipPosition="left"
+                        (onClick)="approveWarehouseTransfer()" />
+                </div>
+                <p-divider></p-divider>
+                <div class="flex flex-col gap-4 w-[25rem]">
+                    <p-button class="btn-controls" (click)="retuneStock()" variant="text" icon="returnstock"
+                        label="Return stock" severity="help" />
+                </div>
+            </ng-template>
+        </p-toolbar>
+
         <div class="card">
             <p-table #dt1 [value]="stockcontrolData" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
                 [loading]="loading()" [paginator]="true"
@@ -404,10 +434,6 @@
                 <ng-template #caption>
                     <div class="flex">
                         <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
-                        <span class="ware-h-header">{{selectedwarehousename}}</span>
-                        <p-button label="Add product to Warehouse" icon="product" severity="info" variant="text"
-                            pTooltip="Use this option to add new products to the selected warehouse. Any new product added will be stored in the selected warehouse"
-                            (click)="AddProduct()" />
                         <p-iconfield iconPosition="left" class="ml-auto">
                             <p-inputicon>
                                 <i class="pi pi-search"></i>
@@ -461,8 +487,28 @@
                                     (onClick)="op.toggle($event)" />
                                 <p-button label="Display Stock" icon="product_transparent" severity="secondary"
                                     pTooltip="Perform stock control operations" tooltipPosition="left"
-                                    (onClick)="displayStockData(stockcontrolData)" />
+                                    (onClick)="display.toggle($event)" />
                             </div>
+
+                            <div class="card flex justify-center">
+                                <p-popover #display>
+                                    <div class="flex flex-col gap-4 w-[25rem]">
+                                        <p-button label="Display active Stock" icon="product_transparent"
+                                            severity="secondary" pTooltip="Display active stock for the category"
+                                            tooltipPosition="left" (onClick)="displayStockData(stockcontrolData)" />
+                                    </div>
+
+                                    <div class="flex flex-col gap-4 w-[25rem]">
+                                        <p-button label="Display Stock history" icon="product_transparent"
+                                            severity="secondary" pTooltip="Load Stock history for this category"
+                                            tooltipPosition="left"
+                                            (onClick)="loadallStock_for_category(stockcontrolData)" />
+                                    </div>
+                                </p-popover>
+                            </div>
+
+
+
 
 
                             <div class="card flex justify-center">
@@ -473,14 +519,13 @@
                                             variant="text" icon="stock" label="In-Coming stock" severity="primary" />
                                         <p-divider></p-divider>
 
-                                        <p-button class="btn-controls" (click)="makeDrawals(stockcontrolData)" variant="text"
-                                            icon="withdraw" label="Transfer stock Stores" severity="info" />
+                                        <p-button class="btn-controls" (click)="makeDrawals(stockcontrolData)"
+                                            variant="text" icon="withdraw" label="Transfer stock to Stores"
+                                            severity="info" />
                                         <p-divider></p-divider>
-                                        <p-button class="btn-controls" (click)="op.toggle($event)" variant="text"
-                                            icon="transfer" label="Transfer stock" severity="success" />
-                                        <p-divider></p-divider>
-                                        <p-button class="btn-controls" (click)="op.toggle($event)" variant="text"
-                                            icon="returnstock" label="Return stock" severity="help" />
+                                        <p-button class="btn-controls"
+                                            (click)="transferStockoverwarehouse(stockcontrolData)" variant="text"
+                                            icon="transfer" label="Transfer to warehouses" severity="success" />
                                     </div>
 
                                 </p-popover>
@@ -493,6 +538,123 @@
                     </tr>
                 </ng-template>
             </p-table>
+            @if(authtransfer()){
+
+            <div class="card flex justify-center">
+                <p-dialog header="Edit Profile" [modal]="true" [(visible)]="authtransfer" [style]="{ width: '25rem' }">
+                    <span class="p-text-secondary block mb-2">Authorise transfer to Store</span>
+                    <p-divider></p-divider>
+                    <div class="flex items-center gap-4 mb-4">
+                        <label for="username" class="font-semibold w-24">Enter Request ID</label>
+                        <input pInputText id="username" class="flex-auto" autocomplete="off"
+                            [(ngModel)]="RequestNumber" />
+                    </div>
+                    <p-divider></p-divider>
+                    <div class="flex justify-end gap-2">
+                        <p-button label="Get Request" severity="info" (click)="AuthoriseRequest()" />
+                    </div>
+                </p-dialog>
+            </div>
+
+            }
+
+
+            @if(requestServedData){
+            <div class="card flex justify-center">
+
+                <div class="card">
+                    <div class="flex justify-center">
+                    </div>
+                    <p-dialog header="STOCK REQUEST APPROVAL" [resizable]="false" [modal]="true" [maximizable]="true"
+                        appendTo="body" [(visible)]="setRequestViaible" [style]="{ width: '80vw' }"
+                        [contentStyle]="{ height: '150vh' }">
+                        <div>
+                            <div class="flex items-center  ">
+                                <div class="flex items-center gap-4 mb-4 req-header">
+                                    <label>Operation Number</label>
+                                    <label>{{requestServedData[0].stock_to_storeid}}</label>
+                                </div>
+                                <div class="flex items-center gap-4 mb-4 req-header">
+                                    <label>Operation Type</label>
+                                    <label>{{requestServedData[0].controlname}}</label>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center ">
+                                <div class="flex items-center gap-4 mb-4 req-header">
+                                    <label>Destination</label>
+                                    <label>{{requestServedData[0].storename}}</label>
+                                </div>
+
+
+                                <div class="flex items-center gap-4 mb-4 req-header">
+                                    <label>Initiated From </label>
+                                    <label>{{requestServedData[0].warehousename}}</label>
+
+                                </div>
+                            </div>
+                            <div class="flex items-center ">
+                                <div class="flex items-center gap-4 mb-4 req-header">
+                                    <label>Request Number </label>
+                                    <label>{{requestServedData[0].store_request_id}}</label>
+
+                                </div>
+                                <div class="flex items-center gap-4 mb-4 mb-4 req-header">
+                                    <label>Date </label>
+                                    <label>{{requestServedData[0].date_withdrawn}}</label>
+
+                                </div>
+                            </div>
+                        </div>
+                        <p-table [value]="requestServedData" [scrollable]="true" scrollHeight="flex"
+                            [tableStyle]="{ 'min-width': '40rem' }">
+
+
+                            <ng-template #header>
+                                <tr>
+                                    <th style="width:25%">Sn</th>
+                                    <th style="width:25%">Product</th>
+                                    <th style="width:25%">Brand</th>
+                                    <th style="width:25%">Quantity</th>
+                                    <th style="width:25%">Remarks</th>
+                                    <th style="width:25%">Products Moved</th>
+
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-requestServedData let-i="rowIndex">
+                                <tr>
+                                    <td style="width:5%">{{i+1}}</td>
+                                    <td>{{ requestServedData.name }}</td>
+                                    <td>{{ requestServedData.title }}</td>
+                                    <td>{{ requestServedData.drawal_quantity}}</td>
+                                    <td>{{ requestServedData.drawal_details}}</td>
+                                    <td>
+                                        <div class="card flex justify-center">
+                                            <p-toggleswitch [(ngModel)]="requestServedData.isdrawn_stock_moved"
+                                                (onChange)="approveRequest($event, requestServedData)"
+                                                [disabled]="requestServedData.isdrawn_stock_moved" />
+                                        </div>
+
+
+                                    </td>
+
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <ng-template #footer>
+                            <p-button label="Ok" icon="pi pi-check" (onClick)="setRequestViaible.set(false)" />
+                        </ng-template>
+                    </p-dialog>
+                </div>
+
+            </div>
+
+            }
+
+            <!-- 
+ -->
+
+
             <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
              ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
              ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
@@ -512,6 +674,7 @@
                             stripedRows="true">
 
                             <ng-template #caption>
+
                                 <div class="flex items-center justify-between">
                                     <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash"
                                         (click)="clear(table2)" />
@@ -701,10 +864,10 @@
                     <label class="lbl-style">Operation</label>
                     <label class="lbl-style">{{StockcontrolObject[0].controlname}}</label>
                 </div>
-              <div class="flex items-center gap-4 mb-1">
+                <div class="flex items-center gap-4 mb-1">
                     <label class="lbl-style">Supplier Invoice</label>
-            <input type="text" pInputText [(ngModel)]="SupplierInvoiceNumber" placeholder="Invoice number"/>
-        </div>
+                    <input type="text" pInputText [(ngModel)]="SupplierInvoiceNumber" placeholder="Invoice number" />
+                </div>
                 <p-divider></p-divider>
                 <div class="flex items-center gap-4 mb-1">
                     <p-select [options]="stockbrand" [(ngModel)]="selectedproductforStocking" optionLabel="title"
@@ -727,18 +890,18 @@
                     <label class="mb-2 font-bold block" for="integeronly">Current Stoc Quantity</label>
                     <p-inputnumber inputId="integeronly" [(ngModel)]="previousQty" readonly="true" />
                 </div>
-                  <p-divider></p-divider>
+                <p-divider></p-divider>
                 <div class="card flex flex-wrap gap-4">
                     <label class="mb-2 font-bold block" for="integeronly">In-commong Quantity</label>
                     <p-inputnumber inputId="integeronly" [(ngModel)]="incomingQuantity" readonly="false"
                         (onInput)="calculateTotalQuantoty($event)" autofocus="true" />
                 </div>
-                  <p-divider></p-divider>
+                <p-divider></p-divider>
                 <div class="card flex flex-wrap gap-4">
                     <label class="mb-2 font-bold block" for="integeronly">Total Quantity</label>
                     <p-inputnumber inputId="integeronly" [(ngModel)]="totalQuantity" readonly="true" />
                 </div>
-                  <p-divider></p-divider>
+                <p-divider></p-divider>
                 <div class="card flex justify-center">
                     <label class="mb-2 font-bold block" for="integeronly">Enter Remarks</label>
                     <textarea rows="1" cols="5" pTextarea class="details" [(ngModel)]="stockinfo"></textarea>
@@ -755,20 +918,20 @@
 
         }
 
-<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        <!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  ............................................................................................................................................................................
  ............................................................................................................................................................................
  ............................................................................................................................................................................. -->
 
-@if(withdrawals()){
+        @if(withdrawals()){
         <div class="card  flex justify-center">
 
             <p-dialog [(visible)]="withdrawals" [modal]="true" [style]="{ width: '35rem' }">
                 <ng-template #header>
                     <div class="inline-flex items-center justify-center gap-2">
                         <p-avatar image="/assets/icons/stock.png" shape="circle" />
-                        <span class="font-bold whitespace-nowrap">WITHDRAW PRODUCT</span>
+                        <span class="font-bold whitespace-nowrap">TRANSFER PRODUCT TO STORES</span>
                     </div>
                 </ng-template>
 
@@ -780,11 +943,11 @@
                 </div>
 
                 <div class="flex items-center gap-4 mb-1">
-                    <label class="lbl-style">From Warehouse </label>
+                    <label class="lbl-style">Main Stock Number </label>
                     <label class="lbl-style">{{currentselectedProduct.whse_stockid}}</label>
                 </div>
 
-                
+
 
 
                 <div class="flex items-center gap-4 mb-1">
@@ -794,13 +957,19 @@
 
                 <div class="flex items-center gap-4 mb-1">
                     <label class="lbl-style">Operation</label>
-                    <label class="lbl-style">{{StockcontrolObject[0].controlname}}</label>
+                    <label class="lbl-style">{{controlObject[0].controlname}}</label>
+                </div>
+
+
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">From Warehouse</label>
+                    <label class="lbl-style">{{warehousename}}</label>
                 </div>
                 <p-divider></p-divider>
                 <div class="flex items-center gap-4 mb-1">
-                    <p-select [options]="stores" [(ngModel)]="selectedstore" optionLabel="storename"
-                        [filter]="true" filterBy="storename" appendTo="body" [showClear]="true" placeholder="SELECT A STORE"
-                        class="w-full md:w-56">
+                    <p-select [options]="storesData" [(ngModel)]="selectedstore" (onChange)="selectAstore($event)"
+                        optionLabel="storename" [filter]="true" filterBy="storename" appendTo="body" [showClear]="true"
+                        placeholder="SELECT A STORE" class="w-full md:w-56">
                         <ng-template #selectedItem let-stores>
                             <div class="flex items-center gap-2">
                                 <div>{{ stores.storename }}</div>
@@ -813,15 +982,15 @@
                         </ng-template>
                     </p-select>
                 </div>
-              <!-- <div class="flex items-center gap-4 mb-1">
-                    <label class="lbl-style">Supplier Invoice</label>
-            <input type="text" pInputText [(ngModel)]="SupplierInvoiceNumber" placeholder="Invoice number"/>
-        </div> -->
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Request Number</label>
+                    <input type="text" pInputText [(ngModel)]="storequestID" placeholder="Invoice number" />
+                </div>
                 <p-divider></p-divider>
                 <div class="flex items-center gap-4 mb-1">
-                    <p-select [options]="stockbrand" [(ngModel)]="selectedproductforStocking" optionLabel="title"
-                        [filter]="true" filterBy="title" appendTo="body" [showClear]="true" placeholder="Select a Brand"
-                        class="w-full md:w-56" (onChange)="loadPreviousStock(stockbrand)">
+                    <p-select [options]="stockbrand" [showClear]="true" [(ngModel)]="selectedproductforStocking"
+                        optionLabel="title" [filter]="true" filterBy="title" appendTo="body" [showClear]="true"
+                        placeholder="Select a Brand" class="w-full md:w-56" (onChange)="loadPreviousStock(stockbrand)">
                         <ng-template #selectedItem let-stockbrand>
                             <div class="flex items-center gap-2">
                                 <div>{{ stockbrand.title }}</div>
@@ -836,36 +1005,289 @@
                 </div>
                 @if(previousQty>=0){
                 <div class="card flex flex-wrap gap-4">
-                    <label class="mb-2 font-bold block" for="integeronly">Current Stock Quantity</label>
+                    <label class="mb-2 font-bold block" for="integeronly" class="lbl-style">Current Stock
+                        Quantity</label>
                     <p-inputnumber inputId="integeronly" [(ngModel)]="previousQty" readonly="true" />
                 </div>
-                  <p-divider></p-divider>
                 <div class="card flex flex-wrap gap-4">
-                    <label class="mb-2 font-bold block" for="integeronly">Quantity to Transfer</label>
-                    <p-inputnumber inputId="integeronly" [(ngModel)]="incomingQuantity" readonly="false"
-                        (onInput)="calculateTotalQuantoty($event)" autofocus="true" />
+                    <label class="mb-2 font-bold block" for="integeronly" class="lbl-style">Quantity to Transfer</label>
+                    <p-inputnumber inputId="integeronly" [(ngModel)]="quantityWithdraw" readonly="false"
+                        (onInput)="calculateRemainingStock($event)" autofocus="true" />
                 </div>
-                  <p-divider></p-divider>
                 <div class="card flex flex-wrap gap-4">
-                    <label class="mb-2 font-bold block" for="integeronly">Remaining Quantity</label>
-                    <p-inputnumber inputId="integeronly" [(ngModel)]="totalQuantity" readonly="true" />
+                    <label class="mb-2 font-bold block" for="integeronly" class="lbl-style">Remaining Quantity</label>
+                    <p-inputnumber inputId="integeronly" [(ngModel)]="remainingQuantity" readonly="true" />
                 </div>
-                  <p-divider></p-divider>
                 <div class="card flex justify-center">
-                    <label class="mb-2 font-bold block" for="integeronly">Enter Remarks</label>
-                    <textarea rows="1" cols="5" pTextarea class="details" [(ngModel)]="stockinfo"></textarea>
+                    <label class="mb-2 font-bold block" for="integeronly" class="lbl-style">Enter Remarks</label>
+                    <textarea rows="1" cols="5" pTextarea class="details" [(ngModel)]="drawaldetails"></textarea>
                 </div>
                 <p-divider></p-divider>
-                @if(incomingQuantity){
-                <p-button class="btn-controls" (click)="submitIncomingStock()" raised="true " label="Submit stock"
-                    severity="success" />
+                @if(quantityWithdraw){
+                <div class="card flex flex-wrap gap-8 fluid">
+                    <p-button class="btn-controls" (click)="submitTo_Store()" raised="true " label="Submit stock"
+                        severity="success" />
+                    <p-button class="btn-controls" (click)='withdrawals.set(false);destroyWithdrawals()' raised="true "
+                        label="Submit stock" severity="danger" />
+                </div>
                 }
                 }
+
             </p-dialog>
         </div>
 
 
         }
+        <!-- Transferring products between WAREHOUSES
+ =============================================================================================================================================================================
+ =============================================================================================================================================================================
+ =============================================================================================================================================================================
+ ============================================================================================================================================================================ -->
+        @if (isTowarehouseTransfer()) {
+
+        <div class="card  flex justify-center">
+
+            <p-dialog [(visible)]="isTowarehouseTransfer" [modal]="true" [style]="{ width: '35rem' }">
+                <ng-template #header>
+                    <div class="inline-flex items-center justify-center gap-2">
+                        <p-avatar image="/assets/icons/stock.png" shape="circle" />
+                        <span class="font-bold whitespace-nowrap">WAREHOUSE TO WAREHOUSE TRANSFER</span>
+                    </div>
+                </ng-template>
+
+                <span class="p-text-secondary block mb-1">Transfer products between Warehouses</span>
+                <p-divider></p-divider>
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Operation Id</label>
+                    <label class="lbl-style">{{stockwidthdrawalID}}</label>
+                </div>
+
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Main Stock Number </label>
+                    <label class="lbl-style">{{currentselectedProduct.whse_stockid}}</label>
+                </div>
+
+
+
+
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Product</label>
+                    <label class="lbl-style">{{stockedSelectedProduct}}</label>
+                </div>
+
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Operation</label>
+                    <label class="lbl-style">{{controlObject[0].controlname}}</label>
+                </div>
+
+
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">From Warehouse</label>
+                    <label class="lbl-style">{{warehousename}}</label>
+                </div>
+                <p-divider></p-divider>
+                <div class="flex items-center gap-4 mb-1">
+                    <label>To Warehouse</label>
+                    <p-select [options]="warehouseData" [(ngModel)]="selectedwarehousedetails"
+                        (onChange)="selectedWarehouse($event)" optionLabel="warehousename" [filter]="true"
+                        filterBy="warehousename" appendTo="body" [showClear]="true" placeholder="SELECT A WAREHOUSE"
+                        class="w-full md:w-56">
+                        <ng-template #selectedItem let-warehouseData>
+                            <div class="flex items-center gap-2">
+                                <div>{{ warehouseData.warehousename }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-warehouseData #item>
+                            <div class="flex items-center gap-2">
+                                <div>{{ warehouseData.warehousename }}</div>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                </div>
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Request Number</label>
+                    <input type="text" pInputText [(ngModel)]="storequestID" placeholder="Invoice number"
+                        (input)="setTransferId()" />
+                </div>
+                <div class="flex items-center gap-4 mb-1">
+                    <label class="lbl-style">Transfer Number</label>
+                    <input type="text" pInputText [(ngModel)]="transferNumber" placeholder="Invoice number" />
+                </div>
+                <p-divider></p-divider>
+                <div class="flex items-center gap-4 mb-1">
+                    <p-select [options]="stockbrand" [showClear]="true" [(ngModel)]="selectedproductforStocking"
+                        optionLabel="title" [filter]="true" filterBy="title" appendTo="body" [showClear]="true"
+                        placeholder="Select a Brand" class="w-full md:w-56" (onChange)="loadPreviousStock(stockbrand)">
+                        <ng-template #selectedItem let-stockbrand>
+                            <div class="flex items-center gap-2">
+                                <div>{{ stockbrand.title }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-stockbrand #item>
+                            <div class="flex items-center gap-2">
+                                <div>{{ stockbrand.title }}</div>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                </div>
+                @if(previousQty>=0){
+                <div class="card flex flex-wrap gap-4">
+                    <label class="mb-2 font-bold block" for="integeronly" class="lbl-style">Current Stock
+                        Quantity</label>
+                    <p-inputnumber inputId="integeronly" [(ngModel)]="previousQty" readonly="true" />
+                </div>
+                <div class="card flex flex-wrap gap-4">
+                    <label class="mb-2 font-bold block" for="integeronly" class="lbl-style">Quantity to Transfer</label>
+                    <p-inputnumber inputId="integeronly" [(ngModel)]="quantityWithdraw" readonly="false"
+                        (onInput)="calculateRemainingStock($event)" autofocus="true" />
+                </div>
+                <div class="card flex flex-wrap gap-4">
+                    <label class="mb-2 font-bold block" for="integeronly" class="lbl-style">Remaining Quantity</label>
+                    <p-inputnumber inputId="integeronly" [(ngModel)]="remainingQuantity" readonly="true" />
+                </div>
+                <div class="card flex justify-center">
+                    <label class="mb-2 font-bold block" for="integeronly" class="lbl-style">Enter Remarks</label>
+                    <textarea rows="1" cols="5" pTextarea class="details" [(ngModel)]="drawaldetails"></textarea>
+                </div>
+                <p-divider></p-divider>
+                @if(quantityWithdraw){
+                <div class="card flex flex-wrap gap-8 fluid">
+                    <p-button class="btn-controls" (click)="submitTo_Warehouse()" raised="true "
+                        label="Submit Warehouse" severity="success" />
+                    <p-button class="btn-controls" (click)='isTowarehouseTransfer.set(false);destroyWithdrawals()'
+                        raised="true " label="Cancel" severity="danger" />
+                </div>
+                }
+                }
+
+            </p-dialog>
+        </div>
+
+        }
+
+
+        @if(isApproveWarehousetransfer()){
+
+        <div class="card flex justify-center">
+            <p-dialog header="WAREHOUSE TRANSFER" [modal]="true" [(visible)]="isApproveWarehousetransfer"
+                [style]="{ width: '35rem' }">
+                <span class="p-text-secondary block mb-2">Approve transfer to Warehouse</span>
+                <p-divider></p-divider>
+                <div class="flex items-center gap-4 mb-4">
+                    <label for="username" class="font-semibold w-full">Enter Request Number of Transfer number</label>
+                    <input pInputText id="username" class="flex-auto w-full" autocomplete="off"
+                        [(ngModel)]="RequestNumber" />
+                </div>
+                <p-divider></p-divider>
+                <div class="flex justify-end gap-2">
+                    <p-button label="Get Request" severity="info" (click)="ApproveWarehouseRequest()" />
+                </div>
+            </p-dialog>
+        </div>
+
+        }
+
+
+
+        @if(showVisibleWareseTransferData()){
+        <div class="card flex justify-center">
+
+            <div class="card">
+                <div class="flex justify-center">
+                </div>
+                <p-dialog header="STOCK REQUEST APPROVAL" [resizable]="false" [modal]="true" [maximizable]="true"
+                    appendTo="body" [(visible)]="showVisibleWareseTransferData" [style]="{ width: '80vw' }"
+                    [contentStyle]="{ height: '150vh' }">
+                    <div>
+                        <div class="flex items-center  ">
+                            <div class="flex items-center gap-4 mb-4 req-header">
+                                <label>Operation Number</label>
+                                <label>{{toWarehouseData[0].warehouse_transfer_id}}</label>
+                            </div>
+                            <div class="flex items-center gap-4 mb-4 req-header">
+                                <label>Operation Type</label>
+                                <label>{{toWarehouseData[0].controlname}}</label>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center ">
+                            <div class="flex items-center gap-4 mb-4 req-header">
+                                <label>Destination</label>
+                                <label>{{toWarehouseData[0].to_warehouse_name}}</label>
+                            </div>
+
+
+                            <div class="flex items-center gap-4 mb-4 req-header">
+                                <label>Initiated From </label>
+                                <label>{{warehouseOrigin}}</label>
+
+                            </div>
+                        </div>
+                        <div class="flex items-center ">
+                            <div class="flex items-center gap-4 mb-4 req-header">
+                                <label>Request Number </label>
+                                <label>{{toWarehouseData[0].warehouse_request_id}}</label>
+
+                            </div>
+                            <div class="flex items-center gap-4 mb-4 mb-4 req-header">
+                                <label>Date </label>
+                                <label>{{toWarehouseData[0].date_transfered}}</label>
+
+                            </div>
+                            <div class="flex items-center gap-4 mb-4 mb-4 req-header">
+                                <label>Transfer Number </label>
+                                <label>{{toWarehouseData[0].transfer_id}}</label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <p-table [value]="toWarehouseData" [scrollable]="true" scrollHeight="flex"
+                        [tableStyle]="{ 'min-width': '40rem' }">
+
+
+                        <ng-template #header>
+                            <tr>
+                                <th style="width:25%">Sn</th>
+                                <th style="width:25%">Product</th>
+                                <th style="width:25%">Brand</th>
+                                <th style="width:25%">Quantity</th>
+                                <th style="width:25%">Remarks</th>
+                                <th style="width:25%">Products Moved</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-toWarehouseData let-i="rowIndex">
+                            <tr>
+                                <td style="width:5%">{{i+1}}</td>
+                                <td>{{ toWarehouseData.name }}</td>
+                                <td>{{ toWarehouseData.title }}</td>
+                                <td>{{ toWarehouseData.transfered_quantity}}</td>
+                                <td>{{ toWarehouseData.transfered_details}}</td>
+                                <td>
+                                    <div class="card flex justify-center">
+                                        <p-toggleswitch [(ngModel)]="toWarehouseData.is_transfered_stock_moved"
+                                            (onChange)="warehouseRequeastapproval($event, toWarehouseData)"
+                                            [disabled]="toWarehouseData.is_transfered_stock_moved" />
+                                    </div>
+
+
+                                </td>
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <ng-template #footer>
+                        <p-button label="Ok" icon="pi pi-check" (onClick)="isVisibleWrehoustTowarehouse.set(false)" />
+                    </ng-template>
+                </p-dialog>
+            </div>
+
+        </div>
+
+        }
+
+
+
 
 
 
@@ -1081,7 +1503,7 @@
 <!-- warehouse control creator -->
 @if(iscreatingcontrol()){
 <div class="card flex justify-center">
-    <p-dialog [modal]="true" [(visible)]="iscreatingcontrol" [style]="{ width: '25rem' }">
+    <p-dialog [modal]="true" [(visible)]="iscreatingcontrol" [style]="{ width: '30rem' }">
         <ng-template #header>
             <div class="inline-flex items-center justify-center gap-2">
                 <p-avatar image="/assets/icons/operationcontrol.png" shape="circle" />
@@ -1092,26 +1514,78 @@
 
         <span class="p-text-secondary block mb-4">STOCK OPERATIONAL CONTROLS</span>
         <div class="flex items-center gap-4 mb-4">
-            <label>Create a Control object for items to be withdrawn</label>
+            <label class="controle-data">Create a Control object for items to be withdrawn</label>
             <p-toggleswitch [(ngModel)]="drawals" [disabled]="drawals().valueOf()"
                 (onChange)="createControl($event,'WITHDRAWAL')" />
         </div>
         <div class="flex items-center gap-4 mb-4">
-            <label>Create a Control object for incoming stock</label>
+            <label class="controle-data">Create a Control object for incoming stock</label>
             <p-toggleswitch [(ngModel)]="incoming" [disabled]="incoming()"
                 (onChange)="createControl($event,'INCOMMING')" />
         </div>
         <div class="flex items-center gap-4 mb-4">
-            <label>Create a Control object for returned items</label>
+            <label class="controle-data">Create a Control object for returned items</label>
             <p-toggleswitch [(ngModel)]="returns" [disabled]="returns()"
                 (onChange)="createControl($event,'RETURNED')" />
         </div>
         <div class="flex items-center gap-4 mb-4">
-            <label>Create a Control object transfered items</label>
+            <label class="controle-data">Create a Control object transfered items</label>
             <p-toggleswitch [(ngModel)]="transfer" [disabled]="transfer()"
-                (onChange)="createControl($event,'TRANSFER')" />
+                (onChange)="createControl($event,'TRANSFER_TO_WAREHOUSE')" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label class="controle-data">Create a Control object return items from store to warehouse</label>
+            <p-toggleswitch [(ngModel)]="return_from_store" [disabled]="transfer()"
+                (onChange)="createControl($event,'RETURN_FROM_STORE')" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label class="controle-data">Create a Control object return items from a warehouse to warehouse</label>
+            <p-toggleswitch [(ngModel)]="return_from_warehouse" [disabled]="transfer()"
+                (onChange)="createControl($event,'RETURN_FROM_WAREHOUSE')" />
         </div>
     </p-dialog>
 </div>
 }
+
+<!-- WORKING ON STOCK RETUNS -->
+<!-- ================================================================================================================================================================
+ ================================================================================================================================================================
+ ===============================================================================================================================================================
+ ================================================================================================================================================================ -->
+
+@if(isStockreturns()){
+<div class="card flex justify-center">
+    <p-dialog [(visible)]="isStockreturns" [modal]="true" [style]="{ width: '25rem' }">
+        <ng-template #header>
+            <div class="inline-flex items-center justify-center gap-2">
+                <p-avatar image="/assets/icons/transfer.png" shape="circle" />
+                <span class="font-bold whitespace-nowrap">RECEIVE RETURNS STOCK </span>
+            </div>
+        </ng-template>
+        <span class="text-surface-500 dark:text-surface-400 block mb-4">Initiate stock return process. Note this module
+            can be use to return stock from Warehouse or a store</span>
+        <div class="card flex justify-center">
+            <p-select [options]="controls" [(ngModel)]="selectedControl" (onChange)="selectStoreName($event)"
+                appendTo="body" optionLabel="controlname" placeholder="Select Operation" class="w-full md:w-56" />
+        </div>
+
+        @if(isStoreSelected()){
+        <p-divider></p-divider>
+        <div class="card flex justify-center">
+            <label>Select Store</label>
+            <p-select [options]="storesData" [(ngModel)]="selectedStoreName" (onChange)="selectProductInStore()"
+                appendTo="body" optionLabel="storename" placeholder="Select Store" class="w-full md:w-56" />
+        </div>
+        }
+
+        <p-divider></p-divider>
+        <ng-template #footer>
+            <p-button label="Forward" [outlined]="true" severity="info" />
+        </ng-template>
+    </p-dialog>
+</div>
+}
+
+
+
 <p-toast />

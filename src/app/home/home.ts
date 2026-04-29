@@ -147,18 +147,20 @@ layout: any = 'list';
         // this.setTrending()  
   }
   
-  async setProducts(){
-    await this.productService.getProductsData().subscribe((response:any)=>{
+   setProducts(){
+     this.productService.getProductsData().subscribe((response:any)=>{
         if(response?.message){
              this.message=response?.message
              setTimeout(()=>{this.message=undefined},5000)
         }else{
             if(response?.arrival){
-
+                        setTimeout(()=>{
+          this.products=response?.arrival
+                        },5000)
 
             
                 
-                           this.products=response?.arrival
+                 
                         // console.log(this.products)
              this.cdr.markForCheck();
 
