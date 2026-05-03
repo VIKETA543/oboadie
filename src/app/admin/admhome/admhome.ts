@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterOutlet, RouterLinkWithHref } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { RouterOutlet, RouterLinkWithHref, Router, ActivatedRoute } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { Toolbar } from 'primeng/toolbar';
 import { IconField } from 'primeng/iconfield';
@@ -25,7 +25,18 @@ import { DrawerModule } from 'primeng/drawer';
   templateUrl: './admhome.html',
   styleUrl: './admhome.scss',
 })
-export class Admhome {
+export class Admhome implements OnInit {
+  constructor(private router:Router, private routes:ActivatedRoute){}
+  ngOnInit(): void {
+    
+  }
+openStores() {
+
+    this.router.navigate(['main-stores'],{relativeTo:this.routes})
+}
+pointofsale=()=>{
+    this.router.navigate(['point-of-sale'],{relativeTo:this.routes})
+}
 toggle($event: MouseEvent) {
 throw new Error('Method not implemented.');
 }

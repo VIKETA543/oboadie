@@ -97,7 +97,7 @@ console.log($event)
     this.warehouseservice.createControl(data).subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
-        this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 5000 });
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
       } else {
         if (response?.success) {
           this.iscreatingcontrol.set(false)
@@ -105,7 +105,7 @@ console.log($event)
           this.messageservice.add({ severity: 'success', summary: 'success', detail: this.message, life: 5000 });
         } else {
           this.message = response?.message
-          this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 5000 });
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
         }
 
       }

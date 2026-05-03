@@ -1,0 +1,40 @@
+<div class="card flex justify-center container">
+    <p-panel header="Customer Information">
+        <p-divider />
+        <div class="flex items-center gap-4 mb-4">
+            <label for="username" class="font-semibold w-24 w">Serial Number</label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" [(ngModel)]="cutomerNumber" readonly="true" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label for="username" class="font-semibold w-24 w">Customer Name</label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" [(ngModel)]="customerName" />
+        </div>
+        <div class="flex items-center gap-4 mb-2">
+            <label for="email" class="font-semibold w-24 w">Mobile Number</label>
+            <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="mobileNumber" />
+        </div>
+         <div class="flex items-center gap-4 mb-2">
+            <label for="email" class="font-semibold w-24 w">Telephone Number (Optional)</label>
+            <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="telephoneNumber" />
+        </div>
+        <div class="flex items-center gap-4 mb-2">
+            <label for="email" class="font-semibold w-24 w">Email Address (Optional)</label>
+            <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="emailAddress" />
+        </div>
+        <div class="card flex justify-center  gap-4 mb-2">
+            <label for="email" class="font-semibold w-24 w">Address (Optional)</label>
+            <textarea rows="2" cols="30" pTextarea [(ngModel)]="custerAddress" placeholder="Enter customer address"
+                ></textarea>
+        </div>
+           <div class="card flex justify-center  gap-4 mb-2">
+            <label for="email" class="font-semibold w-24 w">Additional Information (Optional)</label>
+            <textarea rows="2" cols="30" pTextarea [(ngModel)]="remarks" placeholder="Enter customer address"
+          ></textarea>
+        </div>
+             <p-divider />
+        <div class="card flex justify-center">
+            <p-button label="Add" icon="pi pi-user-plus" [text]="true" severity="info" (click)="addCustomer()" />
+        </div>
+    </p-panel>
+
+</div>

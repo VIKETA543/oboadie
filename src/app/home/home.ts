@@ -154,14 +154,10 @@ layout: any = 'list';
              setTimeout(()=>{this.message=undefined},5000)
         }else{
             if(response?.arrival){
-                        setTimeout(()=>{
-          this.products=response?.arrival
-                        },5000)
-
-            
-                
-                 
-                        // console.log(this.products)
+                        // setTimeout(()=>{
+         
+                        // },5000)
+                         this.products=response?.arrival
              this.cdr.markForCheck();
 
 
@@ -200,7 +196,7 @@ setTrending=()=>{
             setTimeout(()=>{this.message=undefined},5000)
         }else{
             if(response?.data){
-             console.log(response?.data)
+            //  console.log(response?.data)
               this.productcart=response?.data
                 this.cdr.markForCheck();
             }else{

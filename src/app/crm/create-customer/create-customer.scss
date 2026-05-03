@@ -1,0 +1,28 @@
+.container{
+    padding: 10px;
+    width: calc(100% - 40%);
+    margin: 30px auto;
+    font-size: clamp(1.2em,1.6em,1.8em);
+    font-weight: bold;
+    ::ng-deep{
+        .p-button{
+            float: right;
+        }
+    }
+}
+.w{
+    width: calc(100% - 60%);
+}
+::ng-deep{
+    .p-panel{
+        width:calc(100% - 2%);
+        margin: 0px auto;
+    }
+}
+textarea{
+        width: calc(100% - 50%);
+}
+.btn-submit{
+ padding: 10px;
+ background-color: rgb(3, 78, 128);
+}

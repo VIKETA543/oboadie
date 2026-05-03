@@ -1,0 +1,25 @@
+<p-toolbar>
+    <ng-template #start>
+        <span>
+            PROFOMA INVOICES
+        </span>
+    </ng-template>
+    <ng-template #center>
+    </ng-template>
+    <ng-template #end>
+        <p-button icon="pi pi-ellipsis-v" variant="text" [raised]="false" severity="secondary"
+            (onClick)="op.toggle($event)" />
+    </ng-template>
+</p-toolbar>
+
+<div class="card flex justify-center">
+    <p-popover #op>
+        <div class="flex flex-col gap-4">
+            <p-button icon="" label="New Invoice" variant="text" [raised]="false" severity="secondary"
+                routerLink="new-profoma" />
+        </div>
+    </p-popover>
+</div>
+<div>
+    <router-outlet></router-outlet>
+</div>

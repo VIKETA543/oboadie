@@ -1,0 +1,53 @@
+<div class="card">
+    <p-toolbar>
+        <ng-template #start>
+
+        </ng-template>
+        <ng-template #center>
+
+        </ng-template>
+        <ng-template #end>
+            <p-button icon="pi pi-ellipsis-v" class="mr-2" text severity="secondary" (onClick)="rightaside.set(true)" />
+        </ng-template>
+    </p-toolbar>
+</div>
+<p-drawer [(visible)]="rightaside" [modal]="true" [dismissible]="true" [blockScroll]="false" position="right">
+    <div class="card flex justify-center gap-4">
+        <p-button label="New Product" icon="pi pi-star" severity="secondary" (onClick)="newProduct()" serverity="info"
+            variant="text" />
+    </div>
+
+    <div class="card flex justify-center gap-4">
+        <p-button label="Product Categories" icon="pi pi-star" severity="secondary" (onClick)="productCategories()"
+            serverity="info" variant="text" />
+    </div>
+
+    <div class="card flex justify-center gap-4">
+        <p-button label="Receive Stock" icon="store" severity="secondary" (onClick)="recieveStock()" serverity="info"
+            variant="text" />
+    </div>
+    <div class="card flex justify-center gap-4">
+        <p-button label="Stock Rceived History" icon="store" severity="secondary" (onClick)="receivedstock()"
+            serverity="info" variant="text" />
+    </div>
+    <div class="card flex justify-center gap-4">
+
+        <p-button label="Verify Sales" icon="store" severity="secondary" (onClick)="VerifySales()" serverity="info"
+            variant="text" />
+    </div>
+    <div class="card flex justify-center gap-4">
+        <p-button label="Items Verified" icon="store" severity="secondary" (onClick)="VerifySales()" serverity="info"
+            variant="text" />
+    </div>
+    <div class="card flex justify-center gap-4">
+        <p-button label="Verification History" icon="store" severity="secondary" (onClick)="VerifySales()"
+            serverity="info" variant="text" />
+    </div>
+    <div class="card flex justify-center gap-4">
+        <p-button label="Stock Balances" icon="store" severity="secondary" (onClick)="VerifySales()" serverity="info"
+            variant="text" />
+    </div>
+</p-drawer>
+<div id="routercontainer">
+    <router-outlet></router-outlet>
+</div>

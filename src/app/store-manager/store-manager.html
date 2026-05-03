@@ -15,23 +15,30 @@
                                     style="font-size: 1rem"></i>Options</span>
                             <p-divider />
                             <div class="btn-pops">
-                                    <p-button label="Stores " icon="access" iconPos="left" severity="secondary" (onClick)="createStore()" />
-                                  
-                                          <p-button label="Store Type " icon="access" iconPos="left" severity="secondary" (onClick)="storeType()" />
-                           
+                                <div class="card flex justify-center gap-4">
+                                    <p-button label="New Product" icon="pi pi-star" severity="secondary"
+                                        (onClick)="newProduct()" serverity="info" variant="text" />
+                                </div>
+                                <div class="card flex justify-center gap-4">
+                                    <p-button label="Stores " icon="access" iconPos="left" severity="secondary"
+                                        (onClick)="createStore()" />
+                                </div>
+                                <div class="card flex justify-center gap-4">
+                                    <p-button label="Store Type " icon="access" iconPos="left" severity="secondary"
+                                        (onClick)="storeType()" />
+                                </div>
+                                <div class="card flex justify-center gap-4">
+                                    <p-button label="Receive Stock" icon="store" severity="secondary"
+                                        (onClick)="recieveStock()" serverity="info" variant="text" />
+                                </div>
 
-                                <p-button label="Receive Stock" icon="store" severity="secondary"
-                                    (onClick)="recieveStock()" serverity="info" variant="text" />
 
-
-                                <p-button icon="manager" variant="text" label='Manage Identity' class="mr-2" text
-                                    severity="success" severity="info" />
-                                <p-button icon="wh-man" variant="text" label='Open a Store' class="mr-2" text
-                                    severity="info" severity="info" variant="text" />
-                                <p-button icon="operationcontrol" variant="text" label='Initialize Control' class="mr-2"
-                                    text severity="info" variant="text" />
-
-
+                                <div class="card flex justify-center gap-4">
+                                    <p-button icon="" variant="text" label='Product Categories'
+                                        class="mr-2" text severity="info" variant="text"
+                                        (onClick)="productCategories()" />
+                                </div>
+                              
                             </div>
                         </div>
                     </p-popover>
@@ -48,8 +55,8 @@
 
 
 
-        <!-- Working on store manager modules -->
-        <!-- /=============================================================================================================================================================================================
+<!-- Working on store manager modules -->
+<!-- /=============================================================================================================================================================================================
   ==============================================================================================================================================================================================================
   =======================================================================================================================================================================================
   ==================================================================================================================================================================================== -->
@@ -58,14 +65,14 @@
 
 
 
-        <!-- Viewing stores
+<!-- Viewing stores
      ========================================================================================================================================================================
      ========================================================================================================================================================================
      ====================================================================================================================================================================== -->
-      
-        <div> 
+
+<div>
 
 
 
-            <router-outlet> </router-outlet>
-        </div>
+    <router-outlet> </router-outlet>
+</div>

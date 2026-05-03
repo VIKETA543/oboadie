@@ -1,0 +1,20 @@
+<p-toolbar>
+    <ng-template #start>
+        <span>
+            CRM MANAGER
+        </span>
+    </ng-template>
+    <ng-template #center>
+    </ng-template>
+    <ng-template #end>
+        <p-button icon="pi pi-ellipsis-v" variant="text" [raised]="false" severity="secondary"
+            (onClick)="op.toggle($event)" />
+    </ng-template>
+</p-toolbar>
+<div>
+    <p-popover #op>
+        <p-button icon="" label="New Customer" variant="text" [raised]="false" severity="secondary" routerLink="create-customer"  />
+         <p-button icon="" label="Customers" variant="text" [raised]="false" severity="secondary" routerLink="create-customer"  />
+    </p-popover>
+</div>
+<router-outlet></router-outlet>

@@ -116,13 +116,6 @@ this.selectedStoreType=$event.value.storeidentityid
 console.log(this.selectedStoreType)
 }
 
-
-
-
-
-
-
-
 isStoremanager=signal(false)
 openStoreManager=()=>{
  }
@@ -141,6 +134,10 @@ storeStockNumber:any;
   isstockhistroyLoading = signal(false)
 
 
-
-
+newProduct=()=>{
+this.router.navigate(['create-products'],{relativeTo:this.routes})
+}
+productCategories=()=>{
+  this.router.navigate(['product-category'],{relativeTo:this.routes})
+}
 }

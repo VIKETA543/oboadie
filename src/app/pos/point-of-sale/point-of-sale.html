@@ -1,0 +1,27 @@
+<div class="card flex flex-col items-center gap-4 head">
+    <header>POS</header>
+
+</div>
+<p-toast />
+<p-toolbar>
+    <ng-template #start>
+        <p-button icon="pi pi-cart-plus" label="Cash Sales" pTooltip="Prepare Cash Sales" class="mr-2" text
+            severity="secondary" (onClick)="cashSales()" />
+        <p-button icon="pi pi-print" label='Credit Sales' pTooltip="Prepare Credit Sales" class="mr-2" text
+            severity="secondary"  (onClick)="creditSales()"  />
+        <p-button icon="pi pi-upload" label="Deposit" Make Deposit text severity="secondary" />
+        <p-button icon="pi pi-upload" label="Return Sales" pTooltip="Process Return Item" text severity="secondary" />
+        <p-button icon="pi pi-upload" label="CRM" pTooltip="Customer Relation management" text severity="secondary" routerLink="crm-manager"  />
+        <p-button icon="pi pi-upload" label="Profoma Invoice" pTooltip="Profoma Invoince" text severity="secondary" routerLink="profoma-invoice" />
+    </ng-template>
+    <ng-template #center>
+
+    </ng-template>
+    <ng-template #end>
+
+    </ng-template>
+</p-toolbar>
+<div>
+
+<router-outlet></router-outlet>
+</div>

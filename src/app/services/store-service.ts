@@ -65,4 +65,7 @@ droptType=(data:any)=>{
 }
 
 
+loadStoreRecivedStock=()=>{
+   return this.http.post(this.url + '/stores/loadStoreRecivedStock', { headers: new HttpHeaders().set('contentType', "application/json") })
+}
 }

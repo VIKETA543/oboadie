@@ -1,0 +1,277 @@
+<div class="card flex flex-col items-center gap-4">
+    <div class="sales-quotes">
+        <p-table #dt2 [value]="SalesData" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+            [loading]="loading()" [paginator]="true" [globalFilterFields]="['serialnumber','name', 'title']"
+            stripedRows>
+
+            <ng-template #caption>
+                <div class="flex">
+                    <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt2)" />
+                    <div class="card flex flex-col items-center gap-4">
+                        <p-button label="PROFOMA INVOICE" [outlined]="true" icon="pi pi-receipt"
+                            (onClick)="iniCashSales()" />
+                    </div>
+                    <p-iconfield iconPosition="left" class="ml-auto">
+                        <p-inputicon>
+                            <i class="pi pi-search"></i>
+                        </p-inputicon>
+                        <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Search keyword" />
+                    </p-iconfield>
+
+                </div>
+
+            </ng-template>
+
+            <ng-template #header>
+                <tr>
+                    <th>serial</th>
+                    <th>Product Name</th>
+                    <th>Type/brand</th>
+                    <th>From Store</th>
+                    <th>Image</th>
+                    <th>Available Quantity</th>
+                    <th>Price</th>
+                    <th>Info</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-cashSalesData let-product let-i="rowIndex">
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{cashSalesData.name}}</td>
+                    <td>{{ cashSalesData.title }}</td>
+                    <td>{{ cashSalesData.storename }}</td>
+                    <td>
+                        <img [src]="cashSalesData.imageurl" />
+                    </td>
+                    <td>{{cashSalesData.total_quantity}}</td>
+                    <td>{{cashSalesData.unitesellingprice | currency: 'Ghø'}}</td>
+                    <td>
+                        <p class="truncate-text" pTooltip="{{cashSalesData.role}}"> {{ cashSalesData.role }}</p>
+                    </td>
+                    <td>{{cashSalesData.date}}</td>
+                    <td>
+                        <div class="card flex justify-center">
+                            <p-toggleswitch (onChange)="addToCart($event,cashSalesData)" pTooltip="Add products to Cart"
+                                tooltipPosition="left" [disabled]="checked" />
+                            <p-dialog [(visible)]="isaddingCart" [modal]="true" [style]="{ width: '20rem' }">
+                                <p-fluid class="card flex flex-wrap gap-4">
+                                    <div class="flex-auto">
+                                        <label class="mb-2 font-bold block" for="integeronly">Quantity</label>
+                                        <div class="card flex flex-wrap gap-4">
+                                            <p-inputnumber inputId="integeronly" [(ngModel)]="quoteQuantity"
+                                                (onInput)="calcTotal()" />
+                                            <p-button label="add" icon="pi pi-cart-plus" [raised]="true" severity="info"
+                                                (onClick)="AddCart()" />
+                                        </div>
+                                    </div>
+                                </p-fluid>
+                            </p-dialog>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+     @if(isInput()){
+    <div>
+        <div class="sales-display" header="Cash Invoice" id="print-section">
+            <div class="header">
+                <header>OBOADIE NYAME ADOM ENTERPRISE</header>
+                <span>Behind Our Lady of Fatima Junction</span>
+                <span>0531885457</span>
+            </div>
+            <div class="card flex flex-col items-center gap-4">
+                <div class="card flex flex-col items-center gap-4 customer">
+                    <span class="card flex flex-col items-center gap-2">Invoice Number: </span>
+                    <span class="card flex flex-col items-center gap-2">{{InvoiceNumber}}</span>
+                </div>
+                <div class=" card flex flex-col items-center gap-4 customer">
+                    <span class="card flex flex-col items-center gap-2">Date Prepared: </span>
+                    <span class="card flex flex-col items-center gap-2">{{ invoiceDate | date: 'yyyy-MMM-dd, h:mm:ss
+                        a'}}</span>
+                </div>
+            </div>
+            <div class="card flex flex-col items-center gap-4">
+                <label class="card flex flex-col items-center gap-2 customer">
+                    <span class="card flex flex-col items-center gap-2">Customer Name:</span><span
+                        class="card flex flex-col items-center gap-2">{{customerName}}</span>
+                </label>
+                <label class="card flex flex-col items-center gap-2 customer">
+                    <span>Tel/Mobile No:</span><span>{{telephoneNumber}}</span>
+                </label>
+            </div>
+            <div class="card flex flex-col items-center gap-4">
+                <label class="card flex flex-col items-center gap-2 customer">
+                    <span class="card flex flex-col items-center gap-2">Email Address:</span><span
+                        class="card flex flex-col items-center gap-2">{{emailAddress}}</span>
+                </label>
+                <label class="card flex flex-col items-center gap-2 customer">
+                    <span>Address:</span><span>{{custerAddress}}</span>
+                </label>
+            </div>
+             <div class="card flex flex-col items-center gap-4">
+                <div class="card flex flex-col items-center gap-4 customer">
+                    <span class="card flex flex-col items-center gap-2">PROFOMA INVOICE: </span>
+                </div>
+                <div class=" card flex flex-col items-center gap-4 customer">
+                    <span class="card flex flex-col items-center gap-2">Expiry Date: </span>
+                    <span class="card flex flex-col items-center gap-2">{{ expiryDate | date: 'yyyy-MMM-dd, h:mm:ss
+                        a'}}</span>
+                </div>
+            </div>
+
+            <div class="card  tb">
+                <p-table [value]="creditTempData" [tableStyle]="{ 'min-width': '50rem' }">
+                    <ng-template #header>
+                        <tr>
+                            <th style="width:20%">PID</th>
+                            <th style="width:2%">Product</th>
+                            <th style="width:15%">Brand</th>
+                            <th style="width:10%">Quantity</th>
+                            <th style="width:10%">unit Price</th>
+                            <th style="width:15%">Total</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-cashtempData>
+                        <tr>
+                            <td>{{cashtempData.purchaseid}}</td>
+                            <td>{{ cashtempData.name }}</td>
+                            <td>{{ cashtempData.title }}</td>
+                            <td>{{ cashtempData.quantity }}</td>
+                            <td>{{ cashtempData.unitprice }}</td>
+                            <td>{{ cashtempData.totalcost }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <div class="card flex flex-wrap justify-center gap-4 total">
+                    <div>Sum Total</div>
+                    <div>{{sumTotalCart | currency: 'Ghø'}}</div>
+
+                </div>
+                <div class="card flex flex-wrap justify-center gap-4 ">
+                    <ngx-barcode6 [bc-value]=InvoiceNumber [bc-format]="'CODE128'" [bc-display-value]="true">
+                    </ngx-barcode6>
+                </div>
+
+            </div>
+        </div>
+        <div class='print-footer'>
+            @if(sumTotalCart){
+            <div class="card flex flex-wrap justify-center gap-4 btn-submit">
+                <p-button label="Submit" [raised]="true" severity="info" (onClick)="submitInvoice()" />
+            </div>
+            }
+            @if(submitOnSuccess()){
+            <div class="card flex flex-wrap justify-center gap-4 btn-submit">
+                <p-button label="Print" icon="pi pi-print" [raised]="true" severity="secondary"
+                    printSectionId="print-section" ngxPrint (printCompleted)="onPrintComplete()"
+                    [useExistingCss]="true" />
+            </div>
+            }
+        </div>
+    </div>
+    <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    @if(isInputInvoice()){
+    <div class="card flex justify-center">
+        <p-dialog [(visible)]="isInputInvoice" [modal]="true" [style]="{ width: '35rem' }">
+            <ng-template #header>
+                <div class="inline-flex items-center justify-center gap-2">
+                    <!-- <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" /> -->
+                    <span class="font-bold whitespace-nowrap">CUSTOMER PROFILE</span>
+                </div>
+            </ng-template>
+            <span class="text-surface-500 dark:text-surface-400 block mb-2">Create a new customer profile.</span>
+            <p-divider />
+            <div class="card flex flex-wrap justify-center gap-4">
+                <div class="flex items-center gap-2">
+                    <p-checkbox [(ngModel)]="size" inputId="size_large" name="size" value="Normal"
+                        [(ngModel)]="walkinCustomer" (onChange)="selectecustomerType($event,'WALK-IN')" />
+                    <label for="size_normal">WALK-IN CUSTOMER</label>
+                </div>
+                <div class="flex items-center gap-2">
+                    <p-checkbox [(ngModel)]="size" inputId="size_large" name="size" value="Large" size="large"
+                        [(ngModel)]="registeredCustomer" (onChange)="selectecustomerType($event,'REGISTERED')" />
+                    <label for="size_large" class="text-lg">REGISTERED CUSTOMER</label>
+                </div>
+            </div>
+            @if(registeredCustomer){
+            <p-divider />
+            <div class="card flex justify-center">
+                <p-select [options]="customerData" [(ngModel)]="selectedCustomer" optionLabel="customername"
+                    [filter]="true" filterBy="customername" [showClear]="true" placeholder="Select a Cusatomer"
+                    class="w-full md:w-56" (onChange)="getSelectedCustomer($event)">
+                    <ng-template #selectedItem let-customerData>
+                        <div class="flex items-center gap-2">
+                            <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px" /> -->
+                            <div>{{ customerData.customername }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-customerData #item>
+                        <div class="flex items-center gap-2">
+                            <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" /> -->
+                            <div>{{ customerData.customername }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+            }
+
+            <p-divider />
+            <div class="flex items-center gap-4 mb-4">
+                <label for="username" class="font-semibold w-24 w">Customer Name</label>
+                <input pInputText id="username" class="flex-auto" autocomplete="off" [(ngModel)]="customerName" />
+            </div>
+            <div class="flex items-center gap-4 mb-2">
+                <label for="email" class="font-semibold w-24 w">Telephone Number</label>
+                <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="telephoneNumber" />
+            </div>
+            <div class="flex items-center gap-4 mb-2">
+                <label for="email" class="font-semibold w-24 w">Mobile Number</label>
+                <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="mobile_number" />
+            </div>
+            <div class="flex items-center gap-4 mb-2">
+                <label for="email" class="font-semibold w-24 w">Email Address (Optional)</label>
+                <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="emailAddress" />
+            </div>
+            <p-divider />
+            <div class="card flex justify-center">
+                <label for="email" class="font-semibold w-24 w">Address (Optional)</label>
+                <textarea rows="2" cols="30" pTextarea [(ngModel)]="custerAddress"
+                    placeholder="Enter customer address"></textarea>
+            </div>
+            <p-divider />
+            <div class="card flex justify-center">
+                <label for="email" class="font-semibold w-24 w">Additional Info (Optional)</label>
+                <textarea rows="2" cols="30" pTextarea [(ngModel)]="remarks"
+                    placeholder="Add Additional Information"></textarea>
+            </div>
+
+                  <div class="card flex justify-center">
+                     <label for="email" class="font-semibold w-24 w">Set Expiry date for invoice</label>
+            <p-datepicker [(ngModel)]="expiryDate" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" pInputMask="99/99/9999" />
+        </div>
+
+            <ng-template #footer>
+                <div class="text-surface-500 dark:text-surface-400 block mb-2">
+                    <!-- <div class="flex items-center gap-4 mb-2">
+                        <span>Add this details to customer List</span>
+                        <p-toggleswitch [(ngModel)]="isAddtoCustomerList" />
+                    </div> -->
+                    <div class="flex items-center gap-4 mb-2">
+                        <p-button label="Add" [text]="true" severity="secondary" (click)="addInvoice()" />
+
+                    </div>
+                </div>
+
+            </ng-template>
+        </p-dialog>
+    </div>
+    }
+    }
+
+</div>
+
+<p-toast></p-toast>
