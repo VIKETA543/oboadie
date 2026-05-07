@@ -25,7 +25,7 @@ export class MobileScanner implements OnInit {
     this.lastResult = resultString;
     console.log('Scan Result:', resultString);
     
-    // Optional: Vibrate on success (works on many Android devices)
+  this.toggleScanner();
     if (navigator.vibrate) {
       navigator.vibrate(200);
     }

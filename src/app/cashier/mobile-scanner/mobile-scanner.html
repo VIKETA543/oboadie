@@ -2,11 +2,7 @@
   <h2>Scan Item</h2>
 
   <zxing-scanner
-    *ngIf="scannerEnabled"
-    [formats]="allowedFormats"
-    (scanSuccess)="onCodeResult($event)"
-    (permissionResponse)="onHasPermission($event)"
-    [autofocusEnabled]="true">
+    *ngIf="scannerEnabled"  [formats]="allowedFormats" (scanSuccess)="onCodeResult($event)"  (permissionResponse)="onHasPermission($event)" [autofocusEnabled]="true">
   </zxing-scanner>
 
   <div class="controls">
