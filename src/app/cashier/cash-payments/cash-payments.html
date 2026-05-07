@@ -1,0 +1,13 @@
+<p-toolbar>
+    <ng-template #start>
+       <div class="card flex justify-center">
+    <p-selectbutton [options]="stateOptions" [(ngModel)]="selectionOption" optionLabel="label" optionValue="value" aria-labelledby="basic" (onOptionClick)="selectionButton($event)" />
+</div>
+    </ng-template>
+    <ng-template #center>
+    </ng-template>
+    <ng-template #end>
+        
+    </ng-template>
+</p-toolbar>
+<router-outlet></router-outlet>

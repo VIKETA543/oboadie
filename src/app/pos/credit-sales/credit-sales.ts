@@ -112,7 +112,6 @@ isAddtoCustomerList=signal(false)
       } else {
         if (response?.data) {
           this.SalesData = response?.data
-        
           this.loading.set(false)
         } else {
           this.message = response?.message

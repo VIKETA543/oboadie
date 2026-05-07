@@ -83,7 +83,7 @@ export class CreateCustomer implements OnInit {
   cutomerNumber: any
   mobileNumber: any
   remarks: any
-
+  isCustomerSaved=signal(false)
   constructor(private posservice: PosServcie, private cdr: ChangeDetectorRef, private crmservcie: Crmservice) { }
   ngOnInit(): void {
     this.genranCode()
@@ -119,6 +119,8 @@ export class CreateCustomer implements OnInit {
         if (response?.success) {
           this.message = response?.success
           this.isInputInvoice.set(false)
+          this.crmservcie.setCustomerSaved(true)
+          this.crmservcie.setCustomerNumber(this.cutomerNumber)
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
           this.message = response?.message

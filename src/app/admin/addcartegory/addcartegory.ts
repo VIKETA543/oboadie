@@ -76,7 +76,6 @@ export class Addcartegory implements OnInit {
     this.preview = undefined
   }
   apply = () => {
-
     const formData = new FormData();
     formData.append('IMAGE', this.image)
     formData.append('newCategory', this.newCategory)

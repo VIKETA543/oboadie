@@ -1,0 +1,98 @@
+
+@if(isDeposit()){
+    <div class="card flex justify-center">
+
+            <p-dialog [(visible)]="isDeposit" [modal]="true" [style]="{ width: '25rem' }">
+                <ng-template #header>
+                    <div class="inline-flex items-center justify-center gap-2">
+                        <!-- <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" /> -->
+                        <span class="font-bold whitespace-nowrap">FIND ACCOUNT</span>
+                    </div>
+                </ng-template>
+                <div class="flex items-center gap-4 mb-4">
+                    <input pInputText id="username" class="flex-auto" autocomplete="off" placeholder="ENTER ACCOUNT NUMBER" [(ngModel)]="accountNumber" />
+                </div>
+                <ng-template #footer>
+                    <p-button label="Cancel" [text]="true" severity="secondary" (click)="cancel()" />
+                    <p-button label="CONTINUE" [outlined]="true" severity="secondary" (click)="contninueFind()" />
+                </ng-template>
+            </p-dialog>
+        </div>
+}
+<div class="container">
+    <header>WITDRAW CASH</header>
+</div>
+<!-- <div class="card flex justify-center">
+    <p-selectbutton [options]="stateOptions" [(ngModel)]="selectionOption" optionLabel="label" optionValue="value"
+        aria-labelledby="basic" (onOptionClick)="selectionButton($event)" />
+</div> -->
+<p-panel [toggleable]="false">
+    <ng-template #header>
+        <div class=" gap-2">
+            <span class="font-bold">PROCESS CASH WITHDRAWAL</span>
+        </div>
+    </ng-template>
+    <div class="h">
+  
+        @if(selectedCustomerData){
+                  <div class="account-info">
+        <p-fluid class="card flex flex-wrap gap-4">
+            <div class="card flex flex-wrap gap-4 tt">
+                <label class="block font-bold mb-2 if-3" for="locale-user">Account Number</label>
+                <label>{{selectedCustomerData[0].accountnumber}}</label>
+            </div>
+        </p-fluid>
+
+        <p-fluid class="card flex flex-wrap gap-4">
+            <div class="card flex flex-wrap gap-4 tt">
+                <label class="block font-bold mb-2 if-3" for="locale-user">Account Name</label>
+                <label>{{selectedCustomerData[0].accountname}}</label>
+            </div>
+        </p-fluid>
+
+        <p-fluid class="card flex flex-wrap gap-4">
+            <div class="card flex flex-wrap gap-4 tt">
+                <label class="block font-bold mb-2 if-3" for="locale-user">Current Amount</label>
+                <label>{{currentBalance| currency: 'Ghø'}}</label>
+                
+            </div>
+        </p-fluid>
+
+        <p-fluid class="card flex flex-wrap gap-4">
+            <div class="card flex flex-wrap gap-4 tt">
+                <label class="block font-bold mb-2 if-3" for="locale-user">TRANSACTION NUMBER</label>
+                <label>{{transactionNumber}}</label>
+            </div>
+        </p-fluid>
+        <p-divider layout="horizontal" class="mb-4"></p-divider>
+        <p-fluid class="card flex flex-wrap gap-4">
+            <div class="card flex flex-wrap gap-4 tt" >
+                <label class="block font-bold mb-2 if-3" for="locale-user">Enter Amount to Withdraw</label>
+                <p-inputnumber [(ngModel)]="CreditAmount" inputId="locale-user" [minFractionDigits]="2" (onInput)="calculateWithdrawal()" />
+            </div>
+        </p-fluid>
+        <p-fluid class="card flex flex-wrap gap-4">
+            <div class="card flex flex-wrap gap-4 tt">
+                <label class="block font-bold mb-2 if-3" for="locale-user">Sum Balance</label>
+                <p-inputnumber [(ngModel)]="sumBalance" inputId="locale-user" [minFractionDigits]="2" />
+            </div>
+        </p-fluid>
+        </div>
+
+    <div class="iamge-container">     
+    <div class="flex items-center gap-4 mb-2 img-w">
+        <img  [src]="selectedCustomerData[0].passportpicture" alt="Image" width="100rem" height="150" class="border-round">
+    </div>
+    <div class="flex items-center gap-4 mb-2 img-w">
+        <img  [src]="selectedCustomerData[0].id_image" alt="Image" width="150" height="100rem" class="border-round">
+    </div>
+          <p-divider layout="horizontal" class="mb-4"></p-divider>
+    <p-button label="Withdraw" severity="primary" raised="true" (onClick)="submitWithdrawal()" />
+    </div>
+        }@else {
+
+        }
+    </div>
+</p-panel>
+
+<p-toast></p-toast>

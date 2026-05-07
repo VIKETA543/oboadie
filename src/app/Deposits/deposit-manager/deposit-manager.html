@@ -1,0 +1,21 @@
+ <div class="card">
+            <p-toolbar>
+                <ng-template #start>
+                    <p-button icon="pi pi-plus" label="Make Deposit" class="mr-2" text severity="secondary" routerLink="new-deposit"/>
+                       <p-button icon="" label="Accounts" class="mr-2" text severity="secondary" routerLink="deposit-accounts"/>
+                            <p-button icon="" label="Withdraw" severity="secondary"  routerLink="withdraw"/>
+                    <!-- <p-button icon="" label="Accounts" class="mr-2" text severity="secondary" routerLink="deposit-accounts"/> -->
+                    <p-button icon="" label="Create Account" severity="secondary"  routerLink="create-account"/>
+                    <p-button icon="" label="Deposit Details" severity="secondary"  routerLink="deposit-details"/>
+               
+                </ng-template>
+                <ng-template #center>
+                 
+                </ng-template>
+                <ng-template #end>
+                </ng-template>
+            </p-toolbar>
+        </div>
+        <router-outlet></router-outlet>
+
+

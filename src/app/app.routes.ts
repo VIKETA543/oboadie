@@ -25,6 +25,20 @@ import { CrmManager } from './crm/crm-manager/crm-manager';
 import { CreditSales } from './pos/credit-sales/credit-sales';
 import { ProfomaInvoice } from './profoma/profoma-invoice/profoma-invoice';
 import { NewProfoma } from './profoma/new-profoma/new-profoma';
+import { DepositManager } from './Deposits/deposit-manager/deposit-manager';
+import { NewDeposit } from './Deposits/new-deposit/new-deposit';
+import { DepositAccounts } from './Deposits/deposit-accounts/deposit-accounts';
+import { CreateAccount } from './Deposits/create-account/create-account';
+import { DepositDetails } from './Deposits/deposit-details/deposit-details';
+import { Withdraw } from './Deposits/withdraw/withdraw';
+import { CashManager } from './cashier/cash-manager/cash-manager';
+import { CashPayments } from './cashier/cash-payments/cash-payments';
+import { ScannerPayment } from './cashier/scanner-payment/scanner-payment';
+import { MobileScanner } from './cashier/mobile-scanner/mobile-scanner';
+import { ManualVerification } from './cashier/manual-verification/manual-verification';
+
+
+
 
 export const routes: Routes = [
     {
@@ -63,6 +77,8 @@ export const routes: Routes = [
                 path: 'point-of-sale', component: PointOfSale, children: [
                     { path: 'cash-sales', component: CashSales },
                     { path: 'credit-sales', component: CreditSales },
+                    { path: 'new-deposit', component: NewDeposit },
+                    { path: 'create-account', component: CreateAccount },
                     {
                         path: 'profoma-invoice', component: ProfomaInvoice, children: [
                             { path: 'new-profoma', component: NewProfoma }
@@ -76,6 +92,28 @@ export const routes: Routes = [
                     }
                 ]
             },
+            {
+                path: 'deposit-manager', component: DepositManager, children: [
+                    {
+                        path: 'new-deposit', component: NewDeposit, children: [
+                            { path: 'create-customer', component: CreateCustomer }
+                        ]
+                    },
+                    { path: 'deposit-accounts', component: DepositAccounts },
+                    { path: 'create-account', component: CreateAccount },
+                    { path: 'deposit-details', component: DepositDetails },
+                    {path:'withdraw', component: Withdraw}
+                ]
+
+            },
+            {path: 'cash-manager', component: CashManager,children:[
+                {path: 'cash-payments', component: CashPayments, children:[
+                    {path:'scanner-payment', component:ScannerPayment},
+                      {path:'mobile-scanner', component:MobileScanner},
+                      {path:'manual-verification', component:ManualVerification}
+                ]
+            }
+            ]},
 
             { path: '', redirectTo: 'products', pathMatch: 'full' }
         ]

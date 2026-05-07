@@ -1,0 +1,76 @@
+.container{
+    width: calc(100%);
+    padding: 10px;
+    background-color: rgb(3, 60, 136);
+    header{
+        font-size: clamp(1em,1.5em,1.9em);
+        color: white; 
+    }
+}
+
+::ng-deep{
+    .p-panel{
+    max-width: calc(100% - 20%);
+    min-width:calc(100% - 80%);
+ width:calc(100% - 20%);
+    margin: 1rem auto;
+    padding: 1rem;
+    border: 1px solid grey;
+    }
+}
+.h{
+          border: 1px solid rgb(206, 211, 214);
+  display: flex;
+           font-size: clamp(1em,1.5em,1.9em);
+           div{
+        
+            padding: 5px;
+            margin: 5px;
+            label:first-child{
+                width: calc(100% - 70%);
+            }
+            label:last-child{
+                       border: 1px solid rgb(206, 211, 214);
+                       background-color: rgb(241, 245, 245);
+                           border-radius: .3em;
+                           width: calc(100% - 50%);
+                            padding: 5px;
+            }
+
+           }
+}
+.account-info{
+                 max-width: calc(100% - 0%);
+             min-width: calc(100% - 80%);
+                width: calc(100% - 0%);
+}
+::ng-deep{
+    .p-fluid{
+        div{
+            display: flex;
+        }
+    }
+}
+span{
+    width: 40%;
+}
+.tt{
+    padding: 5px;
+            margin: 5px;
+             width: 100%;
+            display: flex;
+}
+.iamge-container{
+    border: 1px solid rgb(206, 211, 214);
+         max-width: calc(100% - 0%);
+             min-width: calc(100% - 70%);
+                width: calc(100% - 70%);
+}
+.if-3{
+    width: 70%;
+}
+.img-w{
+        border: 1px solid rgb(206, 211, 214);
+        border-radius: .5em;
+        width: 100%;
+}

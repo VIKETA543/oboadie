@@ -1,0 +1,68 @@
+@if(isAccountsLoaded()){
+    
+<div class="card flex flex-col items-center gap-4">
+    <div class="sales-quotes">
+        <p-table #dt2 [value]="depositsData" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+            [loading]="loading()" [paginator]="true" [globalFilterFields]="['accountname','accountnumber','identification_number','identification_type','address','date','telephone','mobile_number','emailaddress']"
+            stripedRows>
+
+            <ng-template #caption>
+                <div class="flex">
+                    <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt2)" />
+                    <p-iconfield iconPosition="left" class="ml-auto">
+                        <p-inputicon>
+                            <i class="pi pi-search"></i>
+                        </p-inputicon>
+                        <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Search keyword" />
+                    </p-iconfield>
+
+                </div>
+
+            </ng-template>
+<!-- accountnumber,customername,date,is_verified,telephone,emailaddress,address,mobile_number,remarks,isopened,ghanacardnumber,passportpicture,ghanacardimage -->
+            <ng-template #header>
+                <tr>
+                    <th>serial</th>
+                    <th>Account Name</th>
+                    <th>Account number</th>
+                    <th>Identification type</th>
+                    <th>Identification number</th>
+                    <th>Address</th>
+                    <th>Date Opened</th>
+                    <th>Telephone</th>
+                    <th>Mobile Number</th>
+                    <th>Email Address</th>
+                    <th>opened</th>
+                    <th>verified</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-depositsData let-product let-i="rowIndex">
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{depositsData.accountname}}</td>
+                    <td>{{ depositsData.accountnumber }}</td>
+                    <td>{{ depositsData.identification_type }}</td>
+                    <td>{{ depositsData.identification_number }}</td>
+                    <td>{{ depositsData.address }}</td>
+                    <td>{{ depositsData.date |date:'dd/MM/yyyy'}}</td>
+                    <td>{{ depositsData.telephone }}</td>
+                    <td>{{ depositsData.mobile_number }}</td>
+                    <td>{{ depositsData.emailaddress }}</td>
+
+                    <td>{{ depositsData.isopened ? 'Yes' : 'No' }}</td>
+                    <td>{{ depositsData.is_verified ? 'Yes' : 'No' }}</td>
+                    <td>
+                        <p-button label="View" [outlined]="true" icon="pi pi-eye" (click)="showAccountDetails(depositsData)" />
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+
+}@else{
+    <p>Loading...</p>
+}
