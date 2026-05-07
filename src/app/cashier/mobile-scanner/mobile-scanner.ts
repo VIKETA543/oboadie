@@ -56,7 +56,10 @@ export class MobileScanner implements OnInit {
 
   // Toggle camera
   toggleScanner() {
+
     this.scannerEnabled.set(true);
+    this.lastResult = null;
+    this.cd.detectChanges();
   }
 stopScanner() {
   this.scannerEnabled.set(false);
