@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BarcodeFormat } from '@zxing/library';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ export class MobileScanner implements OnInit {
   }
     allowedFormats = [BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128];
     currentDevice: MediaDeviceInfo | null = null;
-  scannerEnabled = true;
+  scannerEnabled = signal(true);
   transports: any[] = [];
   debugInfo: string = '';
   lastResult: string | null = null;
@@ -40,7 +40,7 @@ export class MobileScanner implements OnInit {
 
   // Toggle camera
   toggleScanner() {
-    this.scannerEnabled = !this.scannerEnabled;
+    this.scannerEnabled.set(!this.scannerEnabled());
   }
 
 }
