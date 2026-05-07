@@ -15,7 +15,7 @@ export class MobileScanner implements OnInit {
   }
     allowedFormats = [BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128];
     currentDevice: MediaDeviceInfo | null = null;
-  scannerEnabled = signal(true);
+  scannerEnabled = signal(false);
   transports: any[] = [];
   debugInfo: string = '';
   lastResult: string | null = null;
