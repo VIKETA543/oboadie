@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BarcodeFormat } from '@zxing/library';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,6 +11,7 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './mobile-scanner.scss',
 })
 export class MobileScanner implements OnInit {
+  constructor(private cd: ChangeDetectorRef) { }
   ngOnInit(): void {
   
   }
@@ -56,5 +57,7 @@ export class MobileScanner implements OnInit {
   }
 stopScanner() {
   this.scannerEnabled.set(false);
+  this.currentDevice = null;
+  this.cd.detectChanges();
 }
 }
