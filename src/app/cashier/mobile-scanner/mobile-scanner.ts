@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BarcodeFormat } from '@zxing/library';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'mobile-scanner',
-  imports: [ZXingScannerModule],
+  imports: [ZXingScannerModule,FormsModule,ReactiveFormsModule,CommonModule],
   templateUrl: './mobile-scanner.html',
   styleUrl: './mobile-scanner.scss',
 })
