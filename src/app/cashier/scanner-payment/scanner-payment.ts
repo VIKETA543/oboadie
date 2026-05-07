@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 
 @Component({
   selector: 'scanner-payment',
@@ -6,10 +6,15 @@ import { Component, HostListener } from '@angular/core';
   templateUrl: './scanner-payment.html',
   styleUrl: './scanner-payment.scss',
 })
-export class ScannerPayment {
+export class ScannerPayment implements OnInit {
 private buffer: string = '';
   private timeoutGuid: any = null;
   public lastScannedCode: string = '';
+ngOnInit(): void {
+  this. processScan()
+}
+
+
 
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {

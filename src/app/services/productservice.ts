@@ -48,6 +48,22 @@ listproductBycartID=(data:any)=>{
     addProduct=(data:any)=>{
                 return this.http.post(this.url + '/category/addproduct', data, { headers: new HttpHeaders().set('contentType', "multipart/form-data") })
     }
+addGroup=(data:any)=>{
+       return this.http.post(this.url + '/category/addgroup', data, { headers: new HttpHeaders().set('contentType', "multipart/form-data") })
+}
+loadTargetgrpup=()=>{
+     return this.http.get(this.url + '/category/gtgroup', { headers: new HttpHeaders().set('contentType', "application/json") })
+}
+
+loadSelectedGroup=(data:any)=>{
+     return this.http.post(this.url + '/category/selgrp',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+}
+
+dropGroup=(data:any)=>{
+ return this.http.post(this.url + '/category/droptgrp', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+}
+
+
   loadBrandList =() => {
         return this.http.get(this.url + '/category/brndlist', { headers: new HttpHeaders().set('contentType', "application/json") })
     }
