@@ -1,7 +1,23 @@
-<zxing-scanner [formats]="allowedFormats" (scanSuccess)="onCodeResult($event)">
-</zxing-scanner>
+<div class="scanner-container">
+  <h2>Scan Item</h2>
 
-<p>Scanned Results:</p>
-<ul>
-  <li *ngFor="let result of scanResults">{{ result }}</li>
-</ul>
+  <zxing-scanner
+    *ngIf="scannerEnabled"
+    [formats]="allowedFormats"
+    (scanSuccess)="onCodeResult($event)"
+    (permissionResponse)="onHasPermission($event)"
+    [autofocusEnabled]="true">
+  </zxing-scanner>
+
+  <div class="controls">
+    <button (click)="toggleScanner()">
+      {{ scannerEnabled ? 'Stop Scanner' : 'Start Scanner' }}
+    </button>
+  </div>
+
+  <div *ngIf="lastResult" class="result-box">
+    <strong>Result:</strong> {{ lastResult }}
+  </div>
+
+  <p class="error" *ngIf="debugInfo">{{ debugInfo }}</p>
+</div>
