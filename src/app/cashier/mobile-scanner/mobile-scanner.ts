@@ -40,8 +40,11 @@ export class MobileScanner implements OnInit {
 
     if (navigator.vibrate) {
       navigator.vibrate(200);
+        this.stopScanner()
+    }else{
+         this.stopScanner()
     }
-    this.stopScanner()
+  
   }
 
   // Handle permission errors
