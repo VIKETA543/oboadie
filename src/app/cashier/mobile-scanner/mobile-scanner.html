@@ -1,4 +1,7 @@
-<zxing-scanner 
-    [formats]="allowedFormats" 
-    (scanSuccess)="onCodeResult($event)">
+<zxing-scanner [formats]="allowedFormats" (scanSuccess)="onCodeResult($event)">
 </zxing-scanner>
+
+<p>Scanned Results:</p>
+<ul>
+  <li *ngFor="let result of scanResults">{{ result }}</li>
+</ul>
