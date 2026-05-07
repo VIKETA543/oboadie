@@ -25,10 +25,11 @@ export class MobileScanner implements OnInit {
     this.lastResult = resultString;
     console.log('Scan Result:', resultString);
     
-  this.toggleScanner();
+
     if (navigator.vibrate) {
       navigator.vibrate(200);
     }
+    this.stopScanner()
   }
 
   // Handle permission errors
@@ -40,7 +41,9 @@ export class MobileScanner implements OnInit {
 
   // Toggle camera
   toggleScanner() {
-    this.scannerEnabled.set(!this.scannerEnabled());
+    this.scannerEnabled.set(true);
   }
-
+stopScanner() {
+  this.scannerEnabled.set(false);
+}
 }
