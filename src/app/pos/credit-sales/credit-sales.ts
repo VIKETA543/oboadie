@@ -144,9 +144,11 @@ isAddtoCustomerList=signal(false)
     this.cutomerNumber = "CIN" + new Date().getDate() + "-" + customerid
   }
 checked:boolean=false
+storeNumber:any
   addToCart($event: ToggleSwitchChangeEvent, _t77: any) {
     this.isaddingCart.set(true)
     this.SelectedProduct=_t77
+    this.storeNumber=_t77.store_id
     console.log(_t77)
   }
 
@@ -216,7 +218,9 @@ AddCart(){
     uniPrice:this.SelectedProduct?.unitesellingprice,
     totalCost:this.totalCost,
     purchaseId:purchaseId,
-    customerType:this.customerType
+    customerType:this.customerType,
+    storeNumber:this.storeNumber,
+    salesObject:'CREDIT_SALES'
   }
   
  return this.posservice.AddCreditCart(data).subscribe((response:any)=>{
@@ -278,7 +282,8 @@ submitInvoice=()=>{
   }else{
     let data={
       invoceNumber:this.creditTempData[0].invoice_number,
-      sumInvoiceTotal:this.sumTotalCart
+      sumInvoiceTotal:this.sumTotalCart,
+          salesObject:'CREDIT_SALES'
     }
     this.posservice.submitCreditInvoice(data).subscribe((response:any)=>{
       if (response?.message) {

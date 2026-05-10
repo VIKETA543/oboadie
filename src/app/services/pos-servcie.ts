@@ -71,4 +71,18 @@ export class PosServcie {
 
      return this.http.post(this.url + '/profoma/submit_profoma_Invoice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
   }
+
+  loadInvoiceQuote=(data:any)=>{
+   console.log('Loading invoice quote with data:', data)
+   
+     return this.http.post(this.url + '/pos/loadInvoiceQuote', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+   makePayment=(data:any)=>{
+       return this.http.post(this.url + '/pos/makePayment', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+   }
+
+   loadPaymentReceipt=(data:any)=>{
+ return this.http.post(this.url + '/pos/loadPaymentReceipt', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+   }
 }

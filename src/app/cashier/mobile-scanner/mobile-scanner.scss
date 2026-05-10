@@ -1,0 +1,21 @@
+.controls{
+   border:1px solid lightgrey;
+   box-shadoww: 0px 0px 10px 2px lightgrey;
+   border-radius: 0.53em;
+   label{
+  
+    display:block;
+    flex:1;
+    word-break: normal;
+    width: calc(100% - 80%);
+    padding:10px;
+    margin: 10px;
+
+
+}
+.scanner-payment-container{
+width: calc(100% - 80%);
+ padding:10px;
+    margin: 10px;
+}
+}

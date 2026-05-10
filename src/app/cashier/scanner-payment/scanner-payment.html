@@ -1,1 +1,268 @@
-<p>Last Scanned: {{ lastScannedCode }}</p>
+<div class="scanner-payment-container">
+  <div class="status-card">
+    <div class="card">
+      <label>WAITING FOR PAYMENT...</label>
+      <p-progressbar mode="indeterminate" [style]="{ height: '6px' }" aria-labelledby=" Ready" />
+    </div>
+
+    <p>Last Scan: <strong>{{ lastScan }}</strong></p>
+  </div>
+  <div>
+
+  </div>
+</div>
+@if(this.isResults()){
+<div class="card flex justify-center">
+  <p-dialog [(visible)]="isResults" [modal]="true" [style]="{ width: '50rem' }">
+    <ng-template #header>
+      <div class="inline-flex items-center justify-center gap-2">
+        <span class="font-bold whitespace-nowrap">INVOICE DETAILS</span>
+      </div>
+    </ng-template>
+    <div class="header">
+      <header id="main-header">OBOADIE NYAME ADOM ENTERPRISE</header>
+      <span>Behind Our Lady of Fatima Junction</span>
+      <span>Telephone: 0531885457</span>
+    </div>
+        @if(salesType==='CASH_SALES'){
+      <div class="card flex justify-center gap-4 w- cp-24 ">
+
+      <span class="text-surface-500 dark:text-surface-400 block ">PAYMENT NUMBER: {{paymentNumber}}</span>
+      </div>
+    }
+    <div>
+      <div class="card flex justify-center gap-4 w-24">
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Issued to:</span>
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">{{ invoicesum[0].customername }}</span>
+      </div>
+      <div class="card flex justify-center gap-4 w-24">
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Telephone:</span>
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">{{ invoicesum[0].telephone }}</span>
+      </div>
+      <div class="card flex justify-center gap-4 w-24">
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Address:</span>
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">{{ invoicesum[0].address }}</span>
+
+      </div>
+      <div class="card flex justify-center gap-4 w-24">
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Transaction Type:</span>
+        @if(salesType==='CASH_SALES'){
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">CASH SALES</span>
+        }@else if(salesType==='CREDIT_SALES'){ 
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">CREDIT SALES</span>
+        }@else{
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">#</span>
+        }
+
+
+      </div>
+    </div>
+    <div [style]="{ width: '40rem' }" class="invoice-data">
+
+      <div class="card">
+        <p-table [value]="invoiceData" striped>
+          <ng-template #header>
+            <tr>
+              <th>#</th>
+              <th>Item</th>
+              <th>Type</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
+              <th>Total</th>
+            </tr>
+          </ng-template>
+          <ng-template #body let-invoiceData let-i="rowIndex">
+            <tr>
+              <td>{{i+1 }}</td>
+              <td>{{ invoiceData.name }}</td>
+              <td>{{ invoiceData.title }}</td>
+              <td>{{ invoiceData.quantity_sold }}</td>
+              <td>{{ invoiceData.unit_price }}</td>
+              <td>{{ invoiceData.total_price |currency: 'Ghø'}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+      <div class="card flex justify-center gap-4 w-24">
+        <span class="text-surface-500 dark:text-surface-400 block mb-4 total">SUM TOTAL</span>
+        @if(balanceData[0].invoice_total){
+              <span class="text-surface-500 dark:text-surface-400 block mb-4 total">{{balanceData[0].invoice_total | currency: 'Ghø' }}</span>
+        }@else{
+              <span class="text-surface-500 dark:text-surface-400 block mb-4 total">{{balanceData[0].balance | currency: 'Ghø' }}</span>
+        }
+      </div>
+    </div>
+    <div class="barcode-container">
+      <ngx-barcode6 [bc-value]=invoicesum[0].invoice_number [bc-format]="'CODE128'" [bc-display-value]="true">
+      </ngx-barcode6>
+    </div>
+
+
+    <ng-template #footer>
+       @if(salesType==='CASH_SALES'){
+      <p-toolbar>
+        <ng-template #start>
+          <p-fluid class="card flex flex-wrap gap-4">
+            <div class="flex-auto">
+              <label class="mb-2 font-bold block" for="minmaxfraction">Enter AmountGhø</label>
+              <p-inputnumber [(ngModel)]="AmountPaid" (keydown.enter)="makePayment()" (onInput)="onAmountInput($event)" inputId="minmaxfraction"
+                mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" />
+            </div>
+          </p-fluid>
+        </ng-template>
+          <ng-template #center>
+               <p-fluid class="card flex flex-wrap gap-4">
+            <div class="flex-auto">
+              <label class="mb-2 font-bold block" for="minmaxfraction">Balance</label>
+              <p-inputnumber [(ngModel)]="PaidBalance" (keydown.enter)="makePayment()" inputId="minmaxfraction"
+                mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" />
+            </div>
+          </p-fluid>
+          </ng-template>
+        <ng-template #end>
+          <p-button label="Make Payment" type='submit' [autofocus]="true" [outlined]="true" severity="success"
+            (click)="makePayment()" />
+          <p-button label="Cancel" [text]="true" severity="danger" (click)="isResults.set(false)" />
+        </ng-template>
+      </p-toolbar>
+    }@else if(salesType==='CREDIT_SALES'){
+      <p-toolbar>
+        <ng-template #start>
+          <p-fluid class="card flex flex-wrap gap-4">
+            <div class="flex-auto">
+                    
+      <span class="text-surface-500 dark:text-surface-400 block mb-4 total" severity="info">You are required to pay the full amount latest: {{ invoicesum[0].invoice_due_date }}</span>
+                <p-button label="VERIFY"  severity="warn" raised="true"    (click)="verySale()"  />
+              </div>
+              </p-fluid>
+              </ng-template>
+              </p-toolbar>
+    }@else {
+      
+      <span class="text-surface-500 dark:text-surface-400 block mb-4 total" severity="info">This invoice is not available for payment</span>
+    }
+    </ng-template>
+  
+  </p-dialog>
+</div>
+}
+
+@if(   this.isPaymentcomplete()){
+  <div class="card flex justify-center">
+  <p-dialog [(visible)]="isPaymentcomplete" [modal]="true" [style]="{ width: '50rem' }">
+
+    <ng-template #header>
+      <div class="inline-flex items-center justify-center gap-2">
+        <span class="font-bold whitespace-nowrap">PAYMENT RECEIPT</span>
+      </div>
+    </ng-template>
+    <div id='print-section'>
+    <div class="header">
+      <header id="main-header">OBOADIE NYAME ADOM ENTERPRISE</header>
+      <span>Behind Our Lady of Fatima Junction</span>
+      <span>Telephone: 0531885457</span>
+    </div>
+         @if(salesType==='CASH_SALES'){
+    <div class="card flex justify-center gap-4 w-24 pmt-id ">
+      <span class="text-surface-500 dark:text-surface-400 block">PAYMENT NUMBER: {{paymentNumber}}</span>
+       <span class="text-surface-500 dark:text-surface-400 block">PAYMENT STATUS: {{invoicesum[0].payment_progress}}</span>
+      </div>
+    }
+    <div>
+      <div  class='seperator'>
+      <div class="card flex justify-center gap-4 w-24 cp-24 ">
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Issued to:</span>
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">{{ invoicesum[0].customername }}</span>
+      </div>
+      <div class="card flex justify-center gap-4 w-24">
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Tel/Mob:</span>
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">{{ invoicesum[0].telephone }}</span>
+      </div>
+    </div>
+    <div class='seperator'>
+      <div class="card flex justify-center gap-4 w-24 cp-24">
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Address:</span>
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">{{ invoicesum[0].address }}</span>
+
+      </div>
+      <div class="card flex justify-center gap-4 w-24 cp-24">
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Type:</span>
+        @if(salesType==='CASH_SALES'){
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">CASH SALES</span>
+        }@else if(salesType==='CREDIT_SALES'){ 
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">CREDIT SALES</span>
+        }@else{
+        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">#</span>
+        }
+      </div>
+
+      </div>
+    </div>
+    <div [style]="{ width: '40rem' }" class="invoice-data">
+
+      <div class="card">
+        <p-table [value]="invoiceData" striped>
+          <ng-template #header>
+            <tr>
+              <th>#</th>
+              <th>Item</th>
+              <th>Type</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </ng-template>
+          <ng-template #body let-invoiceData let-i="rowIndex">
+            <tr>
+              <td>{{i+1 }}</td>
+              <td>{{ invoiceData.name }}</td>
+              <td>{{ invoiceData.title }}</td>
+              <td>{{ invoiceData.quantity_sold }}</td>
+              <td>{{ invoiceData.unit_price }}</td>
+              <td>{{ invoiceData.total_price |currency: 'Ghø'}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+      <div class="card flex justify-center gap-4 w-24">
+        <span class="text-surface-500 dark:text-surface-400 block mb-4 total">SUM TOTAL: {{(invoicesum[0]?.invoice_total || 0) | currency: 'Ghø' }}</span>
+       <span class="text-surface-500 dark:text-surface-400 block mb-4 total">AMOUNT PAID: {{ (sumamountPaidData[0]?.sumpaid || 0) | currency:'Ghø' }}
+</span>
+        <span class="text-surface-500 dark:text-surface-400 block mb-4 total">{{(balanceData[0]?.balance || 0) | currency: 'Ghø' }}</span>
+      </div>
+    </div>   
+    <div class="barcode-container">
+      <ngx-barcode6 [bc-value]=invoicesum[0].invoice_number [bc-format]="'CODE128'" [bc-display-value]="true">
+      </ngx-barcode6>
+      @if(invoicesum[0]?.isinvoice_verified===true){
+        <div>
+          <i class="pi pi-spin pi-verified" style="font-size: 2rem"></i>
+        </div>
+
+      }@else {
+            <div>
+          <i class="pi pi-spin pi-ban" style="font-size: 2rem"></i>
+        </div>
+      }
+    </div>
+  </div>
+    <ng-template #footer>
+      <p-toolbar>
+          <ng-template #center>
+               <p-fluid class="card flex flex-wrap gap-4">
+             <div class="card flex flex-wrap justify-center gap-4 btn-submit">
+                <p-button label="Print" icon="pi pi-print" [raised]="true" severity="contrast"
+                    printSectionId="print-section" ngxPrint (printCompleted)="onPrintComplete()"
+                    [useExistingCss]="true" />
+            </div>
+          </p-fluid>
+          </ng-template>
+        </p-toolbar>
+    </ng-template>
+  
+  </p-dialog>
+</div>
+}@else {
+    <!-- <span class="text-surface-500 dark:text-surface-400 block mb-4 total" severity="danger">Invoice verification failed</span> -->
+}
+<p-toast />

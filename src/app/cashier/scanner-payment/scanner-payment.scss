@@ -1,0 +1,109 @@
+.scanner-payment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+.status-card{
+    width: 300px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 20px;
+}
+  
+.invoice-data{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+        padding: 20px;
+        width: 90%;
+   margin:20px auto;   
+   overflow: hidden; 
+} 
+.barcode-container{
+    width: 60%;
+    height: 100px;
+    display:flex;
+    flex: 1;
+}
+.header{
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+        text-align: center;
+    label{
+        font-size:clamp(.8rem, 1.0vw, 1.3rem);
+        text-align: center;
+          font-weight: bold;
+    }
+    span{
+   font-size:clamp(1.5rem, 2vw, 2.5rem);
+        text-align: center;
+          font-weight: bold;
+          display: block;
+          width: 100%;
+    };
+    #main-header{
+        font-size:clamp(1.0rem, 1.3vw, 1.5rem);
+        font-weight: bold;
+        text-align: center;
+        spam{
+            font-size:clamp(.9rem, 1.0vw, 1.2rem);
+            text-align: center;
+            display: block;
+            width: 100%
+        }
+    }
+
+}
+.client{
+    // display: block;
+       font-size:clamp(1rem, 1.0vw, 1.5rem);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+font-weight: bold;
+border: 1px solid rgba(0, 0, 0, 0.1);
+    text-align: left; 
+
+}
+.client:first-child{
+    width: calc(100% - 70%);
+}
+.client:last-child{
+    width: calc(100% - 30%);
+}
+.total{
+       font-size:clamp(.8rem, 1.2vw, 1.8rem);
+       font-weight: bold;
+       text-align: right;
+}
+.seperator{
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+}
+.cp-24{
+    width: calc(100% - 48%);
+    span:first-child{
+  width: calc(100% - 70%);
+    }
+    span:last-child{
+          width: calc(100% - 30%);
+    }
+}
+#pmt-id{
+    width: 100%;
+    border: 1px solid lightgray;
+    display: flex;
+    span{
+        margin: 10px;
+    }
+}

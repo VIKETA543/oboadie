@@ -1,18 +1,31 @@
+@if(isMobile()){
 <div class="scanner-container">
-  <h2>Scan Item</h2>
-
-  <zxing-scanner
-    *ngIf="scannerEnabled"  [formats]="allowedFormats" (scanSuccess)="onCodeResult($event)"  (camerasFound)="onCamerasFound($event)" (permissionResponse)="onHasPermission($event)" [autofocusEnabled]="true">
+  <zxing-scanner *ngIf="scannerEnabled" [formats]="allowedFormats" (scanSuccess)="onCodeResult($event)"
+    (camerasFound)="onCamerasFound($event)" (permissionResponse)="onHasPermission($event)" [autofocusEnabled]="true">
   </zxing-scanner>
-
   <div class="controls">
-    <p-button severity="info" (click)="toggleScanner()" icon="pi pi-barcode" label="{{ scannerEnabled() ? 'Stop Scanner' : 'Start Scanner' }}"/>
-  
+    <p-button severity="info" (click)="toggleScanner()" icon="pi pi-barcode"
+      label="{{ scannerEnabled() ? 'Stop Scanner' : 'Start Scanner' }}" />
   </div>
 
-  <div *ngIf="lastResult" class="result-box">
-    <strong>Result:</strong> {{ lastResult }}
+  <div class="card error" severity='warn' *ngIf="debugInfo">
+    <p-message severity="info">{{ debugInfo }}</p-message>
   </div>
+  </div>
+  }@else {
+  <div class="controls" >
+    <label severity="info">ATTENTION! LOGIN SING YOUR MOBILE PHONE TO SCAN PAYMENTS</label>
+  </div>
+  }
+  <div class="scanner-payment-container">
+    <div class="status-card">
+      <div class="card">
+        <label>WAITING FOR PAYMENT...</label>
+        <p-progressbar mode="indeterminate" [style]="{ height: '6px' }" aria-labelledby=" Ready" />
+      </div>
 
-  <p class="error" *ngIf="debugInfo">{{ debugInfo }}</p>
-</div>
+      <strong>INVOICE NUMBER:</strong> {{ lastResult }}
+    </div>
+    <div>
+
+    </div>

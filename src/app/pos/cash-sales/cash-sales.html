@@ -28,14 +28,14 @@
 
             <ng-template #header>
                 <tr>
-                    <th>serial</th>
+                    <th  style="width:5%">serial</th>
                     <th>Product Name</th>
-                    <th>Type/brand</th>
+                    <th  style="width:10%">Type/brand</th>
                     <th>From Store</th>
                     <th>Image</th>
                     <th>Available Quantity</th>
                     <th>Price</th>
-                    <th>Info</th>
+                    <!-- <th>Info</th> -->
                     <th>Action</th>
                 </tr>
             </ng-template>
@@ -50,14 +50,18 @@
                     </td>
                     <td>{{cashSalesData.total_quantity}}</td>
                     <td>{{cashSalesData.unitesellingprice | currency: 'Ghø'}}</td>
-                    <td>
+                    <!-- <td>
                         <p class="truncate-text" pTooltip="{{cashSalesData.role}}"> {{ cashSalesData.role }}</p>
-                    </td>
-                    <td>{{cashSalesData.date}}</td>
+                    </td> -->
+                    <!-- <td>{{cashSalesData.date}}</td> -->
                     <td>
                         <div class="card flex justify-center">
-                            <p-toggleswitch (onChange)="addToCart($event,cashSalesData)" pTooltip="Add products to Cart"
-                                tooltipPosition="left" [disabled]="checked" />
+                             <p-fluid class="card flex flex-wrap gap-4">
+                                <span>Add</span>
+                                <p-toggleswitch (onChange)="addToCart($event,cashSalesData)" pTooltip="Add products to Cart" tooltipPosition="left" [disabled]="checked" />
+                             </p-fluid>
+                            
+                              
                             <p-dialog [(visible)]="isaddingCart" [modal]="true" [style]="{ width: '20rem' }">
                                 <p-fluid class="card flex flex-wrap gap-4">
                                     <div class="flex-auto">
@@ -248,7 +252,7 @@
                         <p-toggleswitch [(ngModel)]="isAddtoCustomerList" />
                     </div>
                     <div class="card flex justify-center">
-                        <p-button label="Add" [text]="true" severity="secondary" (click)="addInvoice()" />
+                        <p-button label="Add Product" [text]="true" severity="secondary" (click)="addInvoice()" />
 
                     </div>
                 </div>
