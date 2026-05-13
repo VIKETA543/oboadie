@@ -68,4 +68,35 @@ droptType=(data:any)=>{
 loadStoreRecivedStock=()=>{
    return this.http.post(this.url + '/stores/loadStoreRecivedStock', { headers: new HttpHeaders().set('contentType', "application/json") })
 }
+
+loadsalseforVerification=(data:any)=>{
+   return this.http.post(this.url + '/stores/loadsalseforVerification', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+}
+
+submitProductVerification=(data:any)=>{
+   return this.http.post(this.url + '/stores/submitProductVerification', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+}
+
+
+submit_credit_for_verification=(data:any)=>{
+   return this.http.post(this.url + '/stores/submit_credit_for_verification', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+}
+
+
+
+closeInVoice=(data:any)=>{
+   return this.http.post(this.url + '/stores/closeInVoice', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+}
+
+
+
+creditVerification=(data:any)=>{
+   return this.http.post(this.url + '/stores/load_for_credit_verification', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+}
+
+closeCreditInVoice=(data:any)=>{
+   return this.http.post(this.url + '/stores/closeCreditInVoice', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+}
+
+
 }

@@ -1,0 +1,51 @@
+@if(message){
+<p-message severity="error">{{message}}</p-message>
+}@else {
+
+<div class="card flex justify-center m-c">
+
+
+    <p-panel header="CREATE YOUR PASSORD">
+    @if(error_message){
+        <p-message severity="error">{{error_message}}</p-message>
+    }
+
+        <div class="card img-c ">
+            <div class="flex flex-wrap gap-8">
+                <div class="flex-auto">
+
+                    <p-avatar image="{{user[0]?.passport_picture_url}}" class="mr-2" size="xlarge" shape="circle" />
+                    <h1>{{user[0]?.fullname}}</h1>
+                </div>
+            </div>
+        </div>
+    <div>
+       
+             <span>Enter your password</span>
+
+           <div class="card flex justify-center">
+            <p-password [(ngModel)]="Password" [toggleMask]="true" autocomplete="off" />
+        </div>
+
+    </div>
+    <p-divider/>
+        <div>
+            <span>Confirm your Password</span>
+           <div class="card flex justify-center">
+            <p-password [(ngModel)]="conform_password" [toggleMask]="true" autocomplete="off" />
+        </div>
+        </div>
+        <p-divider></p-divider>
+         <div class="card flex justify-center">
+            <span>By accepting the terms, you agree to the terms and conditions of using this system</span>
+            <p-toggleswitch [(ngModel)]="acceptTerms" />
+        </div>
+    <p-divider/>
+           <div class="card flex justify-center">
+            <p-button label="SET PASSWORD" icon="pi pi-user-plus" [text]="false" severity="contrast"  [raised]="true" (click)="createPassword()" />
+        </div>
+    </p-panel>
+
+</div>
+
+}

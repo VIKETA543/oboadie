@@ -1,0 +1,122 @@
+ <span class="p-text-secondary block mb-1 fb-text">USER PROFILE</span>
+<div class="card flex justify-center">
+    <div class='container'>
+   
+    <div class="flex items-center gap-4 mb-4">
+        <label for="fullName" class="font-semibold w-50">FULLNAME:</label>
+        <input pInputText id="fullName" class="flex-auto" autocomplete="off" [(ngModel)]="fullName"/>
+    </div>
+
+      <p-fluid class="card flex flex-wrap gap-4">
+            <div class="card flex flex-wrap gap-4">
+                <label for="buttondisplay" class="font-bold block mb-2">DATE OF BIRTH </label>
+                <p-datepicker (onSelect)="calculateAge($event)" [(ngModel)]="dateofBirth" [showIcon]="true" inputId="buttondisplay" [showOnFocus]="false" />
+            </div>
+        </p-fluid>
+
+         <p-fluid class="card flex flex-wrap gap-4">
+       
+            <div class="card flex flex-wrap gap-4">
+                <label class="mb-2 font-bold" for="withoutgrouping">Age</label>
+                <p-inputnumber [(ngModel)]="userAge" mode="decimal" inputId="withoutgrouping" [useGrouping]="false" readonly="true"/>
+            </div>
+         
+        </p-fluid>
+
+    <div class="flex items-center gap-4 mb-4">
+        <label for="email" class="font-semibold w-50">MOBILE NO#</label>
+        <input pInputText id="email" class="flex-auto" autocomplete="off"  [(ngModel)]="prim_mobileNumber" />
+    </div>
+
+      <div class="flex items-center gap-4 mb-4">
+        <label for="email" class="font-semibold w-50">MOBILE NO#</label>
+        <input pInputText id="email" class="flex-auto" autocomplete="off"  [(ngModel)]="sec_mobile_Number" />
+    </div>
+    <div class="flex items-center gap-4 mb-4">
+        <label for="email" class="font-semibold w-50">GENDER:</label>
+        <div class="card flex justify-center gap-4">
+            <span>MALE</span>
+            <p-checkbox [(ngModel)]="checkedMale" [binary]="true" [indeterminate]="true" inputId="size_large"
+                name="size" value="Large" size="large"  [(ngModel)]="genderMale" (onChange)="setGenger($event,'MALE')"  />
+            <div class="card flex justify-center gap-4">
+                <SPan>FEMALE</SPan>
+                <p-checkbox [(ngModel)]="checkedMale" [binary]="true" [indeterminate]="true" inputId="size_large"
+                    name="size" value="Large" size="large"  [(ngModel)]="genderFemale" (onChange)="setGenger($event,'FEMALE')" />
+            </div>
+        </div>
+
+    </div>
+    <div class="flex items-center gap-4 mb-4">
+        <label for="email" class="font-semibold w-50">EMAIL ADDRESS:</label>
+        <input pInputText id="email" class="flex-auto" autocomplete="off"  [(ngModel)]="emailAddress" />
+    </div>
+     <div class="card flex items-center gap-4 mb-4">
+            <label for="" class="font-semibold w-50">CARD TYPE</label>
+            <p-select [options]="identificationTyepes" [(ngModel)]="selectedId" optionLabel="name" [filter]="true"
+                filterBy="name" [showClear]="true" placeholder="Select Identification type" class="w-full md:w-56">
+                <ng-template #selectedItem let-identificationTyepes>
+                    <div class="flex items-center gap-2">
+
+                        <div>{{ identificationTyepes.name }}</div>
+                    </div>
+                </ng-template>
+                <ng-template let-identificationTyepes #item>
+                    <div class="flex items-center gap-2">
+
+                        <div>{{ identificationTyepes.name }}</div>
+                    </div>
+                </ng-template>
+            </p-select>
+
+        </div>
+    <div class="flex items-center gap-4 mb-4">
+        <label for="email" class="font-semibold w-50">ID NUMBER#</label>
+        <input pInputText id="email" class="flex-auto" autocomplete="off"  [(ngModel)]="cardNumber"/>
+    </div>
+    <div class="flex items-center gap-4 mb-4">
+        <label for="email" class="font-semibold w-50">Digital Address</label>
+        <input pInputText id="email" class="flex-auto" autocomplete="off"  [(ngModel)]="digitalAddress" />
+    </div>
+        <div class="flex items-center gap-4 mb-4">
+        <label for="email" class="font-semibold w-50">SURBURB</label>
+        <input pInputText id="email" class="flex-auto" autocomplete="off"  [(ngModel)]="surburb" />
+    </div>
+    <div class="flex justify-end gap-2">
+
+    </div>
+    </div>
+    <div>
+        <div class="image-container">
+            <div class="card">
+                <label for="idImage" class="font-semibold w-24  items-center gap-4 mb-4 file" severity="info">
+              
+                     <i class="pi pi-camera" style="color: slateblue" style="font-size: 2rem"></i>
+                           ID CARD
+                     <input type="file" id="idImage" class="file-input" (change)="onIdImageUpload($event)" #fileUpload>
+                </label>
+                @if(id_image){
+                <img [src]="idimage_preview" alt="" class="max-w-full max-h-full" id="idImage"/>
+                }
+            </div>
+        </div>
+        <div class="image-container">
+            <div class="card">
+                <label for="passposrt" class="font-semibold w-24  items-center gap-4 mb-4 file" >
+                    <i class="pi pi-camera items-center gap-4 mb-4" style="color: slateblue " style="font-size: 2rem"></i>
+                    Passport Picture
+                <input type="file" class="file-input" id="passposrt" (change)="onPassportUpload($event)" #fileUpload1>
+                </label>
+                @if(id_image){
+                <img [src]="passport_preview" alt="" class="max-w-full max-h-full" />
+                }
+            </div>
+        </div>
+     
+</div>
+
+</div>
+<p-divider></p-divider>
+   <div class="card flex justify-center">
+            <p-button label="SIGN UP" icon="pi pi-user-plus" [text]="false" severity="contrast"  [raised]="true" (click)="signup()" />
+        </div>
+        <p-toast></p-toast>

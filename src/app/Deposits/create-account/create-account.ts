@@ -108,7 +108,7 @@ export class CreateAccount implements OnInit, OnDestroy {
         const reader = new FileReader();
         reader.onload = (e: any) => {
           this.idimage_preview = e.target.result
-          this.cdr.markForCheck()
+          this.cdr.detectChanges()
 
         }
         reader.readAsDataURL(this.selectedFile[i]);
@@ -132,7 +132,7 @@ export class CreateAccount implements OnInit, OnDestroy {
         const reader = new FileReader();
         reader.onload = (e: any) => {
           this.passport_preview = e.target.result
-          this.cdr.markForCheck()
+          this.cdr.detectChanges()
         }
         reader.readAsDataURL(this.selectedFile[i]);
         this.passportFileNames.push(this.selectedFile[i]);

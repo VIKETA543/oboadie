@@ -85,4 +85,17 @@ export class PosServcie {
    loadPaymentReceipt=(data:any)=>{
  return this.http.post(this.url + '/pos/loadPaymentReceipt', data, { headers: new HttpHeaders().set('contentType', "application/json") })
    }
+
+    makeCreditPayment=(data:any)=>{
+       return this.http.post(this.url + '/pos/makecreditpayment', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+   }
+   loadCreditPaymentReceipt=(data:any)=>{
+         return this.http.post(this.url + '/pos/loadCreditPaymentReceipt', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+   }
+
+   loadcreditInvoices=(data:any)=>{
+         return this.http.post(this.url + '/pos/loadcreditInvoices', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+   }
+
+   
 }

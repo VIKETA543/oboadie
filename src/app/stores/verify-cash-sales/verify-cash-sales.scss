@@ -1,0 +1,47 @@
+.scanner-payment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+.barcode-container{
+    width: 60%;
+    height: 100px;
+    display:flex;
+    flex: 1;
+}
+.h-container{
+    display: flex;
+    .header-info{
+        border-radius: .5em;
+        width: calc(100% - 49%);
+        margin: 20px;
+             border: 1px solid lightgray;
+        div{
+            border: 1px dotted lightgray;
+            label{
+                padding: 10px;
+                font-size: clamp(.8vw,1vw,1.5vw);
+
+            }
+            label:first-child{
+                width: calc(100% - 70%);
+                font-weight: bold;
+            }
+        }
+    }
+}
+.container{
+   border-radius: .5em;
+        width: calc(100% - 0%);
+        box-shadow: 0px 0px 10px 2px lightgray;
+        margin: 20px;
+}
+.sticky-bottom {
+    position: sticky;
+    bottom: 0;
+    z-index: 1000; /* Keeps it above other content */
+    background-color: var(--surface-card); /* Optional: ensures it isn't transparent */
+}

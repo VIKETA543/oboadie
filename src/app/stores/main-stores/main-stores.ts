@@ -7,6 +7,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { ToolbarModule } from 'primeng/toolbar';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'main-stores',
@@ -19,9 +20,25 @@ import { ToolbarModule } from 'primeng/toolbar';
   styleUrl: './main-stores.scss',
 })
 export class MainStores implements OnInit{
+StockBalances() {
+throw new Error('Method not implemented.');
+}
+verifiedHistory() {
+throw new Error('Method not implemented.');
+}
+verifiedRecords() {
+throw new Error('Method not implemented.');
+}
 
   rightaside=signal(false)
-constructor(private router:Router,private routes:ActivatedRoute){
+constructor(private router:Router,private routes:ActivatedRoute,private deviceService: DeviceDetectorService){
+
+    const deviceInfo = this.deviceService.deviceInfo();
+  const isMobile = this.deviceService.isMobile();
+  const isTablet = this.deviceService.isTablet();
+  const isDesktop = this.deviceService.isDesktop();
+
+  console.log(deviceInfo); // { browser: "Chrome", os: "Windows", ...
 }
 ngOnInit(): void {
   

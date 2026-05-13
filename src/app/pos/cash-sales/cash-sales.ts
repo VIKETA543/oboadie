@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -50,6 +50,8 @@ import { Crmservice } from '../../services/crmservice';
     CurrencyPipe, NgxBarcode6, NgxPrintDirective,],
   templateUrl: './cash-sales.html',
   styleUrl: './cash-sales.scss',
+  providers:[],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class CashSales {
 
@@ -109,8 +111,9 @@ isAddtoCustomerList=signal(false)
         this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
       } else {
         if (response?.data) {
+          console.log('The Data: = ',response?.data)
           this.cashSalesData = response?.data
-        
+        // this.cdr.detectChanges()
           this.loading.set(false)
         } else {
           this.message = response?.message
@@ -141,6 +144,7 @@ isAddtoCustomerList=signal(false)
 
     let customerid: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
     this.cutomerNumber = "CIN" + new Date().getDate() + "-" + customerid
+    this.cdr.detectChanges()
   }
 checked:boolean=false
 storeNumber:any
@@ -148,7 +152,8 @@ storeNumber:any
     this.isaddingCart.set(true)
     this.SelectedProduct=_t77
     this.storeNumber=_t77.store_id
-    console.log(_t77)
+
+    console.log('SELECTED PRO ',this.SelectedProduct)
   }
 
   selectecustomerType($event: CheckboxChangeEvent,arg1: string) {
@@ -168,7 +173,7 @@ storeNumber:any
           }else{
             if(response?.data){
               this.customerData=response?.data
-              this.cdr.markForCheck()
+              this.cdr.detectChanges()
             }else{
               this.message='Unknown error has occured'
                   this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
@@ -209,19 +214,20 @@ AddCart(){
 
     let randomInteger: number = this.getRandomInt(1, 100000); // Generates a random integer between 1 and 10
     const purchaseId = "PID" + new Date().getDate() + "-" + randomInteger
+    console.log('Selected Prof: ', this.selectedProduct)
   let data={
     invoiceNumber:this.cashSalesInvoiceNumber,
-    productId:this.SelectedProduct?.serialnumber,
-    brandId:this.SelectedProduct?.brandid,
+    productId:this.SelectedProduct?.product_number,
+    brandId:this.SelectedProduct?.product_brand,
     quantity:this.quoteQuantity,
     uniPrice:this.SelectedProduct?.unitesellingprice,
     totalCost:this.totalCost,
     purchaseId:purchaseId,
     customerType:this.customerType,
-    storeNumber:this.storeNumber,
+    storeNumber:this.SelectedProduct?.store_number,
     salesObject:'CASH_SALES'
   }
-  
+  console.log('the data :',data)
  return this.posservice.AddCart(data).subscribe((response:any)=>{
   switch(this.customerType){
     case undefined:
@@ -292,6 +298,7 @@ submitInvoice=()=>{
         if (response?.success) {
              this.message = response?.success
              this.submitOnSuccess.set(true)
+             this.router.navigate(['../'], { relativeTo: this.routes })
           //
 
 

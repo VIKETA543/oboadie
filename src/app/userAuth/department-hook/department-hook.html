@@ -1,0 +1,54 @@
+<div class="content">
+    <div class="h">
+        <header>CREATE A NEW DEPARTMENT</header>
+
+    </div>
+    <div>
+        <div class="card flex flex-col items-center gap-4  i-p">
+            <span>Hook Identifier:</span>
+            <input pInputText [(ngModel)]="departemtnId" type="text" pSize="large" placeholder="large"
+                readonly="true" />
+        </div>
+        <p-divider></p-divider>
+        <div class="card flex flex-col items-center gap-4 w-100 i-p">
+            <span>Departement Name</span>
+            <input pInputText [(ngModel)]="departementName" type="text" pSize="large" placeholder="large" placeholder="e.g Paint" />
+        </div>
+          <div class="card flex flex-col items-center gap-4 w-100 i-p">
+            <span>Departement Location</span>
+            <input pInputText [(ngModel)]="deptLocation" type="text" pSize="large" placeholder="large" placeholder="e.g place or town" />
+        </div>
+        <div class="card flex flex-col items-center gap-5 i-p ">
+            <span>Assign to store</span>
+            <div class="card flex justify-center i-p ">
+                <p-select [options]="stores" [(ngModel)]="selectedstore" optionLabel="storename" [filter]="true"
+                    filterBy="storename" [showClear]="true" placeholder="Select a store" class="w-full md:w-56">
+                    <ng-template #selectedItem let-stores>
+                        <div class="flex items-center gap-2">
+                            <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px" /> -->
+                            <div>{{ stores.storename }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-stores #item>
+                        <div class="flex items-center gap-2">
+                            <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" /> -->
+                            <div>{{ stores.storename }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+
+        </div>
+
+        <div lass="card i-p ">
+            <span id="dec">Enter Description</span>
+            <textarea id="textarea" rows="3" cols="30" pTextarea [(ngModel)]="departmentDescription" ></textarea>
+        </div>
+    </div>
+    <p-divider/>
+    <div class="card flex flex-col items-center gap-4">
+        <p-button label="CREATE DEPARTMENT"  iconPos="right" (onClick)="createDepartment()" />
+    </div>
+
+</div>
+<p-toast></p-toast>

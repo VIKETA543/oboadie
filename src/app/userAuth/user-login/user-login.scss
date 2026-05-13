@@ -1,0 +1,17 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    background-color: var(--surface-ground); /* PrimeNG theme background */
+}
+
+/* Ensure the password input takes full width of the card */
+:host ::ng-deep .p-password input {
+    width: 100%;
+}
+
+:host ::ng-deep .p-card {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 12px;
+}

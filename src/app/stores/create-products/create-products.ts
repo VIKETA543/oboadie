@@ -131,6 +131,7 @@ productName:any
       if (response?.data) {
         this.targetGroup = response?.data
      this.cdr.markForCheck();
+     this.cdr.detectChanges()
       } else {
         if (response?.message) {
           this.message = response?.message
@@ -145,6 +146,7 @@ productName:any
 
                   this.productCart = response?.data
              this.cdr.markForCheck();
+             this.cdr.detectChanges()
 
 
       } else {
@@ -159,6 +161,7 @@ productName:any
            
         this.product = response?.data
                this.cdr.markForCheck();
+               this.cdr.detectChanges()
 
         // 
       } else {
@@ -260,6 +263,7 @@ closeProduct=()=>{
   
               this.listproduct()
                      this.cdr.markForCheck();
+                     this.cdr.detectChanges()
               this.message = undefined 
 
           } else {

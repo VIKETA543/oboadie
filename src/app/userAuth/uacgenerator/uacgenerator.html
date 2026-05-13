@@ -1,0 +1,93 @@
+<div class="content">
+    <div class="h">
+        <header>CREATE A NEW DEPARTMENT</header>
+
+    </div>
+    <div>
+        <div class="card flex flex-col items-center gap-4  i-p">
+            <span>Hook Identifier:</span>
+            <input pInputText [(ngModel)]="uacpNumber" type="text" pSize="large" placeholder="large"
+                readonly="true" />
+        </div>
+
+<div class="card flex flex-col items-center gap-5 i-p ">
+            <span>Hook to a Department</span>
+            <div class="card flex justify-center i-p ">
+                <p-select [options]="departments" [(ngModel)]="selecteddepartment" optionLabel="departement_name" [filter]="true"
+                    filterBy="departement_name" [showClear]="true" placeholder="Select a store" class="w-full md:w-56">
+                    <ng-template #selectedItem let-departments>
+                        <div class="flex items-center gap-2">
+                            <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px" /> -->
+                            <div>{{ departments.departement_name }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-departments #item>
+                        <div class="flex items-center gap-2">
+                            <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" /> -->
+                            <div>{{ departments.departement_name }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+
+        </div>
+
+        <div class="card flex flex-col items-center gap-5 i-p ">
+            <span>Hook to a Store</span>
+            <div class="card flex justify-center i-p ">
+                <p-select [options]="stores" [(ngModel)]="selectedstore" optionLabel="storename" [filter]="true"
+                    filterBy="storename" [showClear]="true" placeholder="Select a store" class="w-full md:w-56">
+                    <ng-template #selectedItem let-stores>
+                        <div class="flex items-center gap-2">
+                         
+                            <div>{{ stores.storename }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-stores #item>
+                        <div class="flex items-center gap-2">
+        
+                            <div>{{ stores.storename }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+
+        </div>
+
+            <div class="card flex flex-col items-center gap-5 i-p ">
+            <span>Add User</span>
+            <div class="card flex justify-center i-p ">
+                <p-select [options]="users" [(ngModel)]="selecteduser" optionLabel="username" [filter]="true"
+                    filterBy="username" [showClear]="true" placeholder="Select a user" class="w-full md:w-56">
+                    <ng-template #selectedItem let-users>
+                        <div class="flex items-center gap-2">
+                            <div>{{ users.username }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-users #item>
+                        <div class="flex items-center gap-2">
+        
+                            <div>{{ users.username }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+
+        </div>
+        
+
+
+
+
+        <div lass="card i-p ">
+            <span id="dec">Enter Description</span>
+            <textarea id="textarea" rows="3" cols="30" pTextarea [(ngModel)]="hookDescription" ></textarea>
+        </div>
+    </div>
+    <p-divider/>
+    <div class="card flex flex-col items-center gap-4">
+        <p-button label="CREATE HOOK"  iconPos="right" (onClick)="createHook()" />
+    </div>
+
+</div>
+<p-toast></p-toast>

@@ -69,7 +69,7 @@ loading=signal(false);
   }
   receive_stock = () => {
     let data = {
-      storeNumber: 'STR-S-2379493'
+      storeNumber: 'STR-S-2124352'
     }
     this.storeservice.receive_stock(data).subscribe((response: any) => {
       if (response?.message) {

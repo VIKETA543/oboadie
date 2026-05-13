@@ -1,0 +1,51 @@
+.h{
+    margin: 10px;
+    padding: 10px;
+    width: 100%;
+    header{
+        font-size: clamp(1vw,1.5vw,2vw);
+        font-weight: bold;
+        font-family: Tahoma;
+    }
+}
+.content{
+    margin: 10px auto;
+    padding: 2dvh;
+    max-width: calc(100% - 30%);
+    min-width: calc(100% - 70%);
+    width:calc(100% - 40%);
+    border: 1px solid rgb(89, 89, 92,0.5);
+    box-shadow: 0px 0px 15px 3px  rgb(89, 89, 92,0.5);
+    border-radius: .5em;
+}
+.i-p{
+    margin: 10px;
+    span{
+        font-size: clamp(.8vw,1.4vw,1.8vw);
+        width: calc(100% - 70%);
+    }
+    input{
+           font-size: clamp(.8vw,1.4vw,1.8vw);
+        width: calc(100% - 30%); 
+    }
+  
+ 
+}
+
+  ::ng-deep{
+        .p-select{
+               width: calc(100% - 30%); 
+         
+        }
+    }
+       #textarea{
+        width: calc(100% - 30%); 
+    }
+    #dec{
+            max-width: calc(100% - 30%);
+    min-width: calc(100% - 70%);
+    width:calc(100% - 30%);
+    margin: 10px;
+           font-size: clamp(.8vw,1.4vw,1.8vw);;
+    }
+

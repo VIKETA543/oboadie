@@ -1,7 +1,7 @@
 <p-toolbar>
     <ng-template #start>
        <div class="card flex justify-center">
-    <p-selectbutton [options]="stateOptions" [(ngModel)]="selectionOption" optionLabel="label" optionValue="value" aria-labelledby="basic" (onOptionClick)="selectionButton($event)" />
+    <p-selectbutton [options]="filteredOptions" [(ngModel)]="selectionOption" optionLabel="label" optionValue="value" aria-labelledby="basic" (onOptionClick)="selectionButton($event)" />
 </div>
     </ng-template>
     <ng-template #center>

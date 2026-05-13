@@ -9,6 +9,7 @@ import { Popover, PopoverModule } from 'primeng/popover';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuItem,PrimeIcons } from 'primeng/api';
 import { DrawerModule } from 'primeng/drawer';
+import { DividerModule } from 'primeng/divider';
 
 
 @Component({
@@ -20,16 +21,21 @@ import { DrawerModule } from 'primeng/drawer';
     Toolbar,
     SplitButtonModule,
     PopoverModule,
-    DrawerModule
+    DrawerModule,
+    PopoverModule,
+    DividerModule
+
   ],
   templateUrl: './admhome.html',
   styleUrl: './admhome.scss',
 })
 export class Admhome implements OnInit {
+
   constructor(private router:Router, private routes:ActivatedRoute){}
   ngOnInit(): void {
     
   }
+
 openStores() {
 
     this.router.navigate(['main-stores'],{relativeTo:this.routes})
@@ -38,9 +44,12 @@ pointofsale=()=>{
     this.router.navigate(['point-of-sale'],{relativeTo:this.routes})
 }
 toggle($event: MouseEvent) {
-throw new Error('Method not implemented.');
+  // this.op.toggle(event);
 }
 dropMenu:boolean=false;
 items: MenuItem[]|undefined;
 
+opeSecurityManager() {
+  this.router.navigate(['security-manager'],{relativeTo:this.routes})
+}
 }

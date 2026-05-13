@@ -13,8 +13,8 @@ import { ToastModule } from 'primeng/toast';
 import { Toolbar } from 'primeng/toolbar';
 import { ProductsList, ProductCategory, ProductsTrends } from '../interface/products';
 import { productservice } from '../services/productservice';
-import { Router } from '@angular/router';
-import { DividerModule } from 'primeng/divider'; 
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { DividerModule } from 'primeng/divider';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { DataViewModule } from 'primeng/dataview';
 import { FormsModule } from '@angular/forms';
@@ -22,13 +22,18 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
 import { Tooltip } from "primeng/tooltip";
-
-
+import { DialogModule } from 'primeng/dialog';
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
+import { MessageModule } from 'primeng/message';
+import { PanelModule } from 'primeng/panel';
+import { PasswordModule } from 'primeng/password';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
-  standalone:true,
-  selector: 'home',
-  imports: [CommonModule,
+    standalone: true,
+    selector: 'home',
+    imports: [CommonModule,
     DividerModule,
     DrawerModule,
     Toolbar,
@@ -43,53 +48,63 @@ import { Tooltip } from "primeng/tooltip";
     FormsModule,
     TagModule,
     AutoCompleteModule,
-    SelectModule, Tooltip],
-  templateUrl: './home.html',
-  styleUrl: './home.scss',
-//  changeDetection: ChangeDetectionStrategy.Default
+    SelectModule, 
+    Tooltip,
+     RouterOutlet,
+AvatarModule,
+DialogModule,
+
+
+
+MessageModule,PanelModule,PasswordModule, FormsModule,DividerModule,ToggleSwitchModule,AvatarModule,AvatarGroupModule
+],
+    templateUrl: './home.html',
+    styleUrl: './home.scss',
+    //  changeDetection: ChangeDetectionStrategy.Default
 })
 export class Home implements OnInit {
-searchItem($event: SelectChangeEvent) {
-throw new Error('Method not implemented.');
-}
-search($event: AutoCompleteCompleteEvent) {
-throw new Error('Method not implemented.');
-}
+    searchItem($event: SelectChangeEvent) {
+        throw new Error('Method not implemented.');
+    }
+    search($event: AutoCompleteCompleteEvent) {
+        throw new Error('Method not implemented.');
+    }
 
-selectedLayout: any
+    selectedLayout: any
 
     options: any[] = ['list', 'grid'];
-selectedItem: any;
+    selectedItem: any;
 
-showSelectedCart(arg0: string) {
-throw new Error('Method not implemented.');
-}
+    showSelectedCart(arg0: string) {
+        throw new Error('Method not implemented.');
+    }
 
     @ViewChild('op') op!: Popover;
-//   protected readonly title = signal('premierprime');
-layout: any = 'list';
-  items:any
- visible1: boolean = false;
- dismissable:boolean=false;
-  products: ProductsList[]=[];
-  productTrend:ProductsTrends[]=[];
-  productcart:ProductCategory[]=[]
+    //   protected readonly title = signal('premierprime');
+    layout: any = 'list';
+    items: any
+    visible1: boolean = false;
+    dismissable: boolean = false;
+    products: ProductsList[] = [];
+    productTrend: ProductsTrends[] = [];
+    productcart: ProductCategory[] = []
     responsiveOptions: any[] | undefined;
-    message:any
-      isHandset:any
-  constructor(private productService: productservice, private router:Router,private cdr: ChangeDetectorRef,private breakpointObserver:BreakpointObserver  ){
-  this.breakpointObserver.observe(Breakpoints.Handset).subscribe((h: any) => {
-    if (h.matches) {
-      this.isHandset = h.matches
+    message: any
+    isHandset: any
+    visible=signal(false)
+    constructor(private productService: productservice, private router: Router, private route:ActivatedRoute, private cdr: ChangeDetectorRef, private breakpointObserver: BreakpointObserver) {
+        this.breakpointObserver.observe(Breakpoints.Handset).subscribe((h: any) => {
+            if (h.matches) {
+                this.isHandset = h.matches
 
-    } else {
+            } else {
+
+            }
+        })
 
     }
-  })
- 
-  }
-  setResponsiveOptions(){
-     this.responsiveOptions = [
+    setResponsiveOptions() {
+        this.responsiveOptions = [
             {
                 breakpoint: '1400px',
                 numVisible: 4,
@@ -111,9 +126,9 @@ layout: any = 'list';
                 numScroll: 1
             }
         ]
-  }
-  setButtonItems(){
-    this.items = [
+    }
+    setButtonItems() {
+        this.items = [
             {
                 label: 'Login',
                 icon: 'pi pi-login',
@@ -131,83 +146,83 @@ layout: any = 'list';
             {
                 separator: true,
             },
-           
+
         ];
-  }
-  ngOnInit(): void {
-         
+    }
+    ngOnInit(): void {
 
 
-           this.setProducts();
-  
 
-           this.cartegories();
+        this.setProducts();
+
+
+        this.cartegories();
         // this.setResponsiveOptions();
 
         // this.setTrending()  
-  }
-  
-   setProducts(){
-     this.productService.getProductsData().subscribe((response:any)=>{
-        if(response?.message){
-             this.message=response?.message
-             setTimeout(()=>{this.message=undefined},5000)
-        }else{
-            if(response?.arrival){
-                        // setTimeout(()=>{
-         
-                        // },5000)
-                         this.products=response?.arrival
-             this.cdr.markForCheck();
+    }
+
+    setProducts() {
+        this.productService.getProductsData().subscribe((response: any) => {
+            if (response?.message) {
+                this.message = response?.message
+                setTimeout(() => { this.message = undefined }, 5000)
+            } else {
+                if (response?.arrival) {
+                    // setTimeout(()=>{
+
+                    // },5000)
+                    this.products = response?.arrival
+                    this.cdr.markForCheck();
 
 
-            }else{
-                 this.message="unknown error has occured"
-                 setTimeout(()=>{this.message=undefined},5000)
+                } else {
+                    this.message = "unknown error has occured"
+                    setTimeout(() => { this.message = undefined }, 5000)
+                }
             }
-        }
-       
-      })
-  }     
-    
-setTrending=()=>{
-    this.productService.getTrendingData().subscribe((response:any)=>{
-        if(response?.message){
-             this.message=response?.message
-             setTimeout(()=>{this.message=undefined},5000)
-        }else{
-            if(response?.trending){
-                this.productTrend=response?.trending
-            }else{
-                 this.message="unknown error has occured"
-                 setTimeout(()=>{this.message=undefined},5000)
-            }
-        }
-       
-      })
-  }
 
-  
-  async cartegories(){
-   await  this.productService.cartegories().subscribe((response:any)=>{
-        if(response?.message){
-          this.message=response?.message
-            //  console.log(response?.message)
-            setTimeout(()=>{this.message=undefined},5000)
-        }else{
-            if(response?.data){
-            //  console.log(response?.data)
-              this.productcart=response?.data
-                this.cdr.markForCheck();
-            }else{
-              setTimeout(()=>{this.message=undefined},5000)
-                 this.message="unknown error has occured"
+        })
+    }
+
+    setTrending = () => {
+        this.productService.getTrendingData().subscribe((response: any) => {
+            if (response?.message) {
+                this.message = response?.message
+                setTimeout(() => { this.message = undefined }, 5000)
+            } else {
+                if (response?.trending) {
+                    this.productTrend = response?.trending
+                } else {
+                    this.message = "unknown error has occured"
+                    setTimeout(() => { this.message = undefined }, 5000)
+                }
             }
-        }
-       
-      })
-  }
-      getSeverity=(status: string)=>{
+
+        })
+    }
+
+
+    async cartegories() {
+        await this.productService.cartegories().subscribe((response: any) => {
+            if (response?.message) {
+                this.message = response?.message
+                //  console.log(response?.message)
+                setTimeout(() => { this.message = undefined }, 5000)
+            } else {
+                if (response?.data) {
+                    //  console.log(response?.data)
+                    this.productcart = response?.data
+                    this.cdr.markForCheck();
+                } else {
+                    setTimeout(() => { this.message = undefined }, 5000)
+                    this.message = "unknown error has occured"
+                }
+            }
+
+        })
+    }
+    getSeverity = (status: string) => {
         switch (status) {
             case 'INSTOCK':
                 return 'success';
@@ -218,15 +233,17 @@ setTrending=()=>{
         }
         return
     }
-   
-    toggle(event:any) {
+
+    toggle(event: any) {
         this.op.toggle(event);
     }
 
-    Login=()=> {
-      this.router.navigate(['admhome'])
+    Login = () => {
+           this.visible.set(true)
+        this.router.navigate(['user-login'],{relativeTo:this.route})
     }
-    signup=()=>{
-
+    signup = () => {
+        this.visible.set(true)
+        this.router.navigate(['sign-up'],{relativeTo:this.route})
     }
 }

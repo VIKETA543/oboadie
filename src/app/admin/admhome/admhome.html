@@ -1,14 +1,40 @@
-<div class="container">
-    <div class="buss-header">
-        <img id="srclogo" src="assets/logo/oboadie.jpeg" alt="">
+  <p-toolbar>
+        <ng-template #start>
+             <div class="buss-header">
+        <img id="logo" src="assets/logo/oboadie.jpeg" alt="">
         <header>Oboadie Nyame Trading Enterprise</header>
     </div>
-    <p-toolbar>
-        <ng-template #start>
-            <p-button (click)="dropMenu = true" icon="pi pi-bars" label="Menu" />
         </ng-template>
+
     </p-toolbar>
-</div>
+  <p-toolbar>
+     <ng-template #sart>
+
+     </ng-template>
+      <ng-template #center></ng-template>
+            <ng-template #end>
+            <p-button (click)="dropMenu = true" icon="pi pi-ellipsis-v" label="Menu" severity="secondary" />
+            <p-button (click)="op.toggle($event)" icon="pi pi-cog" label="Admin"  severity="secondary"/>
+        </ng-template>
+  </p-toolbar>
+
+ <div class="card flex justify-center">
+            <p-popover #op>
+   
+                    <div>
+                        <span class="font-medium block mb-2">Admin</span>
+                        <p-divider></p-divider>
+                         <p-button type="button" label="Account Security" (onClick)="opeSecurityManager()" styleClass="min-w-48" variant="text" severity="secondary" />
+                    </div>
+                
+                      <div>
+                        <p-divider></p-divider>
+                         <p-button type="button" label="Sign-Out" (onClick)="opeSecurityManager()" styleClass="min-w-48" variant="text" severity="secondary" />
+                    </div>
+            </p-popover>
+        </div>
+
+
 <div class="card ">
     <p-drawer [(visible)]="dropMenu" header="Menu" modal="true" dismissible="true">
         <p-button type="button" label="Manage Categories" icon="pi pi-folder-plus" routerLink='addcartegory'

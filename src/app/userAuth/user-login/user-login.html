@@ -1,0 +1,84 @@
+<div class="login-container">
+    <p-card header="LOGIN" subheader="Please enter your details to login" [style]="{ width: '30rem' }">
+   
+                <p-divider></p-divider>
+            <!-- Email Field -->
+            <div class="flex flex-column gap-2">
+                <label for="email" class="font-bold">Email</label>
+                <input 
+                    pInputText 
+                    id="email" 
+                    name="email" 
+                    type="email" 
+                    [(ngModel)]="email" 
+                    required 
+                    email
+                    placeholder="email@example.com" />
+            </div>
+            <p-divider></p-divider>
+            <!-- Password Field -->
+            <div class="flex flex-column gap-2">
+                <label for="password" class="font-bold">Password</label>
+                <p-password 
+                    [(ngModel)]="password" 
+                    name="password"
+                    id="password"
+                    [feedback]="false" 
+                    [toggleMask]="true" 
+                    placeholder="Enter password"
+                    styleClass="w-full"
+                    inputStyleClass="w-full">
+                </p-password>
+            </div>
+              <p-divider></p-divider>
+            <!-- Remember Me & Forgot Password -->
+            <div class="flex align-items-center justify-content-between mt-1">
+                <div class="flex align-items-center gap-2">
+                    <p-checkbox 
+                        [(ngModel)]="rememberMe" 
+                        name="rememberMe" 
+                        binary="true" 
+                        inputId="rememberMe">
+                    </p-checkbox>
+                    <label for="rememberMe">Remember me</label>
+                </div>
+                <a href="#" class="no-underline text-primary font-medium">Forgot password?</a>
+            </div>
+    <p-divider></p-divider>
+            <!-- Login Button -->
+            <p-button 
+                label="Sign In" 
+                type="submit" 
+                styleClass="w-full mt-2" 
+                [loading]="loading" (onClick)="onLogin()">
+            </p-button>
+
+        <ng-template pTemplate="footer">
+            <div class="text-center">
+                <span>Don't have an account? </span>
+                <a href="#" class="text-primary font-bold no-underline">Sign up</a>
+            </div>
+        </ng-template>
+
+        @if(isSuccess()){
+             <div class="card flex flex-wrap gap-4 justify-center">
+            <p-message severity="success">{{message}}</p-message>
+            </div>
+
+        }
+        @if(isDenied()){
+             <div class="card flex flex-wrap gap-4 justify-center">
+            <p-message severity="warn">{{message}}</p-message>
+                </div>
+        }@if(isWaiting()){
+             <div class="card flex flex-wrap gap-4 justify-center">
+            <p-message severity="info">{{message}}</p-message>
+            </div>
+        }
+        @if(isMessage()){
+             <div class="card flex flex-wrap gap-4 justify-center">
+            <p-message severity="error">{{message}}</p-message>
+            </div>
+        }
+    </p-card>
+</div>

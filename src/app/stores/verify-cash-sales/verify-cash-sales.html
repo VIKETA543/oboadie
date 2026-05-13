@@ -1,0 +1,111 @@
+<div class="scanner-payment-container">
+    <div class="status-card">
+        <div class="card">
+            <label>SYSTEM READY...</label>
+            <p-progressbar mode="indeterminate" [style]="{ height: '6px' }" aria-labelledby=" Ready" />
+        </div>
+
+        <p>Last Scan: <strong>{{ lastScan }}</strong></p>
+    </div>
+    <div>
+
+    </div>
+</div>
+
+
+
+@if(isDataLoaded()){
+   
+<div class="card container">
+<div class="h-container">
+ <div class="card header-info">
+<div  class="card flex flex-wrap gap-4">
+    <label>INVOICE NO:</label>
+    <label>{{invoiceData[0]?.invoice_number}}</label>
+</div>
+<div  class="card flex flex-wrap gap-4">
+    <label>INVOICE DATE:</label>
+    <label>{{invoiceData[0]?.dateposted | date: 'dd-MMM-yyyy h:mm:ss'}}</label>
+</div>
+<div  class="card flex flex-wrap gap-4">
+    <label>INVOICE STATUS:</label>
+    <label>{{invoiceData[0]?.payment_progress }}</label>
+</div>
+<div  class="card flex flex-wrap gap-4">
+    <label>INVOICE TYPE:</label>
+    <label>{{invoiceData[0]?.sales_type }}</label>
+</div>
+    
+    </div>
+
+    <div class="card header-info">
+      <div  class="card flex flex-wrap gap-4">
+    <label>CUSTOMER NAME:</label>
+    <label>{{invoiceData[0]?.customername }}</label>
+</div>
+
+<div  class="card flex flex-wrap gap-4">
+    <label>EMAIL ADDRESS:</label>
+    <label>{{invoiceData[0]?.emailadress }}</label>
+</div>
+
+<div  class="card flex flex-wrap gap-4">
+    <label>TELEPHONE NUMBER:</label>
+    <label>{{invoiceData[0]?.telephone }}</label>
+</div>
+
+<div  class="card flex flex-wrap gap-4">
+    <label>DDRESS</label>
+    <label>{{invoiceData[0]?.address }}</label>
+</div>
+</div>
+    </div>
+
+    <p-table [value]="purchaseInfo" stripedRows [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template #header>
+            <tr>
+                <th>serial</th>
+                <th>Product</th>
+                <th>Type</th>
+                <th>Purchase Number</th>
+                <th>Quantity</th>
+                <th>Authorised</th>
+                   <th>Store Verify</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-purchaseInfo let-i="rowIndex">
+            <tr>
+                <td>{{ i+1}}</td>
+                <td>{{ purchaseInfo.name }}</td>
+                <td>{{ purchaseInfo.title }}</td>
+                <td>{{ purchaseInfo.purchaseid }}</td>
+                <td>{{purchaseInfo.quantity_sold}}</td>
+                <td>
+                    <div class="card flex justify-center">
+                        <p-toggleSwitch [(ngModel)]="purchaseInfo.isinvoice_verified" disabled="purchaseInfo.isinvoice_verified" />
+                    </div>
+
+                </td>
+                <td>
+                    <div class="card flex justify-center">
+                        <p-toggleSwitch [(ngModel)]="isStoreVerified" (onChange)="verifyProduct($event,purchaseInfo,invoiceData)" />
+                    </div>
+
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</div>
+}
+@if(isDataLoaded()){
+<p-toolbar class="sticky-botttom">
+    <ng-template #end>
+      <div class="p-toolbar-group-start">
+        <p-button label="Close Invoice" icon="pi pi-lock" severity="info"  (onClick)="lockInvoice()"/>
+
+    </div>
+    </ng-template>
+</p-toolbar>
+}
+<p-toast/>

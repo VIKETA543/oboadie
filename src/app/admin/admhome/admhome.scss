@@ -26,6 +26,7 @@
         max-width: 100%;
         display: flex;
 
+
         // border-top-left-radius: 1em;
         // border-top-right-radius: 1em;
         // box-shadow: 0px 0px 5px 1px rgb(138, 137, 137);
@@ -48,19 +49,13 @@
             color: rgb(4, 55, 102);
         }
 
-        img {
-            max-width: calc(100% - 92%);
-            min-width: calc(100% - 97%);
-            width: calc(100% - 96%);
-        }
+   
 
-        #buslogo {
-            max-width: calc(100% - 92%);
-            min-width: calc(100% - 97%);
-            width: calc(100% - 95%);
-        }
+  
     }
-
+     img {
+        width: clamp(15px, 20px, 25px);
+        }
     section {
         background-color: rgb(255, 255, 255);
         padding: 10px;

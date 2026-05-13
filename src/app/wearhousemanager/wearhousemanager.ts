@@ -1185,16 +1185,17 @@ warehousename:any
     this.warehouseservice.loadstores().subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
-        this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 5000 });
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
       } else {
         if (response?.data) {
           setTimeout(() => {
             this.storesData = response?.data;
-            this.cdr.markForCheck
+            this.cdr.markForCheck()
+            this.cdr.detectChanges()
           }, 1000);
         } else {
           this.message = "Unknown error has occured"
-          this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 5000 });
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
         }
       }
     })

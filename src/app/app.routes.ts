@@ -36,13 +36,30 @@ import { CashPayments } from './cashier/cash-payments/cash-payments';
 import { ScannerPayment } from './cashier/scanner-payment/scanner-payment';
 import { MobileScanner } from './cashier/mobile-scanner/mobile-scanner';
 import { ManualVerification } from './cashier/manual-verification/manual-verification';
+import { PayCredit } from './cashier/pay-credit/pay-credit';
+import { VerifyCashSales } from './stores/verify-cash-sales/verify-cash-sales';
+import { VerifyCreditSales } from './stores/verify-credit-sales/verify-credit-sales';
+import { VerifySales } from './stores/verify-sales/verify-sales';
+import { SecurityManager } from './userAuth/security-manager/security-manager';
+import { UACGenerator } from './userAuth/uacgenerator/uacgenerator';
+import { DepartmentHook } from './userAuth/department-hook/department-hook';
+import { SignUp } from './userAuth/sign-up/sign-up';
+import { UserLogin } from './userAuth/user-login/user-login';
+import { Auth } from './userAuth/auth/auth';
 
 
 
 
 export const routes: Routes = [
     {
+
         path: 'admhome', component: Admhome, children: [
+            {
+                path: 'security-manager', component: SecurityManager, children: [
+                    { path: 'uacgenerator', component: UACGenerator },
+                    { path: 'department-hook', component: DepartmentHook }
+                ]
+            },
             { path: 'addcartegory', component: Addcartegory },
             { path: 'products', component: Products },
             { path: 'targetgroup', component: Targetgroup },
@@ -60,7 +77,14 @@ export const routes: Routes = [
                     { path: 'store-receive-stock', component: StoreReceiveStock },
                     { path: 'stockreceived', component: Stockreceived },
                     { path: 'create-products', component: CreateProducts },
-                    { path: 'product-category', component: ProductCategory }
+                    { path: 'product-category', component: ProductCategory },
+                    {
+                        path: 'verify-sales', component: VerifySales, children: [
+                            { path: 'verify-cash-sales', component: VerifyCashSales },
+                            { path: 'verify-credit-sales', component: VerifyCreditSales }
+                        ]
+                    },
+
                 ]
             },
             {
@@ -69,7 +93,8 @@ export const routes: Routes = [
                     { path: 'new-store', component: NewStore },
                     { path: 'store-type', component: StoreType },
                     { path: 'create-products', component: CreateProducts },
-                    { path: 'product-category', component: ProductCategory }
+                    { path: 'product-category', component: ProductCategory },
+
                 ]
             },
             { path: 'pos-panager', component: PosPanager },
@@ -102,25 +127,36 @@ export const routes: Routes = [
                     { path: 'deposit-accounts', component: DepositAccounts },
                     { path: 'create-account', component: CreateAccount },
                     { path: 'deposit-details', component: DepositDetails },
-                    {path:'withdraw', component: Withdraw}
+                    { path: 'withdraw', component: Withdraw }
                 ]
 
             },
-            {path: 'cash-manager', component: CashManager,children:[
-                {path: 'cash-payments', component: CashPayments, children:[
-                    {path:'scanner-payment', component:ScannerPayment},
-                      {path:'mobile-scanner', component:MobileScanner},
-                      {path:'manual-verification', component:ManualVerification}
+            {
+                path: 'cash-manager', component: CashManager, children: [
+                    {
+                        path: 'cash-payments', component: CashPayments, children: [
+                            { path: 'scanner-payment', component: ScannerPayment },
+                            { path: 'mobile-scanner', component: MobileScanner },
+                            { path: 'manual-verification', component: ManualVerification }
+                        ]
+                    },
+                    { path: 'pay-credit', component: PayCredit }
                 ]
-            }
-            ]},
+            },
 
-            { path: '', redirectTo: 'products', pathMatch: 'full' }
+             { path: '', redirectTo: 'admhome', pathMatch: 'full' }
         ]
     },
 
-    { path: 'home', component: Home },
+    {
+        path: 'home', component: Home, children: [
+            { path: 'sign-up', component: SignUp },
+            { path: 'user-login', component: UserLogin },
+            {path:'auth/:uac',component:Auth},
+        ]
+    },
 
-    { path: '', redirectTo: 'home', pathMatch: 'full' }
+     { path: '', redirectTo: 'home', pathMatch: 'full' }
+        //  { path: '', redirectTo: 'admhome', pathMatch: 'full' }
 
 ];

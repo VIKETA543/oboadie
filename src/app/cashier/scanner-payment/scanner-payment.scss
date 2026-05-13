@@ -6,6 +6,12 @@
     height: 100%;
     width: 100%;
 }
+.barcode-container{
+    width: 60%;
+    height: 100px;
+    display:flex;
+    flex: 1;
+}
 .status-card{
     width: 300px;
     padding: 20px;
@@ -27,12 +33,7 @@
    margin:20px auto;   
    overflow: hidden; 
 } 
-.barcode-container{
-    width: 60%;
-    height: 100px;
-    display:flex;
-    flex: 1;
-}
+
 .header{
     justify-content: space-between;
     align-items: center;
@@ -54,7 +55,7 @@
         font-size:clamp(1.0rem, 1.3vw, 1.5rem);
         font-weight: bold;
         text-align: center;
-        spam{
+        span{
             font-size:clamp(.9rem, 1.0vw, 1.2rem);
             text-align: center;
             display: block;

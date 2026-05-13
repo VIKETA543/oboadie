@@ -33,7 +33,7 @@
                     <th>Type/brand</th>
                     <th>From Store</th>
                     <th>Image</th>
-                    <th>Available Quantity</th>
+                    <th>Quantity</th>
                     <th>Price</th>
                     <!-- <th>Info</th> -->
                     <th>Action</th>
@@ -48,7 +48,7 @@
                     <td>
                         <img [src]="cashSalesData.imageurl" />
                     </td>
-                    <td>{{cashSalesData.total_quantity}}</td>
+                    <td>{{cashSalesData.stock_balance}}</td>
                     <td>{{cashSalesData.unitesellingprice | currency: 'Ghø'}}</td>
                     <!-- <td>
                         <p class="truncate-text" pTooltip="{{cashSalesData.role}}"> {{ cashSalesData.role }}</p>
