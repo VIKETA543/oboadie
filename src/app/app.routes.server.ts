@@ -6,6 +6,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Server // This tells Angular NOT to prerender this at build time
   },
   {
+    path: 'admhome/store-manager/:uac',
+    renderMode: RenderMode.Server
+  }
+  {
     path: '**',
     renderMode: RenderMode.Prerender
   }
