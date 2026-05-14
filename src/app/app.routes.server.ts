@@ -32,6 +32,6 @@ export const serverRoutes: ServerRoute[] = [
   // Everything else (like 'admhome/products') will be Prerendered
   {
     path: '**',
-    renderMode: RenderMode.Prerender
+    renderMode: RenderMode.Server
   }
 ];
