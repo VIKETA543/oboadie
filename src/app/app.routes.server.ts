@@ -14,29 +14,12 @@ export const serverRoutes: ServerRoute[] = [
     path: 'admhome/store-manager/:uac',
     renderMode: RenderMode.Server
   },
-  {
-    // Nested dynamic route
-    path: 'admhome/store-manager/:uac/:child', 
-    renderMode: RenderMode.Server
-  },
-
   // --- STATIC ROUTES (Can be Prerendered) ---
   {
     path: 'home/sign-up',
     renderMode: RenderMode.Prerender
   },
-  {
-    path: 'home/user-login',
-    renderMode: RenderMode.Prerender
-  },
-  {
-    path: 'admhome/security-manager/uacgenerator',
-    renderMode: RenderMode.Prerender
-  },
-  {
-    path: 'admhome/security-manager/department-hook',
-    renderMode: RenderMode.Prerender
-  },
+
 
   // --- FALLBACK / WILDCARD ---
   {
