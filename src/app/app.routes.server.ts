@@ -10,7 +10,7 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Server
   },
   {
-    'home/redirect-user/:uacp',
+    path: 'home/redirect-user/:uacp',
     renderMode: RenderMode.Server
   },
   {
