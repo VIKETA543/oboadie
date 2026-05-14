@@ -8,8 +8,8 @@ export const serverRoutes: ServerRoute[] = [
 {path: 'home/auth/:uac',
    renderMode: RenderMode.Server
 } ,
-{ path: 'redirect-user/:uacp',
-  renderMode: RenderMode.Server
-}
-
+  {
+    path: 'redirect-user/:uacp',
+    renderMode: RenderMode.Server
+  },
 ];
