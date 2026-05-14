@@ -76,7 +76,7 @@ export class Productbrand {
       } else {
         if (response?.message) {
           this.message = response?.message
-          this.messageService.add({ severity: 'info', summary: 'Info', detail: this.message, life: 3000 });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message, life: 3000 });
         }
       }
     })
@@ -133,10 +133,10 @@ export class Productbrand {
       } else {
         if (response?.message) {
           this.message = response?.success
-          this.messageService.add({ severity: 'primary', summary: 'Sucess', detail: this.message, life: 3000 });
+          this.messageService.add({ severity: 'success', summary: 'Sucess', detail: this.message, life: 3000 });
         } else {
           this.message = "Unknown Error has occured"
-          this.messageService.add({ severity: 'danger', summary: 'Attention', detail: this.message, life: 3000 });
+          this.messageService.add({ severity: 'error', summary: 'Attention', detail: this.message, life: 3000 });
         }
       }
     })
@@ -150,10 +150,10 @@ export class Productbrand {
       } else {
         if (response?.message) {
           this.message = response?.success
-          this.messageService.add({ severity: 'primary', summary: 'Sucess', detail: this.message, life: 3000 });
+          this.messageService.add({ severity: 'sucess', summary: 'Sucess', detail: this.message, life: 3000 });
         } else {
           this.message = "Unknown Error has occured"
-          this.messageService.add({ severity: 'danger', summary: 'Attention', detail: this.message, life: 3000 });
+          this.messageService.add({ severity: 'error', summary: 'Attention', detail: this.message, life: 3000 });
         }
 
       }
@@ -172,7 +172,7 @@ export class Productbrand {
 
         this.loadBrandData();
         this.message = response?.success
-        this.messageService.add({ severity: 'primary', summary: 'Sucess', detail: this.message, life: 3000 });
+        this.messageService.add({ severity: 'success', summary: 'Sucess', detail: this.message, life: 3000 });
         this.preview = undefined;
         this.isNewBrand = false
 
@@ -180,12 +180,12 @@ export class Productbrand {
         if (response?.message) {
           // console.log(response?.message)
           this.message = response?.message
-          this.messageService.add({ severity: 'info', summary: 'Attention', detail: this.message, life: 3000 });
+          this.messageService.add({ severity: 'error', summary: 'Attention', detail: this.message, life: 3000 });
           this.preview = undefined
         } else {
 
           this.message = "Unknown Error has occured"
-          this.messageService.add({ severity: 'danger', summary: 'Attention', detail: this.message, life: 3000 });
+          this.messageService.add({ severity: 'error', summary: 'Attention', detail: this.message, life: 3000 });
         }
       }
     })
@@ -260,7 +260,7 @@ export class Productbrand {
       } else {
         if (response?.message) {
           this.message = response?.message
-          this.messageService.add({ severity: 'info', summary: 'Info', detail: this.message, life: 3000 });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message, life: 3000 });
         }
       }
     })
@@ -284,14 +284,14 @@ console.log(this.selectedBrand)
     this.productservice.dropBrand(data).subscribe((response: any) => {
       if (response?.sucess) {
         this.message = response?.success
-        this.messageService.add({ severity: 'primary', summary: 'Success', detail: this.message, life: 3000 });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message, life: 3000 });
       } else {
         if (response?.message) {
           this.message = response?.message
-          this.messageService.add({ severity: 'info', summary: 'Attention', detail: this.message, life: 3000 });
+          this.messageService.add({ severity: 'success', summary: 'Attention', detail: this.message, life: 3000 });
         } else {
           this.message = "unknown error occured"
-          this.messageService.add({ severity: 'danger', summary: 'Attention', detail: this.message, life: 3000 });
+          this.messageService.add({ severity: 'error', summary: 'Attention', detail: this.message, life: 3000 });
         }
       }
     })
@@ -325,7 +325,7 @@ console.log(this.selectedBrand)
       } else {
         if (response?.message) {
           this.message = response?.message
-          this.messageService.add({ severity: 'info', summary: 'Info', detail: this.message, life: 3000 });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message, life: 3000 });
         }
       }
     })

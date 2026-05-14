@@ -1,0 +1,46 @@
+.container{
+    margin:20vh auto;
+    padding:10px;
+    width: calc(100% - 0%);
+  
+}
+
+/* 1. The Main Container (The border and shadow) */
+:host ::ng-deep .p-panel {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin: 0px auto;
+    width: 60%;
+}
+
+/* 2. The Header (Where the title and toggle icon live) */
+:host ::ng-deep .p-panel-header {
+    background-color: #f8fafc;
+    color: #1e293b;
+    padding: 1.25rem;
+    font-weight: 700;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* 3. The Content Area (Where your form/data is) */
+:host ::ng-deep .p-panel-content {
+    padding: 1.5rem;
+    background-color: #ffffff;
+    line-height: 1.5;
+}
+
+/* 4. The Footer (Optional) */
+:host ::ng-deep .p-panel-footer {
+    padding: 1rem;
+    background-color: #f1f5f9;
+}
+:host ::ng-deep .p-password input {
+    width: 100%;
+}
+:host ::ng-deep .p-button {
+    width: 100%;
+}
+span{
+    font-size:clamp(1.0em,1.5em,1.8em)
+}

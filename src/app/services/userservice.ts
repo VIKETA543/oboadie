@@ -33,4 +33,20 @@ export class Userservice {
 
   return this.http.post(this.url + '/user/signin', data, { headers: new HttpHeaders().set('contentType',  "application/json") });
   }
+
+  userredentials=()=>{
+
+  return this.http.get(this.url + '/user/userredentials', { headers: new HttpHeaders().set('contentType',  "application/json") });
+  }
+
+
+    submitUac=(data:any)=>{
+
+  return this.http.post(this.url + '/user/submitUac',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+  }
+
+    authrole=(data:any)=>{
+
+  return this.http.post(this.url + '/user/authrole',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+  }
 }

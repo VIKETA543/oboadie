@@ -49,3 +49,14 @@
            font-size: clamp(.8vw,1.4vw,1.8vw);;
     }
 
+    /* In your component.css */
+:host ::ng-deep .p-selectbutton {
+    display: flex;
+    flex-wrap: wrap; /* This allows buttons to drop to the next line */
+    gap: 0.5rem;      /* Optional: adds spacing between the wrapped rows */
+}
+
+:host ::ng-deep .p-selectbutton .p-button {
+    flex: 1 1 auto; /* Optional: allows buttons to grow/shrink to fill space */
+    min-width: 100px; /* Optional: prevents buttons from getting too small */
+}

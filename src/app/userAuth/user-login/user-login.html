@@ -35,7 +35,7 @@
             <div class="flex align-items-center justify-content-between mt-1">
                 <div class="flex align-items-center gap-2">
                     <p-checkbox 
-                        [(ngModel)]="rememberMe" 
+                        [(ngModel)]="rememberMe"  (onChange)="byPass()"
                         name="rememberMe" 
                         binary="true" 
                         inputId="rememberMe">

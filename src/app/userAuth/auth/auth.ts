@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Userservice } from '../../services/userservice';
 import { MessageModule } from 'primeng/message';
@@ -22,6 +22,7 @@ import { ButtonModule } from 'primeng/button';
   changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class Auth implements OnInit {
+  messageservice=inject(MessageService)
 Password: any;
 conform_password: any;
 acceptTerms:boolean=false

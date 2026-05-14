@@ -46,6 +46,8 @@ import { DepartmentHook } from './userAuth/department-hook/department-hook';
 import { SignUp } from './userAuth/sign-up/sign-up';
 import { UserLogin } from './userAuth/user-login/user-login';
 import { Auth } from './userAuth/auth/auth';
+import { RedirectUser } from './userAuth/redirect-user/redirect-user';
+
 
 
 
@@ -84,11 +86,12 @@ export const routes: Routes = [
                             { path: 'verify-credit-sales', component: VerifyCreditSales }
                         ]
                     },
+                    { path: 'productbrand', component: Productbrand },
 
                 ]
             },
             {
-                path: 'store-manager', component: StoreManager, children: [
+                path: 'store-manager/:uac', component: StoreManager, children: [
                     { path: 'store-receive-stock', component: StoreReceiveStock },
                     { path: 'new-store', component: NewStore },
                     { path: 'store-type', component: StoreType },
@@ -144,19 +147,55 @@ export const routes: Routes = [
                 ]
             },
 
-             { path: '', redirectTo: 'admhome', pathMatch: 'full' }
+            { path: '', redirectTo: 'admhome', pathMatch: 'full' }
+        ]
+    },
+    {
+        path: 'main-stores', component: MainStores, children: [
+            { path: 'store-receive-stock', component: StoreReceiveStock },
+            { path: 'stockreceived', component: Stockreceived },
+            { path: 'create-products', component: CreateProducts },
+            { path: 'product-category', component: ProductCategory },
+             { path: 'productbrand', component: Productbrand },
+            {
+                path: 'verify-sales', component: VerifySales, children: [
+                    { path: 'verify-cash-sales', component: VerifyCashSales },
+                    { path: 'verify-credit-sales', component: VerifyCreditSales }
+                ]
+            },
+
         ]
     },
 
+        {
+                path: 'point-of-sale', component: PointOfSale, children: [
+                    { path: 'cash-sales', component: CashSales },
+                    { path: 'credit-sales', component: CreditSales },
+                    { path: 'new-deposit', component: NewDeposit },
+                    { path: 'create-account', component: CreateAccount },
+                    {
+                        path: 'profoma-invoice', component: ProfomaInvoice, children: [
+                            { path: 'new-profoma', component: NewProfoma }
+                        ]
+                    },
+                    {
+                        path: 'crm-manager', component: CrmManager, children: [
+                            { path: 'create-customer', component: CreateCustomer },
+
+                        ]
+                    }
+                ]
+            },
     {
         path: 'home', component: Home, children: [
             { path: 'sign-up', component: SignUp },
             { path: 'user-login', component: UserLogin },
-            {path:'auth/:uac',component:Auth},
+            { path: 'auth/:uac', component: Auth },
+            { path: 'redirect-user/:uacp', component: RedirectUser }
         ]
     },
 
-     { path: '', redirectTo: 'home', pathMatch: 'full' }
-        //  { path: '', redirectTo: 'admhome', pathMatch: 'full' }
+    { path: '', redirectTo: 'home', pathMatch: 'full' }
+    //  { path: '', redirectTo: 'admhome', pathMatch: 'full' }
 
 ];

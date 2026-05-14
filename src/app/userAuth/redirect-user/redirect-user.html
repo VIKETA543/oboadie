@@ -1,0 +1,17 @@
+<div class="card flex justify-center  container">
+            <p-panel header="USER ACCESS CONTROL">
+                <span>Enter user access key</span>
+        <div class="card flex justify-center">
+            <p-password [(ngModel)]="decriptedKey" [toggleMask]="true" autocomplete="off"  inputStyleClass="w-full"/>
+        </div>
+        <p-divider></p-divider>
+           <div class="card flex justify-center">
+            <p-button label="Submit" severity="contrast" (onClick)="authUser()" />
+        </div>
+        @if(message){
+          <div class="card">
+            <p-message severity="error">{{message}}</p-message>
+        </div>
+    }
+            </p-panel>
+</div>

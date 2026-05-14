@@ -61,4 +61,7 @@ this.router.navigate(['create-products'],{relativeTo:this.routes})
 productCategories=()=>{
   this.router.navigate(['product-category'],{relativeTo:this.routes})
 }
+goToBrands=()=>{
+  this.router.navigate(['productbrand'],{relativeTo:this.routes})
+}
 }

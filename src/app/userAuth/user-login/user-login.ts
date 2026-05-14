@@ -10,6 +10,7 @@ import { DividerModule } from 'primeng/divider';
 import { Userservice } from '../../services/userservice';
 import { MessageService } from 'primeng/api';
 import { single } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   standalone:true,
@@ -28,7 +29,7 @@ import { single } from 'rxjs';
   changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class UserLogin {
-constructor(private userservice:Userservice){}
+constructor(private userservice:Userservice,private router:Router, private route: ActivatedRoute){}
 messageservice=inject(MessageService)
 message:any
   loading: boolean = false;
@@ -64,6 +65,8 @@ isMessage=signal(false)
             if(response?.success){
               this.message=response?.success
               this.isSuccess.set(true)
+                console.log(response?.hook)
+                 this.router.navigate(['../redirect-user',response?.hook],{relativeTo:this.route})
             }else{
               this.message='Unknown error has occured'
             }
@@ -79,6 +82,6 @@ isMessage=signal(false)
     }, 2000);
   }
   byPass=()=>{
-    
+    this.router.navigate(['admhome'])
   }
 }

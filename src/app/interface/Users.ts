@@ -1,4 +1,5 @@
 export interface Usercredentials{
-    Username:string,
-    accountId:string,
+   uac_id:string,
+    fullname:string,
+   passport_picture_url:string 
 }
