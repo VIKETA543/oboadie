@@ -25,7 +25,7 @@ export const serverRoutes: ServerRoute[] = [
   // 2. STATIC ROUTES (Optional specific definitions)
   {
     path: 'home/user-login',
-    renderMode: RenderMode.Prerender
+    renderMode: RenderMode.Server
   },
 
   // 3. THE WILDCARD
