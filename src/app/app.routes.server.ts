@@ -4,7 +4,7 @@ export const serverRoutes: ServerRoute[] = [
   {
   path: 'admhome/store-manager/:uac/store-receive-stock',
   renderMode: RenderMode.Server // This fixes the error
-}
+},
   {
     path: 'admhome/store-manager/:uac/product-category',
      renderMode: RenderMode.Server // This fixes the error
