@@ -125,6 +125,7 @@ export class StoreType implements OnInit {
     this.storeservice.liststoretypes().subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
+          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
       } else {
         if (response?.data) {
           this.storeTypeData = response?.data
