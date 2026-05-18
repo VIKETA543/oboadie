@@ -92,7 +92,7 @@ export const routes: Routes = [
                 ]
             },
             {
-                path: 'store-manager/:uac', component: StoreManager, children: [
+                path: 'store-manager', component: StoreManager, children: [
                     { path: 'store-receive-stock', component: StoreReceiveStock },
                     { path: 'new-store', component: NewStore },
                     { path: 'store-type', component: StoreType },
