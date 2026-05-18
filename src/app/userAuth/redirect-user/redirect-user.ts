@@ -45,7 +45,7 @@ export class RedirectUser implements OnInit {
   }
 
   decrypt(encryptedData: string): string {
-    const bytes = CryptoJS.AES.decrypt(encryptedData, this.Key);
+    const bytes = CryptoJS.AES.decrypt(encryptedData, 'Mvk2@@#3011~43011');
 
     return this.decriptedKey = bytes.toString(CryptoJS.enc.Utf8);
   }
