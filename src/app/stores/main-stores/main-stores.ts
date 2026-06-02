@@ -13,6 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Users } from '../../interface/Users';
 import { AvatarModule } from 'primeng/avatar';
 import { PopoverModule } from 'primeng/popover';
+import { DividerModule } from 'primeng/divider';
 @Component({
   selector: 'main-stores',
   imports: [DrawerModule,
@@ -25,14 +26,13 @@ import { PopoverModule } from 'primeng/popover';
     ToolbarModule,
     InputTextModule,
     AvatarModule,
-    PopoverModule],
+    PopoverModule,
+  DividerModule],
   templateUrl: './main-stores.html',
   styleUrl: './main-stores.scss',
 })
 export class MainStores implements OnInit {
-  StockBalances() {
-    throw new Error('Method not implemented.');
-  }
+ 
   verifiedHistory() {
     throw new Error('Method not implemented.');
   }
@@ -105,5 +105,12 @@ export class MainStores implements OnInit {
   }
  goToStoctrequest = () => {
     this.router.navigate(['stock-request'], { relativeTo: this.routes })
+  }
+   StockBalances() {
+  this.router.navigate(['stock-balances'], { relativeTo: this.routes })
+  }
+
+    wahousePull() {
+  this.router.navigate(['warehouse-pull'], { relativeTo: this.routes })
   }
 }

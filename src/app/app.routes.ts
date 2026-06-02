@@ -10,7 +10,6 @@ import { Pricing } from './pricing/pricing';
 import { Supplierprices } from './admin/supplierprices/supplierprices';
 import { Wearhousemanager } from './wearhousemanager/wearhousemanager';
 import { StoreManager } from './store-manager/store-manager';
-import { StoreReceiveStock } from './store-manager/store-receive-stock/store-receive-stock';
 import { NewStore } from './store-manager/new-store/new-store';
 import { StoreType } from './store-manager/store-type/store-type';
 import { MainStores } from './stores/main-stores/main-stores';
@@ -48,6 +47,10 @@ import { UserLogin } from './userAuth/user-login/user-login';
 import { Auth } from './userAuth/auth/auth';
 import { RedirectUser } from './userAuth/redirect-user/redirect-user';
 import { StockRequest } from './stores/stock-request/stock-request';
+import { StockBalances } from './stores/stock-balances/stock-balances';
+import { StoreReceiveStock } from './stores/store-receive-stock/store-receive-stock';
+import { WarehousePull } from './stores/main-stores/Warehousepull/warehouse-pull';
+import { Resetpassword } from './userAuth/resetpassword/resetpassword';
 
 
 
@@ -70,6 +73,8 @@ export const routes: Routes = [
             { path: 'pricing', component: Pricing },
             { path: 'supplierprices', component: Supplierprices },
             { path: 'wearhousemanager', component: Wearhousemanager },
+            // {path:  'store-manager/:uac', component: StoreManager},
+            // 
             {
                 path: 'crm-manager', component: CrmManager, children: [
                     { path: 'create-customer', component: CreateCustomer }
@@ -77,6 +82,7 @@ export const routes: Routes = [
             },
             {
                 path: 'main-stores', component: MainStores, children: [
+                    { path: 'stock-request', component: StockRequest },
                     { path: 'store-receive-stock', component: StoreReceiveStock },
                     { path: 'stockreceived', component: Stockreceived },
                     { path: 'create-products', component: CreateProducts },
@@ -89,6 +95,8 @@ export const routes: Routes = [
                     },
                     { path: 'productbrand', component: Productbrand },
 
+                    { path: 'stock-balances', component: StockBalances },
+                    { path: 'warehouse-pull', component: WarehousePull },
                 ]
             },
             {
@@ -98,7 +106,6 @@ export const routes: Routes = [
                     { path: 'store-type', component: StoreType },
                     { path: 'create-products', component: CreateProducts },
                     { path: 'product-category', component: ProductCategory },
-
                 ]
             },
             { path: 'pos-panager', component: PosPanager },
@@ -157,8 +164,8 @@ export const routes: Routes = [
             { path: 'stockreceived', component: Stockreceived },
             { path: 'create-products', component: CreateProducts },
             { path: 'product-category', component: ProductCategory },
-             { path: 'productbrand', component: Productbrand },
-             {path:'stock-request',component:StockRequest},
+            { path: 'productbrand', component: Productbrand },
+            { path: 'stock-request', component: StockRequest },
             {
                 path: 'verify-sales', component: VerifySales, children: [
                     { path: 'verify-cash-sales', component: VerifyCashSales },
@@ -169,35 +176,48 @@ export const routes: Routes = [
         ]
     },
 
-        {
-                path: 'point-of-sale', component: PointOfSale, children: [
-                    { path: 'cash-sales', component: CashSales },
-                    { path: 'credit-sales', component: CreditSales },
-                    { path: 'new-deposit', component: NewDeposit },
-                    { path: 'create-account', component: CreateAccount },
-                    {
-                        path: 'profoma-invoice', component: ProfomaInvoice, children: [
-                            { path: 'new-profoma', component: NewProfoma }
-                        ]
-                    },
-                    {
-                        path: 'crm-manager', component: CrmManager, children: [
-                            { path: 'create-customer', component: CreateCustomer },
-
-                        ]
-                    }
+    {
+        path: 'point-of-sale', component: PointOfSale, children: [
+            { path: 'cash-sales', component: CashSales },
+            { path: 'credit-sales', component: CreditSales },
+            { path: 'new-deposit', component: NewDeposit },
+            { path: 'create-account', component: CreateAccount },
+            {
+                path: 'profoma-invoice', component: ProfomaInvoice, children: [
+                    { path: 'new-profoma', component: NewProfoma }
                 ]
             },
+            {
+                path: 'crm-manager', component: CrmManager, children: [
+                    { path: 'create-customer', component: CreateCustomer },
+
+                ]
+            }
+        ]
+    },
+    {
+        path: 'cash-manager', component: CashManager, children: [
+            {
+                path: 'cash-payments', component: CashPayments, children: [
+                    { path: 'scanner-payment', component: ScannerPayment },
+                    { path: 'mobile-scanner', component: MobileScanner },
+                    { path: 'manual-verification', component: ManualVerification }
+                ]
+            },
+            { path: 'pay-credit', component: PayCredit }
+        ]
+    },
+    { path: 'wearhousemanager', component: Wearhousemanager },
     {
         path: 'home', component: Home, children: [
             { path: 'sign-up', component: SignUp },
             { path: 'user-login', component: UserLogin },
-            { path: 'auth/:uac', component: Auth },
-            { path: 'redirect-user', component: RedirectUser }
+            { path: 'auth', component: Auth },
+            { path: 'redirect-user', component: RedirectUser },
+            {path:'resetpassword',component:Resetpassword}
         ]
     },
 
     { path: '', redirectTo: 'home', pathMatch: 'full' }
-    //  { path: '', redirectTo: 'admhome', pathMatch: 'full' }
 
 ];

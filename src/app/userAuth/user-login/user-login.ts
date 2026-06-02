@@ -29,6 +29,17 @@ import { ActivatedRoute, Router } from '@angular/router';
   changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class UserLogin {
+  visible=signal(false)
+signup() {
+  this.visible.set(true)
+        this.router.navigate(['../sign-up'],{relativeTo:this.route})
+}
+forgotPassowrd=()=>{
+this.router.navigate(['../resetpassword'],{relativeTo:this.route})
+
+
+// this.router.navigate(['../auth'],{relativeTo:this.route})
+}
 constructor(private userservice:Userservice,private router:Router, private route: ActivatedRoute){}
 messageservice=inject(MessageService)
 message:any
@@ -56,11 +67,12 @@ isMessage=signal(false)
         if(response?.wait){
         this.message=response?.wait
         this.isWaiting.set(true)
+         this.loading=false
         }else{
           if(response?.denied){
-            console.log(response?.denied)
                  this.message=response?.denied
                  this.isDenied.set(true)
+                  this.loading=false
           }else{
             if(response?.success){
               this.message=response?.success
@@ -68,10 +80,17 @@ isMessage=signal(false)
                 console.log(response?.hook)
                 const usercredential={UACP:response?.hook, uac_id:response?.uac_id}
                 localStorage.setItem('user',JSON.stringify(usercredential))
-                // console.log(response)
+                 console.log(response)
                  this.router.navigate(['../redirect-user'],{relativeTo:this.route})
             }else{
-              this.message='Unknown error has occured'
+              if(response?.NO_PASSWORD){
+                this.message=response?.NO_PASSWORD
+                this.loading=false
+              }else{
+                 this.loading=false
+                          this.message='Unknown error has occured'
+              }
+    
             }
           }
         }
@@ -79,10 +98,10 @@ isMessage=signal(false)
     })
 
     
-    setTimeout(() => {
-      this.loading = false;
-      // Navigate to dashboard or show error
-    }, 2000);
+    // setTimeout(() => {
+    //   this.loading = false;
+    //   // Navigate to dashboard or show error
+    // }, 2000);
   }
   byPass=()=>{
     this.router.navigate(['admhome'])

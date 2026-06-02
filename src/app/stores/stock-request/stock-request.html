@@ -1,13 +1,17 @@
 <div class="card">
     <p-toolbar>
         <ng-template #start>
-            <p-button icon="pi pi-book" label="Request" class="mr-2" text severity="info" (onClick)="openFind()" />
+          
             <p-button icon="pi pi-trash" label="Drop Request" class="mr-2" text severity="danger"
-                (onClick)="dropRequest()" />
-            <p-button icon="pi pi-plus" label='New Request' (onClick)="openNewRequest()" text severity="info" />
-            <p-button icon="pi pi-hourglass" label='pending Approval' (onClick)="getPending()" text severity="info" />
-            <p-button icon="pi pi-refresh" label='Request History' (onClick)="loadRequesthistory()" text
-                severity="info" />
+                (onClick)="allSignals(); dropRequest()" />
+            <p-button icon="pi pi-plus" label='New Request' (onClick)="allSignals(); openNewRequest('PLACE REQUEST')"
+                text severity="info" />
+            <p-button icon="pi pi-hourglass" label='pending Approval'
+                (onClick)="allSignals(); getPending('PENDING REQUEST')" text severity="info" />
+            <p-button icon="pi pi-refresh" label='Unsubmitted'
+                (onClick)="allSignals(); loadUnsubmitted('NOT SUBMITTED')" text severity="info" />
+                  <p-button icon="pi pi-book" label="Request History" class="mr-2" text severity="info"
+                (onClick)="allSignals(); history();" />
         </ng-template>
         <ng-template #center>
 
@@ -15,7 +19,76 @@
 
     </p-toolbar>
 </div>
+@if(starts()){
+<div>
+    <header>REQUEST HISTORY</header>
+ <p-table #dt1 [value]="requestHistory" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading()" [paginator]="true" [globalFilterFields]="['name', 'request_number','title','date_received','quantity_requested']"
+        showGridlines>
+        <ng-template #caption>
+            <div class="flex">
+                <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+                <p-iconfield iconPosition="left" class="ml-auto">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Search keyword" />
+                </p-iconfield>
+            </div>
+        </ng-template>
 
+        <ng-template #header>
+            <tr>
+                   <th>#</th>
+                <th>Request Number</th>
+                <th>Product Name</th>
+                <th>Brand (Type)</th>
+                <th>Row Number</th>
+                <th>quantity</th>
+                <th>Submitted</th>
+                <th>Description</th>
+                <th>Approval</th>
+                <!-- <th>Action</th> -->
+            </tr>
+        </ng-template>
+        <ng-template #body let-requestHistory let-i="rowIndex">
+             <tr>
+                <td>{{ i + 1 }}</td>
+               
+                <td>{{requestHistory.request_number}}</td>
+                
+                <td>{{requestHistory?.name}}</td>
+                <td>{{ requestHistory?.title }}</td>
+                <td>{{requestHistory.itemrowid}}</td>
+                <td>{{ requestHistory?.quantity }}</td>
+                <td>
+
+                    @if(requestHistory.request_approved===true){
+                       <p-tag severity="success" class="tag" value="Submitted"  />
+                    }@else {
+                          <p-tag severity="danger"  class="tag" value="Not submitted"  />
+                    }
+                    <p-toggleswitch [(ngModel)]="requestHistory.is_submitted" [disabled]="requestHistory.is_submitted===true"/>
+                </td>
+                 <td>{{ requestHistory.description }}</td>
+                <td>
+                    @if(requestHistory.request_approved===true){
+                       <p-tag severity="success" class="tag" value="Approved"  />
+                    }@else {
+                          <p-tag severity="info" class="tag" value="Waiting"  />
+                    }
+                    <!-- <p-toggleswitch [(ngModel)]="requestedData.request_approved"
+                        (ngModelChange)="requestedData.request_approved = $event ? 'Approved' : 'On Waiting'" /> -->
+                    
+                    
+                    </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    
+</div>
+}
 @if(isFindRequest()){
 <div class="card flex justify-center">
     <p-dialog [(visible)]="isFindRequest" [modal]="true" [style]="{ width: '25rem' }" appendTo="body">
@@ -91,12 +164,7 @@
                     <label id="requestNumber">{{requestNumber}}</label>
                 </div>
             </div>
-            <div class="card flex justify-center multiple">
-                <span class="w">Multiple</span>
-                <label>
-                    <p-toggleswitch [(ngModel)]="isMultiple" />
-                </label>
-            </div>
+
             <div class="card flex justify-center">
                 <p-select [options]="product" [(ngModel)]="selectedProduct" optionLabel="name" [filter]="true"
                     filterBy="name" [showClear]="true" placeholder="Select a Product" class="w-full md:w-56"
@@ -160,14 +228,14 @@
             </div>
             <p-divider></p-divider>
             <div class="card">
-                <label>Enter quantity</label>
-                <textarea id="textarea" rows="3" cols="30" pTextarea [(ngModel)]="description"
+                <label>Add notes</label>
+                <textarea id="textarea" rows="2" cols="30" pTextarea [(ngModel)]="description"
                     class="w-full p-3 border-round border-1 border-primary surface-overlay text-base focus:border-primary-500"></textarea>
             </div>
         </div>
 
         <ng-template #footer>
-            <p-button label="Cancel" [text]="true" severity="secondary" (click)="isisNewrequest.set(false) " />
+            <p-button label="Cancel" [text]="true" severity="contrast" (click)="isisNewrequest.set(false) " />
             @if(isInput()){
             <div class="card flex justify-center">
                 <p-button label="Place Request" icon="" [text]="false" severity="contrast" [raised]="true"
@@ -175,28 +243,155 @@
             </div>
             }
         </ng-template>
+
     </p-dialog>
+
 </div>
 }
 
-<div >
 
+
+
+
+
+@if(addmoreproduct()){
+<div class="card flex justify-center">
+    <p-dialog [(visible)]="addmoreproduct" [modal]="true" [style]="{ width: '40rem' }" appendTo="body">
+        <ng-template #header>
+            <div class="inline-flex items-center justify-center gap-2">
+                <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" />
+                <span class="font-bold whitespace-nowrap">REQUEST</span>
+            </div>
+        </ng-template>
+
+
+        <div class="req-no">
+            <header>
+                <span class="ware-h-header">Add more items</span>
+            </header>
+
+            <p-divider />
+            <div>
+                <div class="card flex justify-center">
+                    <label id="requestNumber">{{requestNumber}}</label>
+                </div>
+            </div>
+
+            <div class="card flex justify-center">
+                <p-select [options]="product" [(ngModel)]="selectedProduct" optionLabel="name" [filter]="true"
+                    filterBy="name" [showClear]="true" placeholder="Select a Product" class="w-full md:w-56"
+                    (onChange)="selectProduct($event)">
+                    <ng-template #selectedItem let-product>
+                        <div class="flex items-center gap-2">
+                            <img src="{{product.imageurl}}" style="width: 25px" />
+                            <div>{{ product.name }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-product #item>
+                        <div class="flex items-center gap-2">
+                            <img src="{{product.imageurl}}" style="width: 25px" />
+                            <div>{{ product.name }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+
+            <div class="card flex justify-center">
+                <p-select [options]="productBrand" [(ngModel)]="selectedBrand" optionLabel="title" [filter]="true"
+                    filterBy="title" [showClear]="true" placeholder="Select Product brand or type"
+                    (onClick)="SelectBrand(productBrand)" class="w-full md:w-56">
+                    <ng-template #selectedItem let-productBrand>
+                        <div class="flex items-center gap-2">
+                            <img src="{{productBrand.imageurl}}" style="width: 25px" />
+                            <div>{{ productBrand.title }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-productBrand #item>
+                        <div class="flex items-center gap-2">
+                            <img src="{{productBrand.imageurl}}" style="width: 25px" />
+                            <div>{{ productBrand.title }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+
+            <div class="card flex justify-center">
+                <span>{{warehouseName}}</span>
+            </div>
+            <div class="card ">
+                <label>Enter quantity</label>
+                <p-inputnumber [(ngModel)]="quantity" placeholder="Enter Quantity" mode="decimal"
+                    inputId="withoutgrouping" readonly="false" aria-placeholder="Quantity" (onInput)="showSubmit()" />
+            </div>
+            <p-divider></p-divider>
+            <div class="card">
+                <label>Add notes</label>
+                <textarea id="textarea" rows="2" cols="30" pTextarea [(ngModel)]="description"
+                    class="w-full p-3 border-round border-1 border-primary surface-overlay text-base focus:border-primary-500"></textarea>
+            </div>
+        </div>
+
+        <ng-template #footer>
+            <p-button label="Cancel" [text]="true" severity="contrast" (click)="addmoreproduct.set(false) " />
+            @if(isInput()){
+            <div class="card flex justify-center">
+                 <p-button label="Complete" icon="" [text]="false" severity="help" [raised]="true"
+                    (click)="setComplete();addmoreproduct.set(false)" />
+                <p-button label="App product" icon="" [text]="false" severity="contrast" [raised]="true"
+                    (click)="addProduct();addmoreproduct.set(false)" />
+            </div>
+            }
+        </ng-template>
+
+    </p-dialog>
+
+    @if(is_cart_complete()){
+    <div class="flex items-center gap-4 mb-1">
+        <p-button label="Submit Request" icon="pi pi-trash" severity="success" (click)="submitRequest()"
+            pTooltip="Delete Object" />
+
+    </div>
+    }
+</div>
+}
+@if(!starts()){
+<div class="tb-pending-request">
+    <header>{{mode}}</header>
     <p-table #dt2 [value]="requestedData" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
         [loading]="isloading()" [paginator]="true" [globalFilterFields]="['serialnumber','title', 'name', 'location']"
         stripedRows class="w-full">
 
         <ng-template #caption>
             <div class="flex">
-                <div class="flex items-center gap-4 mb-4">
-                    <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt2)" />
-                </div>
-                <div class="flex items-center gap-4 mb-4">
-                    <input pInputText id="username" class="flex-auto" autocomplete="off" [(ngModel)]="Retrieve_req_nunmber" readonly='true' />
-                </div>
+                @if(unsubmitted()){
 
+                <div class="flex items-center gap-4 mb-4">
+                    @for (item of Retrieve_req_nunmber; track $index) {
+                            <p-tag severity="info" icon="pi pi-cog" class="tag" value="{{item?.request_number}}" [rounded]="true" (click)="continueRequest(item)" />
+                    }
+                   
+                </div>
+            }
+                @if(showAddmoreButton()){
+                <div class="flex items-center gap-4 mb-4">
+                    <p-button label="Add more" [outlined]="false" severity="info" icon="pi pi-plus"
+                        (click)="AddMore()" />
+                            <p-button label="Complete" icon="" [text]="false" severity="help" [raised]="true"
+                    (click)="setComplete();addmoreproduct.set(false)" />
+                </div>
+                }
+<!-- 
+                @if(is_cart_complete()){
+                <div class="flex items-center gap-4 mb-1">
+                    <p-button label="Submit Request" icon="pi pi-trash" severity="success" (click)="submitRequest()"
+                        pTooltip="Delete Object" />
+
+                </div>
+                } -->
                 @if(isPending_request()){
-                  <p-select [options]="pendingRequest" [(ngModel)]="selected_pending_request" optionLabel="request_number" [filter]="true"
-                    filterBy="request_number" [showClear]="true" placeholder="Select a request number" (onChange)="selectPendingRequest($event)" >
+                <p-select [options]="pendingRequest" [(ngModel)]="selected_pending_request" optionLabel="request_number"
+                    [filter]="true" filterBy="request_number" [showClear]="true" placeholder="Select a request number"
+                    (onChange)="selectPendingRequest($event)">
                     <ng-template #selectedItem let-pendingRequest>
                         <div class="flex items-center gap-2">
                             <div>{{pendingRequest.request_number }}</div>
@@ -208,20 +403,7 @@
                         </div>
                     </ng-template>
                 </p-select>
-
-
-
-
-
-
-            }
-                <p-iconfield iconPosition="left" class="ml-auto">
-                    <p-inputicon>
-                        <i class="pi pi-search"></i>
-                    </p-inputicon>
-                    <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')"
-                        placeholder="Search keyword" />
-                </p-iconfield>
+                }
 
             </div>
 
@@ -230,7 +412,7 @@
         <ng-template #header>
             <tr>
                 <th>serial</th>
-                @if(history()){
+                @if(unsubmitted()){
                 <th>Request Number</th>
                 }
                 <th>Product Name</th>
@@ -239,13 +421,14 @@
                 <th>quantity</th>
                 <th>Submitted</th>
                 <th>Description</th>
+                <th>Approval</th>
                 <th>Action</th>
             </tr>
         </ng-template>
         <ng-template #body let-requestedData let-product let-i="rowIndex">
             <tr>
                 <td>{{ i + 1 }}</td>
-                @if(history()){
+                @if(unsubmitted()){
                 <td>{{requestedData.request_number}}</td>
                 }
                 <td>{{requestedData?.name}}</td>
@@ -256,7 +439,10 @@
                 <td>
                     <p-toggleswitch [(ngModel)]="requestedData.is_submitted" />
                 </td>
-                <td>{{ requestedData.description }}</td>
+                 <td>{{ requestedData.description }}</td>
+                <td> <p-toggleswitch [(ngModel)]="requestedData.request_approved"
+                        (ngModelChange)="requestedData.request_approved = $event ? 'Approved' : 'On Waiting'" /></td>
+               
                 <td>
                     <div class="flex items-center gap-4 mb-1">
                         <p-button label="Delete" icon="pi pi-trash" severity="danger"
@@ -267,23 +453,16 @@
             </tr>
         </ng-template>
     </p-table>
-    @if(ischeckingPending()){
+    <!-- @if(ischeckingPending()){
    <div class="flex items-center gap-4 mb-1">
-        <p-button label="Submit Reques" icon="pi pi-trash" severity="success" (click)="submitRequest()"
+        <p-button label="Submit Request" icon="pi pi-trash" severity="success" (click)="submitRequest()"
             pTooltip="Delete Object" />
 
     </div>
-}
-
-   @if(isisNewrequest()){
-   <div class="flex items-center gap-4 mb-1">
-        <p-button label="Submit Reques" icon="pi pi-trash" severity="success" (click)="submitRequest()"
-            pTooltip="Delete Object" />
-
-    </div>
-}
+} -->
 </div>
- 
+}
+
 @if(message){
 <div class="card flex justify-center items-center gap-4">
     <p-message severity="success">

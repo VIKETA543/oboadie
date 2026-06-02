@@ -52,4 +52,10 @@ export class Userservice {
   getUser=(data:any)=>{
       return this.http.post(this.url + '/user/loadUserInformation',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
   }
+
+
+    resetPassword=(data:any)=>{
+      return this.http.post(this.url + '/user/resetPassword',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+  }
+
 }

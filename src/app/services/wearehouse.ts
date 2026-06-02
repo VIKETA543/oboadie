@@ -190,4 +190,28 @@ loadallStock_for_category = (data: any) => {
   loadStoreProduct_for_selected_store=(data:any)=>{
     return this.http.post(this.url + '/warehouse/loadStoreProduct_for_selected_store',{ headers: new HttpHeaders().set('contentType', "application/json") })
   }
+
+  processRequest=(data:any)=>{
+    return this.http.post(this.url + '/warehouse/processRequest',data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+  mountproduct=(data:any)=>{
+     return this.http.post(this.url + '/warehouse/mountproduct',data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+
+   dropWarehouseproduct=(data:any)=>{
+     return this.http.post(this.url + '/warehouse/dropWarehouseproduct',data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+
+   finaliseTransferApproval=(data:any)=>{
+     return this.http.post(this.url + '/warehouse/finaliseTransferApproval',data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+
+  finaliserequest=(data:any)=>{
+     return this.http.post(this.url + '/warehouse/finaliserequest',data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+  
 }

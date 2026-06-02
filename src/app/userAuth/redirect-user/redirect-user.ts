@@ -25,6 +25,7 @@ export class RedirectUser implements OnInit {
   RedirectKey: any
   decrptedKey: any
   uacp: any
+  user:any
   decriptedKey: any
   message: any
   success:any
@@ -36,19 +37,17 @@ export class RedirectUser implements OnInit {
   @Inject(PLATFORM_ID) private platformId: Object) {
 
     if (isPlatformBrowser(this.platformId)) {
-     this.user = JSON.parse(localStorage.getItem('user') ?? '{}');
-       this.uacp =this.user?.UACP
-      console.log('UACP',this.uacp)
+       this.user=JSON.parse(localStorage.getItem('user') || '{}');
     }
-
-    // console.log('the UACP', this.uacp)
+this.uacp= this.user?.UACP
+   console.log('the UACP', this.user?.UACP)
   }
   ngOnInit(): void {
 
   }
 
   decrypt(encryptedData: string): string {
-    const bytes = CryptoJS.AES.decrypt(encryptedData, 'Mvk2@@#3011~43011');
+    const bytes = CryptoJS.AES.decrypt(encryptedData, this.Key);
 
     return this.decriptedKey = bytes.toString(CryptoJS.enc.Utf8);
   }
@@ -56,7 +55,7 @@ export class RedirectUser implements OnInit {
   authUser = () => {
 
     this.decrypt(this.uacp)
-          // console.log('The decryoted Key=>', this.decriptedKey)
+          console.log('The decryoted Key=>', this.decriptedKey)
           //       console.log('the Raw key:' +this.RedirectKey)
     if (this.decriptedKey===this.RedirectKey) {
   
@@ -70,7 +69,7 @@ export class RedirectUser implements OnInit {
           this.message = response?.message
         } else {
           if (response.success) {
-            // console.log(response?.data)
+            //  console.log(response?.data)
             // console.log(response?.success)
             const redirector = response?.data[0]?.login_redirect
             console.log(redirector)
@@ -79,6 +78,16 @@ export class RedirectUser implements OnInit {
                 this.success=response?.success
                 this.router.navigate(['main-stores']);
                 break;
+                case 'CASH AND PAYMENT':
+                    this.router.navigate(['cash-manager']);
+                break;
+                case 'POINT OF SALES':
+                    this.router.navigate(['point-of-sale']);
+                break;
+                case 'WAREHOUSE MANAGER':
+                    this.router.navigate(['wearhousemanager']);
+                break;
+
               default:
                 console.log('Unknown module')
                 this.message = response?.message

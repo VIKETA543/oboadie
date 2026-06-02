@@ -27,6 +27,7 @@ import { DialogModule } from 'primeng/dialog';
 import { AvatarModule } from 'primeng/avatar';
 import { ToastModule } from 'primeng/toast';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { TagModule } from 'primeng/tag';
 @Component({
   selector: 'stock-request',
   imports: [FormsModule,
@@ -45,7 +46,8 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
     DialogModule,
     AvatarModule,
     ToastModule,
-    ToggleSwitchModule
+    ToggleSwitchModule,
+    TagModule
   ],
   templateUrl: './stock-request.html',
   styleUrl: './stock-request.scss',
@@ -54,15 +56,15 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 })
 export class StockRequest {
 
-  Retrieve_req_nunmber: any;
+
+
+  Retrieve_req_nunmber: any[]|undefined;
   SelectBrand(arg0: any) {
     console.log(arg0)
   }
-
-
   messageservice = inject(MessageService)
   message: any
-  credentials: any
+
   product: Product[] = []
   productBrand: Brand | any
   selectedProduct: any
@@ -72,18 +74,24 @@ export class StockRequest {
   selectedwarehouse: any
   requestedData: Request[] | any
   selected_request: Request | any
+  requestHistory: Request[] | any
+  
   selectedcateory: any
   requestNumber: any
   userData: any
+    credentials: any
   description: any
   isFindRequest = signal(false)
   isDropRequest = signal(false)
   isisNewrequest = signal(false)
   itemrowid: any
-  isMultiple: boolean = false
   randomInteger: number = 0
   pendingRequest: any[] | any
   selected_pending_request: any | any
+  starts = signal(false)
+ mode:any
+ loading=signal(false)
+ isAddmore=signal(false)
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
     private userservice: Userservice,
     private router: Router,
@@ -185,24 +193,17 @@ export class StockRequest {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
   genranCode = () => {
-    switch (this.isMultiple) {
-      case true:
-
-        break;
-      case false:
-        this.randomInteger = this.getRandomInt(1, 1000000); // Generates a random integer between 1 and 10
+            this.randomInteger = this.getRandomInt(1, 1000000); // Generates a random integer between 1 and 10
         this.requestNumber = "REQ-" + this.randomInteger
-        break;
-
-      default:
-        this.randomInteger = this.getRandomInt(1, 1000000); // Generates a random integer between 1 and 10
-        this.requestNumber = "REQ-" + this.randomInteger
-    }
-
+  }
+  addmoreproduct=signal(false)
+  showAddmoreButton=signal(false)
+  AddMore=()=>{
+this.addmoreproduct.set(true)
 
   }
   getRequest = () => {
-    this.history.set(false)
+    this.unsubmitted.set(false)
     let data = {
       request_number: this.requestNumber
     }
@@ -225,7 +226,7 @@ export class StockRequest {
   }
 
   find_store_request = () => {
-    this.history.set(false)
+    this.unsubmitted.set(false)
     this.isloading.set(true)
     let data = {
       request_number: this.Retrieve_req_nunmber
@@ -247,16 +248,40 @@ export class StockRequest {
     })
   }
 
-  openFind = () => {
-    this.history.set(false)
+  history = () => {
+
+    this.unsubmitted.set(false)
     this.isFindRequest.set(false)
+    let data={
+        storeNumber: this.userData[0]?.storenumber
+    }
+    this.storeservice.requestHistory(data).subscribe((response:any)=>{
+        if (response?.message) {
+        this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          this.cdr.markForCheck()
+          this.cdr.detectChanges()
+          this.isloading.set(false)
+          this.requestHistory=response?.data
+               this.starts.set(true)
+          console.log('the request history', this.requestHistory)
+        } else {
+          this.message = 'Unknown error has occured'
+           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
   }
   dropRequest = () => {
-    this.history.set(false)
+    this.unsubmitted.set(false)
     this.isDropRequest.set(true)
   }
+  warehouseName:any
   selectWarehouse($event: SelectChangeEvent) {
     this.selectedwarehouse = $event?.value.whse_serialnumber
+    this.warehouseName=$event?.value?.warehousename
   }
   selectProduct($event: SelectChangeEvent) {
     this.selectedProduct = $event.value.serialnumber
@@ -271,6 +296,7 @@ export class StockRequest {
   }
   isloading = signal(false)
   PlaceRequest = () => {
+    this.showAddmoreButton.set(true)
     let randomInteger: number = this.getRandomInt(1, 1000000); // Generates a random integer between 1 and 10
     this.itemrowid = "REQ-ITMR" + randomInteger
 
@@ -286,12 +312,13 @@ export class StockRequest {
       reuqestDat: new Date(),
       description: this.description,
       itemrowid: this.itemrowid,
-      isMultiple: this.isMultiple
+
     }
     console.log(data)
     this.storeservice.submitReques(data).subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
       } else {
         if (response?.success) {
 
@@ -302,13 +329,56 @@ export class StockRequest {
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
           this.message = 'Unknown error has occured'
+           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
         }
       }
     })
   }
 
+
+
+  
+  addProduct=()=>{
+    let randomInteger: number = this.getRandomInt(1, 1000000); // Generates a random integer between 1 and 10
+    this.itemrowid = "REQ-ITMR" + randomInteger
+
+
+    let data = {
+      productNumber: this.selectedProduct,
+      productBrand: this.selectedBrand?.brandid,
+      to_warehouse: this.selectedwarehouse,
+      category: this.selectedcateory,
+      storeNumber: this.userData[0]?.storenumber,
+      requestNumber: this.requestNumber,
+      quantity: this.quantity,
+      reuqestDat: new Date(),
+      description: this.description,
+      itemrowid: this.itemrowid,
+
+    }
+    console.log(data)
+    this.storeservice.addmoreProducts(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.success) {
+
+          this.getRequest()
+          this.cdr.markForCheck()
+          this.cdr.detectChanges()
+          this.isloading.set(false)
+          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+        } else {
+          this.message = 'Unknown error has occured'
+           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
+  
+  }
   deleteRequest = () => {
-    this.history.set(false)
+    this.unsubmitted.set(false)
     let data = {
       request_number: this.Retrieve_req_nunmber
     }
@@ -319,7 +389,7 @@ export class StockRequest {
       } else {
         if (response?.success) {
           this.message = response.success
-          this.loadRequesthistory()
+          this.loadUnsubmitted(this.mode)
           this.messageservice.add({ severity: 'sucess', summary: 'Success', detail: this.message, life: 5000 });
         } else {
           this.message = 'Unknown error has occured'
@@ -328,17 +398,16 @@ export class StockRequest {
       }
     })
   }
-
-  openNewRequest() {
+  openNewRequest(obj:any) {
+    this.mode='- Request Number:'+this.requestNumber
     this.isisNewrequest.set(true)
   }
-
   isPending_request = signal(false)
   ischeckingPending = signal(false)
-
-
-  getPending = () => {
-    this.history.set(false)
+  getPending = (obj:any) => {
+    this.mode=obj
+    this.unsubmitted.set(false)
+    this.isisNewrequest.set(false)
     let data = {
       storeNumber: this.userData[0]?.storenumber
 
@@ -347,17 +416,22 @@ export class StockRequest {
       if (response?.message) {
         this.message = response?.message
         this.isloading.set(false)
+        this.isisNewrequest.set(false)
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
       } else {
         console.log(response)
         this.ischeckingPending.set(true)
         this.isPending_request.set(true)
         this.requestedData = response?.data
-        this.Retrieve_req_nunmber = response?.data[0]?.request_number
+        this.Retrieve_req_nunmber = response?.requests
         this.pendingRequest = response?.requests
 
         this.cdr.markForCheck()
         this.cdr.detectChanges()
         this.isloading.set(false)
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
 
       }
 
@@ -368,9 +442,9 @@ export class StockRequest {
     this.Retrieve_req_nunmber = $event.value.request_number
     this.cdr.markForCheck();
     this.cdr.detectChanges()
-    console.log('event', )
-    let data={
-      request_number:this.Retrieve_req_nunmber,
+    console.log('event',)
+    let data = {
+      request_number: this.Retrieve_req_nunmber,
       store_number: this.userData[0]?.storenumber
 
     }
@@ -380,8 +454,8 @@ export class StockRequest {
         this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
       } else {
         if (response?.data) {
-          this.requestedData=response?.data
-             this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+          this.requestedData = response?.data
+          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
           this.message = response?.message
           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
@@ -403,7 +477,7 @@ export class StockRequest {
         if (response?.success) {
 
           this.message = response.success
-          this.getPending();
+          this.getPending(this.mode);
           this.cdr.markForCheck()
           this.cdr.detectChanges()
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
@@ -416,19 +490,22 @@ export class StockRequest {
       }
     })
   }
-  history = signal(false)
-  loadRequesthistory = () => {
+  unsubmitted = signal(false)
+  loadUnsubmitted = (obj:any) => {
+    this.mode=obj
     let data = {
       storeNumber: this.userData[0]?.storenumber,
     }
-    this.storeservice.load_store_request_history(data).subscribe((response: any) => {
+    this.storeservice.loadUnsubmitted(data).subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
         this.isloading.set(false)
       } else {
         if (response?.data) {
-          this.history.set(true)
+          this.unsubmitted.set(true)
           this.requestedData = response?.data
+          this.Retrieve_req_nunmber=response?.req_nos
+          console.log('the retrieved numbers: ',this.Retrieve_req_nunmber)
 
           this.cdr.markForCheck()
           this.cdr.detectChanges()
@@ -447,13 +524,16 @@ export class StockRequest {
       submitted: true,
       date_submitted: new Date()
     }
+    console.log(data)
     this.storeservice.submitRequest(data).subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
+             this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
       } else {
         if (response?.success) {
-          this.history.set(true)
+          this.unsubmitted.set(true)
           this.message = response?.success
+               this.messageservice.add({ severity: 'Error', summary: 'Success', detail: this.message, life: 5000 });
           this.cdr.markForCheck()
           this.cdr.detectChanges()
         } else {
@@ -464,4 +544,78 @@ export class StockRequest {
   }
 
 
+  allSignals = () => {
+    this.starts.set(false)
+    this.isPending_request = signal(false)
+    this.ischeckingPending = signal(false)
+    this.isloading.set(false)
+    this.unsubmitted.set(false)
+    this.isisNewrequest.set(false)
+  }
+
+  continueRequest(rq: any,) {
+
+this.showAddmoreButton.set(true)  
+let data = {
+      storeNumber: this.userData[0]?.storenumber,
+      request_number:rq?.request_number||this.requestNumber
+    }
+    this.requestNumber=rq?.request_number
+    this.unsubmittedRequestNumber=rq?.request_number
+       console.log('The req Number: ',rq?.request_number)
+    console.log('Continue Data: ',data)
+ this.storeservice.load_selected_Unsubmitted(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.isloading.set(false)
+             this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          this.unsubmitted.set(true)
+          this.requestedData = response?.data
+          this.Retrieve_req_nunmber=response?.req_nos[0]?.requestNumber
+       
+
+          this.cdr.markForCheck()
+          this.cdr.detectChanges()
+          this.isloading.set(false)
+
+        } else {
+          this.isloading.set(false)
+        }
+      }
+    })
+}
+
+
+ is_cart_complete=signal(false) 
+ unsubmittedRequestNumber:any
+setComplete=()=>{
+this.is_cart_complete.set(true)
+
+ let data = {
+      store_number: this.userData[0]?.storenumber,
+      request_number: this.unsubmittedRequestNumber||this.requestNumber,
+      submitted: true,
+      date_submitted: new Date()
+    }
+    console.log(data)
+    this.storeservice.submitRequest(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+           this.messageservice.add({ severity: 'error', summary: 'Success', detail: this.message, life: 5000 });
+      } else {
+        if (response?.success) {
+
+          this.unsubmitted.set(true)
+          this.message = response?.success
+          this.cdr.markForCheck()
+          this.cdr.detectChanges()
+             this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+        } else {
+          this.isloading.set(false)
+        }
+      }
+    })
+}
 }

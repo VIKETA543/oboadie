@@ -29,6 +29,8 @@ import { Cashsales, Cashsaletemp, Customer } from '../../interface/posinterface'
 import { response } from 'express';
 import { Customers } from '../../interface/crmInterface';
 import { Crmservice } from '../../services/crmservice';
+import { AvatarModule } from 'primeng/avatar';
+import { PanelModule } from 'primeng/panel';
 
 
 @Component({
@@ -47,7 +49,9 @@ import { Crmservice } from '../../services/crmservice';
     CheckboxModule,
     DatePipe, SelectModule,
     InputNumberModule, FluidModule,
-    CurrencyPipe, NgxBarcode6, NgxPrintDirective,],
+    CurrencyPipe, NgxBarcode6, NgxPrintDirective,
+  AvatarModule,
+PanelModule],
   templateUrl: './cash-sales.html',
   styleUrl: './cash-sales.scss',
   providers:[],
@@ -88,8 +92,19 @@ customerData:Customers[]|any;
 selectedCustomer:Customers|any
 mobile_number:any
 remarks:any
-cutomerNumber:any
-isAddtoCustomerList=signal(false)
+cutomerNumber: any
+  product_name: any
+  product_type: any
+  price_for_carton: number = 0;
+  price_for_unit: number = 0;
+  selected_price: number = 0
+  available_quantity: number = 0
+  store_name: any
+  is_pack: boolean = false
+  is_unit: boolean = false
+  is_kg: boolean = false
+  is_yard: boolean = false
+  isAddtoCustomerList = signal(false)
 
   constructor(private posservice: PosServcie, private crmservcie: Crmservice,  private cdr:ChangeDetectorRef, private router:Router, private routes:ActivatedRoute) { 
        this.isCashsalse.set(true)
@@ -148,12 +163,18 @@ isAddtoCustomerList=signal(false)
   }
 checked:boolean=false
 storeNumber:any
-  addToCart($event: ToggleSwitchChangeEvent, _t77: any) {
+  addToCart(_t77: any) {
     this.isaddingCart.set(true)
-    this.SelectedProduct=_t77
-    this.storeNumber=_t77.store_id
+    this.SelectedProduct = _t77
+    this.storeNumber = _t77.store_number
+    this.product_name = _t77.name
+    this.product_type = _t77.title
+    this.price_for_unit = _t77.unitesellingprice
+    this.price_for_carton = _t77.cartsellingprice
+    this.available_quantity = _t77.stock_balance
+    this.store_name = _t77.storename
 
-    console.log('SELECTED PRO ',this.SelectedProduct)
+    console.log('The selected', this.SelectedProduct)
   }
 
   selectecustomerType($event: CheckboxChangeEvent,arg1: string) {
@@ -204,11 +225,49 @@ this.remarks=data.remarks
 
 
 
-calcTotal=()=>{
- this.totalCost=this.quoteQuantity*this.SelectedProduct?.unitesellingprice
- console.log(this.totalCost)
-}
+  calcTotal = () => {
+    switch(this.selected_price){
+      case 0:
+        this.message='This product has not been priced. Add price before you issue invoices'
+           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        break;
+        default: 
+            this.totalCost = this.quoteQuantity * this.selected_price
+    console.log(this.totalCost)
+
+        break;
+    }
+
+  }
 isaddingCart=signal(false)
+
+  selectPacktype(value: any) {
+    const s = value
+    switch (s) {
+      case 'UNIT':
+        this.is_pack = false
+        this.is_yard = false,
+          this.is_kg = false;
+        this.selected_price = this.price_for_unit
+        console.log(this.selected_price)
+        break;
+      case 'PACK':
+        this.is_unit = false
+        this.is_yard = false,
+          this.is_kg = false;
+        this.selected_price = this.price_for_carton
+        console.log(this.selected_price)
+        break;
+    
+      default:
+        this.message = 'select package type'
+        break
+    }
+  }
+
+
+
+
 
 AddCart(){
 
@@ -220,14 +279,14 @@ AddCart(){
     productId:this.SelectedProduct?.product_number,
     brandId:this.SelectedProduct?.product_brand,
     quantity:this.quoteQuantity,
-    uniPrice:this.SelectedProduct?.unitesellingprice,
+    uniPrice:this.selected_price,
     totalCost:this.totalCost,
     purchaseId:purchaseId,
     customerType:this.customerType,
     storeNumber:this.SelectedProduct?.store_number,
     salesObject:'CASH_SALES'
   }
-  console.log('the data :',data)
+
  return this.posservice.AddCart(data).subscribe((response:any)=>{
   switch(this.customerType){
     case undefined:
@@ -263,17 +322,23 @@ loadCart=()=>{
     invoceNumber:this.cashSalesInvoiceNumber
   
   }
+  
   return this.posservice.getTemp(data).subscribe((response:any)=>{
     if (response?.message) {
         this.message = response?.message
+        this.cashtempData=[]
+          this.sumTotalCart=0
         this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
       } else {
         if (response?.data) {
           this.cashtempData = response?.data
           this.sumTotalCart=response?.sumtotal[0].total
-          console.log(response?.sumtotal)
+          console.log(this.cashtempData)
+          this.isInput.set(true)
           this.cdr.markForCheck()
         } else {
+            this.cashtempData=[]
+          this.sumTotalCart=0
           this.message = response?.message
           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
         }
@@ -298,7 +363,7 @@ submitInvoice=()=>{
         if (response?.success) {
              this.message = response?.success
              this.submitOnSuccess.set(true)
-             this.router.navigate(['../'], { relativeTo: this.routes })
+          
           //
 
 
@@ -380,6 +445,97 @@ addInvoice=()=>{
     })
   }
 onPrintComplete() {
+     this.router.navigate(['../'], { relativeTo: this.routes })
  this.cashSales()
+}
+
+removeCart=(item:any)=>{
+  console.log('the cart remove',item)
+  let data={
+    purchaseId:item?.purchaseid,
+    invoice_number:item?.invoice_number
+  }
+  this.posservice.removePurchase(data).subscribe((response:any)=>{
+    if(response?.message){
+      this.message=response?.message
+                this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+    }else{
+      if(response?.success){
+                   this.loadCart()
+        this.message=response?.success
+                  this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+      }else{
+        this.message='Unknown error has occured'
+                  this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      }
+    }
+  })
+}
+is_invoice_update=signal(false)
+invoiceList:any[]|undefined
+selected_invoice_from_list:any|undefined
+updateInvoice=()=>{
+this.is_invoice_update.set(true)
+this.posservice.getAllinvoice().subscribe((response:any)=>{
+  if(response?.message){
+     this.message=response?.message
+                this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+  }else{
+    if(response?.data){
+      this.invoiceList=response?.data
+    }else{
+ this.message='Unknown error has occured'
+                  this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+    }
+  }
+})
+}
+
+
+getInvoiceDetails=()=>{
+    this.is_invoice_update.set(false)
+  this.cashSalesInvoiceNumber=this.selected_invoice_from_list?.invoice_number
+ let data={
+    invoceNumber:this.cashSalesInvoiceNumber
+  
+  }
+  
+  return this.posservice.load_invoice_for_update(data).subscribe((response:any)=>{
+    if (response?.message) {
+        this.message = response?.message
+        this.cashtempData=[]
+          this.sumTotalCart=0
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          this.cashtempData = response?.data
+          this.sumTotalCart=response?.sumtotal[0].total
+          console.log(response?.invoice)
+
+
+
+            cutomerNumber: this.cutomerNumber,
+
+        this.customerType=response?.invoice[0]?.customertype,
+        this.customerName=response?.invoice[0]?.customername,
+        this.telephoneNumber=response?.invoice[0]?.telephone,
+        this.emailAddress=response?.invoice[0]?.emailadress,
+        this.address=response?.invoice[0]?.address,
+        this.invoiceDate=response?.invoice[0]?.dateposted
+          this.isInput.set(true)
+          this.cdr.markForCheck()
+        } else {
+            this.cashtempData=[]
+          this.sumTotalCart=0
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+
+      }
+  })
+
+
+
+      
 }
 }

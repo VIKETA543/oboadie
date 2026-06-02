@@ -42,7 +42,7 @@
                     </p-checkbox>
                     <label for="rememberMe">Remember me</label>
                 </div>
-                <a href="#" class="no-underline text-primary font-medium">Forgot password?</a>
+                <a  (click)="forgotPassowrd()" class="no-underline text-primary font-medium">Forgot password?</a>
             </div>
     <p-divider></p-divider>
             <!-- Login Button -->
@@ -52,11 +52,10 @@
                 styleClass="w-full mt-2" 
                 [loading]="loading" (onClick)="onLogin()">
             </p-button>
-
         <ng-template pTemplate="footer">
             <div class="text-center">
                 <span>Don't have an account? </span>
-                <a href="#" class="text-primary font-bold no-underline">Sign up</a>
+                <a  class="text-primary font-bold no-underline" (click)="signup()">Sign up</a>
             </div>
         </ng-template>
 
@@ -64,7 +63,6 @@
              <div class="card flex flex-wrap gap-4 justify-center">
             <p-message severity="success">{{message}}</p-message>
             </div>
-
         }
         @if(isDenied()){
              <div class="card flex flex-wrap gap-4 justify-center">

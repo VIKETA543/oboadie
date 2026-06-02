@@ -134,9 +134,9 @@
                             <th>Action</th>
                         </tr>
                     </ng-template>
-                    <ng-template #body let-pricetagDetails>
+                    <ng-template #body let-pricetagDetails let-i="rowIndex">
                         <tr>
-                            <td>{{ pricetagDetails.sn }}</td>
+                            <td>{{i+1}}</td>
                             <td>{{ pricetagDetails.pricetagid }}</td>
                             <td>{{ pricetagDetails.pricetag }}</td>
                             <td>{{ pricetagDetails.datemodified }}</td>
@@ -290,7 +290,7 @@
                 </tr>
             </ng-template>
 
-            <ng-template #body let-priceDetails>
+            <ng-template #body let-priceDetails let-rowcounter="rowIndex" >
                 <tr>
                     <td>{{ rowcounter+1 }}</td>
                     <td>{{ priceDetails.name }}</td>

@@ -9,6 +9,8 @@
  border: 1px solid lightgray;
     overflow: hidden;
     width: 55rem;
+
+}
  .header{
 
     padding: 10px ;
@@ -20,7 +22,6 @@
                 text-align: center;
     }
  }
-}
 img{
     width: 50px;
     height: 50px;
@@ -33,14 +34,22 @@ img{
     color: whitesmoke;
 }
 .customer{
-    border: 1px solid lightgray;
-    padding: 10px;
-    border-radius: .3em;
-    //  box-shadow: 0px 0px 10px 1px lightgray;
+    padding: 5px;
+    // border-radius: .3em;
+    // box-shadow: 0px 0px 10px 1px lightgray;
     margin-left: 10px ;
-        max-width: calc(100% - 0%);
+        max-width: calc(100% - 10%);
     min-width:calc(100% - 60%);
-    width: calc(100% - 57%);;
+    width: calc(100% - 0%);
+     span{
+        margin: 0px;
+        padding: 0px;
+        
+    }
+    span:first-child{
+        width: calc(100% - 70%);
+        color: rgb(0, 19, 12);
+    }
 
 }
 .w{
@@ -60,14 +69,15 @@ img{
             border: 1px solid lightgray;
     }
     div:first-child{
-        width: 50%;
+        width: 30%;
     }
     
 }
 .tb{
      border: 1px solid lightgray;
     overflow: hidden;
-    width: 55rem;
+    width: 100%;
+    margin: 10px;
 }
 .btn-submit{
     width: 55rem;
@@ -84,11 +94,63 @@ padding: 5px;
     
 }
 .header-i{
-  background-color: rgb(62, 63, 63);
+
        padding: 10px;
           font-size: clamp(1.5em,1.8em,2.5em);
           border-radius: .3em;
             border: 1px solid lightgray;
             color: white;
             font-weight: bold;
+}
+
+
+.header-segement{
+    margin: 0px auto;
+    border: 1px dotted lightgray;
+    border-radius: .3em;
+    width: 98%;
+      padding: 10px;
+}
+.receipt-info{
+ padding: 10px;
+ padding: 10px ;
+ display: flex;
+ flex: 1;
+ header{
+   text-align: center;
+      width: 100%;
+ }
+
+  .head-info{
+    text-align: center;
+    width: 100%;
+        padding: 0px;
+        margin: 0px auto;
+        display: block;
+ }
+}
+.section{
+    width: calc(100rem - 20rem);
+}
+@media print {
+  /* Hide elements you don't want on the paper (like navbars or buttons) */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Style your print container */
+  .tb{
+    width: 100%;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #000;
+    background: red;
+
+  }
+
+  /* Force background colors and images to print */
+  .highlight-box {
+    background-color: #f4f4f4 !important;
+    -webkit-print-color-adjust: exact; /* For Chrome/Safari */
+    print-color-adjust: exact;         /* Standard */
+  }
 }

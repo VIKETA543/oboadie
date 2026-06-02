@@ -9,6 +9,7 @@ export interface ProductsList {
     category?: string;
     image?: string;
     rating?: number;
+    serialnumber:string
 }
 
 

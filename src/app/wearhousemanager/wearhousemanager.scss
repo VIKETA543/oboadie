@@ -332,6 +332,14 @@ img {
             border-right: 1px solid rgb(1, 32, 88);
          }
 }
+.request-header{
+    width: 100%;
+    span{
+   font-size: clamp(.5em, 1em, 1.2em);
+   border-radius: .3em;
+   box-shadow: 0px 0px 15px 2px rgb(226, 225, 225, .5);
+    }
+}
 @keyframes slide-fade {
     from {
         opacity: 0;

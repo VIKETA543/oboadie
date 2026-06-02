@@ -22,6 +22,15 @@ export class PosServcie {
    return this.http.post(this.url + '/pos/loadTempSales',data, { headers: new HttpHeaders().set('contentType', "application/json") })
   }
 
+    load_invoice_for_update=(data:any)=>{
+   return this.http.post(this.url + '/pos/load_invoice_for_update',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+    load_credit_invoice_for_update=(data:any)=>{
+   return this.http.post(this.url + '/pos/load_credit_invoice_for_update',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+
   AddCart=(data:any)=>{
    return this.http.post(this.url + '/pos/AddCart',data, { headers: new HttpHeaders().set('contentType', "application/json") })
   }
@@ -95,6 +104,25 @@ export class PosServcie {
 
    loadcreditInvoices=(data:any)=>{
          return this.http.post(this.url + '/pos/loadcreditInvoices', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+   }
+
+   removePurchase=(data:any)=>{
+       return this.http.post(this.url + '/pos/removepurchase', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
+
+  remove_credit_urchase=(data:any)=>{
+       return this.http.post(this.url + '/pos/remove_credit_purchase', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
+
+
+
+   
+   getAllinvoice=()=>{
+       return this.http.post(this.url + '/pos/getAllinvoice', { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
+
+    getAll_CREDIT_invoice=()=>{
+       return this.http.post(this.url + '/pos/getAll_CREDIT_invoice', { headers: new HttpHeaders().set('contentType', "application/json") }) 
    }
 
    

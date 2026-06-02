@@ -23,12 +23,15 @@ import { PanelModule } from 'primeng/panel';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberInputEvent, InputNumberModule } from 'primeng/inputnumber';
-import { Brand } from '../interface/products';
+import { Brand, ProductsList } from '../interface/products';
 import { TextareaModule } from 'primeng/textarea';
 import { AvatarModule } from 'primeng/avatar';
 import { Control, Store, Storeinterface, StoreListInterface } from '../interface/storeinterface';
 import { StoreService } from '../services/store-service';
-
+import { MessageModule } from 'primeng/message';
+import { TagModule } from 'primeng/tag';
+import { productservice } from '../services/productservice';
+import { response } from 'express';
 
 
 
@@ -60,28 +63,29 @@ import { StoreService } from '../services/store-service';
     InputNumberModule,
     TextareaModule,
     AvatarModule,
-
-
+    MessageModule,
+    TagModule
   ],
 
   templateUrl: './wearhousemanager.html',
   styleUrl: './wearhousemanager.scss',
   providers: [MessageService],
-  // changeDetection: ChangeDetectionStrategy.Default
+ changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Wearhousemanager implements OnInit {
 
-selectedwarehousedetails: any;
-return_from_store: boolean=false;
-return_from_warehouse: boolean=false;
-submitTransfer() {
-throw new Error('Method not implemented.');
-}
+
+  selectedwarehousedetails: any;
+  return_from_store: boolean = false;
+  return_from_warehouse: boolean = false;
+process_store_request: any;
+  // mountselected:boolean=false
+  submitTransfer() {
+    throw new Error('Method not implemented.');
+  }
 
 
-selectAstore($event: SelectChangeEvent) {
-console.log($event)
-}
+
 
   SupplierInvoiceNumber: any;
 
@@ -290,10 +294,10 @@ console.log($event)
       } else {
         if (response?.brand) {
           this.brannd = response?.brand
-        }else{
+        } else {
           this.message = 'Something went wrong'
           this.brannd
-        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });  
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
         }
       }
     })
@@ -324,7 +328,7 @@ console.log($event)
   isStockOpen: any;
   stockQuantity: any;
   brannd: Brand[] = [];
-  product: Product[] = [];
+   product: Product[] = [];
   cartegory: Cartegory[] = []
   selectedcartegory: any;
   selectedBrand: any;
@@ -333,57 +337,27 @@ console.log($event)
   warehouseIdentity: any
   stockComments: any
   setStoclopend: boolean = false
-  savenewStock() {
-    let data = {
-      warehouseid: this.warehouseID,
-      warehouseStockID: this.warehouseStockID,
-      warehouseIdentity: this.warehouseIdentity,
-      productid: this.selectedproduct.serialnumber,
-      productCartegory: this.selectedcartegory.serialnumber,
-      productBrand: this.selectedBrand.brandid,
-      comment: this.stockComments,
-      isOpened: this.setStoclopend,
-      dateOpened: this.dateOpened,
-      openeningstock: this.stockQuantity
-    }
-    console.log(data)
-    this.warehouseservice.savenewStock(data).subscribe((response: any) => {
-      if (response?.message) {
-        this.message = response?.message
-        this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
-      } else {
-        if (response?.success) {
-          this.isAddingproduct.set(false)
-          this.loadWarehouse()
-          this.destroyElement();
-          this.message = response?.success
-          this.messageservice.add({ severity: 'danger', summary: 'info', detail: this.message, life: 3000 });
-        } else {
-          this.message = response?.message
-          this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
-        }
-      }
-    })
-  }
+  
 
-  destroyElement() {
-    this.warehouseID = undefined
-    this.warehouseStockID = undefined,
-      this.warehouseIdentity = undefined,
-      this.selectedproduct.serialnumber = undefined,
-      this.selectedcartegory.serialnumber = undefined,
-      this.selectedBrand.brandid = undefined,
-      this.stockComments = undefined,
-      this.setStoclopend = false,
-      this.dateOpened = undefined,
-      this.stockQuantity = undefined
-  }
+  // destroyElement() {
+  //   this.warehouseID = undefined
+  //   this.warehouseStockID = undefined,
+  //     this.warehouseIdentity = undefined,
+  //     this.selectedproduct.serialnumber = undefined,
+  //     this.selectedcartegory.serialnumber = undefined,
+  //     this.selectedBrand.brandid = undefined,
+  //     this.stockComments = undefined,
+  //     this.setStoclopend = false,
+  //     this.dateOpened = undefined,
+  //     this.stockQuantity = undefined
+  // }
 
 
 
   isStockControlVisisble = signal(false)
   selectedwarehousename: any
   warehouseID: any
+  selectedwarehouse:StockControlInterface[]|any
   stockcontrolData: StockControlInterface[] = []
 
   selectedWarehouse($event: SelectChangeEvent) {
@@ -392,6 +366,7 @@ console.log($event)
     this.warehouseID = $event.value.whse_serialnumber
     this.warehouseIdentity = $event.value.identityid
     this.selectedwarehousename = $event.value.warehoustidentity_name + "-" + $event.value.whse_serialnumber
+    this.selectedwarehouse=$event.value
     console.log($event.value)
   }
   //loading warehouse details for operations
@@ -410,6 +385,7 @@ console.log($event)
           this.isStockControlVisisble.set(true)
           this.isStockoperation.set(false)
           this.stockcontrolData = response?.data
+          console.log('Finding Identity',this.stockcontrolData)
           this.cdr.markForCheck();
         } else {
           this.message = response?.message
@@ -425,7 +401,8 @@ console.log($event)
   dialogvisible: boolean = false;
 
   selectedsearchwarehouse: any;
- warehouseOrigin:any
+  warehouseOrigin: any
+  warehouseNumber:any
 
   display() {
     this.isStockoperation.set(true)
@@ -437,7 +414,7 @@ console.log($event)
     this.selectedwarehousename = _t78.warehousename + "-" + _t78.whse_serialnumber
 
     this.warehouseIdentity = _t78.identityid
-    console.log(this.warehouseIdentity)
+    console.log('........,', this.warehouseIdentity)
     let data = {
       selectedWarehouseoperationID: _t78.whse_serialnumber
     }
@@ -450,8 +427,9 @@ console.log($event)
         if (response?.data) {
           this.isStockControlVisisble.set(true)
           this.isStockoperation.set(false)
-          this.warehouseOrigin=response?.data[0].warehousename
-          console.log('warehouse neme : ',response?.data)
+          this.warehouseOrigin = response?.data[0].warehousename
+          this.warehouseNumber=response?.data[0].warehouseid
+          console.log('warehouse neme : ', response?.data)
           this.stockcontrolData = response?.data
 
         } else {
@@ -712,11 +690,134 @@ console.log($event)
   identityID: any
   message: any;
   rowcounter: number = 0
-
+is_mountproduct=signal(false)
 
   warehousesData: Warehouseinterface[] = []
+  stock_number:any
   @ViewChild('op') op!: Popover;
-  constructor(private storeservice:StoreService, private warehouseservice: Wearehouse, private messageservice: MessageService, private cdr: ChangeDetectorRef) { }
+  constructor(private productservice:productservice, private storeservice: StoreService, private warehouseservice: Wearehouse, private messageservice: MessageService, private cdr: ChangeDetectorRef) { }
+
+  gotoMountProduct() {
+  this.productservice.listproduct().subscribe((response:any)=>{
+    if(response?.message){
+      this.message=response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Success', detail: this.message, life: 5000 });
+
+    }else{
+      if(response?.data){
+        this.is_mountproduct.set(true)
+        this.product=response?.data
+        console.log(this.product)
+      }else{
+          this.message='Unknown error has occured'
+          this.messageservice.add({ severity: 'error', summary: 'Success', detail: this.message, life: 5000 });
+      }
+    }
+  })
+}
+protductTomount:any
+product_category:any
+product_Brand:any
+savenewStock() {
+    let data = {
+      warehouseid: this.selectedwarehouse?.whse_serialnumber,
+      warehouseStockID:this.warehouseStockID ,
+      warehouseIdentity: this.selectedwarehouse.identityid,
+      productid: this.protductTomount,
+      productCartegory: this.product_category,
+      // productBrand: this.product_Brand,
+      comment: '',
+      isOpened: true,
+      dateOpened: new Date(),
+      openeningstock: 0
+    }
+console.log('identity:  ',this.selectedwarehouse)
+    this.warehouseservice.savenewStock(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.success) {
+          this.isAddingproduct.set(false)
+          // this.loadWarehouse()
+          // this.destroyElement();
+          this.message = response?.success
+          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+        } else {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
+  }
+mountProduct=(product:ProductsList,$event:ToggleSwitchChangeEvent)=>{
+  const changed:boolean=$event.checked
+  switch(changed){
+    case true:
+       let randomInteger: number = this.getRandomInt(1, 1000000); // Generates a random integer between 1 and 10
+    this.stock_number = "WPRID-" + randomInteger
+
+      let code: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
+
+    
+    this.warehouseID=this.warehouseNumber
+this.warehouseStockID="WHSE-STCKID" + new Date().getDate() + "-" + code
+this.protductTomount=product?.serialnumber
+this.product_category=product?.category
+// this.product_Brand=product?.branid
+
+// warehouseIdentity
+
+  let data={
+    productId:product?.serialnumber,
+    cartegory:product?.category,
+    warehouseNumber:this.warehouseNumber,
+    stock_number:this.stock_number
+  }
+    console.log('Data key',product)
+  this.warehouseservice.mountproduct(data).subscribe((response:any)=>{
+    if(response?.success){
+      this.message=response?.success
+      this.savenewStock()
+              // this.isAddingproduct.set(true)
+          this.messageservice.add({ severity: 'success', summary: 'success', detail: this.message, life: 3000 });
+    }else{
+      if(response?.message){
+        this.message=response?.message
+    this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      }else{
+        this.message='Unknown error has occured'
+            this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life:53000 });
+      }
+    }
+  })
+    break
+    case false:
+  let del={
+    productId:product?.serialnumber,
+    cartegory:product?.category,
+    warehouseNumber:this.warehouseNumber
+  }
+this.warehouseservice.dropWarehouseproduct(del).subscribe((response:any)=>{
+  if(response?.success){
+      this.message=response?.success
+          this.messageservice.add({ severity: 'success', summary: 'success', detail: this.message, life: 3000 });
+    }else{
+      if(response?.message){
+        this.message=response?.message
+    this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      }else{
+        this.message='Unknown error has occured'
+            this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life:53000 });
+      }
+    }
+})
+
+  break;
+  }
+     
+}
+
   ngOnInit(): void {
     this.loading.set(true)
     this.listWarehouses();
@@ -815,7 +916,7 @@ console.log($event)
   StockcontrolObject: any
 
 
-  incomingStock(_t527: any) {
+  incomingStock=(_t527: any)=> {
 
     let randomInteger: number = this.getRandomInt(1, 1000000); // Generates a random integer between 1 and 10
     this.stockNumber = "STK-NIC" + randomInteger
@@ -839,7 +940,7 @@ console.log($event)
         if (response?.data) {
 
           this.stockbrand = response?.data;
-
+          console.log('Prcessing stock ',response?.data)
           this.StockcontrolObject = response?.control
           this.dialogVisible.set(true)
           this.cdr.markForCheck
@@ -865,7 +966,7 @@ console.log($event)
   loadPreviousStock(arg0: stockBrand[]) {
     this.brandID = this.selectedproductforStocking?.brandid
     let data = {
-      brandID:  this.brandID
+      brandID: this.brandID
     }
     this.warehouseservice.loadPreviousStock(data).subscribe((response: any) => {
 
@@ -893,24 +994,29 @@ console.log($event)
     })
   }
 
-destroyWithdrawals(){
-  this.warehousename=undefined;
-  this.stockwidthdrawalID=undefined
-  this.stockedSelectedProduct=undefined;
-  this.controlObject[0].controlname=''
-  this.storequestID=undefined
-  this.previousQty=0
-  this.quantityWithdraw=0
-  this.remainingQuantity=0
-  this.drawaldetails=undefined
+  destroyWithdrawals() {
+    this.warehousename = undefined;
+    this.stockwidthdrawalID = undefined
+    this.stockedSelectedProduct = undefined;
+    this.controlObject[0].controlname = ''
+    this.storequestID = undefined
+    this.previousQty = 0
+    this.quantityWithdraw = 0
+    this.remainingQuantity = 0
+    this.drawaldetails = undefined
 
-}
+  }
 
 
 
 
   calculateTotalQuantoty($event: InputNumberInputEvent) {
-    this.totalQuantity = (this.previousQty + $event.value)
+    if(this.previousQty!==0){
+   this.totalQuantity = (this.previousQty + $event.value)
+    }else{
+      alert('This product does not have stock available')
+    }
+ 
   }
   submitIncomingStock = () => {
     // console.log(this.currentselectedProduct.identityid)
@@ -968,40 +1074,79 @@ destroyWithdrawals(){
 
   isLoadingbyCategories = signal(false)
   isstockhistroyLoading = signal(false)
-  authtransfer=signal(false)
+  authtransfer = signal(false)
+  authoriseRequest=signal(false)
   stockby_by_cartegories: Stockbycategories[] = []
   histpory: Stockbycategories[] = []
   first: number = 0;
   rows: number = 10;
-RequestNumber:any;
-requestServedData:RequestApprovalData[]|undefined;
-setRequestViaible = signal(false)
-inititateAuthorisation=()=>{
-  this.authtransfer.set(true)
-}
-
-AuthoriseRequest=()=>{
-
-let data={
-  RequestNumber:this.RequestNumber
-}
-this.warehouseservice.loadInitialRequest(data).subscribe((response:any)=>{
-  if(response?.message){
-      this.message = response?.message
-        this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 3000 });
-  }else{
-    if(response?.data){
-      console.log(response?.data)
-      this.requestServedData=response?.data
-        this.authtransfer.set(false)
-        this.setRequestViaible.set(true)
-    }else{
-        this.message = response?.message
-        this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
-    }
+  RequestNumber: any;
+  requestServedData: RequestApprovalData[] | undefined;
+  transferServedData: RequestApprovalData[] | undefined;
+  setRequestViaible = signal(false)
+  inititateAuthorisation = () => {
+    this.authtransfer.set(true)
   }
-})
+
+
+authoriseStoreRequest=()=>{
+this.authoriseRequest.set(true)
+
+
+
 }
+
+
+  AuthoriseRequest = () => {
+    let data = {
+      RequestNumber: this.RequestNumber
+    }
+    this.warehouseservice.loadInitialRequest(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          console.log(response?.data)
+          this.requestServedData = response?.data
+          this.authtransfer.set(false)
+          this.setRequestViaible.set(true)
+        } else {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 3000 });
+        }
+      }
+    })
+  }
+
+
+
+  AuthouriseTransfer = () => {
+    let data = {
+      RequestNumber: this.RequestNumber
+    }
+    this.warehouseservice.loadInitialRequest(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          console.log(response?.data)
+          this.transferServedData = response?.data
+          this.authtransfer.set(true)
+          this.setRequestViaible.set(false)
+        } else {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 3000 });
+        }
+      }
+    })
+  }
+
+
+
+
+  
 
   displayStockData(_t526: any) {
 
@@ -1014,7 +1159,7 @@ this.warehouseservice.loadInitialRequest(data).subscribe((response:any)=>{
         this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 3000 });
       } else {
         if (response?.data) {
-          console.log('sTOCK BY CARTGE ',this.stockby_by_cartegories)
+          console.log('sTOCK BY CARTGE ', this.stockby_by_cartegories)
           this.stockby_by_cartegories = response?.data
           //
           this.isLoadingbyCategories.set(true)
@@ -1026,7 +1171,7 @@ this.warehouseservice.loadInitialRequest(data).subscribe((response:any)=>{
     })
   }
 
-loadallStock_for_category(_t526: any) {
+  loadallStock_for_category(_t526: any) {
 
     let data = {
       category: _t526.cartegory
@@ -1037,7 +1182,7 @@ loadallStock_for_category(_t526: any) {
         this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 3000 });
       } else {
         if (response?.data) {
-          console.log('sTOCK BY CARTGE ',this.stockby_by_cartegories)
+          console.log('sTOCK BY CARTGE ', this.stockby_by_cartegories)
           this.stockby_by_cartegories = response?.data
           //
           this.isLoadingbyCategories.set(true)
@@ -1115,16 +1260,18 @@ loadallStock_for_category(_t526: any) {
   stockwidthdrawalID: any
   selectedstore: any
   storesData: Store[] = []
+  storeNumber:any
   quantityWithdraw: number = 0
   remainingQuantity: number = 0
   drawaldetails: any
   controlObject: Control[] = []
   selectedProductID: any
-  warehouseNumber: any
-storequestID: any;
-warehousename:any
+
+  storequestID: any;
+  warehousename: any
+
   makeDrawals = (_t527: any) => {
-    this.loadstores()
+    // this.loadstores()
 
     let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
     this.stockwidthdrawalID = "STKD-WD" + new Date().getDate() + "-" + randomInteger
@@ -1134,7 +1281,7 @@ warehousename:any
     this.stockedSelectedProduct = _t527.name;
     this.warehouseNumber = _t527.warehouseid;
     this.selectedProductID = _t527.productid;
-    this.warehousename=_t527.warehousename
+    this.warehousename = _t527.warehousename
     let data = {
       stockId: _t527.productid
     }
@@ -1147,6 +1294,8 @@ warehousename:any
         if (response?.data) {
           setTimeout(() => {
             this.stockbrand = response?.data;
+              let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
+    this.storequestID = "STRE-TRNSID" + new Date().getDate() + "-" + randomInteger
             this.cdr.markForCheck
           }, 250)
         } else {
@@ -1157,17 +1306,17 @@ warehousename:any
     })
 
 
- this.warehouseservice.loadstockcontrol().subscribe((response: any) => {
+    this.warehouseservice.loadstockcontrol().subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
         this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
       } else {
         if (response?.control) {
-          console.log('Controls= ',response?.control)
-          
-            this.controlObject = response?.control
-                 this.cdr.markForCheck
-                    this.withdrawals.set(true)
+          console.log('Controls= ', response?.control)
+
+          this.controlObject = response?.control
+          this.cdr.markForCheck
+          this.withdrawals.set(true)
         } else {
           this.message = "Unknown error has occured"
           this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
@@ -1175,13 +1324,11 @@ warehousename:any
       }
     })
 
- 
+
 
   }
 
-
-
-  loadstores = () => {
+  loadstores_for_Transfer = () => {
     this.warehouseservice.loadstores().subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
@@ -1202,87 +1349,153 @@ warehousename:any
   }
 
 
+  loadstores = () => {
+    this.warehouseservice.loadstores().subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          setTimeout(() => {
+            this.storesData = response?.data;
+            this.cdr.markForCheck()
+            this.cdr.detectChanges()
+          }, 1000);
+          this.isRequest_processing.set(true)
+        } else {
+          this.message = "Unknown error has occured"
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
+  }
+
+// requestedquantity:number=0
   calculateRemainingStock($event: InputNumberInputEvent) {
 
 
 
-    const amount_to_withdraw = $event.value ?? 0
-        if(this.previousQty>=1 || !amount_to_withdraw>this.previousQty){
-    this.remainingQuantity = this.previousQty - amount_to_withdraw;
-        }else{
-    alert('Attention: Requested stocked must not be greater than available stock')
-        }
+    const amount_to_withdraw = $event.value||this.quantityWithdraw || 0 
+    if (this.previousQty >= 1 || !amount_to_withdraw > this.previousQty) {
+      this.remainingQuantity = this.previousQty - amount_to_withdraw;
+    } else {
+      this.quantityWithdraw=0
+      alert('Attention: Requested stocked must not be greater than available stock')
+    }
   }
 
 
   submitTo_Store = () => {
-    if( this.previousQty>=1){
-    let data = {
-      stockwidthdrawalID: this.stockwidthdrawalID,
-      whse_stockid: this.currentselectedProduct.whse_stockid,
-      stockedSelectedProduct: this.selectedProductID,
-      controlObject: this.controlObject[0].controlid,
-      storeid: this.storesData[0].storenumber,
-      brandid: this.brandID,
-      previousQty: this.previousQty,
-      quantityWithdraw: this.quantityWithdraw,
-      drawaldetails: this.drawaldetails,
-      warehouseNumber:this.warehouseNumber,
-      storequestID:this.storequestID
+    if (this.previousQty >= 1) {
+      let data = {
+        stockwidthdrawalID: this.stockwidthdrawalID,
+        whse_stockid: this.currentselectedProduct.whse_stockid||this.warehousestock_id,
+        stockedSelectedProduct: this.selectedProductID,
+        controlObject: this.controlObject[0].controlid,
+        storeid:this.storeNumber,
+        brandid: this.brandID,
+        previousQty: this.previousQty,
+        quantityWithdraw: this.quantityWithdraw,
+        drawaldetails: this.drawaldetails,
+        warehouseNumber: this.warehouseNumber,
+        storequestID: this.storequestID
+      }
+      // console.log('Submitting Data=>: ',data)
+      this.warehouseservice.submitToStore(data).subscribe((response: any) => {
+        if (response?.message) {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
+        } else {
+          if (response?.success) {
+            this.destroyWithdrawals()
+            this.withdrawals.set(false)
+            this.message = response?.success
+            this.messageservice.add({ severity: 'success', summary: 'SUCCESS', detail: this.message, life: 3000 });
+          } else {
+            this.message = 'Unknown error has occured'
+            this.messageservice.add({ severity: 'danger', summary: 'Success', detail: this.message, life: 3000 });
+          }
+        }
+      })
+    } else {
+      alert('No stock available for this product brand')
     }
-    this.warehouseservice.submitToStore(data).subscribe((response: any) => {
+  }
+
+  approveTransfer($event: ToggleSwitchChangeEvent, _t683: any) {
+    console.log(_t683)
+    let data = {
+      isApprove: $event.checked,
+      store_request_id: _t683.store_request_id,
+      stock_to_storeid: _t683.stock_to_storeid,
+      withdrwanbrand: _t683.withdrwanbrand,
+      drawal_quantity: _t683.drawal_quantity,
+      warehouse_stock_id: _t683.warehouse_stock_id,
+      store_id: _t683.store_id,
+      from_warehouse_id: _t683.from_warehouse_id,
+      stockoperationid: _t683.stockoperationid
+    }
+    this.warehouseservice.approveRequest(data).subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
         this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
       } else {
         if (response?.success) {
-          this.destroyWithdrawals()
-          this.withdrawals.set(false)
           this.message = response?.success
           this.messageservice.add({ severity: 'success', summary: 'SUCCESS', detail: this.message, life: 3000 });
         } else {
           this.message = 'Unknown error has occured'
-          this.messageservice.add({ severity: 'danger', summary: 'Success', detail: this.message, life: 3000 });
+          this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
+
         }
       }
     })
-  }else{
-    alert('No stock available for this product brand')
-  }
   }
 
-approveRequest($event: ToggleSwitchChangeEvent,_t683: any) {
-console.log(_t683)
-let data={
-isApprove:$event.checked,
-store_request_id:_t683.store_request_id,
-stock_to_storeid:_t683.stock_to_storeid,
-withdrwanbrand:_t683.withdrwanbrand,
-drawal_quantity:_t683.drawal_quantity,
-warehouse_stock_id:_t683.warehouse_stock_id,
-store_id:_t683.store_id,
-from_warehouse_id:_t683.from_warehouse_id,
-stockoperationid:_t683.stockoperationid
-}
-this.warehouseservice.approveRequest(data).subscribe((response:any)=>{
-  if(response?.message){
-this.message = response?.message
+
+
+
+
+  approveRequest($event: ToggleSwitchChangeEvent, _t683: any) {
+    console.log(_t683)
+    let data = {
+      isApprove: $event.checked,
+      store_request_id: _t683.store_request_id,
+      stock_to_storeid: _t683.stock_to_storeid,
+      withdrwanbrand: _t683.withdrwanbrand,
+      drawal_quantity: _t683.drawal_quantity,
+      warehouse_stock_id: _t683.warehouse_stock_id,
+      store_id: _t683.store_id,
+      from_warehouse_id: _t683.from_warehouse_id,
+      stockoperationid: _t683.stockoperationid
+    }
+    this.warehouseservice.approveRequest(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
         this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
-  }else{
-    if(response?.success){
-        this.message = response?.success
+      } else {
+        if (response?.success) {
+          this.message = response?.success
           this.messageservice.add({ severity: 'success', summary: 'SUCCESS', detail: this.message, life: 3000 });
-    }else{
-     this.message = 'Unknown error has occured'
+        } else {
+          this.message = 'Unknown error has occured'
           this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
 
-    }
+        }
+      }
+    })
   }
-})
-}
 
-warehouseData:Warehouseinterface[]=[]
-loadwarehouses = () => {
+
+
+
+
+
+
+
+  
+  warehouseData: Warehouseinterface[] = []
+  loadwarehouses = () => {
     this.warehouseservice.loadwarehouses().subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
@@ -1292,7 +1505,7 @@ loadwarehouses = () => {
           setTimeout(() => {
             console.log('The warehouses',)
             this.warehouseData = response?.data;
-                 console.log('The warehouses',this.warehouseData)
+            console.log('The warehouses', this.warehouseData)
             this.cdr.markForCheck
           }, 1000);
 
@@ -1306,9 +1519,9 @@ loadwarehouses = () => {
     })
   }
 
-isTowarehouseTransfer=signal(false)
-transferStockoverwarehouse(_t527:any) {
-  let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
+  isTowarehouseTransfer = signal(false)
+  transferStockoverwarehouse(_t527: any) {
+    let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
     this.stockwidthdrawalID = "WHS-WHSID" + new Date().getDate() + "-" + randomInteger
 
     this.loadwarehouses()
@@ -1318,7 +1531,7 @@ transferStockoverwarehouse(_t527:any) {
     this.stockedSelectedProduct = _t527.name;
     this.warehouseNumber = _t527.warehouseid;
     this.selectedProductID = _t527.productid;
-    this.warehousename=_t527.warehousename
+    this.warehousename = _t527.warehousename
     let data = {
       stockId: _t527.productid
     }
@@ -1341,17 +1554,17 @@ transferStockoverwarehouse(_t527:any) {
     })
 
 
- this.warehouseservice.loadstockcontrolforwarehouse().subscribe((response: any) => {
+    this.warehouseservice.loadstockcontrolforwarehouse().subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
         this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
       } else {
         if (response?.control) {
-          console.log('Controls= ',response?.control)
-          
-            this.controlObject = response?.control
-                 this.cdr.markForCheck
-                    this.isTowarehouseTransfer.set(true)
+          console.log('Controls= ', response?.control)
+
+          this.controlObject = response?.control
+          this.cdr.markForCheck
+          this.isTowarehouseTransfer.set(true)
         } else {
           this.message = "Unknown error has occured"
           this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
@@ -1361,193 +1574,461 @@ transferStockoverwarehouse(_t527:any) {
 
 
 
-}
-transferNumber:any
-setTransferId=()=>{
+  }
+  transferNumber: any
+  setTransferId = () => {
 
     let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
     this.transferNumber = "WH-TRNS" + new Date().getDate() + "-" + randomInteger
     console.log(this.transferNumber)
-}
+  }
 
   submitTo_Warehouse = () => {
-    if( this.previousQty>=1){
-    let data = {
-      stockwidthdrawalID: this.stockwidthdrawalID,
-      whse_stockid: this.currentselectedProduct.whse_stockid,
-      stockedSelectedProduct: this.selectedProductID,
-      controlObject: this.controlObject[0].controlid,
-      towarehouse: this.selectedWarehouseoperationID,
-      brandid: this.brandID,
-      previousQty: this.previousQty,
-      quantityWithdraw: this.quantityWithdraw,
-      drawaldetails: this.drawaldetails,
-      warehouseNumber:this.warehouseNumber,
-      storequestID:this.storequestID,
-      transferid:this.transferNumber
+    if (this.previousQty >= 1) {
+      let data = {
+        stockwidthdrawalID: this.stockwidthdrawalID,
+        whse_stockid: this.currentselectedProduct.whse_stockid,
+        stockedSelectedProduct: this.selectedProductID,
+        controlObject: this.controlObject[0].controlid,
+        towarehouse: this.selectedWarehouseoperationID,
+        brandid: this.brandID,
+        previousQty: this.previousQty,
+        quantityWithdraw: this.quantityWithdraw,
+        drawaldetails: this.drawaldetails,
+        warehouseNumber: this.warehouseNumber,
+        storequestID: this.storequestID,
+        transferid: this.transferNumber
+      }
+
+      if (this.warehouseNumber !== this.selectedWarehouseoperationID) {
+        this.warehouseservice.transfer_to_Warehouse(data).subscribe((response: any) => {
+          if (response?.message) {
+            this.message = response?.message
+            this.messageservice.add({ severity: 'erro', summary: 'Error', detail: this.message, life: 5000 });
+          } else {
+            if (response?.success) {
+              this.destroyWithdrawals()
+              this.withdrawals.set(false)
+              this.message = response?.success
+              this.isTowarehouseTransfer.set(false)
+              this.messageservice.add({ severity: 'success', summary: 'SUCCESS', detail: this.message, life: 5000 });
+            } else {
+              this.message = 'Unknown error has occured'
+              this.messageservice.add({ severity: 'error', summary: 'Success', detail: this.message, life: 5000 });
+            }
+          }
+        })
+      } else {
+        this.message = 'You cannot transfer stock to the warehouse you initiated the transfer'
+        this.messageservice.add({ severity: 'warn', summary: 'Warning', detail: this.message, life: 5000 });
+      }
+    } else {
+      alert('No stock available for this product brand')
     }
-    
-    if(this.warehouseNumber!==this.selectedWarehouseoperationID){
-    this.warehouseservice.transfer_to_Warehouse(data).subscribe((response: any) => {
+  }
+
+  isApproveWarehousetransfer = signal(false)
+  isVisibleWrehoustTowarehouse = signal(false);
+  showVisibleWareseTransferData = signal(false)
+  toWarehouseData: WarehousetoWarehouse[] = []
+  approveWarehouseTransfer = () => {
+    this.isApproveWarehousetransfer.set(true)
+  }
+
+  ApproveWarehouseRequest = () => {
+
+    let data = {
+      RequestNumber: this.RequestNumber
+    }
+    this.warehouseservice.loadWarehouseRequest(data).subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
-        this.messageservice.add({ severity: 'erro', summary: 'Error', detail: this.message, life: 5000 });
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
       } else {
-        if (response?.success) {
-          this.destroyWithdrawals()
-          this.withdrawals.set(false)
-          this.message = response?.success
-          this.isTowarehouseTransfer.set(false)
-          this.messageservice.add({ severity: 'success', summary: 'SUCCESS', detail: this.message, life: 5000 });
+        if (response?.data) {
+
+          this.toWarehouseData = response?.data
+          this.showVisibleWareseTransferData.set(true)
+          console.log(this.toWarehouseData)
+          this.isVisibleWrehoustTowarehouse.set(true)
+
         } else {
-          this.message = 'Unknown error has occured'
-          this.messageservice.add({ severity: 'error', summary: 'Success', detail: this.message, life: 5000 });
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
         }
       }
     })
-  }else{
-     this.message = 'You cannot transfer stock to the warehouse you initiated the transfer'
-          this.messageservice.add({ severity: 'warn', summary: 'Warning', detail: this.message, life: 5000 });
-  }
-  }else{
-    alert('No stock available for this product brand')
- }
   }
 
-  isApproveWarehousetransfer=signal(false)
-isVisibleWrehoustTowarehouse=signal(false);
-showVisibleWareseTransferData=signal(false)
-toWarehouseData:WarehousetoWarehouse[]=[]
-  approveWarehouseTransfer=()=>{
-  this.isApproveWarehousetransfer.set(true)
-}
 
-ApproveWarehouseRequest=()=>{
-
-let data={
-  RequestNumber:this.RequestNumber
-}
-this.warehouseservice.loadWarehouseRequest(data).subscribe((response:any)=>{
-  if(response?.message){
-      this.message = response?.message
-        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-  }else{
-    if(response?.data){
-  
-      this.toWarehouseData=response?.data
-      this.showVisibleWareseTransferData.set(true)
- console.log(this.toWarehouseData)
-        this.isVisibleWrehoustTowarehouse.set(true)
-   
-    }else{
+  warehouseRequeastapproval($event: ToggleSwitchChangeEvent, _t683: any) {
+    console.log(_t683)
+    let data = {
+      isApprove: $event.checked,
+      warehouse_request_id: _t683.warehouse_request_id,
+      warehouse_transfer_id: _t683.warehouse_transfer_id,
+      transfered_stock_brand: _t683.transfered_stock_brand,
+      transfered_quantity: _t683.transfered_quantity,
+      warehouse_stock_id: _t683.warehouse_stock_id,
+      to_warehouse_id: _t683.to_warehouse_id,
+      from_warehouse_id: _t683.from_warehouse_id,
+      stockoperationid: _t683.stockoperationid,
+    }
+    this.warehouseservice.warehouseRequeastapproval(data).subscribe((response: any) => {
+      if (response?.message) {
         this.message = response?.message
         this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.success) {
+          this.message = response?.success
+          this.messageservice.add({ severity: 'success', summary: 'SUCCESS', detail: this.message, life: 5000 });
+        } else {
+          this.message = 'Unknown error has occured'
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+
+        }
+      }
+    })
+  }
+  controls: StockControlInterface[] = []
+  selectedControl: StockControlInterface | undefined
+  selectedStoreName: any
+  selectedWarehouseName: boolean = false
+  isStockreturns = signal(false)
+  requestData:Request[]|any
+  retuneStock = () => {
+    this.isStockreturns.set(true)
+    this.warehouseservice.returnstockcontrols().subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response.control) {
+          this.controls = response?.control
+        } else {
+          this.message = 'Unknown error has occured'
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
+    this.loadstores()
+  }
+  isReturnFromWarehouse = signal(false)
+  isReturnfromStore = signal(false)
+  isStoreSelected = signal(false)
+  isWarehouseSelected = signal(false)
+  selectOperation($event: SelectChangeEvent) {
+    let selected = $event.value.controlname.trim()
+    // console.log($event.value)
+    switch (selected) {
+      case 'RETURN_FROM_WAREHOUSE':
+        this.isReturnFromWarehouse.set(true)
+        this.isReturnfromStore = signal(false)
+        break;
+      case 'RETURN_FROM_STORE':
+        this.isReturnfromStore = signal(true)
+        this.isReturnFromWarehouse.set(false)
+        break;
+      default:
+        this.message = 'This operation cannot be applied here'
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        break;
     }
   }
-})
-}
 
+  selectStoreName = ($event: SelectChangeEvent) => {
+    this.isStoreSelected.set(true)
+    this.isWarehouseSelected.set(false)
+  }
+  selectWarehouseName = ($event: SelectChangeEvent) => {
+    this.isWarehouseSelected.set(true)
+    this.isStoreSelected.set(false)
+  }
+  selectProductInStore = () => {
+    console.log(this.selectedStoreName)
+    let data = {
+      storeNumber: this.selectedStoreName.storenumber,
+      storetype: this.selectedStoreName.storetype
+    }
+    this.warehouseservice.loadStoreProduct_for_selected_store(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
 
-warehouseRequeastapproval($event: ToggleSwitchChangeEvent,_t683: any) {
-console.log(_t683)
-let data={
-isApprove:$event.checked,
-warehouse_request_id:_t683.warehouse_request_id,
-warehouse_transfer_id:_t683.warehouse_transfer_id,
-transfered_stock_brand:_t683.transfered_stock_brand,
-transfered_quantity:_t683.transfered_quantity,
-warehouse_stock_id:_t683.warehouse_stock_id,
-to_warehouse_id:_t683.to_warehouse_id,
-from_warehouse_id:_t683.from_warehouse_id,
-stockoperationid:_t683.stockoperationid,
-}
-this.warehouseservice.warehouseRequeastapproval(data).subscribe((response:any)=>{
-  if(response?.message){
-this.message = response?.message
         this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response.control) {
+          this.controls = response?.control
+        } else {
+          this.message = 'Unknown error has occured'
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
+  }
+
+  isRequest_processing = signal(false)
+  processRequest = () => {
+    this.loadstores()
+  }
+is_store_search=signal(false)
+is_request_number_search=signal(false)
+  selectAstore($event: SelectChangeEvent) {
+    this.selectedstore = $event.value
+    this.storeNumber= this.selectedstore?.storenumber
+    this.is_store_search.set(true)
+    this.is_request_number_search.set(false)
+  }
+
+  
+
+  switchbuttons($event: Event) {
+      this.is_store_search.set(false)
+    this.is_request_number_search.set(true)
+}
+
+
+  requestesStock: any[] = []
+  isLoadedStock = signal(false)
+  is_request_loaded=signal(false)
+  is_requestReady=signal(false)
+  warehousestock_id:any
+
+  loadRequest = () => {
+    let data = {
+      store_number: this.selectedstore?.storenumber
+    }
+    this.storeservice.warehouseLoad_Request(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          console.log('the request',response)
+          this.requestesStock = response?.data
+          this.is_request_loaded.set(true)
+          setTimeout(() => {
+            this.cdr.markForCheck()
+            this.cdr.detectChanges()
+           this.isRequest_processing.set(false)
+          }, 1000)
+        } else {
+          this.message = response?.message
+
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
+  }
+
+
+
+  warehouserequestloadbyrequestnumber = () => {
+    let data = {
+      request_number: this.RequestNumber
+    }
+    this.storeservice.warehouserequestloadbyrequestnumber(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          console.log('the request',response)
+          this.requestesStock = response?.data
+          this.is_request_loaded.set(true)
+          setTimeout(() => {
+            this.cdr.markForCheck()
+            this.cdr.detectChanges()
+           this.isRequest_processing.set(false)
+          }, 1000)
+        } else {
+          this.message = response?.message
+
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
+  }
+
+
+
+  
+  getRequestDetails = (request: any) => {
+  
+    this.requestesStock=[]
+    let data = {
+      request_number: request?.request_number,
+      store_number: request?.store_number,
+    }
+    return this.storeservice.findPendingItem(data).subscribe((response: any) => {
+      if (response?.data) {
+        console.log(response)
+        setTimeout(()=>{
+            this.is_request_loaded.set(false)
+               this.requestData=response?.data
+               this.controlObject=response?.control
+               console.log('the reqData',   this.requestData)
+               this.is_requestReady.set(true)
+        this.cdr.markForCheck()
+        this.cdr.detectChanges()
+        },250)
+   
+        
+      } else {
+        if (response?.message) {
+           this.message = response?.message
+          this.is_requestReady.set(true)
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        } else {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+
+      }
+    })
+
+  }
+
+
+
+
+  requestedBrand:any
+processApproval($event: ToggleSwitchChangeEvent,_t1789: any) {
+
+this.withdrawals.set(true)
+ let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
+this.stockwidthdrawalID = "STKD-WD" + new Date().getDate() + "-" + randomInteger
+    this.requestedBrand=_t1789?.title
+    // this.selectedproductforStocking=_t1789.title
+    this.currentselectedProduct = _t1789
+    this.stockedSelectedProduct = _t1789.name;
+    this.warehouseNumber = _t1789.warehouse_number;
+    this.selectedProductID = _t1789.product_number;
+    this.warehousename = _t1789.warehousename
+    this.storequestID=_t1789?.request_number
+  this.brandID=_t1789?.brand_number,
+  this.storeNumber=_t1789?.store_number,
+  this.quantityWithdraw=_t1789?.quantity
+    console.log('the selected brand: data: ',_t1789)
+    this.warehouseservice.loadPreviousStock({brandID:_t1789?.brand_number}).subscribe((response: any) => {
+
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
+      } else {
+        if (response?.empty) {
+          console.log('not found')
+          setTimeout(() => {
+            this.previousQty = 0
+            this.cdr.markForCheck()
+          }, 100)
+
+        } else {
+          if (response?.data) {
+            
+            console.log(response?.data)
+            this.warehousestock_id=response?.data[0].warehouseproductstockid
+
+            this.previousQty = response?.data[0].warehouse_stock_total_quantity
+            this.cdr.markForCheck()
+          } else {
+
+          }
+        }
+      }
+    })
+
+
+let d = {
+      stockId: _t1789.product_number
+    }
+    this.warehouseservice.transfert_To_stores(d).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
+      } else {
+        if (response?.data) {
+          setTimeout(() => {
+            this.stockbrand = response?.data;
+            console.log('the brands')
+            this.cdr.markForCheck
+          }, 250)
+        } else {
+          this.message = "Unknown error has occured"
+          this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
+        }
+      }
+    })
+
+    
+  }
+approveStoreRequest(arg0: any) {
+  console.log('submitting for approval',arg0[0]?.request_number)
+    let data = {
+      RequestNumber:arg0[0]?.request_number
+    }
+
+  this.warehouseservice.loadInitialRequest(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          console.log(response?.data)
+          this.requestServedData = response?.data
+          this.authtransfer.set(false)
+          this.setRequestViaible.set(true)
+        } else {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 3000 });
+        }
+      }
+    })
+}
+
+
+
+finaliseTransferApproval(arg0: RequestApprovalData[]) {
+console.log(arg0)
+ let data = {
+      RequestNumber:arg0[0]?.store_request_id,
+      storeNumber:arg0[0]?.store_id,
+    }
+this. warehouseservice.finaliseTransferApproval(data).subscribe((response:any)=>{
+  if(response?.message){
+    this.message=response?.message
+     this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 3000 });
   }else{
     if(response?.success){
-        this.message = response?.success
-          this.messageservice.add({ severity: 'success', summary: 'SUCCESS', detail: this.message, life: 5000 });
+      this.setRequestViaible.set(false)
+      this.message=response?.success
+             this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
     }else{
-     this.message = 'Unknown error has occured'
-          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-
+      this.message='unknown error has occured'
+           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
     }
   }
 })
 }
-controls:StockControlInterface[]=[]
-selectedControl:StockControlInterface|undefined
-selectedStoreName:any
-selectedWarehouseName:boolean=false
-isStockreturns=signal(false)
-retuneStock=()=>{
-this.isStockreturns.set(true)
-this.warehouseservice.returnstockcontrols().subscribe((response:any)=>{
+
+finaliseApproval(arg0: RequestApprovalData[]) {
+console.log(arg0)
+ let data = {
+      RequestNumber:arg0[0]?.store_request_id,
+      storeNumber:arg0[0]?.store_id,
+    }
+this. warehouseservice.finaliserequest(data).subscribe((response:any)=>{
   if(response?.message){
     this.message=response?.message
-
-          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+     this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 3000 });
   }else{
-    if(response.control){
-      this.controls=response?.control
+    if(response?.success){
+      this.setRequestViaible.set(false)
+      this.message=response?.success
+             this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
     }else{
-       this.message = 'Unknown error has occured'
-          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-    }
-  }
-})
-this.loadstores()
-}
-isReturnFromWarehouse=signal(false)
-isReturnfromStore=signal(false)
-isStoreSelected=signal(false)
-isWarehouseSelected=signal(false)
-selectOperation($event: SelectChangeEvent) {
-let selected=$event.value.controlname.trim()
-// console.log($event.value)
-switch(selected){
-  case 'RETURN_FROM_WAREHOUSE':
-this.isReturnFromWarehouse.set(true)
-this.isReturnfromStore=signal(false)
-  break;
-case 'RETURN_FROM_STORE':
-this.isReturnfromStore=signal(true)
-this.isReturnFromWarehouse.set(false)
-break;
-default :
- this.message = 'This operation cannot be applied here'
-          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-          break;
-}
-}
-
-selectStoreName=($event: SelectChangeEvent)=>{
-this.isStoreSelected.set(true)
-this.isWarehouseSelected.set(false)
-}
-selectWarehouseName=($event: SelectChangeEvent)=>{
-this.isWarehouseSelected.set(true)
-this.isStoreSelected.set(false)
-}
-selectProductInStore=()=>{
-console.log(this.selectedStoreName)
-let data={
-  storeNumber:this.selectedStoreName.storenumber,
-  storetype:this.selectedStoreName.storetype
-}
-this.warehouseservice.loadStoreProduct_for_selected_store(data).subscribe((response:any)=>{
-if(response?.message){
-    this.message=response?.message
-
-          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-  }else{
-    if(response.control){
-      this.controls=response?.control
-    }else{
-       this.message = 'Unknown error has occured'
-          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      this.message='unknown error has occured'
+           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
     }
   }
 })
@@ -1557,4 +2038,36 @@ if(response?.message){
 
 
 
+  
+  
+//   approveStoreRequest(arg0: any) {
+
+//     this.withdrawals.set(true)
+
+//     this.warehouseIdentity = _t78.identityid
+//     console.log(this.warehouseIdentity)
+//     let data = {
+//       selectedWarehouseoperationID: _t78.whse_serialnumber
+//     }
+//     this.warehouseservice.findwarehouseforOperation(data).subscribe((response: any) => {
+//       if (response?.message) {
+//         this.message = response?.message
+//         this.warehouseIdentity = _t78.identityid
+//         this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
+//       } else {
+//         if (response?.data) {
+//           this.isStockControlVisisble.set(true)
+//           this.isStockoperation.set(false)
+//           this.warehouseOrigin = response?.data[0].warehousename
+//           console.log('warehouse neme : ', response?.data)
+//           this.stockcontrolData = response?.data
+
+//         } else {
+//           this.message = response?.message
+//           this.warehouseIdentity = _t78.identityid
+//           this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 3000 });
+//         }
+//       }
+//     })
+// }
 }

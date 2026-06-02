@@ -1,0 +1,162 @@
+<div>
+    <header class="w-full p-3 border-round border-primary surface-overlay text-base focus:border-primary-500">
+        <p-tag severity="warn" class="tag" value=" STOCK BALANCE" />
+
+    </header>
+    @if(stockBalance){
+    <p-table #dt1 [value]="stockBalance" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading()" [paginator]="true"
+        [globalFilterFields]="['name', 'product_number','title','date_posted','stock_balance']" showGridlines
+        stripedRows>
+        <ng-template #caption>
+            <div class="flex">
+                <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+                <p-iconfield iconPosition="left" class="ml-auto">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Search keyword" />
+                </p-iconfield>
+            </div>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th>#</th>
+                <th>Product NUMBER</th>
+                <th>Product Name</th>
+                <th>Type Number</th>
+                <th>Type</th>
+                <th>Image</th>
+                <th>Available quantity</th>
+                <th>As at</th>
+                <th>status</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-stockBalance let-i="rowIndex">
+            <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{stockBalance.product_number}}</td>
+                <td>{{stockBalance?.name}}</td>
+                <td>{{ stockBalance?.product_brand }}</td>
+                
+                <td>{{stockBalance.title}}</td>
+                <td><img [src]="stockBalance.imageurl" [alt]="stockBalance.title" class="rounded-border"
+                        [style]="{ width: '2rem', overflow: 'hidden' }" />
+                </td>
+                <td>{{ stockBalance?.stock_balance }}</td>
+                <td>{{stockBalance?.date_posted| date:'dd/MM/yyyy'}}</td>
+                <td>
+                    <p-tag severity="info" class="tag" value="Current" />
+                    <!-- <p-toggleswitch [(ngModel)]="stockBalance.is_current" [disabled]="stockBalance.is_current===true"/> -->
+                </td>
+                <td>
+                    <p-button label="Show Transactions" [outlined]="true" icon="pi pi-filter-slash"
+                        (click)="showTransaction(stockBalance)" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    }@else {
+    <div class="card flex justify-center items-center gap-4">
+        <p-message severity="error">
+            <ng-template #icon>
+            </ng-template>
+            <span class="ms-2">{{message}}</span>
+        </p-message>
+    </div>
+    }
+</div>
+@if(is_showing_transaction()){
+<div class="card flex justify-center">
+    <p-dialog [(visible)]="is_showing_transaction" [modal]="true" [style]="{ width: '90rem' }">
+        <ng-template #header>
+            <div class="inline-flex items-center justify-center gap-2">
+                <p-avatar image="/assets/icons/transfer.png" shape="circle" />
+                <span class="font-bold whitespace-nowrap">TRANSACTION</span>
+            </div>
+        </ng-template>
+        @if(transaction){
+        <p-table #dt1 [value]="transaction" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+            [loading]="loading()" [paginator]="true"
+            [globalFilterFields]="['name', 'product_number','title','date_posted','stock_balance']" showGridlines
+            stripedRows>
+            <ng-template #caption>
+                <div class="flex">
+                    <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+                    <p-iconfield iconPosition="left" class="ml-auto">
+                        <p-inputicon>
+                            <i class="pi pi-search"></i>
+                        </p-inputicon>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Search keyword" />
+                    </p-iconfield>
+                </div>
+            </ng-template>
+
+            <ng-template #header>
+                <tr>
+                    <th>#</th>
+                    <th>Product Number</th>
+                    <th>Product Name</th>
+                    <th>Type Number</th>
+                    <th>Type</th>
+                    <th>Image</th>
+                     <th>Previous Quabtity</th>
+                      <th>Previous sold</th>
+                        <th>Re-stock Quantity</th>
+                    <th>Available quantity</th>
+                    <th>As at</th>
+                    <th>status</th>
+                    <!-- <th>Action</th> -->
+                </tr>
+            </ng-template>
+            <ng-template #body let-transaction let-i="rowIndex">
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{transaction.product_number}}</td>
+                    <td>{{transaction?.name}}</td>
+                    <td>{{ transaction?.product_brand }}</td>
+                       <td>{{transaction.title}}</td>
+                       
+                    <td><img [src]="transaction.imageurl" [alt]="transaction.title" class="rounded-border" [style]="{ width: '2rem', overflow: 'hidden' }" /></td>
+                    <td>{{transaction?.avaible_quantity}}</td>
+                    <td>{{transaction?.quantity_sold}}</td>
+                    <td>{{ transaction?.new_quantity }}</td>
+                    <td>{{ transaction?.stock_balance }}</td>
+                    <td>{{transaction?.date_posted| date:'dd/MM/yyyy'}}</td>
+                    <td>
+                        @if(transaction.is_current===true){
+                        <p-tag severity="success" class="tag" value="CURRENT" />
+                        }@else {
+                        <p-tag severity="info" class="tag" value="OLD" />
+                        }
+
+                    </td>
+                    <!-- <td>
+                   <p-button label="Show Transactions" [outlined]="true" icon="pi pi-filter-slash" (click)="showTransaction(stockBalance)" />
+                    </td> -->
+                </tr>
+            </ng-template>
+        </p-table>
+        }@else {
+
+        <div class="card flex justify-center items-center gap-4">
+            <p-message severity="warn">
+                <ng-template #icon>
+                </ng-template>
+                <span class="ms-2">{{message}}</span>
+            </p-message>
+        </div>
+
+        }
+        <ng-template #footer>
+        </ng-template>
+
+    </p-dialog>
+
+
+</div>
+}

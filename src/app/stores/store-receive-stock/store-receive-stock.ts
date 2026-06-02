@@ -1,5 +1,5 @@
-
-import { Component, OnInit, Signal, inject, signal } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -20,7 +20,7 @@ import { ReceivedStock } from '../../interface/storeinterface';
 import { DialogModule } from 'primeng/dialog';
 import { Table, TableModule } from 'primeng/table';
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
-import { CommonModule } from '@angular/common';
+
 import { Tooltip } from "primeng/tooltip";
 
 
@@ -59,17 +59,33 @@ loading=signal(false);
   message: any | undefined
   messageservice = inject(MessageService)
   receivedStockData: ReceivedStock[] = []
-  constructor(private storeservice: StoreService) { }
+    userData: any
+    credentials: any
+  constructor(private storeservice: StoreService,@Inject(PLATFORM_ID) private platformId: Object) {
+    
+      if (isPlatformBrowser(this.platformId)) {
+      try {
+        this.credentials = JSON.parse(localStorage.getItem('user') || '{}');
+        this.userData = JSON.parse(localStorage.getItem('USER_INFO') || '{}');
+        console.log('The User Data: ', this.userData)
+      } catch (e) {
+        console.log(e)
+        this.message = "Could not parse JSON from storage: " + e
+      }
+
+    }
+   }
 
 
   ngOnInit(): void {
     this.receive_stock()
    this. loading.set(true)
+   
 
   }
   receive_stock = () => {
     let data = {
-      storeNumber: 'STR-S-2124352'
+      storeNumber:  this.userData[0]?.storenumber
     }
     this.storeservice.receive_stock(data).subscribe((response: any) => {
       if (response?.message) {
@@ -122,3 +138,5 @@ loading=signal(false);
    })
 }
 }
+
+

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Userservice } from '../../services/userservice';
 import { MessageModule } from 'primeng/message';
@@ -11,6 +11,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { isPlatformBrowser } from '@angular/common';
 
 
 @Component({
@@ -27,7 +28,13 @@ Password: any;
 conform_password: any;
 acceptTerms:boolean=false
 error_message:any
-constructor(private router: Router,private route:ActivatedRoute, private userservice:Userservice, private cdr: ChangeDetectorRef,) {
+
+constructor(@Inject(PLATFORM_ID) private platformId: Object,private router: Router,private route:ActivatedRoute, private userservice:Userservice, private cdr: ChangeDetectorRef,) {
+ if (isPlatformBrowser(this.platformId)) {
+       this.uac=JSON.parse(localStorage.getItem('uac_id') || '{}');
+       console.log('the uac from local storage', this.uac)
+    }
+
 
 }
 
@@ -38,8 +45,6 @@ ngOnInit(): void {
     this.getUserc()
 }
 getUserc=()=>{
-
-  this.uac = this.route.snapshot.paramMap.get('uac');
 let  data={
   uac:this.uac
 }
@@ -96,8 +101,11 @@ createPassword=()=>{
           this.error_message=response?.message
         }else{
           if(response?.success){
-            this.message=response?.message
+            this.message=response?.success
+            console.log(response?.success)
             this.router.navigate(['../user-login'],{relativeTo:this.route})
+            this.cdr.markForCheck()
+            this.cdr.detectChanges()
           }else{
                this.error_message='Unlnown error has occured'
           }
@@ -105,5 +113,8 @@ createPassword=()=>{
       })
     }
   }
+}
+login=()=>{
+         this.router.navigate(['../user-login'],{relativeTo:this.route})
 }
 }

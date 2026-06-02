@@ -18,16 +18,53 @@ import { response } from 'express';
 import { environment } from '../../../environments/environment';
 import * as CryptoJS from 'crypto-js';
 import { SelectButtonModule, SelectButtonOptionClickEvent } from 'primeng/selectbutton';
-
+import { CommonModule } from '@angular/common';
+import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 @Component({
   selector: 'uacgenerator',
-  imports: [Divider,InputTextModule,FormsModule,SelectModule,SelectButtonModule,ToastModule,TextareaModule,ButtonModule],
+  imports: [Divider,InputTextModule,FormsModule,SelectModule,SelectButtonModule,ToastModule,TextareaModule,ButtonModule,FormsModule,CommonModule,ToggleSwitchModule],
   templateUrl: './uacgenerator.html',
   styleUrl: './uacgenerator.scss',
      providers:[MessageService],
     changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class UACGenerator {
+isAllstores($event: ToggleSwitchChangeEvent,arg1: string) {
+  let data={
+    storeNumber:arg1
+  }
+  this.departmentservice.hookAllStores(data).subscribe((response:any)=>{
+    if(response?.message){
+      this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Info', detail: this.message, life: 5000 });
+    }else{
+      if(response?.success){
+        this.message = response?.success
+        this.selectedstore=response?.data
+        console.log(this.selectedstore)
+      }
+    }
+  }) 
+}
+isAlldepartments($event: ToggleSwitchChangeEvent,arg1: string) {
+  let data={
+    hoid:arg1
+}
+  this.departmentservice.isAlldepartments(data).subscribe((response:any)=>{
+    if(response?.message){
+      this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Info', detail: this.message, life: 5000 });
+    }else{
+      if(response?.success){
+        this.message = response?.success
+        this.selecteddepartment=response?.data
+        console.log(this.selecteddepartment)
+          this.messageservice.add({ severity: 'success', summary: 'Info', detail: this.message, life: 5000 });
+      }
+    }
+})
+}
+
   messageservice=inject(MessageService)
   stores:Store[]=[]
   selectedstore:Store|undefined
@@ -44,11 +81,16 @@ redirectObject:any
 private k=environment.uacp_enc_key
 encryptedUAC:any
 selectedBrand:any
+hook_to:boolean=false
+hook_to_all_departments:boolean=false
+hook_to_all_stores:boolean=false
 
 brandOptions: any[] = [
     { label: 'STORE', value: 'MAIN STORE' },
     { label: 'POS', value: 'POINT OF SALES' },
-    { label: 'CASHOER', value: 'CASH AND PAYMENT' }
+    { label: 'CASHIER', value: 'CASH AND PAYMENT' },
+    { label: 'WAREHOUSE MANAGER', value: 'WAREHOUSE MANAGER' },
+    { label: 'ADMINISTRATOR', value: 'ADMINISTRATOR' }
   ];
 
 constructor(private storeservice:StoreService,
@@ -114,7 +156,8 @@ getUsers=()=>{
     }else{
       if(response?.data){
         this.users=response?.data
-        this.uac_id=this.users[0]?.uac_id
+        console.log(this.users)
+        // this.uac_id=this.users[0]?.uac_id
       }
     }
   })
@@ -129,7 +172,7 @@ hrid:this.encryptedUAC,
    login_redirect:this.selectedBrand, 
   description:this.hookDescription, 
   postedDate:new Date(), 
-  user:this.uac_id, 
+  user:this.selecteduser?.uac_id, 
   access:true
 
 }

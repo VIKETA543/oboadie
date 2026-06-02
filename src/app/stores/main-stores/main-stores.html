@@ -4,9 +4,13 @@
             <div class="flex-auto">
                 <p-avatar image="{{userInfo[0]?.passport_picture_url ||0}}" class="mr-2" size="xlarge" shape="circle" />
             </div>
-            <div class="flex-auto">
+            <div class="flex gap-4">
                 <span>
                     {{userInfo[0]?.fullname}}
+                </span>
+                <p-divider layout="vertical"></p-divider>
+                 <span>
+                    {{userInfo[0]?.storename}}
                 </span>
             </div>
         </ng-template>
@@ -39,15 +43,16 @@
     <div class="card flex justify-center gap-4">
         <p-button label="Stock Request" icon="pi pi-star" severity="secondary" (onClick)="goToStoctrequest()"
             serverity="info" variant="text" />
-    </div>
-
-
-
-    
+    </div>    
     <div class="card flex justify-center gap-4">
         <p-button label="Receive Stock" icon="store" severity="secondary" (onClick)="recieveStock()" serverity="info"
             variant="text" />
     </div>
+
+     <div class="card flex justify-center gap-4">
+        <p-button label="Pull from Warehouse" icon="store" severity="secondary" (onClick)="wahousePull()" serverity="info"
+            variant="text" />
+    </div> 
     <div class="card flex justify-center gap-4">
         <p-button label="Stock Rceived History" icon="store" severity="secondary" (onClick)="receivedstock()"
             serverity="info" variant="text" />

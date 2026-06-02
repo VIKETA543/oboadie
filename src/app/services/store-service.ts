@@ -106,6 +106,15 @@ submitReques=(data:any)=>{
     return this.http.post(this.url + '/stores/submitReques', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
 }
 
+
+
+addmoreProducts=(data:any)=>{
+    return this.http.post(this.url + '/stores/addmoreProducts', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+}
+
+
+
+
 find_store_request=(data:any)=>{
     return this.http.post(this.url + '/stores/find_store_request', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
 }
@@ -123,8 +132,12 @@ dropRequest_Item=(data:any)=>{
     return this.http.post(this.url + '/stores/dropRequest_Item',data,{ headers: new HttpHeaders().set('contentType', "application/json") })
 }
 
-load_store_request_history=(data:any)=>{
-  return this.http.post(this.url + '/stores/load_store_request_history', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+loadUnsubmitted=(data:any)=>{
+  return this.http.post(this.url + '/stores/loadUnsubmitted', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+   
+}
+load_selected_Unsubmitted=(data:any)=>{
+  return this.http.post(this.url + '/stores/load_selected_Unsubmitted', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
    
 }
 
@@ -135,4 +148,27 @@ submitRequest=(data:any)=>{
 findPendingItem=(data:any)=>{
    return this.http.post(this.url + '/stores/findPendingItem', data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
 }
+
+warehouseLoad_Request=(data:any)=>{
+   return this.http.post(this.url + '/stores/warehouserequestload',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+warehouserequestloadbyrequestnumber=(data:any)=>{
+   return this.http.post(this.url + '/stores/warehouserequestloadbyrequestnumber',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+
+requestHistory=(data:any)=>{
+   return this.http.post(this.url + '/stores/requestHistory',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+loadcurrentStocklevel=(data:any)=>{
+   return this.http.post(this.url + '/stores/loadcurrentStocklevel',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+
+loadtransactions=(data:any)=>{
+   return this.http.post(this.url + '/stores/loadtransactions',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
 }

@@ -194,7 +194,8 @@ this.userservce.signup(data).subscribe((response:any)=>{
       if(this.id_image!==undefined){
         this.uploadIdCard();
       }
-this.router.navigate(['../auth',this.encrypted_Key],{relativeTo:this.routes})
+       localStorage.setItem('uac_id',JSON.stringify(this.encrypted_Key))
+this.router.navigate(['../auth'],{relativeTo:this.routes})
 
   }else{
     this.message=response?.message

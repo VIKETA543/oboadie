@@ -41,3 +41,15 @@ header{
     display: block;
     width: 60%;
 }
+.tb-pending-request{
+    max-height: 90vh;
+    min-height: 20vh;
+    height: 90vh;
+}
+.tag{
+    cursor: pointer;
+    transition: 1s;
+}
+.tag:hover{
+     box-shadow: 0px 0px 15px 3px lightgrey;
+}

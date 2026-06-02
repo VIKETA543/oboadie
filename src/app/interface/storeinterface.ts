@@ -77,3 +77,17 @@ export interface Request {
     title: string,
     decription:string
 }
+
+export interface stockBalanceData{
+    product_number:string,
+    product_brand:string,
+    store_number:string, 
+    avaible_quantity:string,
+    quantity_sold:string,
+    stock_balance:string, 
+    is_current:string,
+    date_posted:string,
+    new_quantity:string,
+    name:string, 
+    title:string
+}

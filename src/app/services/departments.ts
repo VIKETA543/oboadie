@@ -19,4 +19,13 @@ export class Departments {
   getDepartments=()=>{
          return this.http.post(this.url + '/departments/getDepartments', { headers: new HttpHeaders().set('contentType', "application/json") })
   }
+
+  isAlldepartments=(data:any)=>{
+          return this.http.post(this.url + '/departments/isAlldepartments', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+
+  hookAllStores=(data:any)=>{
+          return this.http.post(this.url + '/departments/hook_all_stores', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
 }
