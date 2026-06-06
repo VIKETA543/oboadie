@@ -396,6 +396,7 @@
                                         </tr>
                                     </ng-template>
                                 </p-table>
+                                <p-divider></p-divider>
                                 <div class="card flex flex-wrap justify-center gap-4 total">
                                     <div>Sum Total</div>
                                     <div>{{sumTotalCart | currency: 'Ghø'}}</div>
@@ -406,7 +407,23 @@
                                         [bc-display-value]="true">
                                     </ngx-barcode6>
                                 </div>
+                                <p-divider></p-divider>
+                                
+                                 <div class="card flex flex-wrap justify-center gap-8 ">
+                                    <section class="signature">
+                                        <label>Issued by: </label>
+                                    <label>{{USER_CREDENTIALS?.fullname}}</label>
+                                    </section>
 
+                                    <section class="signature">
+                                        <label >Signature</label>
+
+                                          <label >...................................</label>
+                                    </section>
+                                         <section class="signature">
+                                             <label >Printed Date: {{invoiceDate}}</label>
+                                         </section>
+                                </div>
                             </div>
 
 

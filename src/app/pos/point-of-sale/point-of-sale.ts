@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -12,7 +12,7 @@ import { Table, TableModule } from 'primeng/table';
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 import { FormsModule } from '@angular/forms';
 import { Divider } from "primeng/divider";
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxChangeEvent, CheckboxModule } from 'primeng/checkbox';
 import { TextareaModule } from 'primeng/textarea';
@@ -24,6 +24,8 @@ import { ToastModule } from 'primeng/toast';
 import { NgxBarcode6 } from 'ngx-barcode6';
 import { NgxPrintDirective } from 'ngx-print';
 import { RouterOutlet, RouterLinkWithHref, Router, ActivatedRoute } from "@angular/router";
+import { Users } from '../../interface/Users';
+import { AvatarModule } from 'primeng/avatar';
 
 
 @Component({
@@ -37,24 +39,46 @@ import { RouterOutlet, RouterLinkWithHref, Router, ActivatedRoute } from "@angul
     InputTextModule, Tooltip,
     TableModule,
     ToggleSwitchModule,
-    FormsModule, 
+    FormsModule,
     DialogModule,
     TextareaModule,
-    CheckboxModule
-    , SelectModule,
+    CheckboxModule,
+    SelectModule,
     InputNumberModule, FluidModule,
- RouterOutlet, RouterLinkWithHref],
+    RouterOutlet, RouterLinkWithHref, AvatarModule, NgxBarcode6, NgxPrintDirective, CurrencyPipe, CommonModule, DatePipe, Divider],
   templateUrl: './point-of-sale.html',
   styleUrl: './point-of-sale.scss',
   providers: [MessageService]
 })
 export class PointOfSale implements OnInit {
-    constructor(private posservice: PosServcie, private cdr:ChangeDetectorRef, private router:Router, private routes:ActivatedRoute) { }
+  private messageService = inject(MessageService)
+  message:any
+   userInfo: Users[] | any
+   USER_CREDENTIALS:Users[]|any
+   storeData:any
+    constructor(@Inject(PLATFORM_ID) private platformId: Object,private posservice: PosServcie, private cdr:ChangeDetectorRef, private router:Router, private routes:ActivatedRoute) { 
+
+        if (isPlatformBrowser(this.platformId)) {
+                  try {
+              this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+              this.USER_CREDENTIALS=JSON.parse(localStorage.getItem('USER_CREDENTIALS') || '{}');
+              this.storeData = JSON.parse(localStorage.getItem('storeData') || '{}');
+               console.log('User',this.storeData)
+            } catch (e) {
+              this.message = "Could not parse JSON from storage: " + e
+            }
+          }
+    }
   ngOnInit(): void {
 
   }
 
+return() {
+    this.router.navigate(['pos-home'], { relativeTo: this.routes })
 
+  }
+
+  
   cashSales() {
     this.router.navigate(['cash-sales'],{relativeTo:this.routes})  
 

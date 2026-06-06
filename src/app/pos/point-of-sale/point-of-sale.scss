@@ -1,6 +1,37 @@
 .head{
     padding: 10px;
     font-size: clamp(1em,1.5em,1.9em);
-    background-color: rgb(4, 29, 102);
+  
     color: whitesmoke;
+}
+:host ::ng-deep .p-toolbar {
+border:none !important;
+border-radius:0px !important;
+  background-color:  rgb(66, 2, 16);
+  color: white;
+ 
+}
+ .storename{
+    color:rgb(247, 245, 245);
+      font-size: clamp(1vw,3vw,3.5vw);
+      padding:10px;
+      border-radius: .3em;
+      background-color: rgb(32, 32, 32);
+      box-shadow: 0px 0px 10px 1px lightgray;
+  }
+ .toobar-btn{ 
+ background-color: transparent !important;
+}
+h2{
+    margin:0px;
+    margin-top: 10px;
+    padding:0px;
+    font-family: 'Courier New', Courier, monospace;
+}
+.name{
+    font-size: clamp(1vw,2vw,3.5vw);
+    padding:5px;
+    border-radius: .3em;
+    background-color: rgb(32, 32, 32);
+    // box-shadow: 0px 0px 10px 1px lightgray;
 }

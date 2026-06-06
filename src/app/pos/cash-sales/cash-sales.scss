@@ -132,6 +132,17 @@ padding: 5px;
 .section{
     width: calc(100rem - 20rem);
 }
+.signature{
+    display: block;
+    flex-direction: column;
+    align-items: center;
+    label{
+        display: block;
+        width: 100%;
+        text-align: center;
+        line-height: 1.6;
+    }
+}
 @media print {
   /* Hide elements you don't want on the paper (like navbars or buttons) */
   .no-print {

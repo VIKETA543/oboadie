@@ -17,29 +17,29 @@ import { MessageService } from 'primeng/api';
   imports: [PanelModule, InputTextModule, FormsModule, ButtonModule, DividerModule, MessageModule, PasswordModule],
   templateUrl: './redirect-user.html',
   styleUrl: './redirect-user.scss',
-  providers:[MessageService],
-  changeDetection:ChangeDetectionStrategy.OnPush
+  providers: [MessageService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RedirectUser implements OnInit {
-  messageservice=inject(MessageService)
+  messageservice = inject(MessageService)
   RedirectKey: any
   decrptedKey: any
   uacp: any
-  user:any
+  user: any
   decriptedKey: any
   message: any
-  success:any
-  private Key:string='Mvk2@@#3011~43011'
-  constructor(private userservice: Userservice, 
-    private router: Router, 
+  success: any
+  private Key: string = 'Mvk2@@#3011~43011'
+  constructor(private userservice: Userservice,
+    private router: Router,
     private routes: ActivatedRoute,
-  @Inject(PLATFORM_ID) private platformId: Object) {
+    @Inject(PLATFORM_ID) private platformId: Object) {
 
     if (isPlatformBrowser(this.platformId)) {
-       this.user=JSON.parse(localStorage.getItem('user') || '{}');
+      this.user = JSON.parse(localStorage.getItem('user') || '{}');
     }
-this.uacp= this.user?.UACP
-   console.log('the UACP', this.user?.UACP)
+    this.uacp = this.user?.UACP
+    console.log('the UACP', this.user?.UACP)
   }
   ngOnInit(): void {
 
@@ -54,10 +54,10 @@ this.uacp= this.user?.UACP
   authUser = () => {
 
     this.decrypt(this.uacp)
-          console.log('The decryoted Key=>', this.decriptedKey)
-          //       console.log('the Raw key:' +this.RedirectKey)
-    if (this.decriptedKey===this.RedirectKey) {
-  
+    console.log('The decryoted Key=>', this.decriptedKey)
+    //       console.log('the Raw key:' +this.RedirectKey)
+    if (this.decriptedKey === this.RedirectKey) {
+
       let data = {
         hrid: this.uacp
       }
@@ -68,23 +68,25 @@ this.uacp= this.user?.UACP
           this.message = response?.message
         } else {
           if (response.success) {
-            //  console.log(response?.data)
+             console.log(response?.data)
             // console.log(response?.success)
+            const storeData = response?.storeData
+              localStorage.setItem('storeData', JSON.stringify(storeData));
             const redirector = response?.data[0]?.login_redirect
             console.log(redirector)
             switch (redirector.trim()) {
               case "MAIN STORE":
-                this.success=response?.success
+                this.success = response?.success
                 this.router.navigate(['main-stores']);
                 break;
-                case 'CASH AND PAYMENT':
-                    this.router.navigate(['cash-manager']);
+              case 'CASH AND PAYMENT':
+                this.router.navigate(['cash-manager']);
                 break;
-                case 'POINT OF SALES':
-                    this.router.navigate(['point-of-sale']);
+              case 'POINT OF SALES':
+                this.router.navigate(['point-of-sale']);
                 break;
-                case 'WAREHOUSE MANAGER':
-                    this.router.navigate(['wearhousemanager']);
+              case 'WAREHOUSE MANAGER':
+                this.router.navigate(['wearhousemanager']);
                 break;
 
               default:

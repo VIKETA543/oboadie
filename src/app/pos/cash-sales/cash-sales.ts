@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -13,7 +13,7 @@ import { Table, TableModule } from 'primeng/table';
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 import { FormsModule } from '@angular/forms';
 import { Divider } from "primeng/divider";
-import { DatePipe } from '@angular/common';
+import { DatePipe, formatDate, isPlatformBrowser } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxChangeEvent, CheckboxModule } from 'primeng/checkbox';
 import { TextareaModule } from 'primeng/textarea';
@@ -31,6 +31,7 @@ import { Customers } from '../../interface/crmInterface';
 import { Crmservice } from '../../services/crmservice';
 import { AvatarModule } from 'primeng/avatar';
 import { PanelModule } from 'primeng/panel';
+import { Users } from '../../interface/Users';
 
 
 @Component({
@@ -105,8 +106,20 @@ cutomerNumber: any
   is_kg: boolean = false
   is_yard: boolean = false
   isAddtoCustomerList = signal(false)
+  USER_CREDENTIALS:Users[]|any
 
-  constructor(private posservice: PosServcie, private crmservcie: Crmservice,  private cdr:ChangeDetectorRef, private router:Router, private routes:ActivatedRoute) { 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,private posservice: PosServcie, private crmservcie: Crmservice,  private cdr:ChangeDetectorRef, private router:Router, private routes:ActivatedRoute) { 
+
+        if (isPlatformBrowser(this.platformId)) {
+                      try {
+                  // this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+                  this.USER_CREDENTIALS=JSON.parse(localStorage.getItem('USER_CREDENTIALS') || '{}');
+                   console.log('User',this.USER_CREDENTIALS)
+                } catch (e) {
+                  this.message = "Could not parse JSON from storage: " + e
+                }
+              }
+        
        this.isCashsalse.set(true)
     this.getAllproducts()
   }
@@ -151,8 +164,9 @@ cutomerNumber: any
 
 
   iniCashSales = () => {
+  const dbFormatAngular = formatDate(new Date(), 'yyyyMMddsshh', 'en-US');
     let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
-    this.cashSalesInvoiceNumber = "CINV" + new Date().getDate() + "-" + randomInteger
+    this.cashSalesInvoiceNumber = "CINV" + dbFormatAngular + "-" + randomInteger
     this.isInput.set(true)
     this.isInputInvoice.set(true)
 
@@ -388,7 +402,8 @@ addInvoice=()=>{
         telephone:this.telephoneNumber,
         emailadress:this.emailAddress,
         addresss:this.address,
-        dateposted:this.invoiceDate
+        dateposted:this.invoiceDate,
+        preparedBy:this.USER_CREDENTIALS?.uac_id
   }
   this.posservice.openInvoice(data).subscribe((response:any)=>{
      if (response?.message) {

@@ -51,6 +51,7 @@ import { StockBalances } from './stores/stock-balances/stock-balances';
 import { StoreReceiveStock } from './stores/store-receive-stock/store-receive-stock';
 import { WarehousePull } from './stores/main-stores/Warehousepull/warehouse-pull';
 import { Resetpassword } from './userAuth/resetpassword/resetpassword';
+import { PosHome } from './pos/pos-home/pos-home';
 
 
 
@@ -125,7 +126,10 @@ export const routes: Routes = [
                             { path: 'create-customer', component: CreateCustomer },
 
                         ]
-                    }
+                    },
+                 
+             
+
                 ]
             },
             {
@@ -192,7 +196,9 @@ export const routes: Routes = [
                     { path: 'create-customer', component: CreateCustomer },
 
                 ]
-            }
+            },
+               {path: 'pos-home', component: PosHome },
+               { path: '', redirectTo: 'pos-home', pathMatch: 'full' }
         ]
     },
     {

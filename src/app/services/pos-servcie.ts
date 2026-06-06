@@ -126,4 +126,18 @@ export class PosServcie {
    }
 
    
+    prepared_invoices=(data:any)=>{
+       return this.http.post(this.url + '/pos/prepared_cash_invoices', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
+
+     prepared_credit_invoices=(data:any)=>{
+       return this.http.post(this.url + '/pos/prepared_credit_invoices', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
+
+
+       join_credit_cash_salse=(data:any)=>{
+       return this.http.post(this.url + '/pos/join_credit_cash_salse', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
+
+
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -13,7 +13,7 @@ import { Table, TableModule } from 'primeng/table';
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Divider } from "primeng/divider";
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxChangeEvent, CheckboxModule } from 'primeng/checkbox';
 import { TextareaModule } from 'primeng/textarea';
@@ -113,8 +113,21 @@ export class CreditSales {
   is_kg: boolean = false
   is_yard: boolean = false
   isAddtoCustomerList = signal(false)
+  USER_CREDENTIALS: any;
 
-  constructor(private posservice: PosServcie, private crmservcie: Crmservice, private cdr: ChangeDetectorRef, private router: Router, private routes: ActivatedRoute) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,private posservice: PosServcie, private crmservcie: Crmservice, private cdr: ChangeDetectorRef, private router: Router, private routes: ActivatedRoute) {
+    
+     if (isPlatformBrowser(this.platformId)) {
+                          try {
+                      // this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+                      this.USER_CREDENTIALS=JSON.parse(localStorage.getItem('USER_CREDENTIALS') || '{}');
+                       console.log('User',this.USER_CREDENTIALS)
+                    } catch (e) {
+                      this.message = "Could not parse JSON from storage: " + e
+                    }
+                  }
+    
+    
     this.isCashsalse.set(true)
     this.getAllproducts()
   }
@@ -387,7 +400,8 @@ export class CreditSales {
       telephone: this.telephoneNumber,
       emailadress: this.emailAddress,
       addresss: this.address,
-      dateposted: this.invoiceDate
+      dateposted: this.invoiceDate,
+      preparedBy:this.USER_CREDENTIALS?.uac_id
     }
     this.posservice.openOpenInvoice(data).subscribe((response: any) => {
       if (response?.message) {
