@@ -17,10 +17,11 @@ export class productservice {
       getTrendingData() {
         return this.http.get(this.url + '/display/trending', { headers: new HttpHeaders().set('contentType', "application/json") })
 
-    }
+    }     
 
- listproduct() {
-        return this.http.get(this.url + '/display/listproduct', { headers: new HttpHeaders().set('contentType', "application/json") })
+ listproduct(data: any) {
+    console.log(data)
+        return this.http.post(this.url + '/display/listproduct',data, { headers: new HttpHeaders().set('contentType', "application/json") })
 
     }
 
@@ -106,5 +107,8 @@ dropPriceTag=(data:any)=>{
 }
 authTag=(data:any)=>{
    return this.http.post(this.url + '/category/authtag',data,{ headers: new HttpHeaders().set('contentType', "application/json") })  
+}
+dropProduct=(data:any)=>{
+    return this.http.post(this.url + '/category/dropProduct',data,{ headers: new HttpHeaders().set('contentType', "application/json") })  
 }
 }

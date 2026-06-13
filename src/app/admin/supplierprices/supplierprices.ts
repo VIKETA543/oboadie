@@ -76,6 +76,7 @@ this.cdr.markForCheck()
 })
 
 }
+
     clear(table: Table) {
         table.clear();
         this.searchValue.set('');

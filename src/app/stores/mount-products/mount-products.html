@@ -1,0 +1,75 @@
+<header class="inline-flex items-center justify-center gap-5 w-full">
+   <span class="inline-flex items-center justify-center gap-5 w-full"> Mount product to stores</span>
+       <div class="card flex justify-center">
+                <p-select [options]="stores" [(ngModel)]="selectedStore" optionLabel="storename" [filter]="true"
+                    filterBy="storename" [showClear]="true" placeholder="Select a Store" class="w-full md:w-56">
+                    <ng-template #selectedItem let-stores>
+                        <div class="flex items-center gap-2">
+                            <img src="{{stores.imageurl ||''}}" style="width: 25px" />
+                            <div>{{ stores.storename }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-stores #item>
+                        <div class="flex items-center gap-2">
+                            <img src="{{stores.imageurl ||''}}" style="width: 25px" />
+                            <div>{{ stores.storename }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+
+</header>
+    <div class="card">
+        <div class="card">
+            <p-table #table3 [value]="StoreProducts" [paginator]="true" [rows]="rows" [showCurrentPageReport]="true"
+                [tableStyle]="{ 'min-width': '70rem' }"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                (onPage)="pageChange($event)" [rowsPerPageOptions]="[10, 25, 50]"
+                [globalFilterFields]="['name', 'category_name']"
+                stripedRows="true">
+
+                <ng-template #caption>
+                    <div class="flex ">
+                        <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(table3)" />
+
+                        <p-iconfield iconPosition="left" class="ml-auto">
+                            <p-inputicon class="pi pi-search" />
+                            <input pInputText type="text" (input)="table3.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Search..." />
+                        </p-iconfield>
+                    </div>
+                </ng-template>
+                <ng-template #header>
+                    <tr>
+                        <th style="width:5%">SERIAL</th>
+                        <th style="width:15%">PRODUCT NUMBER</th>
+                        <th style="width:25%">PRODUCT NAME</th>
+                        <th style="width:15%">CATEGORY</th>
+                        <th style="width:25%">IMAGE</th>
+                        <th style="width:15%">Actions</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template #body let-StoreProducts let-i="rowIndex">
+                    <tr >
+                        <td>{{i+1}}</td>
+                        <td>{{StoreProducts.serialnumber}}</td>
+                        <td>{{StoreProducts.name }}</td>
+                        <td>{{ StoreProducts.category_name}}</td>
+
+                        <td>
+                          <div class="flex items-center gap-2">
+                            <img src="{{StoreProducts.imageurl ||''}}" style="width: 40px" />
+                        </div>
+                        </td>
+
+                        <td>
+                            <p-button icon="pi pi-upload" label="Push" pTooltip="Delete producted" severity="info" (onClick)="pushProductToStore(StoreProducts,i)"/>
+                        </td>
+
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <p-toast></p-toast>

@@ -1,5 +1,5 @@
 main {
-    margin-top: calc(4%);
+    margin-top: calc(0%);
 }
 
 .product-bar {
@@ -260,7 +260,12 @@ main {
 .enter-animation {
     animation: slide-fade 1s;
 }
-
+:host ::ng-deep .p-toolbar:first-child {
+border:none !important;
+border-radius:0px !important;
+  background-color:  transparent !important;
+ 
+}
 @keyframes slide-fade {
     from {
         opacity: 0;

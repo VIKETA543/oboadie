@@ -32,6 +32,7 @@ import { DividerModule } from 'primeng/divider';
   styleUrl: './main-stores.scss',
 })
 export class MainStores implements OnInit {
+
  
   verifiedHistory() {
     throw new Error('Method not implemented.');

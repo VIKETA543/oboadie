@@ -154,14 +154,12 @@ productName:any
     })
   }
   listproduct = () => {
-    this.productservice.listproduct().subscribe((response: any) => {
+    let data={
+    }
+    this.productservice.listproduct(data).subscribe((response: any) => {
       if (response?.data) {
-
-           
         this.product = response?.data
                this.cdr.markForCheck();
-
-        // 
       } else {
         this.message = response?.message
       }

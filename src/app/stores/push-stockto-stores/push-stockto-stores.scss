@@ -1,0 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: rgb(3, 117, 117);
+    width: 100%;
+    padding: 10px;
+
+    span {
+        color: rgb(255, 255, 255);
+        font-size: clamp(1.0vw, 1.5vw, 2.0vw);
+    }
+}
+img{
+    max-width: 3rem;
+}

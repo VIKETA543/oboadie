@@ -1,4 +1,4 @@
-<p-toolbar>
+<p-toolbar  [style]="{ 'background': 'linear-gradient(to right, #4facfe, #00f2fe)', 'border': 'none' }">
     <ng-template #start>
        <div class="card flex justify-center">
     <p-selectbutton [options]="filteredOptions" [(ngModel)]="selectionOption" optionLabel="label" optionValue="value" aria-labelledby="basic" (onOptionClick)="selectionButton($event)" />

@@ -11,13 +11,14 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePipe } from '@angular/common';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { AvatarModule } from 'primeng/avatar';
 @Component({
   selector: 'stockreceived',
   imports: [TableModule,ButtonModule,FormsModule,
     ReactiveFormsModule,
     IconFieldModule,InputIconModule,
     InputTextModule,ToggleSwitchModule,
-    DatePipe],
+    DatePipe,AvatarModule],
   templateUrl: './stockreceived.html',
   styleUrl: './stockreceived.scss',
   providers:[MessageService]

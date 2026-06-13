@@ -2,10 +2,9 @@
     <div class="card product-bar">
         <p-toolbar>
             <ng-template #start>
-                <p-button icon="pi pi-plus" label="New Product" class="mr-2" text severity="secondary"
+                <p-button icon="pi pi-plus" label="New Product" class="mr-2"  severity="info"
                     (onClick)="newProduct()" />
-                <p-button icon="pi pi-print" class="mr-2" text severity="secondary" />
-                <p-button icon="pi pi-upload" text severity="secondary" />
+
 
             </ng-template>
             <div class="card flex justify-center">
@@ -74,14 +73,13 @@
                         <th style="width:20%">description</th>
                         <th>image</th>
                         <th style="width:20%">Category</th>
-                        <th>Status</th>
                         <th style="width:20%">date</th>
                         <th>Action</th>
                     </tr>
                 </ng-template>
                 <ng-template #body let-product>
                     <tr>
-                        <td>{{ product.serialnumber }}</td>
+                        <td>{{ product.product_number }}</td>
                         <td>{{ product.name }}</td>
                         <td>{{ product.description }}</td>
                         <td>
@@ -90,15 +88,14 @@
                         <td>
                             <p-tag [value]="product.category_name" [severity]="getSeverity(product.category_name)" />
                         </td>
-                        <td></td>
-                        <td>{{ product.date_created }}</td>
+                        <td>{{ product.date_created |date: 'dd/mm/yyyy' }}</td>
 
                         <td>
                             <div class="flex items-center justify-between">
                                 <p-toast />
                                 <p-confirmpopup />
                                 <p-button icon="pi pi-trash" label="Del" severity="danger"
-                                    (onClick)="dropCart($event,product.serialnumber)" rounded raised />
+                                    (onClick)="dropProduct($event,product)" rounded raised />
                             </div>
 
                         </td>

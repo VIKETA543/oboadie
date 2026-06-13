@@ -53,3 +53,9 @@ header{
 .tag:hover{
      box-shadow: 0px 0px 15px 3px lightgrey;
 }
+:host ::ng-deep .p-toolbar:first-child {
+border:none !important;
+border-radius:0px !important;
+  background-color:  rgb(238, 238, 238) ;
+ 
+}

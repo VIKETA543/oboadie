@@ -1,7 +1,7 @@
 <div class="card">
     <p-table #dt1 [value]="stockRceivedData" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
         [loading]="loading()" [paginator]="true" [globalFilterFields]="['name', 'title','date_received','quantity_requested']"
-        showGridlines>
+        showGridlines stripedRows>
 
         <ng-template #caption>
             <div class="flex">
@@ -34,7 +34,9 @@
                 <td>{{i+1}}</td>
                 <td>{{ stockRceivedData.name }}</td>
                 <td>{{ stockRceivedData.title }}</td>
-                <td><img [src]="stockRceivedData.imageurl" [alt]="stockRceivedData.title" class="rounded-border" [style]="{ width: '3rem', overflow: 'hidden'}" /></td>
+                <td>
+                        <p-avatar image="{{stockRceivedData.imageurl}}" class="mr-2" size="xlarge" shape="circle" />
+
                 <td>{{ stockRceivedData.quantity_requested }}</td>
                 <td>{{ stockRceivedData.quantity_received }}</td>
 

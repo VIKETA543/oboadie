@@ -122,7 +122,10 @@ export class StockRequest {
 
   }
   loadingProducts = () => {
-    this.productservcie.listproduct().subscribe((response: any) => {
+    let data={
+
+    }
+    this.productservcie.listproduct(data).subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
       } else {

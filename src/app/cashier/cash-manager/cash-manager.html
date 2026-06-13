@@ -1,9 +1,41 @@
- <div class="card">
-            <p-toolbar>
+<div class="card">
+    <p-toolbar>
+        <ng-template #start>
+  
+                 <p-avatar image="assets/logo/oboadie.jpeg" class="mr-5" size="xlarge" shape="circle"/>
+            <div>
+            <span class="font-bold text-lg mr-2 storename">{{storeData[0]?.storename}}</span>
+            <h2>OBOADIE NYAME ENTERPRISE</h2>
+            </div>
+        </ng-template>
+        <ng-template #center>
+
+        </ng-template>
+        <ng-template #end>
+            <span class="font-bold text-lg mr-4 storename">
+                <label class="mr-2 name">  {{USER_CREDENTIALS?.fullname}} {{USER_CREDENTIALS?.last_name}}</label>
+              
+                <!-- <i class="pi pi-cog" style="font-size: 2rem"></i> -->
+                    <p-avatar class="mr-2" size="xlarge" shape="circle" image="{{USER_CREDENTIALS?.photo_id_url}}"
+                shape="circle" size="large" >
+       
+                </p-avatar>
+            </span>
+         
+        </ng-template>
+    </p-toolbar>
+</div>
+<p-toast />
+
+
+
+<div class="card">
+            <p-toolbar [style]="{ 'background': 'linear-gradient(to right, #4facfe, #00f2fe)', 'border': 'none' }">
                 <ng-template #start>
-                    <p-button icon="pi pi-plus" label="VERIFY INVOICES" class="mr-2" text severity="secondary" routerLink="cash-payments" />
-                    <p-button icon="" label="PAY CREDIT" class="mr-2" text severity="secondary" routerLink="pay-credit" />
-                    <p-button icon="pi pi-upload" text severity="secondary" />
+                           <p-button icon="pi pi-home"  label='Home'  class="mr-2"  severity="contrast" raised="true" routerLink="'cashier-home" />
+                    <p-button icon="pi pi-barcode" label="VERIFY INVOICES" class="mr-2"  severity="contrast" routerLink="cash-payments" raised="true" />
+                    <p-button icon="" label="PAY CREDIT" class="mr-2"  severity="contrast" routerLink="pay-credit" raised="true" routerLink="pay-credit"/>
+             
                 </ng-template>
                 <ng-template #center>
                 </ng-template>

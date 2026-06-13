@@ -1,5 +1,5 @@
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit,signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { Toolbar } from 'primeng/toolbar';
@@ -14,7 +14,7 @@ import { ConfirmationService, MenuItem } from 'primeng/api';
 import { CarouselModule } from 'primeng/carousel';
 import { response, Router } from 'express';
 import { productservice } from '../../services/productservice';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
 import { Tag } from 'primeng/tag';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -29,12 +29,14 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { Divider } from "primeng/divider";
+import { Users } from '../../interface/Users';
+import { Userservice } from '../../services/userservice';
 
 
 
 
 @Component({
-  standalone:true,
+  standalone: true,
   selector: 'create-products',
   imports: [InputTextModule,
     Toolbar,
@@ -63,90 +65,138 @@ import { Divider } from "primeng/divider";
     Divider],
   templateUrl: './create-products.html',
   styleUrl: './create-products.scss',
-  providers:[ConfirmationService,MessageService]
+  providers: [ConfirmationService, MessageService]
 })
 export class CreateProducts {
 
-     loading = signal(false);
-    searchValue = signal('');
-      activityValues = signal<number[]>([0, 100]);
-  
-     
-      clear(table: Table) {
-          table.clear();
-          this.searchValue.set('');
-      }
+  loading = signal(false);
+  searchValue = signal('');
+  activityValues = signal<number[]>([0, 100]);
+
+
+  clear(table: Table) {
+    table.clear();
+    this.searchValue.set('');
+  }
 
 
 
-dropCart($event: MouseEvent,arg1: any) {
-throw new Error('Method not implemented.');
+  dropProduct($event: MouseEvent, arg1: any) {
+console.log(arg1)
+let data={
+  product_number:arg1?.product_number,
+  store_number: this.userInfo[0]?.storenumber
+
 }
-selectGroup($event: SelectChangeEvent) {
-console.log()
-this.groupID=$event.value.groupid
-}
+this.productservice.dropProduct(data).subscribe((response:any)=>{
+  if(response?.message){
+    this.message=response?.message
+          this.messageService.add({ severity: 'error', summary: 'Info', detail: this.message, life: 5000 });
+  }else{
+    if(response?.success){
+      this.message=response?.success
+      this.listproduct();
+            this.messageService.add({ severity: 'success', summary: 'Info', detail: this.message, life: 5000 });
+    }else{
+      this.message='Unknown Error has occured'
+            this.messageService.add({ severity: 'error', summary: 'Info', detail: this.message, life: 3000 });
+    }
+  }
+})
+  }
+  // selectGroup($event: SelectChangeEvent) {
+  //   console.log()
+  //   this.groupID = $event.value.groupid
+  // }
 
   isShown = signal(false);
-    position: 'left' | 'right' | 'top' | 'bottom' = 'right';
+  position: 'left' | 'right' | 'top' | 'bottom' = 'right';
   position1: 'left' | 'right' | 'top' | 'bottom' = 'bottom';
 
   message: any
   productCart: ProductCategory[] | undefined;
   selectedCart: string | undefined;
 
-  product: ProductsList[]=[];
+  product: ProductsList[] = [];
   selectedProduct: any;
-  
-  targetGroup:TargetGroup[]|undefined
-  selectedGroup:TargetGroup|undefined
 
-productID:any
-groupID:any
-productName:any
+  targetGroup: TargetGroup[] | undefined
+  selectedGroup: TargetGroup | undefined
+
+  productID: any
+  groupID: any
+  productName: any
   image: any
   preview: any;
   selectedFile?: FileList;
   selectedFileNames: any[] = [];
   selectedImage: any;
-    items: any;
+  items: any;
   items1: any;
-  description:any
-  serialnumber:any
+  description: any
+  serialnumber: any
+  rightaside = signal(false)
+  credentials: any
+
+  userInfo: Users[] | any
+  storeStockNumber: any
   selectionOption($event: SelectChangeEvent) {
-    this.serialnumber=$event.value.serialnumber
+    this.serialnumber = $event.value.serialnumber
     console.log($event.value.serialnumber)
   }
 
-  constructor(private productservice: productservice,private confirmationService: ConfirmationService, private messageService: MessageService,private cdr: ChangeDetectorRef) { }
+  constructor(private userservice: Userservice, @Inject(PLATFORM_ID) private platformId: Object, private productservice: productservice, private confirmationService: ConfirmationService, private messageService: MessageService, private cdr: ChangeDetectorRef) {
+
+    if (isPlatformBrowser(this.platformId)) {
+
+      try {
+        this.credentials = JSON.parse(localStorage.getItem('user') || '{}');
+        console.log('The crredentials:', this.credentials)
+         this.userInfo = JSON.parse(localStorage.getItem('USER_INFO') || '{}');
+         console.log('The user info:', this.userInfo)
+      } catch (e) {
+        this.message = "Could not parse JSON from storage: " + e
+      }
+
+      if (this.credentials?.uac_id !== undefined) {
+        let data = {
+          uacp: this.credentials?.uac_id
+        }
+
+      } else {
+
+      }
+    }
+
+  }
   ngOnInit(): void {
-      this.isShown.update((isShown) => !isShown);
+    this.isShown.update((isShown) => !isShown);
     this.loadcartList()
     this.listproduct();
     this.setDocker()
-    this.loadTargetgrpup();
+    // this.loadTargetgrpup();
   }
-   loadTargetgrpup = () => {
-    this.productservice.loadTargetgrpup().subscribe((response: any) => {
-      if (response?.data) {
-        this.targetGroup = response?.data
-     this.cdr.markForCheck();
-     this.cdr.detectChanges()
-      } else {
-        if (response?.message) {
-          this.message = response?.message
-          this.messageService.add({ severity: 'info', summary: 'Info', detail: this.message, life: 3000 });
-        }
-      }
-    })
-  }
+  // loadTargetgrpup = () => {
+  //   this.productservice.loadTargetgrpup().subscribe((response: any) => {
+  //     if (response?.data) {
+  //       this.targetGroup = response?.data
+  //       this.cdr.markForCheck();
+  //       this.cdr.detectChanges()
+  //     } else {
+  //       if (response?.message) {
+  //         this.message = response?.message
+  //         this.messageService.add({ severity: 'info', summary: 'Info', detail: this.message, life: 3000 });
+  //       }
+  //     }
+  //   })
+  // }
   loadcartList = () => {
     this.productservice.categoryList().subscribe((response: any) => {
       if (response?.data) {
 
-                  this.productCart = response?.data
-             this.cdr.markForCheck();
-             this.cdr.detectChanges()
+        this.productCart = response?.data
+        this.cdr.markForCheck();
+        this.cdr.detectChanges()
 
 
       } else {
@@ -155,16 +205,19 @@ productName:any
     })
   }
   listproduct = () => {
-    this.productservice.listproduct().subscribe((response: any) => {
+  // alert('Listing products')
+    let data = {
+      store_number: this.userInfo[0]?.storenumber
+    }
+    // alert(this.userInfo[0]?.storenumber)
+    console.log('Listing products',data)
+    this.productservice.listproduct(data).subscribe((response: any) => {
       if (response?.data) {
-
-           
         this.product = response?.data
-               this.cdr.markForCheck();
-               this.cdr.detectChanges()
-
-        // 
+        this.cdr.markForCheck();
+        this.cdr.detectChanges()
       } else {
+        this.product=[]
         this.message = response?.message
       }
     })
@@ -179,14 +232,14 @@ productName:any
     let randomInteger: number = this.getRandomInt(1, 1000000); // Generates a random integer between 1 and 10
     this.productID = "CRT-HTB" + randomInteger
   }
-  isNewproduct:boolean=false;
-newProduct=()=>{
-  this.genranCode();
-  this.isNewproduct=true
-}
-closeProduct=()=>{
-    this.isNewproduct=false
-}
+  isNewproduct: boolean = false;
+  newProduct = () => {
+    this.genranCode();
+    this.isNewproduct = true
+  }
+  closeProduct = () => {
+    this.isNewproduct = false
+  }
 
 
   setDocker = () => {
@@ -237,50 +290,66 @@ closeProduct=()=>{
     }
   }
 
-  apply = () => {
-  
-      const formData = new FormData();
-      formData.append('IMAGE', this.image)
-       formData.append('productId', this.productID)
-      formData.append('productName', this.productName)
-      formData.append('description', this.description)
-      formData.append('catergory', this.serialnumber)
-      formData.append('date', Date())
-      this.productservice.addProduct(formData).subscribe((response: any) => {
-        if (response?.message) {
-          this.message = response?.message
 
+
+
+  initPushproduct = () => {
+    let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
+    this.storeStockNumber = "STRCKN-" + new Date().getDate() + "-" + randomInteger
+
+  }
+
+
+
+
+  apply = () => {
+    this.initPushproduct()
+    const formData = new FormData();
+    formData.append('IMAGE', this.image)
+    formData.append('productId', this.productID)
+    formData.append('productName', this.productName)
+    formData.append('description', this.description)
+    formData.append('catergory', this.serialnumber)
+    formData.append('date', Date())
+    formData.append('uac_id', this.userInfo[0]?.uac_id)
+    formData.append('store_number', this.userInfo[0]?.storenumber)
+    formData.append('stock_number', this.storeStockNumber)
+
+    this.productservice.addProduct(formData).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+
+        this.messageService.add({ severity: 'info', summary: 'Info', detail: this.message, life: 3000 });
+        setTimeout(() => { this.message = undefined }, 1000)
+        // console.log(this.message)
+        this.isNewproduct = false
+      } else {
+        if (response?.success) {
+          console.log(response?.success)
+          this.message = response?.success
+          this.isNewproduct = false
+          this.messageService.add({ severity: 'success', summary: 'success', detail: this.message, life: 3000 });
+
+          this.listproduct()
+          this.cdr.markForCheck();
+          this.cdr.detectChanges()
+          this.message = undefined
+
+        } else {
+          console.log("Unknown error has occured")
+          this.message = "Unknown error has occured"
           this.messageService.add({ severity: 'info', summary: 'Info', detail: this.message, life: 3000 });
           setTimeout(() => { this.message = undefined }, 1000)
-          // console.log(this.message)
-            this.isNewproduct=false
-        } else {
-          if (response?.success) {
-            console.log(response?.success)
-            this.message = response?.success
-            this.isNewproduct=false
-            this.messageService.add({ severity: 'success', summary: 'success', detail: this.message, life: 3000 });
-  
-              this.listproduct()
-                     this.cdr.markForCheck();
-                     this.cdr.detectChanges()
-              this.message = undefined 
 
-          } else {
-            console.log("Unknown error has occured")
-            this.message = "Unknown error has occured"
-            this.messageService.add({ severity: 'info', summary: 'Info', detail: this.message, life: 3000 });
-            setTimeout(() => { this.message = undefined }, 1000)
-
-            this.preview = undefined
-              this.isNewproduct=false
-          }
-  
+          this.preview = undefined
+          this.isNewproduct = false
         }
-      })
-  
-    }
-      getSeverity(status: string) {
+
+      }
+    })
+
+  }
+  getSeverity(status: string) {
     switch (status) {
       case 'INSTOCK':
         return 'success';
@@ -293,8 +362,8 @@ closeProduct=()=>{
   }
 
 
-  clearRecords=(event: Event)=>{
-  
+  clearRecords = (event: Event) => {
+
     this.confirmationService.confirm({
       target: event.currentTarget as EventTarget,
       message: 'Are you sure you want to proceed?',
@@ -325,6 +394,6 @@ closeProduct=()=>{
       }
     });
 
-}
+  }
 
 }

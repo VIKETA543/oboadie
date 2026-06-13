@@ -1,56 +1,19 @@
 <p-toast></p-toast>
 <div class="card table-style">
-    <p-toolbar>
-        <ng-template #start>
-        </ng-template>
-        <ng-template #center>
-            <div class="card flex justify-center">
-
-                <div class="card flex justify-center">
-                    <p-button type="button" styleClass="min-w-48" icon="storemanager" (onClick)="op.toggle($event)"
-                        variant="text" severity="secondary" label="Manage Store" severity="info" variant="text" />
-                    <p-popover #op>
-                        <div class="card-wrapper">
-                            <span class="font-medium block mb-2"> <i class="pi pi-cog"
-                                    style="font-size: 1rem"></i>Options</span>
-                            <p-divider />
-                            <div class="btn-pops">
-                                <div class="card flex justify-center gap-4">
-                                    <p-button label="New Product" icon="pi pi-star" severity="secondary"
-                                        (onClick)="newProduct()" serverity="info" variant="text" />
-                                </div>
-                                <div class="card flex justify-center gap-4">
-                                    <p-button label="Stores " icon="access" iconPos="left" severity="secondary"
-                                        (onClick)="createStore()" />
-                                </div>
-                                <div class="card flex justify-center gap-4">
-                                    <p-button label="Store Type " icon="access" iconPos="left" severity="secondary"
-                                        (onClick)="storeType()" />
-                                </div>
-                                <div class="card flex justify-center gap-4">
-                                    <p-button label="Receive Stock" icon="store" severity="secondary"
-                                        (onClick)="recieveStock()" serverity="info" variant="text" />
-                                </div>
-
-
-                                <div class="card flex justify-center gap-4">
-                                    <p-button icon="" variant="text" label='Product Categories'
-                                        class="mr-2" text severity="info" variant="text"
-                                        (onClick)="productCategories()" />
-                                </div>
-                              
-                            </div>
-                        </div>
-                    </p-popover>
-                </div>
-            </div>
-        </ng-template>
-    </p-toolbar>
     <!-- <header class="table-style wearehouse">
         <i class="wearehouse" style="font-size: 2.5rem"></i><span> Wearhouse Manager</span>
     </header> -->
 </div>
+<div class="card">
+    <div style="height: 0px; position: relative;">
+        <p-toast />
 
+        <p-speeddial [model]="menuItems" direction="left"
+            [style]="{ position: 'absolute', top: 'calc(10% - 2rem)', right: 0 }"
+            [buttonProps]="{ severity: 'contrast', rounded: true }" />
+
+    </div>
+</div>
 <!-- /=Creating stores identity -->
 
 

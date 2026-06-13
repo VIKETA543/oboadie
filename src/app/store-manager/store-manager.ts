@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { DialogModule } from 'primeng/dialog';
@@ -28,6 +28,8 @@ import { Storeinterface, StoreListInterface } from '../interface/storeinterface'
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { Wearehouse } from '../services/wearehouse';
 import { Cartegory, Product, Stockbycategories } from '../interface/warehouseinterface';
+import { SpeedDialModule } from 'primeng/speeddial';
+
 
 @Component({
   standalone:true,
@@ -57,20 +59,82 @@ import { Cartegory, Product, Stockbycategories } from '../interface/warehouseint
     DatePickerModule,
     InputNumberModule,
     TextareaModule,
-    AvatarModule, RouterOutlet],
+    AvatarModule,
+    SpeedDialModule,
+     RouterOutlet],
   templateUrl: './store-manager.html',
   styleUrl: './store-manager.scss',
     providers: [MessageService],
  
 })
 export class StoreManager implements OnInit {
-
-
+menuItems:any[]=[]
+private messageService=Inject(MessageService)
 
 constructor(private warehouseservice :Wearehouse, private router:Router,private  routes:ActivatedRoute,  private storeservice:StoreService,private messageservice: MessageService, private cdr: ChangeDetectorRef){}
 
 ngOnInit(): void {
   
+   this.menuItems = [
+            {label: 'Add Stock',
+                icon: 'pi pi-server',
+                   tooltipOptions: { tooltipLabel: 'Add Stock' },
+                severity: 'info',
+                command: () => {
+                    this.populateStock()
+                }
+            },
+             {label: 'Add',
+                icon: 'pi pi-pencil',
+                   tooltipOptions: { tooltipLabel: 'New Product' },
+                severity: 'info',
+                command: () => {
+                    this.newProduct()
+                }
+            },
+            {
+                icon: 'pi pi-building-columns',
+                 tooltipOptions: { tooltipLabel: 'Stores' },
+                   severity: 'info',
+                command: () => {
+              this.createStore()
+                }
+            },
+            {
+                icon: 'pi pi-briefcase',
+                  tooltipOptions: { tooltipLabel: 'Store Type' },
+                   severity: 'info',
+                command: () => {
+                  this.storeType()
+                }
+            },
+            {
+                icon: 'pi pi-download',
+               tooltipOptions: { tooltipLabel: 'Receive Stock' },
+                   severity: 'help',
+               command:()=>{
+                this.recieveStock()
+               }
+            },
+            {
+                icon: 'pi pi-microsoft',
+               tooltipOptions: { tooltipLabel: 'Product Cartegory' },
+                   severity: 'help',
+                command:()=>{
+                  this.productCategories()
+                }
+            },
+            {
+              icon:'pi pi-tags',
+                 tooltipOptions: { tooltipLabel: 'Mount Product' },
+                 severity: 'help',
+                 styleClass: 'p-button-success',
+              command:()=>{
+                this.MountProduct()
+              }
+            }
+        ];
+    
 }
 getRandomInt(min: number, max: number): number {
     min = Math.ceil(min);
@@ -94,6 +158,13 @@ storeType=()=>{
   this.router.navigate(['store-type'],{relativeTo:this.routes})
 
   // this.isNewstore.set(true)
+}
+MountProduct() {
+  this.router.navigate(['store-products'], { relativeTo: this.routes })
+}
+
+populateStock() {
+  this.router.navigate(['push-stockto-stores'], { relativeTo: this.routes })
 }
 
 isNewstore=signal(false);

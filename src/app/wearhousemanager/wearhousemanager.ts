@@ -698,7 +698,8 @@ is_mountproduct=signal(false)
   constructor(private productservice:productservice, private storeservice: StoreService, private warehouseservice: Wearehouse, private messageservice: MessageService, private cdr: ChangeDetectorRef) { }
 
   gotoMountProduct() {
-  this.productservice.listproduct().subscribe((response:any)=>{
+    let data = {}
+  this.productservice.listproduct(data).subscribe((response:any)=>{
     if(response?.message){
       this.message=response?.message
           this.messageservice.add({ severity: 'error', summary: 'Success', detail: this.message, life: 5000 });

@@ -157,7 +157,7 @@ this.isNewStore.set(true)
 
   createStoreNumber = () => {
     let randomInteger: number = this.getRandomInt(1, 1000000); // Generates a random integer between 1 and 10
-    this.storeNumber = "STR-S-" + new Date().getDay() + randomInteger
+    this.storeNumber = "STRIDN-" + new Date().getDay() + randomInteger
     // this.liststoretypes()
   }
 

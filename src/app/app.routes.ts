@@ -52,6 +52,11 @@ import { StoreReceiveStock } from './stores/store-receive-stock/store-receive-st
 import { WarehousePull } from './stores/main-stores/Warehousepull/warehouse-pull';
 import { Resetpassword } from './userAuth/resetpassword/resetpassword';
 import { PosHome } from './pos/pos-home/pos-home';
+import { MountProducts } from './stores/mount-products/mount-products';
+import { PushStocktoStores } from './stores/push-stockto-stores/push-stockto-stores';
+import { CashierHome } from './cashier/cashier-home/cashier-home';
+import { StoreManualVerification } from './stores/store-manual-verification/store-manual-verification';
+
 
 
 
@@ -107,6 +112,9 @@ export const routes: Routes = [
                     { path: 'store-type', component: StoreType },
                     { path: 'create-products', component: CreateProducts },
                     { path: 'product-category', component: ProductCategory },
+                    { path: 'store-products', component: MountProducts },
+                    { path: 'push-stockto-stores', component: PushStocktoStores },
+
                 ]
             },
             { path: 'pos-panager', component: PosPanager },
@@ -127,8 +135,8 @@ export const routes: Routes = [
 
                         ]
                     },
-                 
-             
+
+
 
                 ]
             },
@@ -170,10 +178,13 @@ export const routes: Routes = [
             { path: 'product-category', component: ProductCategory },
             { path: 'productbrand', component: Productbrand },
             { path: 'stock-request', component: StockRequest },
+
+
             {
                 path: 'verify-sales', component: VerifySales, children: [
                     { path: 'verify-cash-sales', component: VerifyCashSales },
-                    { path: 'verify-credit-sales', component: VerifyCreditSales }
+                    { path: 'verify-credit-sales', component: VerifyCreditSales },
+                    { path: 'store-manual-verification', component: StoreManualVerification },
                 ]
             },
 
@@ -186,6 +197,7 @@ export const routes: Routes = [
             { path: 'credit-sales', component: CreditSales },
             { path: 'new-deposit', component: NewDeposit },
             { path: 'create-account', component: CreateAccount },
+
             {
                 path: 'profoma-invoice', component: ProfomaInvoice, children: [
                     { path: 'new-profoma', component: NewProfoma }
@@ -197,8 +209,8 @@ export const routes: Routes = [
 
                 ]
             },
-               {path: 'pos-home', component: PosHome },
-               { path: '', redirectTo: 'pos-home', pathMatch: 'full' }
+            { path: 'pos-home', component: PosHome },
+            { path: '', redirectTo: 'pos-home', pathMatch: 'full' }
         ]
     },
     {
@@ -207,7 +219,9 @@ export const routes: Routes = [
                 path: 'cash-payments', component: CashPayments, children: [
                     { path: 'scanner-payment', component: ScannerPayment },
                     { path: 'mobile-scanner', component: MobileScanner },
-                    { path: 'manual-verification', component: ManualVerification }
+                    { path: 'manual-verification', component: ManualVerification },
+                    { path: 'cashier-home', component: CashierHome },
+                    { path: '', redirectTo: 'cashier-home', pathMatch: 'full' }
                 ]
             },
             { path: 'pay-credit', component: PayCredit }
@@ -220,7 +234,7 @@ export const routes: Routes = [
             { path: 'user-login', component: UserLogin },
             { path: 'auth', component: Auth },
             { path: 'redirect-user', component: RedirectUser },
-            {path:'resetpassword',component:Resetpassword}
+            { path: 'resetpassword', component: Resetpassword }
         ]
     },
 

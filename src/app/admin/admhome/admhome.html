@@ -1,23 +1,48 @@
-  <p-toolbar>
+  <div class="card">
+    <p-toolbar>
         <ng-template #start>
-             <div class="buss-header">
-        <img id="logo" src="assets/logo/oboadie.jpeg" alt="">
-        <header>Oboadie Nyame Trading Enterprise</header>
-    </div>
-        </ng-template>
 
+                 <p-avatar image="assets/logo/oboadie.jpeg" class="mr-5" size="xlarge" shape="circle"/>
+            <div>
+            <span class="font-bold text-lg mr-2 storename">{{userInfo[0]?.storename}}</span>
+            <h2>OBOADIE NYAME ENTERPRISE</h2>
+            </div>
+        </ng-template>
+        <ng-template #center>
+
+        </ng-template>
+        <ng-template #end>
+            <span class="font-bold text-lg mr-4 storename">
+                <label class="mr-2 name">{{userInfo[0]?.fullname}}</label>
+              
+                <!-- <i class="pi pi-cog" style="font-size: 2rem"></i> -->
+                    <p-avatar class="mr-2" size="xlarge" shape="circle" image="{{userInfo[0]?.passport_picture_url}}"
+                shape="circle" size="large" >
+       
+                </p-avatar>
+            </span>
+        </ng-template>
     </p-toolbar>
-  <p-toolbar>
-     <ng-template #sart>
-
-     </ng-template>
-      <ng-template #center></ng-template>
-            <ng-template #end>
-            <p-button (click)="dropMenu = true" icon="pi pi-ellipsis-v" label="Menu" severity="secondary" />
+    <div class="pane">
+           <p-toolbar class="mb-4 bg-gray-100">
+                <ng-template #start>
+                     <div class="card flex justify-center gap-4">
+            <div class="card flex justify-center gap-4">
+      
+/>
+    </div>
+    </div>
+                </ng-template>
+                     <ng-template #end>
+                            <!-- <p-button icon="pi pi-ellipsis-v" label="Menu" class="mr-2" raised="true" severity="contrast" (onClick)="op.toggle($event)" /> -->
+                                <p-button (click)="dropMenu = true" icon="pi pi-ellipsis-v" label="Menu" severity="secondary" />
             <p-button (click)="op.toggle($event)" icon="pi pi-cog" label="Admin"  severity="secondary"/>
-        </ng-template>
-  </p-toolbar>
-
+                     </ng-template>
+           
+           </p-toolbar>
+    </div>
+</div>
+  
  <div class="card flex justify-center">
             <p-popover #op>
    

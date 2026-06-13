@@ -171,4 +171,22 @@ loadtransactions=(data:any)=>{
    return this.http.post(this.url + '/stores/loadtransactions',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
 }
 
+
+liststoreproduct_dtock=(data:any)=>{
+   return this.http.post(this.url + '/stores/liststoreproduct',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+
+savePrice=(data:any)=>{
+   return this.http.post(this.url + '/stores/liststoreproduct',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+dropPush=(data:any)=>{
+   return this.http.post(this.url + '/stores/dropPush',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+from_storemanager_to_Store=(data:any)=>{
+   return this.http.post(this.url + '/stores/from_storemanager_to_Store',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
 }

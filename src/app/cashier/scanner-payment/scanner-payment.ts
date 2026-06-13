@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Inject, inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { Subject, Subscription, buffer, debounceTime, map, filter } from 'rxjs';
 import { PosServcie } from '../../services/pos-servcie';
 import { subscribe } from 'diagnostics_channel';
@@ -13,12 +13,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { NgxBarcode6 } from 'ngx-barcode6';
 import { TableModule } from 'primeng/table';
 import { DividerModule } from 'primeng/divider';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, isPlatformBrowser } from '@angular/common';
 import { FluidModule } from 'primeng/fluid';
 import { InputNumberInputEvent, InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
 import { Toolbar } from "primeng/toolbar";
 import { NgxPrintDirective } from 'ngx-print';
+import { Users } from '../../interface/Users';
 @Component({
   standalone: true,
   selector: 'scanner-payment',
@@ -47,7 +48,23 @@ export class ScannerPayment implements OnInit, OnDestroy {
   previousBalance: number = 0
   paymentNumber: any
   sumamountPaidData:any[]=[]
-  constructor(private cdr: ChangeDetectorRef, private posservice: PosServcie) {
+    USER_CREDENTIALS:Users[]|any
+    dialogVisible=signal(false)
+  constructor(private cdr: ChangeDetectorRef, private posservice: PosServcie,@Inject(PLATFORM_ID) private platformId: Object) {
+
+
+ if (isPlatformBrowser(this.platformId)) {
+                      try {
+                  // this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+                  this.USER_CREDENTIALS=JSON.parse(localStorage.getItem('USER_CREDENTIALS') || '{}');
+                   console.log('User',this.USER_CREDENTIALS)
+                } catch (e) {
+                  this.message = "Could not parse JSON from storage: " + e
+                }
+              }
+
+
+
     this.scanSub = this.keyStrokes$.pipe(
       // 1. Group keys together
       buffer(this.keyStrokes$.pipe(debounceTime(50))),
@@ -93,6 +110,8 @@ export class ScannerPayment implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.scanSub.unsubscribe();
   }
+
+  
   loadSales = () => {
     let data = {
       invoinceNumber: this.lastScan
@@ -263,6 +282,14 @@ console.log('sum paid',  this.sumamountPaidData)
     })
   }
   onPrintComplete = () => {
+
     this.isPaymentcomplete.set(false)
+  }
+
+    onExit=()=>{
+      this.dialogVisible.set(false)
+        this.isPaymentcomplete.set(false)
+        
+
   }
 }

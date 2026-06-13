@@ -312,6 +312,7 @@
                 <p-button label="Submit" [raised]="true" severity="info" (onClick)="submitInvoice()" />
             </div>
             }
+            
             @if(submitOnSuccess()){
             <div class="card flex justify-center">
                 <p-dialog [(visible)]="submitOnSuccess" [modal]="true" [style]="{ width: '50rem' }">
@@ -323,16 +324,7 @@
                     </ng-template>
                     <div class="sales-display" header="Cash Invoice">
                         <div id="print-section">
-                            <div class="receipt-info">
-                                <div class="card flex flex-col items-center gap-1">
-                                    <img id="srclogo" src="assets/logo/oboadie.jpeg" alt="">
-                                </div>
-                                <div class="section">
-                                    <header class="head-info">OBOADIE NYAME ADOM ENTERPRISE</header>
-                                    <label class="head-info">Behind Our Lady of Fatima Junction</label>
-                                    <label class="head-info">0531885457</label>
-                                </div>
-                            </div>
+                         
 
                             <div class="header-segement">
                                 <div class="card w-full">

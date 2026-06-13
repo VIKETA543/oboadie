@@ -26,6 +26,15 @@ export class PosServcie {
    return this.http.post(this.url + '/pos/load_invoice_for_update',data, { headers: new HttpHeaders().set('contentType', "application/json") })
   }
 
+  verify_invoice=(data:any)=>{
+   return this.http.post(this.url + '/pos/verify_invoice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+verify_credit_invoice=(data:any)=>{
+   return this.http.post(this.url + '/pos/verify_credit_invoice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+  
     load_credit_invoice_for_update=(data:any)=>{
    return this.http.post(this.url + '/pos/load_credit_invoice_for_update',data, { headers: new HttpHeaders().set('contentType', "application/json") })
   }

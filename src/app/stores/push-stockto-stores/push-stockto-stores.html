@@ -1,0 +1,142 @@
+<header class="inline-flex items-center justify-center gap-5 w-full">
+    <span class="inline-flex items-center justify-center gap-5 w-full">Stock Products</span>
+
+
+    <div class="card flex justify-center">
+        <p-select [options]="stores" [(ngModel)]="selectedStore" optionLabel="storename" [filter]="true"
+            (onChange)="loadRecords($event)" filterBy="storename" [showClear]="true" placeholder="Select a Store"
+            class="w-full md:w-56">
+            <ng-template #selectedItem let-stores>
+                <div class="flex items-center gap-2">
+                    <img src="{{stores.imageurl ||''}}" style="width: 25px" />
+                    <div>{{ stores.storename }}</div>
+                </div>
+            </ng-template>
+            <ng-template let-stores #item>
+                <div class="flex items-center gap-2">
+                    <img src="{{stores.imageurl ||''}}" style="width: 25px" />
+                    <div>{{ stores.storename }}</div>
+                </div>
+            </ng-template>
+        </p-select>
+    </div>
+
+</header>
+
+@if(StoreProducts && StoreProducts.length>0){
+<div class="card table-style">
+
+
+
+    <p-table [value]="StoreProducts" dataKey="id" stripedRows="true" [tableStyle]="{ 'min-width': '50rem' }" #dt1
+        [value]="StoreProducts" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="false" [paginator]="true"
+        [globalFilterFields]="['serialnumber ', 'brandid', 'title']" [tableStyle]="{ 'min-width': '75rem' }">
+        <ng-template #caption>
+            <div class="flex">
+                <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+                <div class="card flex flex-wrap justify-center gap-6 w-full">
+                    <p-badge value="PUSH STOCK" severity="contrast"
+                        [style]="{ 'padding': '0 10px', 'height': '2rem', 'min-width': '2rem', 'line-height': '2rem' }" />
+                </div>
+                @if(storename){
+                <div class="card flex flex-wrap justify-center gap-6 w-full">
+                    <p-badge value="{{storename}}" severity="contrast"
+                        [style]="{ 'padding': '0 10px', 'height': '2rem', 'min-width': '2rem', 'line-height': '2rem' }" />
+                </div>
+                }
+                <p-iconfield iconPosition="left" class="ml-auto">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt1, $event)" placeholder="Search keyword" />
+                </p-iconfield>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th>#</th>
+                <th style="width:20%">Product ID</th>
+                <th style="width:20%">Brand ID</th>
+                <th style="width:20%">Product Name</th>
+                <th style="width:10%">Product Photo</th>
+                <th style="width:20%">Add Stock</th>
+                <th style="width:20%">Action</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-StoreProducts let-editing="editing" let-i="rowIndex">
+            <tr>
+                <td>{{i+1}}</td>
+                <td>
+                    {{ StoreProducts.product_number }}
+                </td>
+                <td>
+                    {{ StoreProducts.brandid }}
+                </td>
+                <td>
+                    {{ StoreProducts.title }}
+                </td>
+                <td>
+                    <p-avatar image="{{StoreProducts.imageurl}}" class="mr-2" size="xlarge" shape="circle" />
+                </td>
+                <td [pEditableColumn]="StoreProducts.title" pEditableColumnField="title">
+                    <div class="card flex justify-center">
+                        <div class="font-medium text-surface-900 dark:text-surface-0 block mb-2">
+                                     <p-button (click)="op.toggle($event)" icon="pi pi-chevron-down" label="add" />
+                        </div>
+               
+                        <p-popover #op>
+                            <div class="flex flex-col gap-4 w-[25rem]">
+                                <div>
+                                    <span class="font-medium text-surface-900 dark:text-surface-0 block mb-2">Add
+                                        quntity</span>
+                                    <div class="flex">
+                                        <p-inputgroup>
+                                            <input pInputText (input)="onInputChange($event)" />
+                                            <button pButton label="Save" icon="pi pi-arrow-right"
+                                                (click)="submitToStore(StoreProducts, qty);op.hide()"></button>
+                                        </p-inputgroup>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </p-popover>
+
+                        <div class="flex">
+                            <p-inputgroup>
+                                <input pInputText id="{{StoreProducts.brandid}}" readonly #qty />
+                                <!-- @if(is_stock_added()){
+                                <p-overlaybadge value="2">
+                                    <i class="pi pi-check" style="font-size: 2rem" severity="help"></i>
+                                </p-overlaybadge>
+
+                                } -->
+                            </p-inputgroup>
+                        </div>
+                    </div>
+
+                </td>
+
+                <td>
+                    <div class="card flex justify-center gap-4">
+
+                        <div class="card flex justify-center">
+                            <p-button label="Delete" icon="pi pi-trash" (onClick)="onDelete(StoreProducts,qty)"
+                                severity="danger" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</div>
+}@else {
+
+
+<div class="card flex flex-wrap justify-center gap-6 w-full">
+    <p-badge value="Load Products" severity="info"
+        [style]="{ 'padding': '0 10px', 'height': '2rem', 'min-width': '2rem', 'line-height': '2rem' }" />
+</div>
+
+}
+<p-toast></p-toast>

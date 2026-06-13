@@ -69,3 +69,22 @@
         padding: 1.5rem;
     }
 }
+.section{
+width: calc(100% - 30%);
+}
+.head-info{
+  display:block;
+  width:100%;
+  text-align: center;
+}
+.customer{
+  span{
+          font-size: clamp(1red,1.5rem,2rem);
+  }
+  span:first-child{
+    width: calc(100% - 60%);
+  }
+  span:last-child{
+    width: calc(100% - 40%);
+  }  
+}

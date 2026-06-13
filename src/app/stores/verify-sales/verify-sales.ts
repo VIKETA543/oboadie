@@ -41,7 +41,7 @@ constructor(
 
   selectionOption: string='HOME';
   isMobile = false;
-  stateOptions: any[] = [{ label: 'HOME', value: 'HOME',handsetOnly: false },{ label: 'CASH', value: 'CASH SALES',handsetOnly: false }, { label: 'CREDIT', value: 'CREDIT SALES',handsetOnly: false }];
+  stateOptions: any[] = [{ label: 'HOME', value: 'HOME',handsetOnly: false },{ label: 'CASH', value: 'CASH SALES',handsetOnly: false }, { label: 'CREDIT', value: 'CREDIT SALES',handsetOnly: false },{ label: 'MANUAL', value: 'MANUAL VERIFICATION',handsetOnly: false }];
 public filteredOptions: any[] = [];
   ngOnInit(): void {
     this.breakpointObserver.observe([
@@ -73,7 +73,12 @@ public filteredOptions: any[] = [];
       case "CREDIT":
         this.router.navigate(['verify-credit-sales'], { relativeTo: this.route });
         break;
-    default: this.router.navigate(['verify-credit-sales'], { relativeTo: this.route });
+         case "MANUAL":
+    
+        this.router.navigate(['store-manual-verification'], { relativeTo: this.route });
+        break;
+    // default: this.router.navigate(['verify-credit-sales'], { relativeTo: this.route });
+    // break;
     }
   }
 

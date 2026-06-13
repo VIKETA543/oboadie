@@ -82,7 +82,8 @@ export class Productbrand {
     })
   }
     loadProductList=()=>{
-    this.productservice.listproduct().subscribe((response: any) => {
+      let data={}
+    this.productservice.listproduct(data).subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
       } else {
