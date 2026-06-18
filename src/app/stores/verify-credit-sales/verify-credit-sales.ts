@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, HostListener, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, Inject, inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Subject, Subscription, buffer, debounceTime, map, filter } from 'rxjs';
 import { PosServcie } from '../../services/pos-servcie';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxBarcode6 } from 'ngx-barcode6';
 import { NgxPrintDirective } from 'ngx-print';
@@ -22,6 +22,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ToggleSwitchChangeEvent } from 'primeng/types/toggleswitch';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { Users } from '../../interface/Users';
 
 @Component({
   selector: 'verify-credit-sales',
@@ -61,8 +62,23 @@ export class VerifyCreditSales implements OnInit, OnDestroy {
   purchaseInfo: any[] = []
   isDataLoaded = signal(false)
   isStoreVerified: boolean = false;
-  constructor(private cdr: ChangeDetectorRef,private storeservcie:StoreService,private router: Router, private route: ActivatedRoute){
+  USER_CREDENTIALS: Users[] | any
+    userInfo: any[] | any
+    storeData: any
+  constructor( @Inject(PLATFORM_ID) private platformId: Object,private cdr: ChangeDetectorRef,private storeservcie:StoreService,private router: Router, private route: ActivatedRoute){
+    
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+        this.USER_CREDENTIALS = JSON.parse(localStorage.getItem('USER_CREDENTIALS') || '{}');
+        console.log('User', this.userInfo)
 
+        this.storeData = JSON.parse(localStorage.getItem('storeData') || '{}');
+        console.log('User', this.storeData)
+      } catch (e) {
+        this.message = "Could not parse JSON from storage: " + e
+      }
+    }
    this.scanSub = this.keyStrokes$.pipe(
       // 1. Group keys together
       buffer(this.keyStrokes$.pipe(debounceTime(50))),
@@ -116,7 +132,8 @@ export class VerifyCreditSales implements OnInit, OnDestroy {
     loadCashSailes = () => {
       let data = {
         invoiceNumber: this.lastScan,
-        storeNumber: 'STR-S-2379493'
+        storeNumber: this.storeData[0]?.storenumber
+
       }
       console.log(data)
       this.storeservcie.creditVerification(data).subscribe((response: any) => {

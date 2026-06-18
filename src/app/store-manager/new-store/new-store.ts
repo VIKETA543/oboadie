@@ -66,7 +66,62 @@ import { response } from 'express';
 })
 export class NewStore implements OnInit {
 
-  // @ViewChild('op') op!: Popover;
+
+
+  
+authStore($event: ToggleSwitchChangeEvent,_t126: any) {
+console.log(_t126)
+let data={
+  store_number:_t126?.storenumber,
+  auth:$event.checked
+}
+this.storeservice.authoriseStore(data).subscribe((response:any)=>{
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.success) {
+          this.message= response?.success
+          this.getAllstores();
+          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+        } else {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+})
+
+}
+
+  
+dropStore(_t126: any) {
+console.log(_t126)
+let data={
+  store_number:_t126?.storenumber,
+}
+this.storeservice.dropStore(data).subscribe((response:any)=>{
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.success) {
+          this.message= response?.success
+          this.getAllstores();
+          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+        } else {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+})
+
+}
+
+
+
+
+
+   @ViewChild('op') op!: Popover;
  
     storeNumber: any
   StoretypeNumber: any
@@ -179,7 +234,8 @@ this.isNewStore.set(true)
 
       } else {
         if (response?.success) {
-          this.stridentityData = response?.success
+          this.message= response?.success
+          this.getAllstores();
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
           this.message = response?.message
@@ -256,6 +312,9 @@ storetypeName:any
     this.storetypeName=selectedstore.storeidentityname
     this.isViewingStore.set(true)
   }
+
+
+  
 
 
  initPushproduct=()=>{

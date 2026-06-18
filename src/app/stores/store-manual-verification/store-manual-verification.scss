@@ -1,0 +1,86 @@
+::ng-deep .p-speeddial-button.p-button {
+  width: 10rem;  /* Adjust as needed */
+  height: 10rem; /* Adjust as needed */
+}
+
+/* Increase the icon size inside the button */
+::ng-deep .p-speeddial-button.p-button .p-button-icon {
+  font-size: 6rem; /* Makes the icon larger */
+}
+
+::ng-deep .p-speeddial-action {
+  width: 3.5rem !important;  /* Default is usually around 2.5rem */
+  height: 3.5rem !important; /* Must match width */
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+::ng-deep .p-speeddial-action .p-button-icon {
+  font-size: 3rem;
+  color: #4f46e5
+}
+::ng-deep .custom-gradient-btn.p-button {
+  background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Ensure the gradient looks great when hovered or focused */
+::ng-deep .custom-gradient-btn.p-button:hover {
+  background: linear-gradient(135deg, #4338ca 0%, #0891b2 100%) !important;
+  transform: translateY(-2px);
+}
+
+::ng-deep .custom-gradient-btn.p-button:active {
+  transform: translateY(0);
+}
+
+
+.scanner-payment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+.barcode-container{
+    width: 60%;
+    height: 100px;
+    display:flex;
+    flex: 1;
+}
+.h-container{
+    display: flex;
+    .header-info{
+        border-radius: .5em;
+        width: calc(100% - 49%);
+        margin: 20px;
+             border: 1px solid lightgray;
+        div{
+            border: 1px dotted lightgray;
+            label{
+                padding: 10px;
+                font-size: clamp(.8vw,1vw,1.5vw);
+
+            }
+            label:first-child{
+                width: calc(100% - 70%);
+                font-weight: bold;
+            }
+        }
+    }
+}
+.container{
+   border-radius: .5em;
+        width: calc(100% - 0%);
+        box-shadow: 0px 0px 10px 2px lightgray;
+        margin: 20px;
+}
+.sticky-bottom {
+    position: sticky;
+    bottom: 0;
+    z-index: 1000; /* Keeps it above other content */
+    background-color: var(--surface-card); /* Optional: ensures it isn't transparent */
+}

@@ -56,6 +56,7 @@ import { MountProducts } from './stores/mount-products/mount-products';
 import { PushStocktoStores } from './stores/push-stockto-stores/push-stockto-stores';
 import { CashierHome } from './cashier/cashier-home/cashier-home';
 import { StoreManualVerification } from './stores/store-manual-verification/store-manual-verification';
+import { StoreHome } from './stores/store-home/store-home';
 
 
 
@@ -93,16 +94,21 @@ export const routes: Routes = [
                     { path: 'stockreceived', component: Stockreceived },
                     { path: 'create-products', component: CreateProducts },
                     { path: 'product-category', component: ProductCategory },
+               
                     {
                         path: 'verify-sales', component: VerifySales, children: [
                             { path: 'verify-cash-sales', component: VerifyCashSales },
-                            { path: 'verify-credit-sales', component: VerifyCreditSales }
+                            { path: 'verify-credit-sales', component: VerifyCreditSales },
+                                    { path: 'store-home', component: StoreHome },
+                                      { path: '', redirectTo: 'store-home', pathMatch: 'full' }
+
                         ]
                     },
                     { path: 'productbrand', component: Productbrand },
 
                     { path: 'stock-balances', component: StockBalances },
                     { path: 'warehouse-pull', component: WarehousePull },
+                   
                 ]
             },
             {
@@ -185,9 +191,10 @@ export const routes: Routes = [
                     { path: 'verify-cash-sales', component: VerifyCashSales },
                     { path: 'verify-credit-sales', component: VerifyCreditSales },
                     { path: 'store-manual-verification', component: StoreManualVerification },
+                     { path: 'store-home', component: StoreHome },
+                                      { path: '', redirectTo: 'store-home', pathMatch: 'full' }
                 ]
             },
-
         ]
     },
 

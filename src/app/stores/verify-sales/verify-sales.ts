@@ -64,7 +64,7 @@ public filteredOptions: any[] = [];
     const selectedOption = $event.option.label
     switch (selectedOption) {
         case "HOME":
-        this.router.navigate(['../'], { relativeTo: this.route });
+        this.router.navigate(['store-home'], { relativeTo: this.route });
         break;
       case "CASH":
         this.router.navigate(['verify-cash-sales'], { relativeTo: this.route });

@@ -115,19 +115,19 @@ export class CreditSales {
   isAddtoCustomerList = signal(false)
   USER_CREDENTIALS: any;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object,private posservice: PosServcie, private crmservcie: Crmservice, private cdr: ChangeDetectorRef, private router: Router, private routes: ActivatedRoute) {
-    
-     if (isPlatformBrowser(this.platformId)) {
-                          try {
-                      // this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
-                      this.USER_CREDENTIALS=JSON.parse(localStorage.getItem('USER_CREDENTIALS') || '{}');
-                       console.log('User',this.USER_CREDENTIALS)
-                    } catch (e) {
-                      this.message = "Could not parse JSON from storage: " + e
-                    }
-                  }
-    
-    
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private posservice: PosServcie, private crmservcie: Crmservice, private cdr: ChangeDetectorRef, private router: Router, private routes: ActivatedRoute) {
+
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        // this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+        this.USER_CREDENTIALS = JSON.parse(localStorage.getItem('USER_CREDENTIALS') || '{}');
+        console.log('User', this.USER_CREDENTIALS)
+      } catch (e) {
+        this.message = "Could not parse JSON from storage: " + e
+      }
+    }
+
+
     this.isCashsalse.set(true)
     this.getAllproducts()
   }
@@ -182,17 +182,27 @@ export class CreditSales {
   checked: boolean = false
   storeNumber: any
   addToCart(_t77: any) {
-    this.isaddingCart.set(true)
-    this.SelectedProduct = _t77
-    this.storeNumber = _t77.store_number
-    this.product_name = _t77.name
-    this.product_type = _t77.title
-    this.price_for_unit = _t77.unitesellingprice
-    this.price_for_carton = _t77.cartsellingprice
-    this.available_quantity = _t77.stock_balance
-    this.store_name = _t77.storename
 
-    console.log('The selected', this.SelectedProduct)
+    if (this.customerType === undefined) {
+      alert('Add Customer information!')
+    } else {
+      if (_t77.unitesellingprice > 0 || _t77.cartsellingprice > 0) {
+        this.isaddingCart.set(true)
+        this.SelectedProduct = _t77
+        this.storeNumber = _t77.store_number
+        this.product_name = _t77.name
+        this.product_type = _t77.title
+        this.price_for_unit = _t77.unitesellingprice
+        this.price_for_carton = _t77.cartsellingprice
+        this.available_quantity = _t77.stock_balance
+        this.store_name = _t77.storename
+
+        console.log('The selected', this.SelectedProduct)
+      } else {
+        this.message = 'The selected Product has no mounted price'
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      }
+    }
   }
 
 
@@ -213,7 +223,7 @@ export class CreditSales {
         this.selected_price = this.price_for_carton
         console.log(this.selected_price)
         break;
-    
+
       default:
         this.message = 'select package type'
         break
@@ -270,14 +280,14 @@ export class CreditSales {
 
 
   calcTotal = () => {
-    switch(this.selected_price){
+    switch (this.selected_price) {
       case 0:
-        this.message='This product has not been priced. Add price before you issue invoices'
-           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        this.message = 'This product has not been priced. Add price before you issue invoices'
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
         break;
-        default: 
-            this.totalCost = this.quoteQuantity * this.selected_price
-    console.log(this.totalCost)
+      default:
+        this.totalCost = this.quoteQuantity * this.selected_price
+        console.log(this.totalCost)
 
         break;
     }
@@ -366,7 +376,9 @@ export class CreditSales {
       let data = {
         invoceNumber: this.creditTempData[0].invoice_number,
         sumInvoiceTotal: this.sumTotalCart,
-        salesObject: 'CREDIT_SALES'
+        salesObject: 'CREDIT_SALES',
+
+
       }
       this.posservice.submitCreditInvoice(data).subscribe((response: any) => {
         if (response?.message) {
@@ -401,7 +413,7 @@ export class CreditSales {
       emailadress: this.emailAddress,
       addresss: this.address,
       dateposted: this.invoiceDate,
-      preparedBy:this.USER_CREDENTIALS?.uac_id
+      preparedBy: this.USER_CREDENTIALS?.uac_id
     }
     this.posservice.openOpenInvoice(data).subscribe((response: any) => {
       if (response?.message) {

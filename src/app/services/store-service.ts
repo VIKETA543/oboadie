@@ -189,4 +189,41 @@ from_storemanager_to_Store=(data:any)=>{
    return this.http.post(this.url + '/stores/from_storemanager_to_Store',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
 }
 
+
+
+authoriseStore=(data:any)=>{
+   return this.http.post(this.url + '/stores/authoriseStore',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+dropStore=(data:any)=>{
+   return this.http.post(this.url + '/stores/dropStore',data,{ headers: new HttpHeaders().set('contentType', "application/json") }) 
+}
+
+ daily_verified_invoice=(data:any)=>{
+   return this.http.post(this.url + '/stores/daily_verified_invoice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+   join_credit_cash_salse=(data:any)=>{
+
+       return this.http.post(this.url + '/stores/join_credit_cash_sale', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
+
+verify_credit_invoice=(data:any)=>{
+   return this.http.post(this.url + '/stores/verify_credit_invoice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+   prepared_credit_invoices=(data:any)=>{
+ return this.http.post(this.url + '/stores/prepared_credit_invoices', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
+
+ prepared_invoices=(data:any)=>{
+       return this.http.post(this.url + '/stores/prepared_cash_invoices', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
+
+
+
+
+verify_invoice=(data:any)=>{
+   return this.http.post(this.url + '/stores/verify_invoice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
 }

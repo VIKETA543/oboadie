@@ -32,7 +32,8 @@ import { Crmservice } from '../../services/crmservice';
 import { AvatarModule } from 'primeng/avatar';
 import { PanelModule } from 'primeng/panel';
 import { Users } from '../../interface/Users';
-
+import { BadgeModule } from 'primeng/badge';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
 
 @Component({
   selector: 'cash-sales',
@@ -41,7 +42,7 @@ import { Users } from '../../interface/Users';
     IconFieldModule,
     InputIconModule,
     SplitButtonModule,
-    InputTextModule, Tooltip,
+    InputTextModule, BadgeModule,Tooltip,OverlayBadgeModule,
     TableModule,
     ToggleSwitchModule,
     FormsModule, Divider,
@@ -165,8 +166,8 @@ cutomerNumber: any
 
   iniCashSales = () => {
   const dbFormatAngular = formatDate(new Date(), 'yyyyMMddsshh', 'en-US');
-    let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
-    this.cashSalesInvoiceNumber = "CINV" + dbFormatAngular + "-" + randomInteger
+    let randomInteger: number = this.getRandomInt(1, 1000); // Generates a random integer between 1 and 10
+    this.cashSalesInvoiceNumber = "CINV" + dbFormatAngular  + randomInteger
     this.isInput.set(true)
     this.isInputInvoice.set(true)
 
@@ -178,6 +179,10 @@ cutomerNumber: any
 checked:boolean=false
 storeNumber:any
   addToCart(_t77: any) {
+    if(this.customerType===undefined){
+      alert('Add Customer information!')
+    }else{
+    if( _t77.unitesellingprice>0||_t77.cartsellingprice>0){
     this.isaddingCart.set(true)
     this.SelectedProduct = _t77
     this.storeNumber = _t77.store_number
@@ -189,6 +194,11 @@ storeNumber:any
     this.store_name = _t77.storename
 
     console.log('The selected', this.SelectedProduct)
+    }else{
+      this.message='The selected Product has no mounted price'
+                  this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+    }
+    }
   }
 
   selectecustomerType($event: CheckboxChangeEvent,arg1: string) {
@@ -305,6 +315,7 @@ AddCart(){
   switch(this.customerType){
     case undefined:
       alert('Select Customer type')
+      this.isaddingCart.set(false)
       break;
       default :
     if (response?.message) {

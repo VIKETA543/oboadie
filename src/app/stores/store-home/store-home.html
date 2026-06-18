@@ -1,0 +1,317 @@
+
+  <div class="card">
+            <div style="height: 0px; position: relative;">
+                <p-speeddial [model]="items" direction="left" [style]="{ position: 'fixed', right: 'calc(0%)', bottom: 0 }" class="custom-gradient-btn" />
+               
+            </div>
+        </div>
+<div class="main-container">
+
+    <p-panel header="DAILY INVOICE SUMMARIES " class="invoices">
+        <!-- <div class="inline-flex items-center justify-center gap-2">
+            <p-button icon="pi pi-history" class="w-full" styleClass="w-full" variant="text" raised="true"
+                severity="contrast" label="History" (onClick)="showHistory()" />
+        </div> -->
+        @if(prepared_invoices && prepared_invoices.length > 0){
+        <div class="items-center justify-center container">
+            <label>Cash Sales Invoices</label>
+
+            <p-divider></p-divider>
+            @for ( invoice of prepared_invoices; track $index) {
+
+            <span class="font-bold mb-1 flex text-lg mr-4 storename">
+                <p-avatar class="mr-2" size="xlarge" shape="circle" image="assets/logo/oboadie.jpeg" shape="circle"
+                    size="large">
+
+                </p-avatar>
+                <label class="mr-2 name"> {{ invoice.customername }}-{{ invoice.invoice_number }} </label>
+
+                <p-button icon="pi pi-eye" label="Show" class="w-50" styleClass="w-full" variant="text" raised="false"
+                    severity="warn" (onClick)="showInvoice(invoice)" />
+            </span>
+            <section>
+
+                <p-badge class="font-bold mb-1  mr-1"
+                    value="Verified: {{invoice.isinvoice_verified ? 'YES':'NO'}}"></p-badge>
+
+                <p-badge class="font-bold mb-1 mr-4"
+                    value="Submitted: {{invoice.invoice_submitted ? 'YES':'NO'}}"></p-badge>
+                <p-badge class="font-bold mb-1 mr-4"
+                    value="Submitted: {{invoice.is_payment_complete ? 'YES':'NO'}}"></p-badge>
+            </section>
+            }
+        </div>
+        }@else {
+        <p-message severity="info">{{ message }}</p-message>
+        }
+
+        @if(prepared_credit_invoice && prepared_credit_invoice.length > 0){
+        <div class="items-center justify-center container">
+            <label class="credit">Credit Sales Invoices</label>
+            <p-divider></p-divider>
+            @for ( invoice of prepared_credit_invoice; track $index) {
+            <span class="font-bold mb-1 flex text-lg mr-4 storename">
+                <p-avatar class="mr-2" size="xlarge" shape="circle" image="assets/logo/oboadie.jpeg" shape="circle"
+                    size="large">
+
+                </p-avatar>
+                <label class="mr-2 name"> {{ invoice.customername }}-{{ invoice.invoice_number }} </label>
+
+                <p-button icon="pi pi-eye" label="Show" class="w-50" styleClass="w-full" variant="text" raised="false"
+                    severity="warn" (onClick)="showInvoice(invoice)" />
+            </span>
+            <section>
+
+                <p-badge class="font-bold mb-1 mr-4" value="Verified: {{invoice.isinvoice_verified? 'YES':'NO'}}"
+                    [severity]="SalesData.isinvoice_verified ? 'success' : 'danger'">
+
+                </p-badge>
+
+                <p-badge class="font-bold mb-1 mr-4" value="Submitted: {{invoice.invoice_submitted? 'YES':'NO'}}"
+                    [severity]="SalesData.invoice_submitted ? 'success' : 'danger'">
+                </p-badge>
+                <p-badge class="font-bold mb-1  mr-4" value="Submitted: {{invoice.is_payment_complete ? 'YES':'NO'}}"
+                    [severity]="SalesData.is_payment_complete ? 'success' : 'danger'">
+                </p-badge>
+            </section>
+            }
+
+        </div>
+
+        }@else {
+        <p-message severity="info">{{ message }}</p-message>
+        }
+    </p-panel>
+    @if(isSalesdataloaded()){
+    <div class="card flex justify-center">
+
+        <p-dialog [(visible)]="isSalesdataloaded" [modal]="true" [style]="{ width: '140rem' }">
+            <ng-template #header>
+                <div class="inline-flex items-center justify-center gap-2">
+                    <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" />
+                    <span class="font-bold whitespace-nowrap">DAILY TRANSACTION HISTORY</span>
+                </div>
+            </ng-template>
+
+            <p-panel header="Daily Transaction" class="panel">
+                <div class="sales-quotes">
+                    @if(SalesData){
+                    <p-table #dt2 [value]="SalesData" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+                        [loading]="loading()" [paginator]="true" [globalFilterFields]="['serialnumber','name', 'title']"
+                        stripedRows>
+
+                        <ng-template #caption>
+
+                            <p-iconfield iconPosition="left" class="ml-auto">
+                                <p-inputicon>
+                                    <i class="pi pi-search"></i>
+                                </p-inputicon>
+                                <input pInputText type="text"
+                                    (input)="dt2.filterGlobal($event.target.value, 'contains')"
+                                    placeholder="Search keyword" />
+                            </p-iconfield>
+                        </ng-template>
+
+                        <ng-template #header>
+                            <tr>
+                                <th>serial</th>
+                                <th>Invoice Number</th>
+                                <th>Product Number</th>
+                                <th>Type/brand</th>
+                                <th>Store Name</th>
+                                <th>Purchase Mode</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                                <th>Store</th>
+                                <th>Cashier</th>
+                                <th>Issued</th>
+                                <th>Paid</th>
+                                <!-- <th>Action</th> -->
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-SalesData let-product let-i="rowIndex">
+                            <tr>
+                                <td [style]="{ width: '5rem' }">{{ i + 1 }}</td>
+                                <td>{{SalesData.invoice_number}}</td>
+                                <td>{{ SalesData.name }}</td>
+                                <td>{{ SalesData.title }}</td>
+                                <td>{{ SalesData.storename}}</td>
+                                <td>{{SalesData.sales_type}}</td>
+                                <td>{{ SalesData.quantity_sold }}</td>
+                                <td>{{ SalesData.unit_price | currency: 'Ghø' }}</td>
+                                <td>{{ SalesData.total_price | currency: 'Ghø' }}</td>
+                                <td>{{ SalesData.dateposted | date: 'yyyy-MM-dd' }}</td>
+                                <td>{{SalesData.store_verified ? 'VERIFIED':'NOT VERIFIED' }}</td>
+                                <td>{{SalesData.isinvoice_verified ? 'VERIFIED':'NOT VERIFIED' }}</td>
+                                <td>{{SalesData.item_issued ? 'YES':'NO' }}</td>
+                                <td>{{SalesData.isinvoice_paid ? 'YES':'NO' }}</td>
+                                <!-- <td>
+                            <p-button icon="pi pi-eye" class="w-50" styleClass="w-full" variant="text" raised="false"
+                                severity="info" label="Show Invoice" (onClick)="showInvoice(SalesData)" />
+                        </td> -->
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    }@else {
+                    <ng-component>
+                        <div class="card flex flex-wrap gap-4 justify-center">
+
+                            <p-message severity="info">{{message}}</p-message>
+
+                        </div>
+
+                    </ng-component>
+                    }
+                </div>
+
+            </p-panel>
+            <ng-template #footer>
+                <div class="inline-flex items-center justify-center gap-2">
+                    <p-button icon="pi pi-times" class="w-full" styleClass="w-full" variant="text" raised="true"
+                        severity="danger" label="Exit" (onClick)="closePane(SalesData)" />
+                </div>
+            </ng-template>
+        </p-dialog>
+    </div>
+
+    }
+</div>
+
+
+
+@if(is_View()){
+<div class="card flex justify-center">
+    <p-dialog [(visible)]="is_View" [modal]="true" [style]="{ width: '50rem' }">
+        <ng-template #header>
+            <div class="inline-flex items-center justify-center gap-2">
+                <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" />
+                <span class="font-bold whitespace-nowrap">PRINT INVOICE</span>
+            </div>
+        </ng-template>
+        <div class="sales-display" header="Cash Invoice">
+            <div id="print-section">
+                <div class="receipt-info">
+                    <span class="font-bold mb-1 flex text-lg mr-4 storename">
+                        <p-avatar class="mr-2" size="xlarge" shape="circle" image="assets/logo/oboadie.jpeg"
+                            shape="circle" size="large"></p-avatar>
+                        <div class="section">
+                            <header class="head-info">OBOADIE NYAME ADOM ENTERPRISE</header>
+                            <label class="head-info">Behind Our Lady of Fatima Junction</label>
+                            <label class="head-info">0531885457</label>
+                        </div>
+                    </span>
+
+
+                </div>
+
+                <div class="header-segement">
+                    <div class="card w-full">
+                        <div class="card flex flex-col items-center gap-1 customer">
+                            <span class="card flex flex-col items-center gap-1 ">Invoice#: </span>
+                            <span class="card flex flex-col items-center gap-1">{{cashSalesInvoiceNumber}}</span>
+                        </div>
+                        <div class=" card flex flex-col items-center gap-1 customer">
+                            <span class="card flex flex-col items-center gap-1">Date: </span>
+                            <span class="card flex flex-col items-center gap-1">{{ invoiceDate | date:
+                                'yyyy-MMM-dd, h:mm:ssa'}}</span>
+                        </div>
+                    </div>
+                    <div class="card w-full">
+                        <label class="card flex flex-col items-center gap-1 customer">
+                            <span class="card flex flex-col items-center gap-1">Customer:</span><span
+                                class="card flex flex-col items-center gap-1">{{customerName}}</span>
+                        </label>
+                        <label class="card flex flex-col items-center gap-1 customer">
+                            <span>Tel/Mob#:</span><span>{{telephoneNumber}}</span>
+                        </label>
+                    </div>
+                    <div class="card w-full">
+                        <label class="card flex flex-col items-center gap-1 customer">
+                            <span class="card flex flex-col items-center gap-1">Email:</span><span
+                                class="card flex flex-col items-center gap-1">{{emailAddress}}</span>
+                        </label>
+                        <label class="card flex flex-col items-center gap-5 customer">
+                            <span>Address:</span><span>{{custerAddress}}</span>
+                        </label>
+                        <label class="card flex flex-col items-center gap-5 customer">
+                            <span>Customer Type:</span><span>{{customerType}}</span>
+                        </label>
+                    </div>
+                </div>
+
+
+                <div class="card  tb ">
+                    <p-table [value]="cashtempData" [tableStyle]="{ 'min-width': '100%' }" stripedRows
+                        showGridlines="true">
+                        <ng-template #header>
+                            <tr>
+                                <th style="width:10%">PID</th>
+                                <th style="width:20%">Item</th>
+                                <th style="width:15%">Type</th>
+                                <th style="width:30%">Loc</th>
+                                <th style="width:10%">Qty</th>
+                                <th style="width:10%">Price</th>
+                                <th style="width:10%">Total</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-cashtempData>
+                            <tr>
+                                <td>{{cashtempData.purchaseid}}</td>
+                                <td>{{ cashtempData.name }}</td>
+                                <td>{{ cashtempData.title }}</td>
+                                <td>{{ cashtempData.storename }}</td>
+                                <td>{{ cashtempData.quantity_sold }}</td>
+                                <td>{{ cashtempData.unit_price }}</td>
+                                <td>{{ cashtempData.total_price }}</td>
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <p-divider></p-divider>
+                    <div class="card flex flex-wrap justify-center gap-4 total">
+                        <div>Sum Total</div>
+                        <div>{{sumTotalCart | currency: 'Ghø'}}</div>
+
+                    </div>
+                    <div class="card flex flex-wrap justify-center gap-4 ">
+                        <ngx-barcode6 [bc-value]=cashSalesInvoiceNumber [bc-format]="'CODE128'"
+                            [bc-display-value]="true">
+                        </ngx-barcode6>
+                    </div>
+                    <p-divider></p-divider>
+
+                    <div class="card flex flex-wrap justify-center gap-8 ">
+                        <section class="signature">
+                            <label>Issued by: </label>
+                            <label>{{customerName}}</label>
+                        </section>
+
+                        <section class="signature">
+                            <label>Signature</label>
+
+                            <label>...................................</label>
+                        </section>
+                        <section class="signature">
+                            <label>Printed Date: {{invoiceDate}}</label>
+                        </section>
+
+                        <section class="signature">
+                            <label>Transaction Type: {{salesType}}</label>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <p-divider></p-divider>
+            <div class="card flex flex-wrap justify-center gap-4 btn-submit no-print">
+                <p-button label="Print" icon="pi pi-print" [raised]="true" severity="contrast"
+                    printSectionId="print-section" ngxPrint (printCompleted)="onPrintComplete()"
+                    [useExistingCss]="true" />
+            </div>
+        </div>
+    </p-dialog>
+</div>
+
+
+}

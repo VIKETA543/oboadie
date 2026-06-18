@@ -74,10 +74,10 @@
                     <th>Product Name</th>
                     <th style="width:10%">Type/brand</th>
                     <th>From Store</th>
-                    <th>Image</th>
+                    <!-- <th>Image</th> -->
                     <th>Quantity</th>
                     <th>Price</th>
-                    
+
                     <!-- <th>Info</th> -->
                     <th>Action</th>
                 </tr>
@@ -88,11 +88,14 @@
                     <td>{{cashSalesData.name}}</td>
                     <td>{{ cashSalesData.title }}</td>
                     <td>{{ cashSalesData.storename }}</td>
-                    <td>
+                    <!-- <td>
                         <img [src]="cashSalesData.imageurl" />
-                    </td>
+                    </td> -->
                     <td>{{cashSalesData.stock_balance}}</td>
-                    <td>{{cashSalesData.unitesellingprice | currency: 'Ghø'}}</td>
+                    <td>
+                        {{ cashSalesData.unitesellingprice ? (cashSalesData.unitesellingprice |
+                        currency:'GHS':'symbol':'1.2-2') : 'No Price Value' }}
+                    </td>
                     <!-- <td>
                         <p class="truncate-text" pTooltip="{{cashSalesData.role}}"> {{ cashSalesData.role }}</p>
                     </td> -->
@@ -104,7 +107,7 @@
                                     (onClick)="addToCart(cashSalesData)" />
                             </p-fluid>
 
- <p-dialog [(visible)]="isaddingCart" [modal]="true" [style]="{ width: '40rem' }">
+                            <p-dialog [(visible)]="isaddingCart" [modal]="true" [style]="{ width: '40rem' }">
 
                                 <ng-template #header>
                                     <div class="inline-flex items-center justify-center gap-2">
@@ -252,7 +255,7 @@
                     <span>Address:</span><span>{{custerAddress}}</span>
                 </label>
             </div>
-              <div class="card flex flex-col items-center gap-4">
+            <div class="card flex flex-col items-center gap-4">
                 <label class="card flex flex-col items-center gap-2 customer">
                     <span class="card flex flex-col items-center gap-2">Customer Type</span><span
                         class="card flex flex-col items-center gap-2">{{customerType}}</span>
@@ -312,7 +315,7 @@
                 <p-button label="Submit" [raised]="true" severity="info" (onClick)="submitInvoice()" />
             </div>
             }
-            
+
             @if(submitOnSuccess()){
             <div class="card flex justify-center">
                 <p-dialog [(visible)]="submitOnSuccess" [modal]="true" [style]="{ width: '50rem' }">
@@ -324,7 +327,7 @@
                     </ng-template>
                     <div class="sales-display" header="Cash Invoice">
                         <div id="print-section">
-                         
+
 
                             <div class="header-segement">
                                 <div class="card w-full">
@@ -395,26 +398,26 @@
 
                                 </div>
                                 <div class="card flex flex-wrap justify-center gap-4 ">
-                                    <ngx-barcode6 [bc-value]=cashSalesInvoiceNumber [bc-format]="'CODE128'" 
+                                    <ngx-barcode6 [bc-value]=cashSalesInvoiceNumber [bc-format]="'CODE128'"
                                         [bc-display-value]="true">
                                     </ngx-barcode6>
                                 </div>
                                 <p-divider></p-divider>
-                                
-                                 <div class="card flex flex-wrap justify-center gap-8 ">
+
+                                <div class="card flex flex-wrap justify-center gap-8 ">
                                     <section class="signature">
                                         <label>Issued by: </label>
-                                    <label>{{USER_CREDENTIALS?.fullname}}</label>
+                                        <label>{{USER_CREDENTIALS?.fullname}}</label>
                                     </section>
 
                                     <section class="signature">
-                                        <label >Signature</label>
+                                        <label>Signature</label>
 
-                                          <label >...................................</label>
+                                        <label>...................................</label>
                                     </section>
-                                         <section class="signature">
-                                             <label >Printed Date: {{invoiceDate}}</label>
-                                         </section>
+                                    <section class="signature">
+                                        <label>Printed Date: {{invoiceDate}}</label>
+                                    </section>
                                 </div>
                             </div>
 
