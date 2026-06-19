@@ -34,7 +34,10 @@ listproductBycartID=(data:any)=>{
 
     }
     categoryList =() => {
-        return this.http.get(this.url + '/category/cartlist', { headers: new HttpHeaders().set('contentType', "application/json") })
+        return this.http.get(this.url + '/category/cartlist',{ headers: new HttpHeaders().set('contentType', "application/json") })
+    }
+     categoryListByStore =(data:any) => {
+        return this.http.post(this.url + '/category/categoryListByStore', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
     }
     addCartgeory = (data: any) => {
         return this.http.post(this.url + '/category/addcart', data, { headers: new HttpHeaders().set('contentType', "multipart/form-data") })

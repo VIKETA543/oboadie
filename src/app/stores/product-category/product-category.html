@@ -1,22 +1,22 @@
 
     <div>
-        <p-toolbar>
+        <p-toolbar styleClass="custom-admin-toolbar">
+                 <header>Product Cartegory Manager</header>
             <ng-template #start>
-                <p-button icon="pi pi-plus" class="mr-2" text severity="secondary" label="New Cartegory"
-                    (onClick)="shownewCart()" />
-                <p-button icon="pi pi-print" class="mr-2" text severity="secondary" />
-                <p-button icon="pi pi-upload" text severity="secondary" />
+            
             </ng-template>
             <ng-template #center>
                 
             </ng-template>
+             <ng-template #end>
+                    <p-button icon="pi pi-plus" class="mr-2" raised=true severity="success" label="New Cartegory"
+                    (onClick)="shownewCart()" />
+       
+            </ng-template>
         </p-toolbar>
-        <div class="main-header">
-            <header>Product Cartegory Manager</header>
-
-        </div>
+  
         <p-table #dt1 [value]="categories" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading()" [paginator]="true" 
-        [globalFilterFields]="['serialnumber', 'category_name']" showGridlines>
+        [globalFilterFields]="['serialnumber', 'category_name']" showGridlines stripedRows>
 
  <ng-template #caption>
                     <div class="flex">
@@ -33,30 +33,28 @@
          
             <ng-template #header>
                 <tr>
-                    <th style="width:20%">serial</th>
-                    <th style="width:20%">category</th>
-                    <th style="width:20%">description</th>
-                    <th>image</th>
-                    <th>Reviews</th>
-                    <th>Status</th>
-                    <th style="width:20%">date</th>
+                    <th>#</th>
+                    <th style="width:20%">Serial</th>
+                    <th style="width:20%">Category</th>
+                    <th style="width:20%">Description</th>
+                    <th>Image</th>
+                 
+                    <th style="width:20%">Date</th>
                     <th style="width:20%">Action</th>
                 </tr>
             </ng-template>
-            <ng-template #body let-categories>
+            <ng-template #body let-categories let-i="rowIndex">
                 <tr>
+                    <td>{{i+1}}</td>
                     <td>{{ categories.serialnumber }}</td>
                     <td>{{ categories.category_name }}</td>
                     <td>{{ categories.description }}</td>
                     <td>
-                        <img [src]="categories.imageurl" [alt]="categories.category_name"
-                            class="w-24 rounded table-img" />
+                        <!-- <img [src]="categories.imageurl" [alt]="categories.category_name"
+                            class="w-24 rounded table-img" /> -->
+                              <p-avatar image="{{categories.imageurl}}" class="mr-2" size="xlarge" shape="circle" />
                     </td>
-                    <td><p-rating [(ngModel)]="categories.Reviews" [readonly]="true" /></td>
-                    <td>
-                        <p-tag [value]="categories.Status" [severity]="getSeverity(categories.Status)" />
-                    </td>
-                    <td>{{ categories.date_updated }}</td>
+                    <td>{{ categories.date_updated |date:'dd/MM/yyyy'}}</td>
                     <td>
                         <div class="flex items-center justify-between">
                             <p-toast />

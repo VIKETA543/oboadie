@@ -1,11 +1,9 @@
-<main>
-    <div>
-        <header>Price Control</header>
-    </div>
+
     <div class="card">
-        <p-toolbar>
+        <p-toolbar styleClass="custom-admin-toolbar">
+             <header>Price Control</header>
             <ng-template #start>
-                <p-button icon="pi pi-plus" class="mr-2" label="New Price" text severity="secondary"
+                <p-button icon="pi pi-plus" class="mr-2" label="New Price" raised="true" severity="help"
                     (onClick)="newproductPrice()" />
                 <!-- <p-button icon="pi pi-print" class="mr-2" text severity="secondary" />
                 <p-button icon="pi pi-upload" text severity="secondary" /> -->
@@ -25,7 +23,7 @@
                     <ng-template let-productList #item>
                         <div class="flex items-center gap-2">
                             <img [src]="productList.imageurl" [alt]="productList.name"
-                                class="w-24 rounded select-img" />
+                   />
                             <div>{{ productList.name}}</div>
                         </div>
                     </ng-template>
@@ -40,14 +38,14 @@
                     <ng-template #selectedItem let-categoryList>
                         <div class="flex items-center gap-2">
                             <img [src]="categoryList.imageurl" [alt]="categoryList.category_name"
-                                class="w-24 rounded select-img" />
+                              />
                             <div>{{ categoryList.category_name }}</div>
                         </div>
                     </ng-template>
                     <ng-template let-categoryList #item>
                         <div class="flex items-center gap-2">
                             <img [src]="categoryList.imageurl" [alt]="categoryList.category_name"
-                                class="w-24 rounded select-img" />
+                          />
                             <div>{{ categoryList.category_name}}</div>
                         </div>
                     </ng-template>
@@ -1419,4 +1417,3 @@
         </p-drawer>
     </div>
     <p-toast />
-</main>

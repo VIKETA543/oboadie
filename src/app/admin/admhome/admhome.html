@@ -35,7 +35,7 @@
                 </ng-template>
                      <ng-template #end>
                             <!-- <p-button icon="pi pi-ellipsis-v" label="Menu" class="mr-2" raised="true" severity="contrast" (onClick)="op.toggle($event)" /> -->
-                                <p-button (click)="dropMenu = true" icon="pi pi-ellipsis-v" label="Menu" severity="secondary" />
+                                <p-button (click)="op1.toggle($event)" icon="pi pi-ellipsis-v" label="Menu" severity="secondary" />
             <p-button (click)="op.toggle($event)" icon="pi pi-cog" label="Admin"  severity="secondary"/>
                      </ng-template>
            
@@ -60,39 +60,47 @@
         </div>
 
 
-<div class="card ">
-    <p-drawer [(visible)]="dropMenu" header="Menu" modal="true" dismissible="true">
-        <!-- <p-button type="button" label="Manage Categories" icon="pi pi-folder-plus" routerLink='addcartegory'
-            styleClass="min-w-48" severity="secondary" [style]="{'justify-content': 'flex-start'}" />
-        <p-button type="button" label="Manage Product" icon="pi pi-objects-column" routerLink='products'
-            styleClass="min-w-48" severity="secondary" [style]="{'justify-content': 'flex-start'}" /> -->
-        <!-- <p-button icon="pi pi-venus" label="Manage Group" class="mr-2" routerLink="targetgroup" text
-            severity="secondary" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" /> -->
-        <!-- <p-button icon="pi pi-venus" label="Manage Brand" class="mr-2" routerLink="productbrand" text
-            severity="secondary" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" /> -->
-        <p-button icon="cedi-icon" label="Pricing" class="mr-2" routerLink="pricing"  severity="contrast" raised="true" variant="text"
+
+
+ <div class="card flex justify-center">
+      
+            <p-popover #op1>
+                <div class="gap-4 w-[25rem]">
+                    <p-button icon="cedi-icon" label="Pricing" class="mr-2" routerLink="pricing"  severity="contrast" raised="false" variant="text"
             styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="cedi-icon" label="Manage Supplier Prices" class="mr-2" routerLink="supplierprices" raised="true" variant="text"
+                    <p-button icon="cedi-icon" label="Manual Prices" class="mr-2" routerLink="price-entry" text
             severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="wearhouse" label="Wearhouse Manager" class="mr-2" routerLink="wearhousemanager" raised="true"variant="text"
+        <p-button icon="cedi-icon" label="Manage Supplier Prices" class="mr-2" routerLink="supplierprices" raised="false" variant="text"
             severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="storemanager" label="Store Manager" class="mr-2" routerLink="store-manager" raised="true" variant="text"
+        <p-button icon="wearhouse" label="Wearhouse Manager" class="mr-2" routerLink="wearhousemanager" raised="false"variant="text"
             severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="storemanager" label="Stores" class="mr-2" (onClick)="openStores()"  severity="secondary" raised="true" variant="text"
+        <p-button icon="storemanager" label="Store Manager" class="mr-2" routerLink="store-manager" raised="false" variant="text"
+            severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
+        <p-button icon="storemanager" label="Stores" class="mr-2" (onClick)="openStores()"  severity="secondary" raised="false" variant="text"
             styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="pi pi-star" label="POS Manager" class="mr-2" routerLink="pos-panager" pos-panager  raised="true" variant="text"
+        <p-button icon="pi pi-star" label="POS Manager" class="mr-2" routerLink="pos-panager" pos-panager  raised="false" variant="text"
             severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
         <p-button icon="pi pi-star" label="Point of Sales" class="mr-2" (onClick)="pointofsale()" 
             severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" variant="text" />
-        <p-button icon="pi pi-star" label="Customer Management" class="mr-2" routerLink="crm-manager" raised="true" variant="text"
+        <p-button icon="pi pi-star" label="Customer Management" class="mr-2" routerLink="crm-manager" raised="false" variant="text"
             severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="pi pi-star" label="Manage Deposit" class="mr-2" routerLink="deposit-manager" raised="true" variant="text"
+        <p-button icon="pi pi-star" label="Manage Deposit" class="mr-2" routerLink="deposit-manager" raised="false" variant="text"
             severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
 
-        <p-button icon="pi pi-star" label="Cashier" class="mr-2" routerLink="cash-manager"  severity="contrast" raised="true" variant="text"
+        <p-button icon="pi pi-star" label="Cashier" class="mr-2" routerLink="cash-manager"  severity="contrast" raised="false" variant="text"
             styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
+                </div>
+            </p-popover>
+        </div>
+
+
+
+<!-- 
+<div class="card ">
+    <p-drawer [(visible)]="dropMenu" header="Menu" modal="true" dismissible="true">
+        
     </p-drawer>
-</div>
+</div> -->
 <div id="routercontainer">
     <router-outlet></router-outlet>
 </div>

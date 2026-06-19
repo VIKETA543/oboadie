@@ -17,8 +17,9 @@
             <label>Cash Sales Invoices</label>
 
             <p-divider></p-divider>
+            <div class="items-wrapper">
             @for ( invoice of prepared_invoices; track $index) {
-
+                <div>
             <span class="font-bold mb-1 flex text-lg mr-4 storename">
                 <p-avatar class="mr-2" size="xlarge" shape="circle" image="assets/logo/oboadie.jpeg" shape="circle"
                     size="large">
@@ -39,7 +40,9 @@
                 <p-badge class="font-bold mb-1 mr-4"
                     value="Submitted: {{invoice.is_payment_complete ? 'YES':'NO'}}"></p-badge>
             </section>
+            </div>
             }
+            </div>
         </div>
         }@else {
         <p-message severity="info">{{ message }}</p-message>
@@ -49,7 +52,9 @@
         <div class="items-center justify-center container">
             <label class="credit">Credit Sales Invoices</label>
             <p-divider></p-divider>
+            <div class="items-wrapper">
             @for ( invoice of prepared_credit_invoice; track $index) {
+                <div>
             <span class="font-bold mb-1 flex text-lg mr-4 storename">
                 <p-avatar class="mr-2" size="xlarge" shape="circle" image="assets/logo/oboadie.jpeg" shape="circle"
                     size="large">
@@ -74,8 +79,9 @@
                     [severity]="SalesData.is_payment_complete ? 'success' : 'danger'">
                 </p-badge>
             </section>
+            </div>
             }
-
+            </div>
         </div>
 
         }@else {

@@ -59,7 +59,7 @@ main {
         border-bottom: 1px solid lightgrey;
         margin-bottom: 10px;
         display: flex;
-        
+        color:whitesmoke;
               background-color: rgb(1, 58, 30);
         font-size: 1.5vw;
         span{
@@ -205,6 +205,25 @@ aspect-ratio: .5;
 .enter-animation {
     animation: slide-fade 1s;
 }
+
+
+/* Style the main toolbar wrapper */
+:host ::ng-deep .custom-admin-toolbar.p-toolbar {
+    background: linear-gradient(135deg, #4f46e5, #3b82f6);
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 12px 24px;
+}
+
+/* Customize specific alignment zones if needed */
+:host ::ng-deep .custom-admin-toolbar .p-toolbar-start {
+    gap: 8px; /* Space between buttons on the left */
+}
+
+:host ::ng-deep .custom-admin-toolbar .p-toolbar-end {
+    align-items: center;
+}
+
 
 @keyframes slide-fade {
     from {

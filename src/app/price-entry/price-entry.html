@@ -1,0 +1,229 @@
+<div class="custom-card">
+    <p-toolbar class="custom-toolbar">
+        <ng-template #start>
+            <h3 class="toolbar-title">PRICE CONTROL</h3>
+        </ng-template>
+        <ng-template #center>
+         
+        </ng-template>
+        <ng-template #end>
+            <p-select [options]="storelistData" [(ngModel)]="selectedStore" (onChange)="selectBrand($event)"
+                optionLabel="storename" [filter]="true" filterBy="storename" [showClear]="true"
+                placeholder="Select a Store" class="w-full md:w-56">
+                <ng-template #selectedItem let-storelistData>
+                    <div class="flex items-center gap-2">
+                        <!-- <img [src]="brandList.imageurl" [alt]="brandList.title" class="w-24 rounded select-img" /> -->
+                        <div>{{ storelistData.storename }}</div>
+                    </div>
+                </ng-template>
+                <ng-template let-storelistData #item>
+                    <div class="flex items-center gap-2">
+                        <!-- <img [src]="brandList.imageurl" [alt]="brandList.title" class="w-24 rounded select-img" /> -->
+                        <div>{{ storelistData.storename}}</div>
+                    </div>
+                </ng-template>
+            </p-select>
+            <p-divider></p-divider>
+                <div class="inline-flex items-center justify-center gap-2">
+               <p-button icon="pi pi-load" severity="warn" label="Load Prices" raised="true"
+                (onClick)="loadstoreprices();" />
+                </div>
+                  <p-divider></p-divider>
+                    <div class="inline-flex items-center justify-center gap-2">
+            <p-button icon="pi pi-plus" severity="contrast" label="Set Prices" raised="true"
+                (onClick)="initiatePrice();" />
+                </div>
+        </ng-template>
+    </p-toolbar>
+
+    <div class="card flex justify-center">
+
+
+        <p-dialog [(visible)]="isPriceInitiated" [modal]="true" [style]="{ width: '100rem' }">
+            <ng-template #header>
+                <div class="inline-flex items-center justify-center gap-2">
+                    <p-avatar image="assets/logo/oboadie.jpeg" class="mr-5" size="xlarge" shape="circle" />
+                    <span class="font-bold whitespace-nowrap">ADD NEW PRICES</span>
+                </div>
+            </ng-template>
+              <div class="card flex justify-content-center p-4 shadow-1 border-round surface-card">
+    <p-floatlabel>
+        <p-select 
+            id="price-group-select"
+            [options]="PriceGroup" 
+            [(ngModel)]="seletedPriceGrup" 
+            [checkmark]="true" 
+            optionLabel="pricetag" 
+            [showClear]="true" 
+            class="w-full md:w-rem"
+            styleClass="w-full" placeholder="Select price group" (onChange)="selectPriceGroup($event)" />
+        <label for="price-group-select">Select price group</label>
+    </p-floatlabel>
+</div>
+
+            <div class="card">
+                <p-table #dt1 [value]="storeProducts" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+                    [loading]="loading()" [paginator]="true" [globalFilterFields]="['name', 'title']" showGridlines
+                    stripedRows>
+
+                    <ng-template #caption>
+                        <div class="flex">
+                            <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+                            <p-iconfield iconPosition="left" class="ml-auto">
+                                <p-inputicon>
+                                    <i class="pi pi-search"></i>
+                                </p-inputicon>
+                                <input pInputText type="text"
+                                    (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                    placeholder="Search keyword" />
+                            </p-iconfield>
+                        </div>
+                    </ng-template>
+
+
+                    <ng-template #header>
+                        <tr>
+                            <th style="width:5%">#</th>
+                            <th style="width:5%">Image</th>
+
+                            <th style="width:20%">Product Name</th>
+                             <th style="width:20%">Product Number</th>
+                            <th style="width:20%">Type</th>
+
+                            <th style="width:20%">Pricing</th>
+                            <th style="width:20%">Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-storeProducts let-i="rowIndex">
+                        <tr>
+                            <td>{{i+1}}</td>
+                            <td>
+                                <p-avatar image="{{storeProducts.imageurl}}" class="mr-1"  size="large"
+                                    shape="circle" />
+                            </td>
+                            <td>{{ storeProducts.name }}</td>
+                            <td>{{ storeProducts.brandid }}</td>
+                            <td>{{ storeProducts.title }}</td>
+                            <td>
+                                <p-button label="Add price/Unit" [text]="true" severity="help"
+                                    (click)="op.toggle($event)" />
+                                <p-button label="Add price/Pack" [text]="true" severity="info"
+                                    (click)="op1.toggle($event)" />
+                                <div class="card flex justify-center">
+                                    <p-popover #op>
+                                        <div class="flex flex-col gap-4 w-[25rem]">
+
+                                            <div>
+                                                <span
+                                                    class="font-medium text-surface-900 dark:text-surface-0 block mb-2">Add Price</span>
+                                                <div class="flex">
+                                                    <p-inputgroup>
+                                                        <input pInputText (input)="onInputChange($event)" />
+                                                        <p-button pButton label="Invite" icon="pi pi-users" (onClick)="addUniprice(storeProducts)"></p-button>
+                                                    </p-inputgroup>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </p-popover>
+                                    <p-popover #op1>
+                                        <div class="flex flex-col gap-4 w-[25rem]">
+
+                                            <div>
+                                                <span
+                                                    class="font-medium text-surface-900 dark:text-surface-0 block mb-2">Add Price</span>
+                                                <div class="flex">
+                                                    <p-inputgroup>
+                                                        <input pInputText (input)="onInputChange($event)" />
+                                                        <p-button pButton label="Invite" icon="pi pi-users"  (onClick)="addPackprice(storeProducts)"></p-button>
+                                                    </p-inputgroup>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </p-popover>
+                                </div>
+                            </td>
+                            <td>
+                                <p-button label="Finish" [text]="true" severity="info" (onClick)="deleteRow(storeProducts)"/>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+
+            </div>
+            <ng-template #footer>
+
+                <p-button label="Cancel" [text]="true" severity="danger" (click)="isPriceInitiated.set(false)" />
+
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>
+
+ <div class="card">
+                <p-table #dt2 [value]="PriceData" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+                    [loading]="loading()" [paginator]="true" [globalFilterFields]="['name', 'title']" showGridlines
+                    stripedRows>
+
+                    <ng-template #caption>
+                        <div class="flex">
+                            <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt2)" />
+                            <p-iconfield iconPosition="left" class="ml-auto">
+                                <p-inputicon>
+                                    <i class="pi pi-search"></i>
+                                </p-inputicon>
+                                <input pInputText type="text"
+                                    (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                    placeholder="Search keyword" />
+                            </p-iconfield>
+                        </div>
+                    </ng-template>
+
+
+                    <ng-template #header>
+                        <tr>
+                            <th style="width:5%">#</th>
+                            <th style="width:5%">Image</th>
+
+                            <th style="width:20%">Product Name</th>
+                             <th style="width:20%">Product Number</th>
+                            <th style="width:20%">Type</th>
+                            <th style="width:20%">Unit Price</th>
+                            <th style="width:20%">Cart/Box Price</th>
+                            <th style="width:20%">Date Added</th>
+                            <th style="width:20%">Date Modified</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-storeProducts let-i="rowIndex">
+                        <tr>
+                            <td>{{i+1}}</td>
+                            <td>
+                                <p-avatar image="{{storeProducts.imageurl}}" class="mr-1"  
+                                    shape="circle" />
+                            </td>
+                            <td>{{ storeProducts.name }}</td>
+                            <td>{{ storeProducts.brandid }}</td>
+                            <td>{{ storeProducts.title }}</td>
+                            <td>
+                                 {{ storeProducts.unitesellingprice | currency :'Ghs' }}
+                            </td>
+                            <td>
+                                {{ storeProducts.cartsellingprice | currency :'Ghs' }}
+                            </td>
+                               <td>
+                                {{ storeProducts.dateadded | date:'dd/MM/yyyy' }}
+                            </td>
+                               <td>
+                                {{ storeProducts.datemodified |date: 'dd/MM/yyyy' }}
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+
+            </div>
+
+
+<p-toast></p-toast>

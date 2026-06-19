@@ -219,11 +219,39 @@ verify_credit_invoice=(data:any)=>{
  prepared_invoices=(data:any)=>{
        return this.http.post(this.url + '/stores/prepared_cash_invoices', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
    }
-
-
-
-
 verify_invoice=(data:any)=>{
    return this.http.post(this.url + '/stores/verify_invoice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
   }
+
+  loadstoreProducts=(data:any)=>{
+   return this.http.post(this.url + '/stores/loadstoreProducts',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+ loadpriceGroups=()=>{
+   return this.http.post(this.url + '/stores/loadpriceGroups', { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+  
+
+addUnitPrice=(data:any)=>{
+   return this.http.post(this.url + '/stores/addUnitPrice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+ 
+  
+addPackprice=(data:any)=>{
+   return this.http.post(this.url + '/stores/addPackprice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+  
+loadstoreprices=(data:any)=>{
+   return this.http.post(this.url + '/stores/loadstoreprices',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+
+loadAllprices=()=>{
+   return this.http.post(this.url + '/stores/loadAllprices', { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+  
+  
 }

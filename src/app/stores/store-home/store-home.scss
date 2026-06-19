@@ -160,3 +160,9 @@ width: calc(100% - 30%);
 ::ng-deep .custom-gradient-btn.p-button:active {
   transform: translateY(0);
 }
+.items-wrapper {
+  display: grid;
+grid-template-columns: repeat(2, 1fr);
+  gap: 16px;                                                   /* Spacing between items */
+  overflow: hidden;                                            /* Keeps content from spilling out */
+}

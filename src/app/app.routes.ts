@@ -57,6 +57,7 @@ import { PushStocktoStores } from './stores/push-stockto-stores/push-stockto-sto
 import { CashierHome } from './cashier/cashier-home/cashier-home';
 import { StoreManualVerification } from './stores/store-manual-verification/store-manual-verification';
 import { StoreHome } from './stores/store-home/store-home';
+import { PriceEntry } from './price-entry/price-entry';
 
 
 
@@ -78,6 +79,8 @@ export const routes: Routes = [
             { path: 'targetgroup', component: Targetgroup },
             { path: 'productbrand', component: Productbrand },
             { path: 'pricing', component: Pricing },
+            { path: 'price-entry', component: PriceEntry },
+
             { path: 'supplierprices', component: Supplierprices },
             { path: 'wearhousemanager', component: Wearhousemanager },
             // {path:  'store-manager/:uac', component: StoreManager},

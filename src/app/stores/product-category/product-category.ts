@@ -1,5 +1,5 @@
 
-import { Component, OnInit, signal, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { Toolbar } from 'primeng/toolbar';
 import { IconField } from 'primeng/iconfield';
@@ -23,7 +23,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { Divider } from "primeng/divider";
 import { Products } from '../../interface/suppliers';
-
+import { Users } from '../../interface/Users';
+import { AvatarModule } from 'primeng/avatar';
 
 @Component({
   selector: 'product-category',
@@ -44,7 +45,8 @@ import { Products } from '../../interface/suppliers';
     ImageModule,
     DockModule,
     TooltipModule,
-    ConfirmPopupModule],
+    ConfirmPopupModule,
+  AvatarModule],
   templateUrl: './product-category.html',
   styleUrl: './product-category.scss',
     providers: [MessageService,ConfirmationService],
@@ -125,9 +127,24 @@ export class ProductCategory {
   items: any;
   items1: any;
   shownewcart: any;
-  constructor(private confirmationService: ConfirmationService, private messageService: MessageService, private productservice: productservice, private cdr: ChangeDetectorRef) {
+  USER_CREDENTIALS: Users[] | any
+    userInfo: any[] | any
+    storeData: any
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,private confirmationService: ConfirmationService, private messageService: MessageService, private productservice: productservice, private cdr: ChangeDetectorRef) {
     this.isShown.update((isShown) => !isShown);
-  }
+
+     try {
+        this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+        this.USER_CREDENTIALS = JSON.parse(localStorage.getItem('USER_CREDENTIALS') || '{}');
+        console.log('User', this.userInfo)
+
+        this.storeData = JSON.parse(localStorage.getItem('storeData') || '{}');
+        console.log('Store Data', this.storeData)
+      } catch (e) {
+        this.message = "Could not parse JSON from storage: " + e
+      }
+    }
+  
   ngOnInit(): void {
     this.loadcartlist()
     this.setDocker();
@@ -272,7 +289,11 @@ clearRecords=(event: Event)=>{
     }
   }
   loadcartlist = () => {
-    this.productservice.categoryList().subscribe((response: any) => {
+    let data={
+      store_number:this.storeData[0]?.storenumber
+    }
+
+    this.productservice.categoryListByStore(data).subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
       } else {
