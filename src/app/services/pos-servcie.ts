@@ -148,5 +148,8 @@ verify_credit_invoice=(data:any)=>{
        return this.http.post(this.url + '/pos/join_credit_cash_salse', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
    }
 
+  loadotherprices=(data:any)=>{
+       return this.http.post(this.url + '/pos/loadotherprices', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
 
 }

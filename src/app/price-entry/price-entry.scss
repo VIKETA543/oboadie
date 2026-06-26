@@ -1,4 +1,4 @@
-.custom-card {
+.price-card {
     background:  #1e293b;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -6,8 +6,8 @@
 }
 
 /* Removes the default harsh border/background of PrimeNG toolbar to let the card shine */
-::ng-deep .custom-toolbar .p-toolbar {
-        background:  #1e293b;
+::ng-deep .p-toolbar {
+        background-color:  #1e293b;
     border: none !important;
     padding: 0 !important;
 }
@@ -17,4 +17,8 @@
     font-size: 1.25rem;
     color: #fcfdff;
     font-weight: 600;
+     background-color:  #1e293b;
+}
+:host ::ng-deep .no-wrap-button .p-button-label {
+  white-space: nowrap;
 }

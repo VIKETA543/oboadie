@@ -95,7 +95,7 @@
                         <img [src]="cashSalesData.imageurl" />
                     </td> -->
                     <td>{{cashSalesData.stock_balance}}</td>
-                     <td>
+                    <td>
                         {{ cashSalesData.unitesellingprice ? (cashSalesData.unitesellingprice |
                         currency:'GHS':'symbol':'1.2-2') : 'No Price Value' }}
                     </td>
@@ -108,7 +108,7 @@
                         <div class="card flex justify-center">
                             <p-fluid class="card flex flex-wrap gap-4">
                                 <p-button label="Add" icon="pi pi-cart-plus" [raised]="true" severity="info"
-                                    (onClick)="addToCart(cashSalesData)" />
+                                    (onClick)="addToCart(cashSalesData); loadotherprices(cashSalesData)" />
                             </p-fluid>
 
 
@@ -169,7 +169,11 @@
                                                     [(ngModel)]="price_for_carton" />
                                             </div>
                                         </p-fluid>
+
+
                                     </div>
+
+
                                 </p-panel>
 
                                 <p-panel header="Select item type">
@@ -189,6 +193,35 @@
                                         </div>
 
                                     </div>
+                                    @if(otherPriceData){
+                                    <p-divider />
+                                    <p-fluid class="card flex flex-wrap gap-4">
+                                        <div class="flex-auto">
+                                            <label>Other Type</label>
+                                            <p-select [options]="otherPriceData" optionLabel="item_type" [filter]="true" [(ngModel)]="otherSelected"
+                                                filterBy="item_type" [showClear]="true" placeholder="Select a type" 
+                                                class="w-full md:w-56" (onChange)="selectedOtherPrice($event)">
+                                                <ng-template #selectedItem let-otherPriceData>
+                                                    <div class="flex items-center gap-2">
+                                                        <div>{{ otherPriceData.item_type }}</div>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template let-otherPriceData #item>
+                                                    <div class="flex items-center gap-2">
+                                                        <div>{{ otherPriceData.item_type }}</div>
+                                                    </div>
+                                                </ng-template>
+                                            </p-select>
+
+                                        </div>
+                                        @if(otherPrice){
+                                        <div class="flex-auto">
+                                            <label class="mb-2 font-bold block" for="integeronly">Price</label>
+                                            <p-inputnumber inputId="integeronly" readonly [(ngModel)]="otherPrice" />
+                                        </div>
+                                        }
+                                    </p-fluid>
+                                    }
                                 </p-panel>
                                 <p-panel>
                                     <div class="card flex flex-wrap gap-1">
@@ -196,15 +229,18 @@
                                         <div class="flex-auto">
                                             <label class="mb-2 font-bold block" for="integeronly">Enter quantity</label>
                                             <div class="card flex flex-wrap gap-1">
-                                                <p-inputnumber inputId="integeronly" [(ngModel)]="quoteQuantity"
-                                                    (onInput)="calcTotal()" />
+                                                <p-inputnumber inputId="integeronly" mode="decimal"
+                                                    [minFractionDigits]="2" [maxFractionDigits]="5"
+                                                    [(ngModel)]="quoteQuantity" (onInput)="calcTotal()" />
 
                                             </div>
                                         </div>
                                         <div class="flex-auto">
                                             <label class="mb-2 font-bold block" for="integeronly">Total</label>
                                             <div class="card flex flex-wrap gap-1">
-                                                <p-inputnumber inputId="integeronly" [(ngModel)]="totalCost" />
+                                                <p-inputnumber inputId="integeronly" mode="decimal"
+                                                    [minFractionDigits]="2" [maxFractionDigits]="5"
+                                                    [(ngModel)]="totalCost" />
 
                                             </div>
                                         </div>
@@ -289,7 +325,7 @@
                             <td>{{ creditTempData.storename }}</td>
                             <td>{{ creditTempData.name }}</td>
 
-                            <td>{{ creditTempData.title }}</td>
+                            <td>{{ creditTempData.title }}{{itemTpe}}</td>
                             <td>{{ creditTempData.quantity }}</td>
                             <td>{{ creditTempData.unitprice }}</td>
                             <td>{{ creditTempData.totalcost }}</td>
@@ -412,23 +448,23 @@
                                 </ngx-barcode6>
                             </div>
 
-                             <p-divider></p-divider>
-                                
-                                 <div class="card flex flex-wrap justify-center gap-8 ">
-                                    <section class="signature">
-                                        <label>Issued by: </label>
+                            <p-divider></p-divider>
+
+                            <div class="card flex flex-wrap justify-center gap-8 ">
+                                <section class="signature">
+                                    <label>Issued by: </label>
                                     <label>{{USER_CREDENTIALS?.fullname}}</label>
-                                    </section>
+                                </section>
 
-                                    <section class="signature">
-                                        <label >Signature</label>
+                                <section class="signature">
+                                    <label>Signature</label>
 
-                                          <label >...................................</label>
-                                    </section>
-                                         <section class="signature">
-                                             <label >Printed Date: {{invoiceDate}}</label>
-                                         </section>
-                                </div>
+                                    <label>...................................</label>
+                                </section>
+                                <section class="signature">
+                                    <label>Printed Date: {{invoiceDate}}</label>
+                                </section>
+                            </div>
 
                         </div>
                     </div>

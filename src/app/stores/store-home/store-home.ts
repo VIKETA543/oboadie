@@ -23,6 +23,7 @@ import { StoreService } from '../../services/store-service';
 import { BaseIcon } from "primeng/icons/baseicon";
 import { SpeedDialModule } from 'primeng/speeddial';
 import { TooltipModule } from 'primeng/tooltip';
+import { DrawerModule } from 'primeng/drawer';
 @Component({
   selector: 'store-home',
   imports: [CardModule, SpeedDialModule,TooltipModule,
@@ -43,7 +44,7 @@ import { TooltipModule } from 'primeng/tooltip';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    BaseIcon],
+    BaseIcon,DrawerModule],
   templateUrl: './store-home.html',
   styleUrl: './store-home.scss',
   providers: [MessageService]
@@ -78,22 +79,23 @@ export class StoreHome implements OnInit {
   USER_CREDENTIALS: Users[] | any
   userInfo: any[] | any
   storeData: any
-
+  is_cash_invoices=signal(false)
+    is_credit_invoices=signal(false)
 
 setSpeedDial=()=>{
   this.items = [
             {
                 icon: 'pi pi-history',
-                tooltipLabel: 'Load Verified Invoice',
+                  tooltipOptions: { tooltipLabel: 'Load Verified Invoice',position:'left' },
                 command: () => {
                    this.showHistory()
                 }
             },
               {
-                icon: 'pi pi-wave-pulse',
-                tooltipLabel: 'Load Verified Invoice',
+                icon: 'pi pi-shop',
+                   tooltipOptions: { tooltipLabel: 'Pending Invoices',position:'left' },
                 command: () => {
-                   this.showHistory()
+                   this.join_credit_cash_sale_store_unverified()
                 }
             },
           
@@ -304,6 +306,38 @@ setSpeedDial=()=>{
     })
   }
 
+
+
+  join_credit_cash_sale_store_unverified = () => {
+    let data = {
+      dateposted: new Date(),
+      store_number: this.storeData[0]?.storenumber
+    }
+    console.log('The Data: ', data)
+    return this.storeservice.join_credit_cash_sale_store_unverified(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response.message
+        this.cdr.markForCheck()
+        this.cdr.detectChanges()
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message });
+      } else {
+        if (response.data) {
+          this.SalesData = response.data
+          console.log('The Data: ', this.SalesData)
+          this.isSalesdataloaded.set(true)
+          this.cdr.markForCheck()
+          this.cdr.detectChanges()
+        } else {
+          this.message = "No prepared invoices found"
+          this.cdr.markForCheck()
+          this.cdr.detectChanges()
+        }
+      }
+    })
+  }
+
+
+  
 
   cashtempData: Cashsaletemp[] | any
 

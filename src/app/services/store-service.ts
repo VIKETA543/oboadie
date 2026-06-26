@@ -208,6 +208,13 @@ dropStore=(data:any)=>{
        return this.http.post(this.url + '/stores/join_credit_cash_sale', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
    }
 
+ join_credit_cash_sale_store_unverified=(data:any)=>{
+
+       return this.http.post(this.url + '/stores/join_credit_cash_sale_store_unverified', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
+
+
+   
 verify_credit_invoice=(data:any)=>{
    return this.http.post(this.url + '/stores/verify_credit_invoice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
   }
@@ -227,6 +234,12 @@ verify_invoice=(data:any)=>{
    return this.http.post(this.url + '/stores/loadstoreProducts',data, { headers: new HttpHeaders().set('contentType', "application/json") })
   }
 
+  editPrice=(data:any)=>{
+   return this.http.post(this.url + '/stores/editPrice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+
+
  loadpriceGroups=()=>{
    return this.http.post(this.url + '/stores/loadpriceGroups', { headers: new HttpHeaders().set('contentType', "application/json") })
   }
@@ -240,6 +253,10 @@ addUnitPrice=(data:any)=>{
   
 addPackprice=(data:any)=>{
    return this.http.post(this.url + '/stores/addPackprice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+  addCustomPriceprice=(data:any)=>{
+   return this.http.post(this.url + '/stores/addcustomprice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
   }
 
   

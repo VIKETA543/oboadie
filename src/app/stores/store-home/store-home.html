@@ -1,92 +1,128 @@
+<div class="card">
+    <div style="height: 0px; position: relative;">
+        <p-speeddial [model]="items" direction="left" [style]="{ position: 'absolute', top: 'calc(0%)', right: 0 }"
+            class="custom-gradient-btn" [buttonProps]="{ severity: 'contrast', rounded: true }" />
 
-  <div class="card">
-            <div style="height: 0px; position: relative;">
-                <p-speeddial [model]="items" direction="left" [style]="{ position: 'fixed', right: 'calc(0%)', bottom: 0 }" class="custom-gradient-btn" />
-               
-            </div>
-        </div>
+    </div>
+</div>
 <div class="main-container">
 
-    <p-panel header="DAILY INVOICE SUMMARIES " class="invoices">
-        <!-- <div class="inline-flex items-center justify-center gap-2">
-            <p-button icon="pi pi-history" class="w-full" styleClass="w-full" variant="text" raised="true"
-                severity="contrast" label="History" (onClick)="showHistory()" />
-        </div> -->
-        @if(prepared_invoices && prepared_invoices.length > 0){
-        <div class="items-center justify-center container">
-            <label>Cash Sales Invoices</label>
-
-            <p-divider></p-divider>
-            <div class="items-wrapper">
-            @for ( invoice of prepared_invoices; track $index) {
-                <div>
-            <span class="font-bold mb-1 flex text-lg mr-4 storename">
-                <p-avatar class="mr-2" size="xlarge" shape="circle" image="assets/logo/oboadie.jpeg" shape="circle"
-                    size="large">
-
-                </p-avatar>
-                <label class="mr-2 name"> {{ invoice.customername }}-{{ invoice.invoice_number }} </label>
-
-                <p-button icon="pi pi-eye" label="Show" class="w-50" styleClass="w-full" variant="text" raised="false"
-                    severity="warn" (onClick)="showInvoice(invoice)" />
-            </span>
-            <section>
-
-                <p-badge class="font-bold mb-1  mr-1"
-                    value="Verified: {{invoice.isinvoice_verified ? 'YES':'NO'}}"></p-badge>
-
-                <p-badge class="font-bold mb-1 mr-4"
-                    value="Submitted: {{invoice.invoice_submitted ? 'YES':'NO'}}"></p-badge>
-                <p-badge class="font-bold mb-1 mr-4"
-                    value="Submitted: {{invoice.is_payment_complete ? 'YES':'NO'}}"></p-badge>
-            </section>
-            </div>
-            }
+    <p-panel  class="invoices">
+                <ng-template pTemplate="header">
+        <div class="flex align-items-center justify-content-between w-full">
+            <!-- Title on the Left -->
+            <span class="font-bold text-lg">DAILY INVOICE SUMMARIES</span>
+        
+            <div class="flex gap-2 mr-3">
+                <p-button 
+                    icon="pi pi-refresh" 
+                    severity="contrast" 
+                    [rounded]="true" 
+                    [text]="true" >
+                </p-button>
+                <p-button 
+                    icon="pi pi-cog" 
+                    severity="contrast" 
+                    [rounded]="true" 
+                    [text]="true" >
+                </p-button>
             </div>
         </div>
-        }@else {
-        <p-message severity="info">{{ message }}</p-message>
-        }
+    </ng-template>
 
+
+
+        <div class="card flex justify-center">
+            <p-drawer [(visible)]="is_cash_invoices" header="Drawer">
+
+                @if(prepared_invoices && prepared_invoices.length > 0){
+                <div class="items-center justify-center container">
+                    <label>Cash Sales Invoices</label>
+
+                    <p-divider></p-divider>
+                    <div class="items-wrapper">
+                        @for ( invoice of prepared_invoices; track $index) {
+                        <div>
+                            <span class="font-bold mb-1 flex text-lg mr-4 storename">
+                                <p-avatar class="mr-2" size="xlarge" shape="circle" image="assets/logo/oboadie.jpeg"
+                                    shape="circle" size="large">
+
+                                </p-avatar>
+                                <label class="mr-2 name"> {{ invoice.customername }}-{{ invoice.invoice_number }}
+                                </label>
+
+                                <p-button icon="pi pi-eye" label="Show" class="w-50" styleClass="w-full" variant="text"
+                                    raised="false" severity="warn" (onClick)="showInvoice(invoice)" />
+                            </span>
+                            <section>
+
+                                <p-badge class="font-bold mb-1  mr-1"
+                                    value="Verified: {{invoice.isinvoice_verified ? 'YES':'NO'}}"></p-badge>
+
+                                <p-badge class="font-bold mb-1 mr-4"
+                                    value="Submitted: {{invoice.invoice_submitted ? 'YES':'NO'}}"></p-badge>
+                                <p-badge class="font-bold mb-1 mr-4"
+                                    value="Submitted: {{invoice.is_payment_complete ? 'YES':'NO'}}"></p-badge>
+                            </section>
+                        </div>
+                        }
+                    </div>
+                </div>
+                }@else {
+                <p-message severity="info">{{ message }}</p-message>
+                }
+
+
+            </p-drawer>
+
+        </div>
+
+   <div class="card flex justify-center">
+            <p-drawer [(visible)]="is_credit_invoices" header="Drawer">
         @if(prepared_credit_invoice && prepared_credit_invoice.length > 0){
         <div class="items-center justify-center container">
             <label class="credit">Credit Sales Invoices</label>
             <p-divider></p-divider>
             <div class="items-wrapper">
-            @for ( invoice of prepared_credit_invoice; track $index) {
+                @for ( invoice of prepared_credit_invoice; track $index) {
                 <div>
-            <span class="font-bold mb-1 flex text-lg mr-4 storename">
-                <p-avatar class="mr-2" size="xlarge" shape="circle" image="assets/logo/oboadie.jpeg" shape="circle"
-                    size="large">
+                    <span class="font-bold mb-1 flex text-lg mr-4 storename">
+                        <p-avatar class="mr-2" size="xlarge" shape="circle" image="assets/logo/oboadie.jpeg"
+                            shape="circle" size="large">
 
-                </p-avatar>
-                <label class="mr-2 name"> {{ invoice.customername }}-{{ invoice.invoice_number }} </label>
+                        </p-avatar>
+                        <label class="mr-2 name"> {{ invoice.customername }}-{{ invoice.invoice_number }} </label>
 
-                <p-button icon="pi pi-eye" label="Show" class="w-50" styleClass="w-full" variant="text" raised="false"
-                    severity="warn" (onClick)="showInvoice(invoice)" />
-            </span>
-            <section>
+                        <p-button icon="pi pi-eye" label="Show" class="w-50" styleClass="w-full" variant="text"
+                            raised="false" severity="warn" (onClick)="showInvoice(invoice)" />
+                    </span>
+                    <section>
 
-                <p-badge class="font-bold mb-1 mr-4" value="Verified: {{invoice.isinvoice_verified? 'YES':'NO'}}"
-                    [severity]="SalesData.isinvoice_verified ? 'success' : 'danger'">
+                        <p-badge class="font-bold mb-1 mr-4"
+                            value="Verified: {{invoice.isinvoice_verified? 'YES':'NO'}}"
+                            [severity]="SalesData.isinvoice_verified ? 'success' : 'danger'">
 
-                </p-badge>
+                        </p-badge>
 
-                <p-badge class="font-bold mb-1 mr-4" value="Submitted: {{invoice.invoice_submitted? 'YES':'NO'}}"
-                    [severity]="SalesData.invoice_submitted ? 'success' : 'danger'">
-                </p-badge>
-                <p-badge class="font-bold mb-1  mr-4" value="Submitted: {{invoice.is_payment_complete ? 'YES':'NO'}}"
-                    [severity]="SalesData.is_payment_complete ? 'success' : 'danger'">
-                </p-badge>
-            </section>
-            </div>
-            }
+                        <p-badge class="font-bold mb-1 mr-4"
+                            value="Submitted: {{invoice.invoice_submitted? 'YES':'NO'}}"
+                            [severity]="SalesData.invoice_submitted ? 'success' : 'danger'">
+                        </p-badge>
+                        <p-badge class="font-bold mb-1  mr-4"
+                            value="Submitted: {{invoice.is_payment_complete ? 'YES':'NO'}}"
+                            [severity]="SalesData.is_payment_complete ? 'success' : 'danger'">
+                        </p-badge>
+                    </section>
+                </div>
+                }
             </div>
         </div>
 
         }@else {
         <p-message severity="info">{{ message }}</p-message>
         }
+        </p-drawer>
+   </div>
     </p-panel>
     @if(isSalesdataloaded()){
     <div class="card flex justify-center">

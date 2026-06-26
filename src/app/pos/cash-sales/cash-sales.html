@@ -104,7 +104,7 @@
                         <div class="card flex justify-center">
                             <p-fluid class="card flex flex-wrap gap-4">
                                 <p-button label="Add item" icon="pi pi-cart-plus" [raised]="true" severity="info"
-                                    (onClick)="addToCart(cashSalesData)" />
+                                    (onClick)="addToCart(cashSalesData);loadotherprices(cashSalesData)" />
                             </p-fluid>
 
                             <p-dialog [(visible)]="isaddingCart" [modal]="true" [style]="{ width: '40rem' }">
@@ -184,6 +184,37 @@
                                         </div>
 
                                     </div>
+
+                                     @if(otherPriceData){
+                                    <p-divider />
+                                    <p-fluid class="card flex flex-wrap gap-4">
+                                        <div class="flex-auto">
+                                            <label>Other Type</label>
+                                            <p-select [options]="otherPriceData" optionLabel="item_type" [filter]="true" [(ngModel)]="otherSelected"
+                                                filterBy="item_type" [showClear]="true" placeholder="Select a type" 
+                                                class="w-full md:w-56" (onChange)="selectedOtherPrice($event)">
+                                                <ng-template #selectedItem let-otherPriceData>
+                                                    <div class="flex items-center gap-2">
+                                                        <div>{{ otherPriceData.item_type }}</div>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template let-otherPriceData #item>
+                                                    <div class="flex items-center gap-2">
+                                                        <div>{{ otherPriceData.item_type }}</div>
+                                                    </div>
+                                                </ng-template>
+                                            </p-select>
+
+                                        </div>
+                                        @if(otherPrice){
+                                        <div class="flex-auto">
+                                            <label class="mb-2 font-bold block" for="integeronly">Price</label>
+                                            <p-inputnumber inputId="integeronly" readonly [(ngModel)]="otherPrice" mode="decimal"
+                                                    [minFractionDigits]="2" [maxFractionDigits]="5" />
+                                        </div>
+                                        }
+                                    </p-fluid>
+                                    }
                                 </p-panel>
                                 <p-panel>
                                     <div class="card flex flex-wrap gap-1">
@@ -191,7 +222,8 @@
                                         <div class="flex-auto">
                                             <label class="mb-2 font-bold block" for="integeronly">Enter quantity</label>
                                             <div class="card flex flex-wrap gap-1">
-                                                <p-inputnumber inputId="integeronly" [(ngModel)]="quoteQuantity"
+                                                <p-inputnumber inputId="integeronly" [(ngModel)]="quoteQuantity" mode="decimal"
+                                                    [minFractionDigits]="2" [maxFractionDigits]="5"
                                                     (onInput)="calcTotal()" />
 
                                             </div>

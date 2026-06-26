@@ -250,23 +250,84 @@ this.remarks=data.remarks
 
 
   calcTotal = () => {
-    switch(this.selected_price){
-      case 0:
-        this.message='This product has not been priced. Add price before you issue invoices'
-           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+    switch (this.selectedType) {
+      case 'UNIT':
+        switch (this.selected_price) {
+          case 0:
+            this.totalCost = 0.0
+            this.quoteQuantity = 0.0
+            this.message = 'The sales type does not have price associated'
+            this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+            break
+          default:
+            this.totalCost = (this.selected_price * this.quoteQuantity)
+            break;
+        }
         break;
-        default: 
-            this.totalCost = this.quoteQuantity * this.selected_price
-    console.log(this.totalCost)
+      case 'PACK':
+        switch (this.selected_price) {
+          case 0:
+            this.totalCost = 0.0
+            this.quoteQuantity = 0.0
+            this.message = 'The sales type does not have price associated'
+            this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+            break
+          default:
+            this.totalCost = (this.selected_price * this.quoteQuantity)
+            break;
+        }
+        break;
+      case 'OTHER_PURCHASE':
+        console.log('testing others', this.otherPrice)
+        switch (this.otherPrice) {
+          case 0:
+            this.totalCost = 0.0
+            this.quoteQuantity = 0.0
+            this.message = 'The sales type does not have price associated'
+            this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+            break;
+          default:
+            if (this.quoteQuantity <= 0) {
+              this.totalCost = 0.0
+              this.quoteQuantity = 0.0
+              this.message = 'Enter a valid quantity'
+              this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+            } else {
+              if (this.quoteQuantity > 0 && this.quoteQuantity < 1) {
+                this.totalCost = this.otherPrice
+              } else {
+                console.log('test invalid')
+                this.totalCost = 0.0
+                this.quoteQuantity = 0.0
+                this.message = 'Enter a valid quantity'
+                this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+              }
 
+            }
+
+            break;
+        }
         break;
+      default:
+        this.totalCost = 0.0
+        this.quoteQuantity = 0.0
+        this.message = 'Select item type'
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        break
+
     }
 
+
   }
+
 isaddingCart=signal(false)
+
+  selectedType: any
 
   selectPacktype(value: any) {
     const s = value
+    this.otherPrice = 0
+    this.selectedType = s
     switch (s) {
       case 'UNIT':
         this.is_pack = false
@@ -282,12 +343,13 @@ isaddingCart=signal(false)
         this.selected_price = this.price_for_carton
         console.log(this.selected_price)
         break;
-    
+
       default:
         this.message = 'select package type'
         break
     }
   }
+
 
 
 
@@ -303,7 +365,7 @@ AddCart(){
     productId:this.SelectedProduct?.product_number,
     brandId:this.SelectedProduct?.product_brand,
     quantity:this.quoteQuantity,
-    uniPrice:this.selected_price,
+    uniPrice:this.selected_price| this.otherPrice,
     totalCost:this.totalCost,
     purchaseId:purchaseId,
     customerType:this.customerType,
@@ -564,4 +626,45 @@ getInvoiceDetails=()=>{
 
       
 }
+
+
+
+  otherPriceData: any[] = []
+  loadotherprices(_t85: any) {
+    console.log(_t85)
+    let data = {
+      product_number: _t85?.product_number,
+      btandid: _t85?.product_brand
+    }
+    this.posservice.loadotherprices(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          this.otherPriceData = response?.data
+          console.log(this.otherPriceData)
+        } else {
+          this.message = 'Unknown error has occured'
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
+  }
+  otherPrice: number = 0
+  itemTpe: any
+  itemvalue: number = 0
+  otherSelected: any
+  selectedOtherPrice($event: SelectChangeEvent) {
+    console.log($event.value)
+    this.selectedType = 'OTHER_PURCHASE'
+    this.otherSelected = $event.value
+    this.otherPrice = $event.value?.price
+    this.itemTpe = $event.value?.item_type
+    this.itemvalue = $event?.value?.item_value
+    this.selected_price = 0
+    this.is_unit = false
+    this.is_pack = false
+
+  }
 }

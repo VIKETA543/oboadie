@@ -19,6 +19,7 @@ import { PopoverModule } from 'primeng/popover';
 import { InputGroup } from "primeng/inputgroup";
 import { FloatLabel } from 'primeng/floatlabel';
 import { DividerModule } from 'primeng/divider';
+import { BadgeModule } from 'primeng/badge';
 
 
 @Component({
@@ -38,12 +39,45 @@ import { DividerModule } from 'primeng/divider';
     DividerModule,
     FloatLabel,
      PopoverModule,
-      InputGroup],
+      InputGroup,BadgeModule],
   templateUrl: './price-entry.html',
   styleUrl: './price-entry.scss',
   providers:[MessageService]
 })
 export class PriceEntry implements OnInit{
+addPrice(_t212: any) {
+console.log(_t212)
+
+    this.loadpriceGroups()
+
+  this.loading.set(true)
+let data={
+  store_number:_t212?.store_number,
+  brandid:_t212.brandid
+}
+this.storeservice.editPrice(data).subscribe((response:any)=>{
+   if (response?.message) {
+        this.message = response?.message
+          this.loading.set(false)
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+            this.loading.set(false)
+          this.storeProducts = response?.data
+            this.cdr.markForCheck()
+          this.cdr.detectChanges()
+            this.isPriceInitiated.set(true)
+          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+        } else {
+            this.loading.set(false)
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+})
+
+}
+
 
 onInputChange($event: Event) {
 const target = $event.target as HTMLInputElement;
@@ -77,7 +111,8 @@ constructor(private storeservice:StoreService,private cdr:ChangeDetectorRef){}
       } else {
         if (response?.data) {
           this.storelistData = response?.data
- 
+            this.cdr.markForCheck()
+          this.cdr.detectChanges()
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
           this.message = response?.message
@@ -102,6 +137,8 @@ this.storeservice.loadstoreProducts(data).subscribe((response:any)=>{
         if (response?.data) {
             this.loading.set(false)
           this.storeProducts = response?.data
+            this.cdr.markForCheck()
+          this.cdr.detectChanges()
             this.isPriceInitiated.set(true)
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
@@ -236,6 +273,7 @@ selectedproduct_item:any;
             if(response?.success){
               this.message=response?.success
               this.loadstoreprices()
+
                this.messageservice.add({ severity: 'success', summary: 'Error', detail: this.message, life: 5000 });
             }else{
                 this.message = 'Unknown error has occured'
@@ -252,6 +290,56 @@ selectedproduct_item:any;
   }
 
   
+  customeItem:any
+  customPrice:any
+ onCustomItemInput($event: Event) {
+const target = $event.target as HTMLInputElement;
+this.customeItem=target.value
+    console.log('User typed:', target.value);
+}
+
+ onCustomItemPrice($event: Event) {
+const target = $event.target as HTMLInputElement;
+this.customPrice=target.value
+    console.log('User typed:', target.value);
+}
+
+  addCuatomPackprice=(product:any)=>{
+    this.genranCode()
+    if(this.priceGroup!==undefined){
+    let data={
+      priceID:this.pricetagID,
+      PriceGroup:this.priceGroup,
+      product_number:product?.product_number,
+      product_cartegory:product?.product_category,
+      brandid:product?.brandid,
+      price:this.customPrice,
+      customItem:this.customeItem
+    }
+    this.storeservice.addCustomPriceprice(data).subscribe((response:any)=>{
+       if (response?.message) {
+        this.message=response?.message
+          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+        } else {
+            if(response?.success){
+              this.message=response?.success
+              this.loadstoreprices()
+
+               this.messageservice.add({ severity: 'success', summary: 'Error', detail: this.message, life: 5000 });
+            }else{
+                this.message = 'Unknown error has occured'
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+            }
+        
+        }
+      
+    })
+  }else{
+    this.message='Select price Group'
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+  }
+  }
+
 
 
   
@@ -270,7 +358,8 @@ this.storeservice.loadstoreprices(data).subscribe((response:any)=>{
         if (response?.data) {
             this.loading.set(false)
           this.PriceData = response?.data
-       
+            this.cdr.markForCheck()
+          this.cdr.detectChanges()
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
             this.loading.set(false)
@@ -298,7 +387,9 @@ this.storeservice.loadAllprices().subscribe((response:any)=>{
         if (response?.data) {
             this.loading.set(false)
           this.PriceData = response?.data
-       
+          this.cdr.markForCheck()
+          this.cdr.detectChanges()
+
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
             this.loading.set(false)
