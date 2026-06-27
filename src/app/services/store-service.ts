@@ -213,6 +213,10 @@ dropStore=(data:any)=>{
        return this.http.post(this.url + '/stores/join_credit_cash_sale_store_unverified', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
    }
 
+general_joint_transaction=(data:any)=>{
+
+       return this.http.post(this.url + '/stores/general_joint_transaction', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
 
    
 verify_credit_invoice=(data:any)=>{
@@ -269,6 +273,8 @@ loadAllprices=()=>{
    return this.http.post(this.url + '/stores/loadAllprices', { headers: new HttpHeaders().set('contentType', "application/json") })
   }
 
-  
+  loadOtherprices=()=>{
+   return this.http.post(this.url + '/stores/loadOtherprices', { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
   
 }

@@ -82,26 +82,26 @@ export class StoreHome implements OnInit {
   is_cash_invoices=signal(false)
     is_credit_invoices=signal(false)
 
-setSpeedDial=()=>{
-  this.items = [
-            {
-                icon: 'pi pi-history',
-                  tooltipOptions: { tooltipLabel: 'Load Verified Invoice',position:'left' },
-                command: () => {
-                   this.showHistory()
-                }
-            },
-              {
-                icon: 'pi pi-shop',
-                   tooltipOptions: { tooltipLabel: 'Pending Invoices',position:'left' },
-                command: () => {
-                   this.join_credit_cash_sale_store_unverified()
-                }
-            },
+// setSpeedDial=()=>{
+//   this.items = [
+//             {
+//                 icon: 'pi pi-history',
+//                   tooltipOptions: { tooltipLabel: 'Load Verified Invoice',position:'left' },
+//                 command: () => {
+//                    this.showHistory()
+//                 }
+//             },
+//               {
+//                 icon: 'pi pi-shop',
+//                    tooltipOptions: { tooltipLabel: 'Pending Invoices',position:'left' },
+//                 command: () => {
+//                    this.join_credit_cash_sale_store_unverified()
+//                 }
+//             },
           
            
-        ];
-    }
+//         ];
+//     }
 
 
 
@@ -201,9 +201,11 @@ setSpeedDial=()=>{
   message: any
   loading = signal(false)
   SalesData: any = [];
+  generalData:any = [];
+  sumProducts:number=0
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private storeservice: StoreService, private messageService: MessageService, private cdr: ChangeDetectorRef) {
-    this.setSpeedDial()
+    // this.setSpeedDial()
     if (isPlatformBrowser(this.platformId)) {
       try {
         this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
@@ -221,7 +223,7 @@ setSpeedDial=()=>{
   ngOnInit(): void {
     this.preparedInvoices()
     this.prepared_credit_invoices_data()
-    // this.join_credit_cash_salse()
+    this.general_joint_transaction()
   }
   preparedInvoices = () => {
     let data = {
@@ -250,7 +252,8 @@ setSpeedDial=()=>{
 
   prepared_credit_invoices_data = () => {
     let data = {
-      dateposted: new Date()
+      dateposted: new Date(),
+        store_number: this.storeData[0]?.storenumber
     }
   console.log('The data ')
     return this.storeservice.prepared_credit_invoices(data).subscribe((response: any) => {
@@ -307,6 +310,41 @@ setSpeedDial=()=>{
   }
 
 
+  
+
+
+  general_joint_transaction = () => {
+    let data = {
+      dateposted: new Date(),
+      store_number: this.storeData[0]?.storenumber
+    }
+    console.log('The Data: ', data)
+    return this.storeservice.general_joint_transaction(data).subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response.message
+        this.cdr.markForCheck()
+        this.cdr.detectChanges()
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message });
+      } else {
+        if (response.data) {
+          this.generalData = response?.data
+          this.sumProducts= response?.total
+          console.log('total Products: ',response?.total)
+
+
+          this.cdr.markForCheck()
+          this.cdr.detectChanges()
+        } else {
+          this.message = "No prepared invoices found"
+          this.cdr.markForCheck()
+          this.cdr.detectChanges()
+        }
+      }
+    })
+  }
+
+
+
 
   join_credit_cash_sale_store_unverified = () => {
     let data = {
@@ -323,8 +361,6 @@ setSpeedDial=()=>{
       } else {
         if (response.data) {
           this.SalesData = response.data
-          console.log('The Data: ', this.SalesData)
-          this.isSalesdataloaded.set(true)
           this.cdr.markForCheck()
           this.cdr.detectChanges()
         } else {

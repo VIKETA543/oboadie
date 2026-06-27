@@ -20,7 +20,8 @@ import { InputGroup } from "primeng/inputgroup";
 import { FloatLabel } from 'primeng/floatlabel';
 import { DividerModule } from 'primeng/divider';
 import { BadgeModule } from 'primeng/badge';
-
+import { CardModule } from 'primeng/card';
+import { ChipModule } from 'primeng/chip';
 
 @Component({
   selector: 'price-entry',
@@ -38,72 +39,74 @@ import { BadgeModule } from 'primeng/badge';
     CurrencyPipe,
     DividerModule,
     FloatLabel,
-     PopoverModule,
-      InputGroup,BadgeModule],
+    PopoverModule,
+    InputGroup, BadgeModule,
+    CardModule, ChipModule],
   templateUrl: './price-entry.html',
   styleUrl: './price-entry.scss',
-  providers:[MessageService]
+  providers: [MessageService]
 })
-export class PriceEntry implements OnInit{
-addPrice(_t212: any) {
-console.log(_t212)
+export class PriceEntry implements OnInit {
+  addPrice(_t212: any) {
+    console.log(_t212)
 
     this.loadpriceGroups()
 
-  this.loading.set(true)
-let data={
-  store_number:_t212?.store_number,
-  brandid:_t212.brandid
-}
-this.storeservice.editPrice(data).subscribe((response:any)=>{
-   if (response?.message) {
+    this.loading.set(true)
+    let data = {
+      store_number: _t212?.store_number,
+      brandid: _t212.brandid
+    }
+    this.storeservice.editPrice(data).subscribe((response: any) => {
+      if (response?.message) {
         this.message = response?.message
-          this.loading.set(false)
+        this.loading.set(false)
         this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
       } else {
         if (response?.data) {
-            this.loading.set(false)
+          this.loading.set(false)
           this.storeProducts = response?.data
-            this.cdr.markForCheck()
+          this.cdr.markForCheck()
           this.cdr.detectChanges()
-            this.isPriceInitiated.set(true)
+          this.isPriceInitiated.set(true)
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
-            this.loading.set(false)
+          this.loading.set(false)
           this.message = response?.message
           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
         }
       }
-})
+    })
 
-}
-
-
-onInputChange($event: Event) {
-const target = $event.target as HTMLInputElement;
-this.priceInput=target.value
-    console.log('User typed:', target.value);
-}
-priceInput:any|undefined
-message:any
-  storelistData: StoreListInterface[] = []
-  selectedStore:StoreListInterface|undefined
-  storeProducts:any[]=[]
-  PriceGroup:any[]=[]
-  PriceData:any[]=[]
-  seletedPriceGrup:any
-  loading=signal(false)
-private messageservice=inject(MessageService)
-isPriceInitiated=signal(false)
-pricetagID:any
-constructor(private storeservice:StoreService,private cdr:ChangeDetectorRef){}
-  ngOnInit(): void {
-    this.getAllstores()
-    this.loadAllprices()
   }
 
 
-   getAllstores = () => {
+  onInputChange($event: Event) {
+    const target = $event.target as HTMLInputElement;
+    this.priceInput = target.value
+    console.log('User typed:', target.value);
+  }
+  priceInput: any | undefined
+  message: any
+  storelistData: StoreListInterface[] = []
+  selectedStore: StoreListInterface | undefined
+  storeProducts: any[] = []
+  PriceGroup: any[] = []
+  PriceData: any[] = []
+  seletedPriceGrup: any
+  loading = signal(false)
+  private messageservice = inject(MessageService)
+  isPriceInitiated = signal(false)
+  pricetagID: any
+  constructor(private storeservice: StoreService, private cdr: ChangeDetectorRef) { }
+  ngOnInit(): void {
+    this.getAllstores()
+    this.loadAllprices()
+    this.loadOtherprices()
+  }
+
+
+  getAllstores = () => {
     this.storeservice.listallStores().subscribe((response: any) => {
       if (response?.message) {
         this.message = response?.message
@@ -111,7 +114,7 @@ constructor(private storeservice:StoreService,private cdr:ChangeDetectorRef){}
       } else {
         if (response?.data) {
           this.storelistData = response?.data
-            this.cdr.markForCheck()
+          this.cdr.markForCheck()
           this.cdr.detectChanges()
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
@@ -122,51 +125,51 @@ constructor(private storeservice:StoreService,private cdr:ChangeDetectorRef){}
     })
   }
 
-initiatePrice=()=>{
-  this.loadpriceGroups()
-  this.loading.set(true)
-let data={
-  store_number:this.selectedStore?.storenumber
-}
-this.storeservice.loadstoreProducts(data).subscribe((response:any)=>{
-   if (response?.message) {
+  initiatePrice = () => {
+    this.loadpriceGroups()
+    this.loading.set(true)
+    let data = {
+      store_number: this.selectedStore?.storenumber
+    }
+    this.storeservice.loadstoreProducts(data).subscribe((response: any) => {
+      if (response?.message) {
         this.message = response?.message
-          this.loading.set(false)
+        this.loading.set(false)
         this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
       } else {
         if (response?.data) {
-            this.loading.set(false)
+          this.loading.set(false)
           this.storeProducts = response?.data
-            this.cdr.markForCheck()
+          this.cdr.markForCheck()
           this.cdr.detectChanges()
-            this.isPriceInitiated.set(true)
+          this.isPriceInitiated.set(true)
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
-            this.loading.set(false)
+          this.loading.set(false)
           this.message = response?.message
           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
         }
       }
-})
-}
+    })
+  }
 
 
-loadpriceGroups=()=>{
+  loadpriceGroups = () => {
 
 
-this.storeservice.loadpriceGroups().subscribe((response:any)=>{
-   if (response?.message) {
+    this.storeservice.loadpriceGroups().subscribe((response: any) => {
+      if (response?.message) {
         this.message = response?.message
-          this.loading.set(false)
+        this.loading.set(false)
         this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
       } else {
         if (response?.data) {
 
           this.PriceGroup = response?.data
-     
-            this.isPriceInitiated.set(true)
-            this.cdr.markForCheck();
-            this.cdr.detectChanges();
+
+          this.isPriceInitiated.set(true)
+          this.cdr.markForCheck();
+          this.cdr.detectChanges();
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
 
@@ -174,28 +177,28 @@ this.storeservice.loadpriceGroups().subscribe((response:any)=>{
           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
         }
       }
-})
-}
+    })
+  }
 
 
 
-selectBrand($event: SelectChangeEvent) {
-this.selectedStore=$event.value
+  selectBrand($event: SelectChangeEvent) {
+    this.selectedStore = $event.value
 
 
-}
+  }
 
   searchValue = signal('');
-      activityValues = signal<number[]>([0, 100]);
-  
-     
-      clear(table: Table) {
-          table.clear();
-          this.searchValue.set('');
-      }
+  activityValues = signal<number[]>([0, 100]);
 
-      deleteRow(product: any) {
-// console.log(product)
+
+  clear(table: Table) {
+    table.clear();
+    this.searchValue.set('');
+  }
+
+  deleteRow(product: any) {
+    // console.log(product)
     this.storeProducts = this.storeProducts.filter(p => p.brandid !== product.brandid);
   }
 
@@ -205,198 +208,226 @@ this.selectedStore=$event.value
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
-  priceGroup:any
+  priceGroup: any
   genranCode = () => {
     let randomInteger: number = this.getRandomInt(1, 1000000); // Generates a random integer between 1 and 10
     this.pricetagID = "PRCTG-" + randomInteger
   }
 
   selectPriceGroup($event: SelectChangeEvent) {
-this.priceGroup=$event.value?.pricetagid
-}
-selectedproduct_item:any;
-  addUniprice=(product:any)=>{
+    this.priceGroup = $event.value?.pricetagid
+  }
+  selectedproduct_item: any;
+  addUniprice = (product: any) => {
     this.genranCode()
-    if(this.priceGroup!==undefined){
-    let data={
-      priceID:this.pricetagID,
-      PriceGroup:this.priceGroup,
-      product_number:product?.product_number,
-      product_cartegory:product?.product_category,
-      brandid:product?.brandid,
-      price:this.priceInput,
+    if (this.priceGroup !== undefined) {
+      let data = {
+        priceID: this.pricetagID,
+        PriceGroup: this.priceGroup,
+        product_number: product?.product_number,
+        product_cartegory: product?.product_category,
+        brandid: product?.brandid,
+        price: this.priceInput,
 
-    }
-    this.storeservice.addUnitPrice(data).subscribe((response:any)=>{
-       if (response?.message) {
-        this.message=response?.message
-          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
-        } else {
-            if(response?.success){
-              this.message=response?.success
-              this.loadstoreprices()
-               this.messageservice.add({ severity: 'success', summary: 'Error', detail: this.message, life: 5000 });
-            }else{
-                this.message = 'Unknown error has occured'
-          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-            }
-        
-        }
-      
-    })
-  }else{
-    this.message='Select price Group'
-        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-  }
-  }
-
-
-
- 
-  addPackprice=(product:any)=>{
-    this.genranCode()
-    if(this.priceGroup!==undefined){
-    let data={
-      priceID:this.pricetagID,
-      PriceGroup:this.priceGroup,
-      product_number:product?.product_number,
-      product_cartegory:product?.product_category,
-      brandid:product?.brandid,
-      price:this.priceInput,
-
-    }
-    this.storeservice.addPackprice(data).subscribe((response:any)=>{
-       if (response?.message) {
-        this.message=response?.message
-          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
-        } else {
-            if(response?.success){
-              this.message=response?.success
-              this.loadstoreprices()
-
-               this.messageservice.add({ severity: 'success', summary: 'Error', detail: this.message, life: 5000 });
-            }else{
-                this.message = 'Unknown error has occured'
-          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-            }
-        
-        }
-      
-    })
-  }else{
-    this.message='Select price Group'
-        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-  }
-  }
-
-  
-  customeItem:any
-  customPrice:any
- onCustomItemInput($event: Event) {
-const target = $event.target as HTMLInputElement;
-this.customeItem=target.value
-    console.log('User typed:', target.value);
-}
-
- onCustomItemPrice($event: Event) {
-const target = $event.target as HTMLInputElement;
-this.customPrice=target.value
-    console.log('User typed:', target.value);
-}
-
-  addCuatomPackprice=(product:any)=>{
-    this.genranCode()
-    if(this.priceGroup!==undefined){
-    let data={
-      priceID:this.pricetagID,
-      PriceGroup:this.priceGroup,
-      product_number:product?.product_number,
-      product_cartegory:product?.product_category,
-      brandid:product?.brandid,
-      price:this.customPrice,
-      customItem:this.customeItem
-    }
-    this.storeservice.addCustomPriceprice(data).subscribe((response:any)=>{
-       if (response?.message) {
-        this.message=response?.message
-          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
-        } else {
-            if(response?.success){
-              this.message=response?.success
-              this.loadstoreprices()
-
-               this.messageservice.add({ severity: 'success', summary: 'Error', detail: this.message, life: 5000 });
-            }else{
-                this.message = 'Unknown error has occured'
-          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-            }
-        
-        }
-      
-    })
-  }else{
-    this.message='Select price Group'
-        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-  }
-  }
-
-
-
-  
-loadstoreprices=()=>{
-if(this.selectedStore?.storenumber!==undefined){
-  this.loading.set(true)
-let data={
-  store_number:this.selectedStore?.storenumber
-}
-this.storeservice.loadstoreprices(data).subscribe((response:any)=>{
-   if (response?.message) {
-        this.message = response?.message
-          this.loading.set(false)
-        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-      } else {
-        if (response?.data) {
-            this.loading.set(false)
-          this.PriceData = response?.data
-            this.cdr.markForCheck()
-          this.cdr.detectChanges()
-          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
-        } else {
-            this.loading.set(false)
-          this.message = response?.message
-          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-        }
       }
-})
-}else{
-   this.message = 'Select Store'
+      this.storeservice.addUnitPrice(data).subscribe((response: any) => {
+        if (response?.message) {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+        } else {
+          if (response?.success) {
+            this.message = response?.success
+            this.loadstoreprices()
+            this.messageservice.add({ severity: 'success', summary: 'Error', detail: this.message, life: 5000 });
+          } else {
+            this.message = 'Unknown error has occured'
+            this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+          }
 
-        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-}
-}
+        }
+
+      })
+    } else {
+      this.message = 'Select price Group'
+      this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+    }
+  }
 
 
-loadAllprices=()=>{
 
-this.storeservice.loadAllprices().subscribe((response:any)=>{
-   if (response?.message) {
-        this.message = response?.message
+
+  addPackprice = (product: any) => {
+    this.genranCode()
+    if (this.priceGroup !== undefined) {
+      let data = {
+        priceID: this.pricetagID,
+        PriceGroup: this.priceGroup,
+        product_number: product?.product_number,
+        product_cartegory: product?.product_category,
+        brandid: product?.brandid,
+        price: this.priceInput,
+
+      }
+      this.storeservice.addPackprice(data).subscribe((response: any) => {
+        if (response?.message) {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+        } else {
+          if (response?.success) {
+            this.message = response?.success
+            this.loadstoreprices()
+
+            this.messageservice.add({ severity: 'success', summary: 'Error', detail: this.message, life: 5000 });
+          } else {
+            this.message = 'Unknown error has occured'
+            this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+          }
+
+        }
+
+      })
+    } else {
+      this.message = 'Select price Group'
+      this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+    }
+  }
+
+
+  customeItem: any
+  customPrice: any
+  onCustomItemInput($event: Event) {
+    const target = $event.target as HTMLInputElement;
+    this.customeItem = target.value
+    console.log('User typed:', target.value);
+  }
+
+  onCustomItemPrice($event: Event) {
+    const target = $event.target as HTMLInputElement;
+    this.customPrice = target.value
+    console.log('User typed:', target.value);
+  }
+
+  addCuatomPackprice = (product: any) => {
+    this.genranCode()
+    if (this.priceGroup !== undefined) {
+      let data = {
+        priceID: this.pricetagID,
+        PriceGroup: this.priceGroup,
+        product_number: product?.product_number,
+        product_cartegory: product?.product_category,
+        brandid: product?.brandid,
+        price: this.customPrice,
+        customItem: this.customeItem
+      }
+      console.log('Custom', data)
+      this.storeservice.addCustomPriceprice(data).subscribe((response: any) => {
+        if (response?.message) {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+        } else {
+          if (response?.success) {
+            this.message = response?.success
+            this.loadstoreprices()
+
+            this.messageservice.add({ severity: 'success', summary: 'Error', detail: this.message, life: 5000 });
+          } else {
+            this.message = 'Unknown error has occured'
+            this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+          }
+
+        }
+
+      })
+    } else {
+      this.message = 'Select price Group'
+      this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+    }
+  }
+
+
+
+
+  loadstoreprices = () => {
+    if (this.selectedStore?.storenumber !== undefined) {
+      this.loading.set(true)
+      let data = {
+        store_number: this.selectedStore?.storenumber
+      }
+      this.storeservice.loadstoreprices(data).subscribe((response: any) => {
+        if (response?.message) {
+          this.message = response?.message
           this.loading.set(false)
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        } else {
+          if (response?.data) {
+            this.loading.set(false)
+            this.PriceData = response?.data
+            this.cdr.markForCheck()
+            this.cdr.detectChanges()
+            this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+          } else {
+            this.loading.set(false)
+            this.message = response?.message
+            this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+          }
+        }
+      })
+    } else {
+      this.message = 'Select Store'
+
+      this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+    }
+  }
+
+
+  loadAllprices = () => {
+
+    this.storeservice.loadAllprices().subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.loading.set(false)
         this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
       } else {
         if (response?.data) {
-            this.loading.set(false)
+          this.loading.set(false)
           this.PriceData = response?.data
           this.cdr.markForCheck()
           this.cdr.detectChanges()
 
           this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
         } else {
-            this.loading.set(false)
+          this.loading.set(false)
           this.message = response?.message
           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
         }
       }
-})
-}
+    })
+  }
+
+  additionalPriceData: any = []
+
+  loadOtherprices = () => {
+
+    this.storeservice.loadOtherprices().subscribe((response: any) => {
+      if (response?.message) {
+        this.message = response?.message
+        this.loading.set(false)
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.data) {
+
+          this.additionalPriceData = response?.data
+          this.cdr.markForCheck()
+          this.cdr.detectChanges()
+
+          this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+        } else {
+          this.loading.set(false)
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
+  }
+
 }

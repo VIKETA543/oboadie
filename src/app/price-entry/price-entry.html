@@ -100,7 +100,7 @@
                                     (click)="op.toggle($event)" />
                                 <p-button label="Add price/Pack" [text]="true" severity="info"
                                     (click)="op1.toggle($event)" />
-                                       <p-button label="Other Prices" [text]="true" severity="info"
+                                <p-button label="Other Prices" [text]="true" severity="info"
                                     (click)="op2.toggle($event)" />
                                 <div class="card flex justify-center">
                                     <p-popover #op>
@@ -108,12 +108,14 @@
 
                                             <div>
                                                 <span
-                                                    class="font-medium text-surface-900 dark:text-surface-0 block mb-2" severity="contrast">Add
+                                                    class="font-medium text-surface-900 dark:text-surface-0 block mb-2"
+                                                    severity="contrast">Add
                                                     Price</span>
                                                 <div class="flex">
                                                     <p-inputgroup>
                                                         <input pInputText (input)="onInputChange($event)" />
-                                                        <p-button pButton label="Submit" icon="pi pi-arrows-h" severity="contrast"
+                                                        <p-button pButton label="Submit" icon="pi pi-arrows-h"
+                                                            severity="contrast"
                                                             (onClick)="addUniprice(storeProducts)"></p-button>
                                                     </p-inputgroup>
                                                 </div>
@@ -126,12 +128,14 @@
 
                                             <div>
                                                 <span
-                                                    class="font-medium text-surface-900 dark:text-surface-0 block mb-2" severity="contrast">Add
+                                                    class="font-medium text-surface-900 dark:text-surface-0 block mb-2"
+                                                    severity="contrast">Add
                                                     Price</span>
                                                 <div class="flex">
                                                     <p-inputgroup>
                                                         <input pInputText (input)="onInputChange($event)" />
-                                                        <p-button pButton label="Submit" icon="pi pi-arrows-h" severity="contrast"
+                                                        <p-button pButton label="Submit" icon="pi pi-arrows-h"
+                                                            severity="contrast"
                                                             (onClick)="addPackprice(storeProducts)"></p-button>
                                                     </p-inputgroup>
                                                 </div>
@@ -145,12 +149,15 @@
 
                                             <div>
                                                 <span
-                                                    class="font-medium text-surface-900 dark:text-surface-0 block mb-2" severity="contrast">Create custom price</span>
+                                                    class="font-medium text-surface-900 dark:text-surface-0 block mb-2"
+                                                    severity="contrast">Create custom price</span>
                                                 <div class="flex">
-                                                      <input pInputText (input)="onCustomItemInput($event)" placeholder="Enter item type" />
+                                                    <input pInputText (input)="onCustomItemInput($event)"
+                                                        placeholder="Enter item type" />
                                                     <p-inputgroup>
                                                         <input pInputText (input)="onCustomItemPrice($event)" />
-                                                        <p-button pButton label="Submit" icon="pi pi-arrows-h" severity="contrast"
+                                                        <p-button pButton label="Submit" icon="pi pi-arrows-h"
+                                                            severity="contrast"
                                                             (onClick)="addCuatomPackprice(storeProducts)"></p-button>
                                                     </p-inputgroup>
                                                 </div>
@@ -207,6 +214,7 @@
                 <th style="width:20%">Type</th>
                 <th style="width:20%">Unit Price</th>
                 <th style="width:20%">Cart/Box Price</th>
+                <th style="width:20%">Other Prices</th>
                 <th style="width:20%">Date Added</th>
                 <th style="width:20%">Date Modified</th>
             </tr>
@@ -242,17 +250,120 @@
                     </div>
                 </td>
                 <td>
+
+                    <div class="card flex justify-center">
+                        <p-button (click)="op.toggle($event)" icon="pi pi-chevron-down" shape="circle"
+                            severity="contrast" [raised]="true" />
+                        <p-popover #op>
+
+                            <p-card [style]="{ width: '20rem', overflow: 'hidden' }">
+                                <ng-template #header>
+                                    <!-- <img [src]="storeProducts.imageurl" class="w-full" /> -->
+                                      <p-avatar image="{{storeProducts.imageurl}}" class="mr-1" shape="circle" size="xlarge" />
+                                </ng-template>
+                                <ng-template #title> {{storeProducts.name}}</ng-template>
+                                <ng-template #subtitle>{{storeProducts.title}}</ng-template>
+
+                                    <section class="flex items-center gap-2 text-muted-color ml-auto text-sm ">
+                                        <div>
+                                            <span class="font-medium">Price/Unit</span>
+                                            <!-- <div class="text-sm text-muted-color">{{ member.email }}</div> -->
+                                        </div>
+                                        <div class="flex items-center gap-2 text-muted-color ml-auto text-sm">
+                                            <span>
+                                                <p-chip
+                                                    label=" {{ storeProducts.unitesellingprice|currency :'GHS':'symbol':'1.2-2'}}"
+                                                    severity="contrast" />
+
+                                            </span>
+
+                                        </div>
+                                    </section>
+
+                                    <section class="flex items-center gap-2 text-muted-color ml-auto text-sm ">
+                                        <div>
+                                            <span class="font-medium">Price/Cart/Box</span>
+                                            <!-- <div class="text-sm text-muted-color">{{ member.email }}</div> -->
+                                        </div>
+                                        <div class="flex items-center gap-2 text-muted-color ml-auto text-sm">
+                                            <span>
+                                                <p-chip
+                                                    label=" {{ storeProducts.cartsellingprice|currency :'GHS':'symbol':'1.2-2'}}"
+                                                    severity="contrast" />
+
+                                            </span>
+
+                                        </div>
+                                    </section>
+                                <div class="flex flex-col gap-1 w-[23rem]">
+                                    <div>
+                                        <span class="font-medium text-surface-900 dark:text-surface-0 block mb-2">Other Price
+                                            Variations</span>
+                                        <ul class="list-none p-0 m-0 flex flex-col gap-4">
+                                            @for (member of additionalPriceData; track member) {
+                                            @if(storeProducts.brandid===member.brandid){
+                                            <li class="flex items-center gap-2 text-muted-color ml-auto text-sm ">
+                                                <div>
+                                                    <span class="font-medium">{{ member.item_type }}</span>
+                                                    <!-- <div class="text-sm text-muted-color">{{ member.email }}</div> -->
+                                                </div>
+                                                <div class="flex items-center gap-2 text-muted-color ml-auto text-sm">
+                                                    <span>
+                                                        <p-chip
+                                                            label=" {{ member.price|currency :'GHS':'symbol':'1.2-2'}}"
+                                                            severity="contrast" />
+
+                                                    </span>
+
+                                                </div>
+                                            </li>
+                                            }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </p-card>
+
+                        </p-popover>
+                    </div>
+
+                    <!-- <p-select [options]="additionalPriceData" [(ngModel)]="selectedStore" optionLabel="item_type"
+                        [filter]="true" filterBy="item_type" [showClear]="true" placeholder="Additional Prices"
+                        class="w-full md:w-56">
+                        <ng-template #selectedItem let-additionalPriceData>
+                            <div class="flex items-center gap-2">
+                                <div>
+                                    @if(storeProducts.brandid===additionalPriceData.brandid){
+                                    {{additionalPriceData.item_type}}=>{{additionalPriceData.price}}
+                                    }
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-additionalPriceData #item>
+                            <div class="flex items-center gap-2">
+                                <div>
+                                    @if(storeProducts.brandid===additionalPriceData.brandid){
+                                    {{additionalPriceData.item_type}}=>{{additionalPriceData.price}}
+                                    }
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-select> -->
+                </td>
+                <td>
                     @if(storeProducts.dateadded!==undefined){
-                       {{ storeProducts.dateadded === 'NOT MODIFIED' ? storeProducts.dateadded : (storeProducts.dateadded | date:'dd/MM/yyyy') }}
+                    {{ storeProducts.dateadded === 'NOT MODIFIED' ? storeProducts.dateadded : (storeProducts.dateadded |
+                    date:'dd/MM/yyyy') }}
                     }
                 </td>
                 <td>
                     @if(storeProducts.dateadded!==undefined){
 
-                        {{ storeProducts.datemodified === 'NOT MODIFIED' ? storeProducts.datemodified : (storeProducts.datemodified | date:'dd/MM/yyyy') }}
+                    {{ storeProducts.datemodified === 'NOT MODIFIED' ? storeProducts.datemodified :
+                    (storeProducts.datemodified | date:'dd/MM/yyyy') }}
 
                     <!-- {{ storeProducts.datemodified | date:'dd/MM/yyyy'    }} -->
-                    }  
+                    }
                 </td>
             </tr>
         </ng-template>
