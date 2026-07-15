@@ -1,4 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxBarcode6 } from 'ngx-barcode6';
@@ -30,7 +30,7 @@ import { PosServcie } from '../../services/pos-servcie';
     ProgressBarModule, AvatarModule,
     ButtonModule, DialogModule,
     InputTextModule, TableModule, DividerModule,
-    CurrencyPipe, Toolbar
+    CurrencyPipe, Toolbar,CommonModule,
   ],
     providers:[MessageService],
   templateUrl: './pay-credit.html',

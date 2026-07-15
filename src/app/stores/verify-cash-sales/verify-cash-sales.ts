@@ -176,9 +176,10 @@ export class VerifyCashSales implements OnInit, OnDestroy {
         if (response?.success) {
           this.message=response?.success
              this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
-          // this.router.navigate(['../'], { relativeTo: this.route });
+          //  this.router.navigate(['../'], { relativeTo: this.route });
         } else {
           this.message = response?.message
+            this.router.navigate(['../'], { relativeTo: this.route });
           this.messageservice.add({ severity: 'error', summary: 'Info', detail: this.message, life: 5000 });
         }
       }
@@ -190,7 +191,6 @@ export class VerifyCashSales implements OnInit, OnDestroy {
        invoiceNumber:this.invoiceData[0].invoice_number,
         storeNumber:this.purchaseInfo[0].store_number
      }
-     console.log(data)
      this.storeservcie.closeInVoice(data).subscribe((response:any)=>{
       if (response?.message) {
         this.message = response?.message

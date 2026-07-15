@@ -277,4 +277,9 @@ loadAllprices=()=>{
    return this.http.post(this.url + '/stores/loadOtherprices', { headers: new HttpHeaders().set('contentType', "application/json") })
   }
   
+  stockbalances=(data:any)=>{
+   return this.http.post(this.url + '/stores/stockbalances', data,{ headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+  
+  
 }

@@ -13,21 +13,41 @@ import { InputTextModule } from 'primeng/inputtext';
 import { NgxBarcode6 } from 'ngx-barcode6';
 import { TableModule } from 'primeng/table';
 import { DividerModule } from 'primeng/divider';
-import { CurrencyPipe, isPlatformBrowser } from '@angular/common';
+import { CommonModule, CurrencyPipe, isPlatformBrowser } from '@angular/common';
 import { FluidModule } from 'primeng/fluid';
 import { InputNumberInputEvent, InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
-import { Toolbar } from "primeng/toolbar";
+import { ToolbarModule } from "primeng/toolbar";
 import { NgxPrintDirective } from 'ngx-print';
 import { Users } from '../../interface/Users';
+import { ToggleSwitchChangeEvent } from 'primeng/types/toggleswitch';
+import { PopoverModule } from 'primeng/popover';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 @Component({
   standalone: true,
   selector: 'scanner-payment',
-  imports: [NgxPrintDirective, FormsModule, InputNumberModule, FluidModule, NgxBarcode6, ToastModule, ProgressBarModule, AvatarModule, ButtonModule, DialogModule, InputTextModule, TableModule, DividerModule, CurrencyPipe, Toolbar],
+  imports: [NgxPrintDirective,
+    CommonModule,
+    FormsModule,
+    InputNumberModule,
+    FluidModule,
+    NgxBarcode6,
+    ToastModule,
+    ProgressBarModule,
+    AvatarModule,
+    ButtonModule,
+    DialogModule,
+    InputTextModule,
+    TableModule,
+    DividerModule,
+    CurrencyPipe,
+    ToolbarModule,
+    PopoverModule,
+    ToggleSwitchModule],
   templateUrl: './scanner-payment.html',
   styleUrl: './scanner-payment.scss',
   providers: [MessageService],
- changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScannerPayment implements OnInit, OnDestroy {
 
@@ -47,23 +67,22 @@ export class ScannerPayment implements OnInit, OnDestroy {
   balanceData: any[] = []
   previousBalance: number = 0
   paymentNumber: any
-  sumamountPaidData:any[]=[]
-    USER_CREDENTIALS:Users[]|any
-    dialogVisible=signal(false)
-  constructor(private cdr: ChangeDetectorRef, private posservice: PosServcie,@Inject(PLATFORM_ID) private platformId: Object) {
+  sumamountPaidData: any[] = []
+  USER_CREDENTIALS: Users[] | any
+  dialogVisible = signal(false)
+  checked_Pyment_option: boolean = false
+  constructor(private cdr: ChangeDetectorRef, private posservice: PosServcie, @Inject(PLATFORM_ID) private platformId: Object) {
 
 
- if (isPlatformBrowser(this.platformId)) {
-                      try {
-                  // this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
-                  this.USER_CREDENTIALS=JSON.parse(localStorage.getItem('USER_CREDENTIALS') || '{}');
-                   console.log('User',this.USER_CREDENTIALS)
-                } catch (e) {
-                  this.message = "Could not parse JSON from storage: " + e
-                }
-              }
-
-
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        // this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
+        this.USER_CREDENTIALS = JSON.parse(localStorage.getItem('USER_CREDENTIALS') || '{}');
+        console.log('User', this.USER_CREDENTIALS)
+      } catch (e) {
+        this.message = "Could not parse JSON from storage: " + e
+      }
+    }
 
     this.scanSub = this.keyStrokes$.pipe(
       // 1. Group keys together
@@ -111,7 +130,7 @@ export class ScannerPayment implements OnInit, OnDestroy {
     this.scanSub.unsubscribe();
   }
 
-  
+
   loadSales = () => {
     let data = {
       invoinceNumber: this.lastScan
@@ -122,27 +141,27 @@ export class ScannerPayment implements OnInit, OnDestroy {
       } else {
         if (response?.isQuote) {
           console.log('Invoice data loaded successfully:', response)
-          console.log('Checking progress',response?.invoicesum[0].payment_progress)
+          console.log('Checking progress', response?.invoicesum[0].payment_progress)
           const paystatus = response?.invoicesum[0].payment_progress.trim()
-        
+
           switch (paystatus) {
             case 'FULL_PAYMENT':
               this.isPaymentcomplete.set(true)
               this.loadPaymentReceipt()
               break;
             case 'PART_PAYMENT':
-               
+
               this.isResults.set(response?.isQuote)
               this.invoiceData = response?.invoiceitems
               this.invoicesum = response?.invoicesum
               this.salesType = response?.rws
-            
+
               if (response?.balance[0].balance === "undefined") {
-                    this.balanceData =  response?.invoicesum
+                this.balanceData = response?.invoicesum
                 this.previousBalance = response?.invoicesum[0].invoice_total
               } else {
-                 console.log(paystatus)
-                  this.balanceData = response?.balance
+                console.log(paystatus)
+                this.balanceData = response?.balance
                 this.previousBalance = response?.balance[0].balance
               }
               this.cdr.detectChanges()
@@ -154,19 +173,19 @@ export class ScannerPayment implements OnInit, OnDestroy {
               this.salesType = response?.rws
               if (response?.balance[0].balance === "undefined") {
                 this.previousBalance = response?.invoicesum[0].invoice_total
-                  this.balanceData =  response?.invoicesum
-                       console.log('balance Data,' ,  this.balanceData )
+                this.balanceData = response?.invoicesum
+                console.log('balance Data,', this.balanceData)
               } else {
-                 this.balanceData = response?.balance
-            
+                this.balanceData = response?.balance
+
                 this.previousBalance = response?.balance[0].balance
               }
-                   this.cdr.detectChanges()
+              this.cdr.detectChanges()
               break;
           }
           let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
           this.paymentNumber = "ONPMT-" + new Date().getDate() + "-" + randomInteger
-         this.cdr.detectChanges()
+          this.cdr.detectChanges()
         } else {
           this.message = response?.message
           this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
@@ -195,41 +214,111 @@ export class ScannerPayment implements OnInit, OnDestroy {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-
+  paymentOptions = signal('none')
 
   makePayment = () => {
-    let data = {
-      invoinceNumber: this.lastScan,
-      salesType: this.salesType,
-      amountPaid: this.AmountPaid,
-      balance: this.PaidBalance,
-      payment_progress: this.payment_progress,
-      isFullpayment: this.isFullpayment,
-      paymentNumber: this.paymentNumber
-    }
-    console.log('Checking data for full payment', data)
-    this.posservice.makePayment(data).subscribe((response: any) => {
-      if (response?.message) {
-        this.messageservice.add({ severity: 'error', summary: 'Error', detail: response.message, life: 5000 });
-      } else {
-        if (response?.success) {
-          this.loadPaymentReceipt()
-          this.isResults.set(false)
-          this.isPaymentcomplete.set(true)
-          this.cdr.detectChanges()
-          this.messageservice.add({ severity: 'success', summary: 'Success', detail: response.success, life: 5000 });
-        } else {
-          this.message = 'Unknown error has occured'
-          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+     console.log('Checking data for payment options', this.paymentOptions())
+    switch (this.paymentOptions()) {
+
+      case 'full':
+        this.isFullpayment = true
+        this.payment_progress = 'FULL_PAYMENT'
+        let full_data = {
+          invoinceNumber: this.lastScan,
+          salesType: this.salesType,
+          amountPaid: this.previousBalance,
+          balance: 0.0,
+          payment_progress: this.payment_progress,
+          isFullpayment: this.isFullpayment,
+          paymentNumber: this.paymentNumber
         }
-      }
-    })
+   
+        this.posservice.makePayment(full_data).subscribe((response: any) => {
+          if (response?.message) {
+            this.messageservice.add({ severity: 'error', summary: 'Error', detail: response.message, life: 5000 });
+          } else {
+            if (response?.success) {
+              this.loadPaymentReceipt()
+              this.isResults.set(false)
+              this.isPaymentcomplete.set(true)
+              this.cdr.detectChanges()
+              this.messageservice.add({ severity: 'success', summary: 'Success', detail: response.success, life: 5000 });
+            } else {
+              this.message = 'Unknown error has occured'
+              this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+            }
+          }
+        })
+        break;
+      case 'installment':
+        console.log('Checking data for installment payment', this.AmountPaid, this.PaidBalance)
+         this.payment_progress = 'PART_PAYMENT'
+      this.isFullpayment = false
+        let part_data = {
+          invoinceNumber: this.lastScan,
+          salesType: this.salesType,
+          amountPaid: this.AmountPaid,
+          balance: this.PaidBalance,
+          payment_progress: this.payment_progress,
+          isFullpayment: this.isFullpayment,
+          paymentNumber: this.paymentNumber
+        }
+        console.log('Checking data for installment payment', part_data)
+        this.posservice.makePayment(part_data).subscribe((response: any) => {
+          if (response?.message) {
+            this.messageservice.add({ severity: 'error', summary: 'Error', detail: response.message, life: 5000 });
+          } else {
+            if (response?.success) {
+              this.loadPaymentReceipt()
+              this.isResults.set(false)
+              this.isPaymentcomplete.set(true)
+              this.cdr.detectChanges()
+              this.messageservice.add({ severity: 'success', summary: 'Success', detail: response.success, life: 5000 });
+            } else {
+              this.message = 'Unknown error has occured'
+              this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+            }
+          }
+        })
+        break;
+      default:
+        this.isFullpayment = true
+        this.payment_progress = 'FULL_PAYMENT'
+        let full_default_data = {
+          invoinceNumber: this.lastScan,
+          salesType: this.salesType,
+          amountPaid: this.previousBalance,
+          balance: 0.0,
+          payment_progress: this.payment_progress,
+          isFullpayment: this.isFullpayment,
+          paymentNumber: this.paymentNumber
+        }
+        console.log('Checking data for full payment', full_default_data)
+        this.posservice.makePayment(full_default_data).subscribe((response: any) => {
+          if (response?.message) {
+            this.messageservice.add({ severity: 'error', summary: 'Error', detail: response.message, life: 5000 });
+          } else {
+            if (response?.success) {
+              this.loadPaymentReceipt()
+              this.isResults.set(false)
+              this.isPaymentcomplete.set(true)
+              this.cdr.detectChanges()
+              this.messageservice.add({ severity: 'success', summary: 'Success', detail: response.success, life: 5000 });
+            } else {
+              this.message = 'Unknown error has occured'
+              this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+            }
+          }
+        })
+        break;
+    }
+
   }
   verySale = () => {
     let data = {
       invoinceNumber: this.lastScan,
       salesType: this.salesType,
-    payment_progress: 'NO_PAYMENT_MADE'
+      payment_progress: 'NO_PAYMENT_MADE'
     }
     this.posservice.makePayment(data).subscribe((response: any) => {
       if (response?.message) {
@@ -257,21 +346,21 @@ export class ScannerPayment implements OnInit, OnDestroy {
     let data = {
       invoinceNumber: this.lastScan
     }
-  
+
     this.posservice.loadPaymentReceipt(data).subscribe((response: any) => {
       if (response?.message) {
         this.messageservice.add({ severity: 'error', summary: 'Error', detail: response.message, life: 5000 });
       } else {
         if (response?.isQuote) {
-            console.log('loading receipt: ', response)
-             this.isPaymentcomplete.set(response?.isQuote)
+          console.log('loading receipt: ', response)
+          this.isPaymentcomplete.set(response?.isQuote)
           this.invoiceData = response?.invoiceitems
           this.invoicesum = response?.invoicesum
           this.salesType = response?.rws
-              this.balanceData = response?.balance
-       
-              this.sumamountPaidData=response?.sumpaid
-console.log('sum paid',  this.sumamountPaidData)
+          this.balanceData = response?.balance
+
+          this.sumamountPaidData = response?.sumpaid
+          console.log('sum paid', this.sumamountPaidData)
           this.cdr.detectChanges()
 
         } else {
@@ -286,10 +375,22 @@ console.log('sum paid',  this.sumamountPaidData)
     this.isPaymentcomplete.set(false)
   }
 
-    onExit=()=>{
-      this.dialogVisible.set(false)
-        this.isPaymentcomplete.set(false)
-        
+  onExit = () => {
+    this.dialogVisible.set(false)
+    this.isPaymentcomplete.set(false)
 
+
+  }
+
+
+  changeOption($event: ToggleSwitchChangeEvent) {
+
+    console.log('Switch toggled to:', $event.checked);
+
+    if ($event.checked) {
+
+    } else {
+
+    }
   }
 }

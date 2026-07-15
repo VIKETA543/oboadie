@@ -1,122 +1,172 @@
-.scanner-payment-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
+/* Custom Scoped Invoice Presentation Handling */
+.invoice-modern-dialog .p-dialog-content {
+  padding: 1.5rem 2.25rem !important;
 }
-.status-card{
-    width: 300px;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    margin-top: 20px;
-}
-  
-.invoice-data{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e0e0e0;
-        padding: 20px;
-        width: 90%;
-   margin:20px auto;   
-   overflow: hidden; 
-} 
-.barcode-container{
-    width: 60%;
-    height: 100px;
-    display:flex;
-    flex: 1;
-}
-.header{
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-        text-align: center;
-    label{
-        font-size:clamp(.8rem, 1.0vw, 1.3rem);
-        text-align: center;
-          font-weight: bold;
-    }
-    span{
-   font-size:clamp(1.5rem, 2vw, 2.5rem);
-        text-align: center;
-          font-weight: bold;
-          display: block;
-          width: 100%;
-    };
-    #main-header{
-        font-size:clamp(1.0rem, 1.3vw, 1.5rem);
-        font-weight: bold;
-        text-align: center;
-        span{
-            font-size:clamp(.9vw, 1.0vw, 1.2vw);
-            text-align: center;
-            display: block;
-            width: 100%;
-            color:red
-        }
-    }
 
+/* Make headers inside PrimeNG's datatable match contemporary card elements */
+.invoice-modern-dialog .p-datatable .p-datatable-thead > tr > th {
+  background: var(--p-surface-50, #f8fafc);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--p-surface-500, #64748b);
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--p-surface-200, #e2e8f0);
 }
-.client{
-    // display: block;
-       font-size:clamp(1rem, 1.0vw, 1.5rem);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-font-weight: bold;
-border: 1px solid rgba(0, 0, 0, 0.1);
-    text-align: left; 
 
+.invoice-modern-dialog .p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.85rem 1rem;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--p-surface-100, #f1f5f9);
 }
-.client:first-child{
-    width: calc(100% - 70%);
+
+/* Enforce fluid input layout inside toolbars */
+.invoice-modern-dialog .p-toolbar {
+  gap: 1rem;
+  flex-wrap: wrap;
 }
-.client:last-child{
-    width: calc(100% - 30%);
+
+
+/* --- Thermal Receipt Style Sheet --- */
+.receipt-container {
+  font-family: 'Courier New', Courier, monospace;
+  color: #000000;
+  background-color: #ffffff;
+  padding: 4px;
+  max-width: 100%;
 }
-.total{
-       font-size:clamp(.8vw, 1.2vw, 1.8vw);
-       font-weight: bold;
-       text-align: right;
+
+.receipt-header {
+  text-align: center;
+  margin-bottom: 8px;
 }
-.seperator{
-    display: flex;
-    width: 100%;
-    overflow: hidden;
+
+.receipt-brand {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
 }
-.cp-24{
-    width: calc(100% - 48%);
-    span:first-child{
-  width: calc(100% - 70%);
-    }
-    span:last-child{
-          width: calc(100% - 30%);
-    }
+
+.receipt-sub {
+  font-size: 11px;
+  margin: 2px 0;
+  line-height: 1.2;
 }
-#pmt-id{
-    width: 100%;
-    border: 1px solid lightgray;
-    display: flex;
-    span{
-        margin: 10px;
-    }
-    
+
+/* Simulated Thermal Separation Cuts */
+.receipt-dashed-line {
+  border-top: 1px dashed #000000;
+  margin: 8px 0;
 }
-.r-no{
-    width:100%;
-    padding:10px
+
+.receipt-dashed-line-light {
+  border-top: 1px dotted #555555;
+  margin: 6px 0;
 }
-.t-t-c{
-    border: 1px solid rgb(78, 76, 76);
+
+.receipt-double-dashed-line {
+  border-top: 3px double #000000;
+  margin: 8px 0;
 }
-.pmt-d{
-    display:flex;
-    width:100%
+
+/* Row Component Alignments */
+.receipt-flex-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 11px;
+  margin-bottom: 3px;
+}
+
+.receipt-flex-row .val {
+  text-align: right;
+  padding-left: 8px;
+}
+
+.receipt-meta-block {
+  margin: 4px 0;
+}
+
+/* Structured Layout for Items Table */
+.receipt-items-table {
+  font-size: 11px;
+}
+
+.table-header-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table-body-row {
+  margin-bottom: 6px;
+}
+
+.item-name-line {
+  font-size: 11px;
+  text-transform: uppercase;
+  word-break: break-all;
+}
+
+.item-title-sub {
+  font-size: 10px;
+  text-transform: lowercase;
+  opacity: 0.8;
+}
+
+.item-pricing-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  padding-left: 12px;
+}
+.receipt-totals-block{
+    display: block;
+}
+
+.receipt-barcode-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 12px 0 6px 0;
+}
+
+/* Disables automatic barcode canvas blow-outs on narrow rolls */
+.receipt-barcode-wrap svg, 
+.receipt-barcode-wrap img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+.receipt-footer-msg {
+  text-align: center;
+  font-size: 10px;
+  margin-top: 12px;
+  font-style: italic;
+}
+
+/* --- Strict Hardware Media Print Control --- */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #print-section, #print-section * {
+    visibility: visible !important;
+    color: #000000 !important;
+  }
+  #print-section {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+  /* Force system browser layout engine to hide default margin wrappers */
+  @page {
+    margin: 0;
+  }
 }

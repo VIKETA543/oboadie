@@ -90,6 +90,13 @@ verify_credit_invoice=(data:any)=>{
      return this.http.post(this.url + '/profoma/submit_profoma_Invoice',data, { headers: new HttpHeaders().set('contentType', "application/json") })
   }
 
+ dropItem=(data:any)=>{
+
+     return this.http.post(this.url + '/profoma/dropItem',data, { headers: new HttpHeaders().set('contentType', "application/json") })
+  }
+
+
+  
   loadInvoiceQuote=(data:any)=>{
    console.log('Loading invoice quote with data:', data)
    

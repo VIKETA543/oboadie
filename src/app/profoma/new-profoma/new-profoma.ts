@@ -28,6 +28,8 @@ import { PosServcie } from '../../services/pos-servcie';
 import { Creditsales, Creditsaletemp, Customer } from '../../interface/posinterface';
 import { Customers } from '../../interface/crmInterface';
 import { DatePickerModule } from 'primeng/datepicker';
+import { AvatarModule, Avatar } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
 @Component({
   selector: 'new-profoma',
   imports: [
@@ -45,13 +47,51 @@ import { DatePickerModule } from 'primeng/datepicker';
     CheckboxModule,
     DatePipe, SelectModule,
     InputNumberModule, FluidModule,
-    CurrencyPipe, NgxBarcode6, NgxPrintDirective,DatePickerModule
-  ],
+    CurrencyPipe, NgxBarcode6, NgxPrintDirective, DatePickerModule, AvatarGroupModule,
+    Avatar
+],
   templateUrl: './new-profoma.html',
   styleUrl: './new-profoma.scss',
   providers:[MessageService]
 })
 export class NewProfoma {
+
+
+dropItem(_t145: any) {
+
+  let data={
+    invoiceNumber:_t145?.invoice_number,
+    product_number:_t145?.productid,
+    product_brand:_t145?.brand,
+  }
+   return this.posservice.dropItem(data).subscribe((response:any)=>{
+        if (response?.message) {
+        this.message = response?.message
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      } else {
+        if (response?.success) {
+           this.message = response?.success
+             this.loadCart()
+        this.messageservice.add({ severity: 'success', summary: 'Error', detail: this.message, life: 5000 });
+        } else {
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+
+      }
+   });
+}
+addToCart(_t43: any) {
+
+    if(this.invoice_initiated()){
+       this.isaddingCart.set(true)
+    this.SelectedProduct=_t43
+    }else{
+       this.message = 'Start a new Invoice'
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+    }
+
+}
   constructor(private posservice: PosServcie, private crmservcie: Crmservice, private cdr: ChangeDetectorRef) { 
     this.getAllproducts()
   }
@@ -127,19 +167,19 @@ isAddtoCustomerList=signal(false)
   }
 
 
-    iniCashSales = () => {
+    initInvoice = () => {
     let randomInteger: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
     this.InvoiceNumber = "PROINV" + new Date().getDate() + "-" + randomInteger
     this.isInput.set(true)
     this.isInputInvoice.set(true)
 
-  }
-checked:boolean=false
-  addToCart($event: ToggleSwitchChangeEvent, _t77: any) {
-    this.isaddingCart.set(true)
-    this.SelectedProduct=_t77
 
   }
+  tst=()=>{
+       this.isInput.set(true) 
+  }
+checked:boolean=false
+  
 
 calcTotal=()=>{
  this.totalCost=this.quoteQuantity*this.SelectedProduct?.unitesellingprice
@@ -149,14 +189,14 @@ calcTotal=()=>{
 AddCart(){
   let data={
     invoiceNumber:this.InvoiceNumber,
-    productId:this.SelectedProduct?.serialnumber,
-    brandId:this.SelectedProduct?.brandid,
+    productId:this.SelectedProduct?.product_number,
+    brandId:this.SelectedProduct?.product_brand,
     quantity:this.quoteQuantity,
     uniPrice:this.SelectedProduct?.unitesellingprice,
     totalCost:this.totalCost,
     customerType:this.customerType
   }
-  
+
  return this.posservice.profomacart(data).subscribe((response:any)=>{
   switch(this.customerType){
     case undefined:
@@ -289,7 +329,7 @@ this.customerType=data.customertype
 this.remarks=data.remarks
 }
 
-
+invoice_initiated=signal(false)
 addInvoice=()=>{
   let data={
           cutomerNumber: this.cutomerNumber,
@@ -309,6 +349,7 @@ addInvoice=()=>{
         if (response?.success) {
           this.message=response?.success
           this.isInputInvoice.set(false)
+          this.invoice_initiated.set(true)
           // if(this.isAddtoCustomerList()){
           //   // this.addCustomer()
           // }

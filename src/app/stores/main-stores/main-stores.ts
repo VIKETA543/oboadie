@@ -108,7 +108,7 @@ export class MainStores implements OnInit {
     this.router.navigate(['stock-request'], { relativeTo: this.routes })
   }
    StockBalances() {
-  this.router.navigate(['stock-balances'], { relativeTo: this.routes })
+  this.router.navigate(['store-stock-balances'], { relativeTo: this.routes })
   }
 
     wahousePull() {

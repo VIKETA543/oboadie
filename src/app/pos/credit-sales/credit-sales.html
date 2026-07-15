@@ -1,8 +1,8 @@
 <div class="header-i">CREDIT SALES</div>
 @if(isCashsalse()){
 
-<div class="card flex flex-col items-center gap-4">
-    <div class="sales-quotes">
+<div class="card flex flex-col items-center gap-4 w-full max-w-2xl mx-auto">
+    <div class="w-full sm:w-1/2 bg-gray-100 p-4 rounded-lg shadow-sm text-center">
         <p-table #dt2 [value]="SalesData" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
             [loading]="loading()" [paginator]="true" [globalFilterFields]="['serialnumber','name', 'title']"
             stripedRows>
@@ -78,8 +78,8 @@
                     <th>serial</th>
                     <th>Product Name</th>
                     <th>Type/brand</th>
-                    <th>From Store</th>
-                    <!-- <th>Image</th> -->
+                    <!-- <th>From Store</th> -->
+                    <th>Image</th>
                     <th>Quantity</th>
                     <th>Quantity</th>
                     <th>Action</th>
@@ -90,19 +90,17 @@
                     <td [style]="{ width: '5rem' }">{{ i + 1 }}</td>
                     <td>{{cashSalesData.name}}</td>
                     <td>{{ cashSalesData.title }}</td>
-                    <td>{{ cashSalesData.storename }}</td>
-                    <!-- <td>
-                        <img [src]="cashSalesData.imageurl" />
-                    </td> -->
+                    <!-- <td>{{ cashSalesData.storename }}</td> -->
+                    <td>
+
+                        <p-avatar image="{{cashSalesData.imageurl}}" shape="circle" />
+                    </td>
                     <td>{{cashSalesData.stock_balance}}</td>
                     <td>
                         {{ cashSalesData.unitesellingprice ? (cashSalesData.unitesellingprice |
                         currency:'GHS':'symbol':'1.2-2') : 'No Price Value' }}
                     </td>
-                    <!-- <td>
-                        <p class="truncate-text" pTooltip="{{cashSalesData.role}}"> {{ cashSalesData.role }}</p>
-                    </td> -->
-                    <!-- <td>{{cashSalesData.date}}</td> -->
+
                     <td>
 
                         <div class="card flex justify-center">
@@ -111,198 +109,287 @@
                                     (onClick)="addToCart(cashSalesData); loadotherprices(cashSalesData)" />
                             </p-fluid>
 
+                            <p-dialog [(visible)]="isaddingCart" [modal]="true" [style]="{ width: '45rem' }">
 
-                            <p-dialog [(visible)]="isaddingCart" [modal]="true" [style]="{ width: '40rem' }">
-
+                                <!-- Header Template -->
                                 <ng-template #header>
-                                    <div class="inline-flex items-center justify-center gap-2">
-                                        <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" />
-                                        <span class="font-bold whitespace-nowrap">PURCHASE ITEM QUANTITY</span>
+                                    <div class="flex items-center gap-3">
+                                        <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" size="large" />
+                                        <div class="flex flex-col">
+                                            <span
+                                                class="font-bold text-lg text-surface-900 dark:text-surface-0">PURCHASE
+                                                ITEM QUANTITY</span>
+                                            <span class="text-xs text-muted-color">Review product details and adjust
+                                                quantity</span>
+                                        </div>
                                     </div>
                                 </ng-template>
 
-                                <p-panel header="Product Details">
-                                    <div class="flex-auto">
-                                        <label class="mb-2 font-bold block">Store Details</label>
-                                        <input pInputText [(ngModel)]="store_name" [readOnly]="true" type="text"
-                                            pSize="large" placeholder="Large" class="w-full" />
-                                    </div>
+                                <!-- Dialog Content -->
+                                <div class="gap-6 py-2">
 
-                                    <div class="flex-auto">
-                                        <label class="mb-2 font-bold block">Product Name</label>
-                                        <input pInputText [(ngModel)]="product_name" [readOnly]="true" type="text"
-                                            pSize="large" placeholder="Large" class="w-full" />
-                                    </div>
-                                    <div class="card flex flex-wrap gap-1">
-                                        <div class="flex-auto">
-                                            <label class="mb-2 font-bold block">Product Type</label>
-                                            <input pInputText [(ngModel)]="product_type" readonly [readOnly]="true"
-                                                type="text" pSize="large" placeholder="Large" class="w-full" />
-                                        </div>
+                                    <!-- Section: Product Details -->
+                                    <div class="gap-4">
+                                        <h5
+                                            class="text-base font-semibold border-b border-surface-200 dark:border-surface-700 pb-2 m-0 text-primary">
+                                            Product Details
+                                        </h5>
 
-                                        <div class="flex-auto">
-                                            <label class="mb-2 font-bold block">Available Quantity</label>
-                                            <input pInputText [(ngModel)]="available_quantity" readonly
-                                                [readOnly]="true" type="text" pSize="large" placeholder="Large"
-                                                class="w-full" />
-                                        </div>
-                                    </div>
-                                </p-panel>
-                                <p-panel header="Price Details">
-                                    <p-divider />
-
-                                    <div class="card flex justify-center gap-4">
-                                        <p-fluid class="card flex flex-wrap gap-4">
-                                            <div class="flex-auto">
-                                                <label class="mb-2 font-bold block" for="integeronly">Unit price (per
-                                                    item/per Weight/per length)</label>
-                                                <p-inputnumber inputId="integeronly" readonly
-                                                    [(ngModel)]="price_for_unit" />
+                                        <div class=" md:grid-cols-2 gap-4">
+                                            <div class="gap-2">
+                                                <label
+                                                    class="font-medium text-sm text-surface-700 dark:text-surface-300">Store
+                                                    Details</label>
+                                                <input pInputText [(ngModel)]="store_name" [readOnly]="true" type="text"
+                                                    class="w-full bg-surface-50 dark:bg-surface-800" />
                                             </div>
-                                        </p-fluid>
 
-                                        <p-fluid class="card flex flex-wrap gap-4">
-                                            <div class="flex-auto">
-                                                <label class="mb-2 font-bold block" for="integeronly">Price per
-                                                    (Pack/Bundle) </label>
-                                                <p-inputnumber inputId="integeronly" readonly
-                                                    [(ngModel)]="price_for_carton" />
+                                            <div class="gap-2">
+                                                <label
+                                                    class="font-medium text-sm text-surface-700 dark:text-surface-300">Product
+                                                    Name</label>
+                                                <input pInputText [(ngModel)]="product_name" [readOnly]="true"
+                                                    type="text" class="w-full bg-surface-50 dark:bg-surface-800" />
                                             </div>
-                                        </p-fluid>
 
+                                            <div class=" gap-2">
+                                                <label
+                                                    class="font-medium text-sm text-surface-700 dark:text-surface-300">Product
+                                                    Type</label>
+                                                <input pInputText [(ngModel)]="product_type" [readOnly]="true"
+                                                    type="text" class="w-full bg-surface-50 dark:bg-surface-800" />
+                                            </div>
 
+                                            <div class="gap-2">
+                                                <label
+                                                    class="font-medium text-sm text-surface-700 dark:text-surface-300">Available
+                                                    Quantity</label>
+                                                <input pInputText [(ngModel)]="available_quantity" [readOnly]="true"
+                                                    type="text" class="w-full bg-surface-50 dark:bg-surface-800" />
+                                            </div>
+                                        </div>
                                     </div>
 
+                                    <!-- Section: Price Matrices -->
+                                    <div class=" gap-4">
+                                        <h5
+                                            class="text-base font-semibold border-b border-surface-200 dark:border-surface-700 pb-2 m-0 text-primary">
+                                            Price Details
+                                        </h5>
 
-                                </p-panel>
+                                        <div class="flex flex-col gap-2 gap-4">
+                                            <p-fluid class="flex flex-col gap-2">
+                                                <label for="unitPrice"
+                                                    class="font-medium text-sm text-surface-700 dark:text-surface-300">
+                                                    Unit price (per item/Weight/length)
+                                                </label>
+                                                <p-inputnumber inputId="unitPrice" [readonly]="true"
+                                                    [(ngModel)]="price_for_unit" class="w-full" />
+                                            </p-fluid>
 
-                                <p-panel header="Select item type">
-                                    <div class="card flex justify-center gap-4">
-
-                                        <div class="card flex justify-center gap-4">
-
-                                            <p-checkbox [(ngModel)]="is_unit" (onChange)="selectPacktype('UNIT')"
-                                                [binary]="true" [indeterminate]="true" />
-                                            <span>Unit(per item)/Unit(per Weight)/Unit(per length)</span>
+                                            <p-fluid class="flex flex-col gap-2">
+                                                <label for="packPrice"
+                                                    class="font-medium text-sm text-surface-700 dark:text-surface-300">
+                                                    Price per (Pack/Bundle)
+                                                </label>
+                                                <p-inputnumber inputId="packPrice" [readonly]="true"
+                                                    [(ngModel)]="price_for_carton" class="w-full" />
+                                            </p-fluid>
                                         </div>
-                                        <div class="card flex justify-center gap-4">
-
-                                            <p-checkbox [(ngModel)]="is_pack" [binary]="true"
-                                                (onChange)="selectPacktype('PACK')" [indeterminate]="true" />
-                                            <span>Pack/Bundle</span>
-                                        </div>
-
                                     </div>
-                                    @if(otherPriceData){
-                                    <p-divider />
-                                    <p-fluid class="card flex flex-wrap gap-4">
-                                        <div class="flex-auto">
-                                            <label>Other Type</label>
-                                            <p-select [options]="otherPriceData" optionLabel="item_type" [filter]="true" [(ngModel)]="otherSelected"
-                                                filterBy="item_type" [showClear]="true" placeholder="Select a type" 
-                                                class="w-full md:w-56" (onChange)="selectedOtherPrice($event)">
-                                                <ng-template #selectedItem let-otherPriceData>
-                                                    <div class="flex items-center gap-2">
-                                                        <div>{{ otherPriceData.item_type }}</div>
-                                                    </div>
-                                                </ng-template>
-                                                <ng-template let-otherPriceData #item>
-                                                    <div class="flex items-center gap-2">
-                                                        <div>{{ otherPriceData.item_type }}</div>
-                                                    </div>
-                                                </ng-template>
-                                            </p-select>
 
+                                    <!-- Section: Selection Logic -->
+                                    <div
+                                        class="gap-4 bg-surface-50 dark:bg-surface-900 p-4 rounded-lg border border-surface-200 dark:border-surface-800">
+                                        <span
+                                            class="text-sm font-semibold text-surface-800 dark:text-surface-200 block">Select
+                                            Item Type</span>
+
+                                        <div class="flex flex-wrap gap-6 items-center">
+                                            <div class="flex items-center gap-2">
+                                                <p-checkbox [(ngModel)]="is_unit" (onChange)="selectPacktype('UNIT')"
+                                                    [binary]="true" [indeterminate]="true" inputId="checkUnit" />
+                                                <label for="checkUnit" class="text-sm cursor-pointer select-none">Unit
+                                                    Configuration</label>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <p-checkbox [(ngModel)]="is_pack" [binary]="true"
+                                                    (onChange)="selectPacktype('PACK')" [indeterminate]="true"
+                                                    inputId="checkPack" />
+                                                <label for="checkPack" class="text-sm cursor-pointer select-none">Pack /
+                                                    Bundle</label>
+                                            </div>
                                         </div>
-                                        @if(otherPrice){
-                                        <div class="flex-auto">
-                                            <label class="mb-2 font-bold block" for="integeronly">Price</label>
-                                            <p-inputnumber inputId="integeronly" readonly [(ngModel)]="otherPrice" />
+
+                                        <!-- Dynamic Other Price Segment -->
+                                        @if(otherPriceData) {
+                                        <p-divider styleClass="my-2" />
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                                            <p-fluid class="flex flex-col gap-2">
+                                                <label
+                                                    class="block font-medium text-sm text-surface-700 dark:text-surface-300 w-50">
+                                                    Other Custom Type
+                                                </label>
+                                                <p-select [options]="otherPriceData" optionLabel="item_type"
+                                                    [filter]="true" [(ngModel)]="otherSelected" filterBy="item_type"
+                                                    [showClear]="true" placeholder="Select a type" class="w-full"
+                                                    (onChange)="selectedOtherPrice($event)">
+                                                    <ng-template #selectedItem let-data>
+                                                        <span class="text-sm">{{ data.item_type }}</span>
+                                                    </ng-template>
+                                                    <ng-template let-data #item>
+                                                        <span class="text-sm">{{ data.item_type }}</span>
+                                                    </ng-template>
+                                                </p-select>
+                                            </p-fluid>
+
+                                            @if(otherPrice) {
+                                            <p-fluid class="flex flex-col gap-2">
+                                                <label for="otherPriceInput"
+                                                    class="font-medium text-sm text-surface-700 dark:text-surface-300">Type
+                                                    Price</label>
+                                                <p-inputnumber inputId="otherPriceInput" [readonly]="true"
+                                                    [(ngModel)]="otherPrice" class="w-full" />
+                                            </p-fluid>
+                                            }
                                         </div>
                                         }
-                                    </p-fluid>
-                                    }
-                                </p-panel>
-                                <p-panel>
-                                    <div class="card flex flex-wrap gap-1">
-
-                                        <div class="flex-auto">
-                                            <label class="mb-2 font-bold block" for="integeronly">Enter quantity</label>
-                                            <div class="card flex flex-wrap gap-1">
-                                                <p-inputnumber inputId="integeronly" mode="decimal"
-                                                    [minFractionDigits]="2" [maxFractionDigits]="5"
-                                                    [(ngModel)]="quoteQuantity" (onInput)="calcTotal()" />
-
-                                            </div>
-                                        </div>
-                                        <div class="flex-auto">
-                                            <label class="mb-2 font-bold block" for="integeronly">Total</label>
-                                            <div class="card flex flex-wrap gap-1">
-                                                <p-inputnumber inputId="integeronly" mode="decimal"
-                                                    [minFractionDigits]="2" [maxFractionDigits]="5"
-                                                    [(ngModel)]="totalCost" />
-
-                                            </div>
-                                        </div>
-
                                     </div>
-                                </p-panel>
-                                <div class="card flex flex-wrap gap-1 w-58">
-                                    <p-button label="add" icon="pi pi-cart-plus" [raised]="true" severity="info"
-                                        (onClick)="AddCart()" />
+
+                                    <!-- Section: Calculation Area -->
+                                    <div
+                                        class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-dashed border-surface-200 dark:border-surface-700">
+                                        <p-fluid class="flex flex-col gap-2">
+                                            <label for="qtyInput"
+                                                class="font-bold text-sm text-surface-800 dark:text-surface-200">Enter
+                                                Quantity</label>
+                                            <p-inputnumber inputId="qtyInput" mode="decimal" [minFractionDigits]="2"
+                                                [maxFractionDigits]="5" [(ngModel)]="quoteQuantity"
+                                                (onInput)="calcTotal()" placeholder="0.00" class="w-full" />
+                                        </p-fluid>
+
+                                        <p-fluid class="flex flex-col gap-2">
+                                            <label for="totalInput" class="font-bold text-sm text-primary">Calculated
+                                                Total</label>
+                                            <p-inputnumber inputId="totalInput" mode="decimal" [minFractionDigits]="2"
+                                                [maxFractionDigits]="5" [(ngModel)]="totalCost" [readonly]="true"
+                                                class="w-full font-bold" />
+                                        </p-fluid>
+                                    </div>
 
                                 </div>
+
+                                <!-- Footer Template -->
+                                <ng-template #footer>
+                                    <div
+                                        class="flex justify-end gap-2 w-full pt-3 border-t border-surface-200 dark:border-surface-700">
+                                        <p-button label="Cancel" severity="secondary" [text]="true"
+                                            (onClick)="isaddingCart.set(false)" />
+                                        <p-button label="Add to Cart" icon="pi pi-cart-plus" [raised]="true"
+                                            severity="primary" (onClick)="AddCart()" />
+                                    </div>
+                                </ng-template>
+
                             </p-dialog>
+
+
+
                         </div>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
+
+
+
+
     @if(isInput()){
-    <div>
-        <div class="sales-display" header="Credit Invoice" id="print-section">
-            <div class="section">
-                <header>OBOADIE NYAME ADOM ENTERPRISE</header>
-                <label>Behind Our Lady of Fatima Junction</label>
-                <label>0531885457</label>
-            </div>
-            <div class="card flex flex-col items-center gap-4">
-                <div class="card flex flex-col items-center gap-4 customer">
-                    <span class="card flex flex-col items-center gap-2">Invoice Number: </span>
-                    <span class="card flex flex-col items-center gap-2">{{SalesInvoiceNumber}}</span>
+    <div class="w-full sm:w-1/2 bg-gray-100 p-4 rounded-lg shadow-sm text-center">
+        <div class="sales-display" header="Credit Invoice">
+            <div
+                class="invoice-header-container bg-white border border-gray-200 rounded-xl shadow-sm p-6 max-w-2xl mx-auto">
+
+                <!-- 1. Store Identity Header -->
+                <div class="text-center border-b border-dashed border-gray-200 pb-4 mb-4">
+                    <h2 class="text-xl font-extrabold text-gray-900 tracking-tight leading-none uppercase">
+                        OBOADIE NYAME ADOM ENTERPRISE
+                    </h2>
+                    <p class="text-xs text-gray-500 mt-1.5 font-medium">
+                        Behind Our Lady of Fatima Junction
+                    </p>
+                    <p class="text-xs font-semibold text-zinc-700 mt-0.5">
+                        Tel: 0531885457
+                    </p>
                 </div>
-                <div class=" card flex flex-col items-center gap-4 customer">
-                    <span class="card flex flex-col items-center gap-2">Date Prepared: </span>
-                    <span class="card flex flex-col items-center gap-2">{{ invoiceDate | date: 'yyyy-MMM-dd'}}</span>
+
+                <!-- 2. Invoice Metadata Block (Two Column Split) -->
+                <div class="grid grid-cols-2 gap-4 bg-gray-50 border border-gray-100 rounded-lg p-3 text-xs mb-4">
+                    <div>
+                        <span class="text-gray-400 block uppercase tracking-wider text-[10px] font-bold">Invoice
+                            Number</span>
+                        <span class="font-mono font-bold text-sm text-gray-800">{{SalesInvoiceNumber}}</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-gray-400 block uppercase tracking-wider text-[10px] font-bold">Date
+                            Prepared</span>
+                        <span class="font-semibold text-gray-800 text-sm">{{ invoiceDate | date: 'yyyy-MMM-dd'}}</span>
+                    </div>
                 </div>
-            </div>
-            <div class="card flex flex-col items-center gap-4">
-                <label class="card flex flex-col items-center gap-2 customer">
-                    <span class="card flex flex-col items-center gap-2">Customer Name:</span>
-                    <span class="card flex flex-col items-center gap-2">{{customerName}}</span>
-                </label>
-                <label class="card flex flex-col items-center gap-2 customer">
-                    <span>Tel/Mobile No:</span><span>{{telephoneNumber}}</span>
-                </label>
-            </div>
-            <div class="card flex flex-col items-center gap-4">
-                <label class="card flex flex-col items-center gap-2 customer">
-                    <span class="card flex flex-col items-center gap-2">Email Address:</span><span
-                        class="card flex flex-col items-center gap-2">{{emailAddress}}</span>
-                </label>
-                <label class="card flex flex-col items-center gap-2 customer">
-                    <span>Address:</span><span>{{custerAddress}}</span>
-                </label>
-            </div>
-            <div class="card flex flex-col items-center gap-4">
-                <label class="card flex flex-col items-center gap-2 customer">
-                    <span class="card flex flex-col items-center gap-2">Customer Type</span><span
-                        class="card flex flex-col items-center gap-2">{{customerType}}</span>
-                </label>
-                <label class="card flex flex-col items-center gap-2 customer">
-                    <span>Sales Tyepe</span><span>CREDIT SALES</span>
-                </label>
+
+                <!-- 3. Customer Profile & Account Details Group -->
+                <div class="space-y-2.5">
+                    <h3 class="text-[11px] font-bold uppercase tracking-wider text-gray-400 border-b pb-1">Billing
+                        Details</h3>
+
+                    <!-- Two Column Data Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-xs">
+
+                        <div
+                            class="flex justify-between items-center sm:justify-start sm:gap-3 border-b border-gray-50 pb-1.5 sm:border-0 sm:pb-0">
+                            <span class="text-gray-500 w-28 shrink-0 font-medium">Customer Name:</span>
+                            <span class="font-semibold text-gray-900">{{customerName}}</span>
+                        </div>
+
+                        <div
+                            class="flex justify-between items-center sm:justify-start sm:gap-3 border-b border-gray-50 pb-1.5 sm:border-0 sm:pb-0">
+                            <span class="text-gray-500 w-28 shrink-0 font-medium">Tel / Mobile No:</span>
+                            <span class="font-mono font-semibold text-gray-800">{{telephoneNumber}}</span>
+                        </div>
+
+                        <div
+                            class="flex justify-between items-center sm:justify-start sm:gap-3 border-b border-gray-50 pb-1.5 sm:border-0 sm:pb-0">
+                            <span class="text-gray-500 w-28 shrink-0 font-medium">Email Address:</span>
+                            <span class="text-gray-700 break-all">{{emailAddress || 'N/A'}}</span>
+                        </div>
+
+                        <div
+                            class="flex justify-between items-center sm:justify-start sm:gap-3 border-b border-gray-50 pb-1.5 sm:border-0 sm:pb-0">
+                            <span class="text-gray-500 w-28 shrink-0 font-medium">Physical Address:</span>
+                            <span class="text-gray-700">{{custerAddress || 'N/A'}}</span>
+                        </div>
+
+                        <div
+                            class="flex justify-between items-center sm:justify-start sm:gap-3 border-b border-gray-50 pb-1.5 sm:border-0 sm:pb-0">
+                            <span class="text-gray-500 w-28 shrink-0 font-medium">Customer Type:</span>
+                            <span
+                                class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-100 uppercase tracking-wide">
+                                {{customerType}}
+                            </span>
+                        </div>
+
+                        <div
+                            class="flex justify-between items-center sm:justify-start sm:gap-3 border-b border-gray-50 pb-1.5 sm:border-0 sm:pb-0">
+                            <span class="text-gray-500 w-28 shrink-0 font-medium">Sales Type:</span>
+                            <span
+                                class="px-2 py-0.5 rounded bg-red-50 text-red-700 text-[10px] font-bold border border-red-100 uppercase tracking-wide">
+                                CREDIT SALES
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
 
             <div class="card  tb">
@@ -310,8 +397,8 @@
                     <ng-template #header>
                         <tr>
                             <th style="width:20%">PID</th>
-                            <th style="width:15%">Store</th>
-                            <th style="width:2%">Product</th>
+                            <!-- <th style="width:15%">Store</th> -->
+                            <th style="width:20%">Product</th>
                             <th style="width:15%">Brand</th>
                             <th style="width:10%">Quantity</th>
                             <th style="width:10%">unit Price</th>
@@ -322,7 +409,7 @@
                     <ng-template #body let-creditTempData>
                         <tr>
                             <td>{{creditTempData.purchaseid}}</td>
-                            <td>{{ creditTempData.storename }}</td>
+                            <!-- <td>{{ creditTempData.storename }}</td> -->
                             <td>{{ creditTempData.name }}</td>
 
                             <td>{{ creditTempData.title }}{{itemTpe}}</td>
@@ -356,227 +443,331 @@
                 <p-button label="Submit" [raised]="true" severity="info" (onClick)="submitInvoice()" />
             </div>
             }
-            @if(submitOnSuccess()){
-            <div class="card flex justify-center">
-                <p-dialog [(visible)]="submitOnSuccess" [modal]="true" [style]="{ width: '50rem' }">
-                    <ng-template #header>
-                        <div class="inline-flex items-center justify-center gap-2">
-                            <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" />
-                            <span class="font-bold whitespace-nowrap">PRINT INVOICE</span>
-                        </div>
-                    </ng-template>
-
-                    <div class="sales-display" header="Credit Invoice" id="print-section">
-                        <div class="section">
-                            <header>OBOADIE NYAME ADOM ENTERPRISE</header>
-                            <label>Behind Our Lady of Fatima Junction</label>
-                            <label>0531885457</label>
-                        </div>
-                        <div class="card flex flex-col items-center gap-4">
-                            <div class="card flex flex-col items-center gap-4 customer">
-                                <span class="card flex flex-col items-center gap-2">Invoice Number: </span>
-                                <span class="card flex flex-col items-center gap-2">{{SalesInvoiceNumber}}</span>
-                            </div>
-                            <div class=" card flex flex-col items-center gap-4 customer">
-                                <span class="card flex flex-col items-center gap-2">Date Prepared: </span>
-                                <span class="card flex flex-col items-center gap-2">{{ invoiceDate | date:
-                                    'yyyy-MMM-dd'}}</span>
-                            </div>
-                        </div>
-                        <div class="card flex flex-col items-center gap-4">
-                            <label class="card flex flex-col items-center gap-2 customer">
-                                <span class="card flex flex-col items-center gap-2">Customer Name:</span>
-                                <span class="card flex flex-col items-center gap-2">{{customerName}}</span>
-                            </label>
-                            <label class="card flex flex-col items-center gap-2 customer">
-                                <span>Tel/Mobile No:</span><span>{{telephoneNumber}}</span>
-                            </label>
-                        </div>
-                        <div class="card flex flex-col items-center gap-4">
-                            <label class="card flex flex-col items-center gap-2 customer">
-                                <span class="card flex flex-col items-center gap-2">Email Address:</span><span
-                                    class="card flex flex-col items-center gap-2">{{emailAddress}}</span>
-                            </label>
-                            <label class="card flex flex-col items-center gap-2 customer">
-                                <span>Address:</span><span>{{custerAddress}}</span>
-                            </label>
-                        </div>
-                        <div class="card flex flex-col items-center gap-4">
-                            <label class="card flex flex-col items-center gap-2 customer">
-                                <span class="card flex flex-col items-center gap-2">Customer Type</span><span
-                                    class="card flex flex-col items-center gap-2">{{customerType}}</span>
-                            </label>
-                            <label class="card flex flex-col items-center gap-2 customer">
-                                <span>Sales Tyepe</span><span>CREDIT SALES</span>
-                            </label>
-                        </div>
-
-                        <div class="card tb">
-                            <p-table [value]="creditTempData" [tableStyle]="{ 'max-width': '80rem' }">
-                                <ng-template #header>
-                                    <tr>
-                                        <th style="width:20%">PID</th>
-                                        <th style="width:15%">Store</th>
-                                        <th style="width:2%">Product</th>
-                                        <th style="width:15%">Brand</th>
-                                        <th style="width:10%">Quantity</th>
-                                        <th style="width:10%">unit Price</th>
-                                        <th style="width:15%">Total</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template #body let-creditTempData>
-                                    <tr>
-                                        <td>{{creditTempData.purchaseid}}</td>
-                                        <td>{{ creditTempData.storename }}</td>
-                                        <td>{{ creditTempData.name }}</td>
-                                        <td>{{ creditTempData.title }}</td>
-                                        <td>{{ creditTempData.quantity }}</td>
-                                        <td>{{ creditTempData.unitprice }}</td>
-                                        <td>{{ creditTempData.totalcost }}</td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
-                            <p-divider></p-divider>
-                            <div class="card flex flex-wrap justify-center gap-4 total">
-                                <div>Sum Total</div>
-                                <div>{{sumTotalCart | currency: 'Ghø'}}</div>
-                                <p-divider></p-divider>
-                            </div>
-                            <div class="card flex flex-wrap justify-center gap-4 ">
-                                <ngx-barcode6 [bc-value]=SalesInvoiceNumber [bc-format]="'CODE128'"
-                                    [bc-display-value]="true">
-                                </ngx-barcode6>
-                            </div>
-
-                            <p-divider></p-divider>
-
-                            <div class="card flex flex-wrap justify-center gap-8 ">
-                                <section class="signature">
-                                    <label>Issued by: </label>
-                                    <label>{{USER_CREDENTIALS?.fullname}}</label>
-                                </section>
-
-                                <section class="signature">
-                                    <label>Signature</label>
-
-                                    <label>...................................</label>
-                                </section>
-                                <section class="signature">
-                                    <label>Printed Date: {{invoiceDate}}</label>
-                                </section>
-                            </div>
-
-                        </div>
-                    </div>
-                    <p-divider></p-divider>
-                    <div class="card flex flex-wrap justify-center gap-4 btn-submit">
-                        <p-button label="Print" icon="pi pi-print" [raised]="true" severity="contrast"
-                            printSectionId="print-section" ngxPrint (printCompleted)="onPrintComplete()"
-                            [useExistingCss]="true" />
-                    </div>
-                </p-dialog>
-            </div>
-
-            }
         </div>
     </div>
-    <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-    @if(isInputInvoice()){
-    <div class="card flex justify-center">
-        <p-dialog [(visible)]="isInputInvoice" [modal]="true" [style]="{ width: '35rem' }">
-            <ng-template #header>
-                <div class="inline-flex items-center justify-center gap-2">
-                    <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" />
-                    <span class="font-bold whitespace-nowrap">CUSTOMER PROFILE</span>
-                </div>
-            </ng-template>
-            <span class="text-surface-500 dark:text-surface-400 block mb-2">Create a new customer profile.</span>
-            <p-divider />
-            <div class="card flex flex-wrap justify-center gap-4">
-                <div class="flex items-center gap-2">
-                    <p-checkbox [(ngModel)]="size" inputId="size_large" name="size" value="Normal"
-                        [(ngModel)]="walkinCustomer" (onChange)="selectecustomerType($event,'WALK-IN')" />
-                    <label for="size_normal">WALK-IN CUSTOMER</label>
-                </div>
-                <div class="flex items-center gap-2">
-                    <p-checkbox [(ngModel)]="size" inputId="size_large" name="size" value="Large" size="large"
-                        [(ngModel)]="registeredCustomer" (onChange)="selectecustomerType($event,'REGISTERED')" />
-                    <label for="size_large" class="text-lg">REGISTERED CUSTOMER</label>
+    }@else {
+    <div class="w-full sm:w-1/2 bg-gray-100 p-4 rounded-lg shadow-sm text-center">
+
+        <div   class="flex items-center gap-3 p-3 border rounded-xl bg-gray-50/50 hover:bg-gray-50 transition-colors cursor-pointer" >
+            
+             <label for="customer_registered"
+                        class="font-xlarge  font-semibold text-xs text-gray-700 cursor-pointer select-none">Create a new invoice!</label>
+        </div>
+
+    </div>
+    }
+</div>
+}
+
+
+<!--Adding customers details to invoice -->
+@if(isInputInvoice()){
+<div class="justify-center">
+    <p-dialog [(visible)]="isInputInvoice" [modal]="true" [style]="{ width: '38rem' }">
+
+        <!-- Header Section -->
+        <ng-template #header>
+            <div class="flex items-center gap-3">
+                <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" size="large" class="shadow-sm" />
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg tracking-wide text-gray-800">CUSTOMER PROFILE</span>
+                    <span class="text-xs text-gray-400 font-normal">Create or select a customer profile</span>
                 </div>
             </div>
+        </ng-template>
+
+        <div class=" gap-4 pt-2">
+
+            <!-- Customer Type Toggles -->
+            <div class="grid grid-cols-2 gap-3 p-1">
+                <div
+                    class="flex items-center gap-3 p-3 border rounded-xl bg-gray-50/50 hover:bg-gray-50 transition-colors cursor-pointer">
+                    <p-checkbox [(ngModel)]="walkinCustomer" [binary]="true" inputId="customer_walkin"
+                        (onChange)="selectecustomerType($event,'WALK-IN')" />
+                    <label for="customer_walkin"
+                        class="font-medium text-xs text-gray-700 cursor-pointer select-none">WALK-IN CUSTOMER</label>
+                </div>
+
+                <div
+                    class="flex items-center gap-3 p-3 border rounded-xl bg-gray-50/50 hover:bg-gray-50 transition-colors cursor-pointer">
+                    <p-checkbox [(ngModel)]="registeredCustomer" [binary]="true" inputId="customer_registered"
+                        (onChange)="selectecustomerType($event,'REGISTERED')" />
+                    <label for="customer_registered"
+                        class="font-medium text-xs text-gray-700 cursor-pointer select-none">REGISTERED CUSTOMER</label>
+                </div>
+            </div>
+
+            <!-- Dynamic Customer Selector Dropdown -->
             @if(registeredCustomer){
-            <p-divider />
-            <div class="card flex justify-center">
+            <div class=" gap-1.5 animate-fadeIn">
+                <label class="text-xs font-semibold text-gray-600">Select Existing Account</label>
                 <p-select [options]="customerData" [(ngModel)]="selectedCustomer" optionLabel="customername"
-                    [filter]="true" filterBy="customername" [showClear]="true" placeholder="Select a Cusatomer"
-                    class="w-full md:w-56" (onChange)="getSelectedCustomer($event)">
-                    <ng-template #selectedItem let-customerData>
-                        <div class="flex items-center gap-2">
-                            <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px" /> -->
-                            <div>{{ customerData.customername }}</div>
-                        </div>
+                    [filter]="true" filterBy="customername" [showClear]="true" placeholder="Search database..."
+                    styleClass="w-full" (onChange)="getSelectedCustomer($event)">
+                    <ng-template #selectedItem let-customer>
+                        <span class="text-sm font-medium text-gray-700">{{ customer.customername }}</span>
                     </ng-template>
-                    <ng-template let-customerData #item>
-                        <div class="flex items-center gap-2">
-                            <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" /> -->
-                            <div>{{ customerData.customername }}</div>
-                        </div>
+                    <ng-template let-customer #item>
+                        <span class="text-sm py-1 block text-gray-700">{{ customer.customername }}</span>
                     </ng-template>
                 </p-select>
             </div>
             }
 
-            <p-divider />
-            <div class="flex items-center gap-4 mb-4">
-                <label for="username" class="font-semibold w-24 w">Customer Name</label>
-                <input pInputText id="username" class="flex-auto" autocomplete="off" [(ngModel)]="customerName" />
-            </div>
-            <div class="flex items-center gap-4 mb-2">
-                <label for="email" class="font-semibold w-24 w">Telephone Number</label>
-                <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="telephoneNumber" />
-            </div>
-            <div class="flex items-center gap-4 mb-2">
-                <label for="email" class="font-semibold w-24 w">Mobile Number</label>
-                <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="mobile_number" />
-            </div>
-            <div class="flex items-center gap-4 mb-2">
-                <label for="email" class="font-semibold w-24 w">Email Address (Optional)</label>
-                <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="emailAddress" />
-            </div>
-            <p-divider />
-            <div class="card flex justify-center">
-                <label for="email" class="font-semibold w-24 w">Address (Optional)</label>
-                <textarea rows="2" cols="30" pTextarea [(ngModel)]="custerAddress"
-                    placeholder="Enter customer address"></textarea>
-            </div>
-            <p-divider />
-            <div class="card flex justify-center">
-                <label for="email" class="font-semibold w-24 w">Additional Info (Optional)</label>
-                <textarea rows="2" cols="30" pTextarea [(ngModel)]="remarks"
-                    placeholder="Add Additional Information"></textarea>
-            </div>
-            <p-divider />
-            <ng-template #footer>
+            <p-divider styleClass="my-1" />
 
-                <div class="text-surface-500 dark:text-surface-400 block mb-2">
-                    <div class="flex items-center gap-4 mb-2">
-                        <span class="text-surface-500 dark:text-surface-400 block mb-2 w-100">Add this details to
-                            customer List</span>
-                        <p-toggleswitch [(ngModel)]="isAddtoCustomerList" />
+            <!-- Core Information Form Layout -->
+            <div class=" gap-3.5">
+                <div class=" sm:items-center gap-1 sm:gap-4">
+                    <label for="username" class="font-semibold text-sm text-gray-700 sm:w-50 shrink-0">Customer
+                        Name</label>
+                    <input pInputText id="username" class="w-full" autocomplete="off" [(ngModel)]="customerName" />
+                </div>
+
+                <div class=" sm:items-center gap-1 sm:gap-4">
+                    <label for="tel" class="font-semibold text-sm text-gray-700 sm:w-50 shrink-0">Telephone No.</label>
+                    <input pInputText id="tel" class="w-full font-mono" autocomplete="off"
+                        [(ngModel)]="telephoneNumber" />
+                </div>
+
+                <div class=" sm:items-center gap-1 sm:gap-4">
+                    <label for="mobile" class="font-semibold text-sm text-gray-700 sm:w-50 shrink-0">Mobile
+                        Number</label>
+                    <input pInputText id="mobile" class="w-full font-mono" autocomplete="off"
+                        [(ngModel)]="mobile_number" />
+                </div>
+
+                <div class=" sm:items-center gap-1 sm:gap-4">
+                    <label for="email" class="font-semibold text-sm text-gray-700 sm:w-50 shrink-0">Email <span
+                            class="text-xs font-normal text-gray-400">(Optional)</span></label>
+                    <input pInputText id="email" class="w-full" autocomplete="off" [(ngModel)]="emailAddress" />
+                </div>
+
+                <div class=" gap-1 sm:gap-4 pt-1">
+                    <label for="address" class="font-semibold text-sm text-gray-700 sm:w-50 shrink-0 pt-1">Address <span
+                            class="text-xs font-normal text-gray-400">(Opt.)</span></label>
+                    <textarea id="address" rows="2" pTextarea [(ngModel)]="custerAddress"
+                        placeholder="Enter street/digital address details..." class="w-full resize-none"></textarea>
+                </div>
+
+                <div class="gap-1 sm:gap-4">
+                    <label for="remarks" class="font-semibold text-sm text-gray-700 sm:w-50 shrink-0 pt-1">Remarks <span
+                            class="text-xs font-normal text-gray-400">(Opt.)</span></label>
+                    <textarea id="remarks" rows="2" pTextarea [(ngModel)]="remarks"
+                        placeholder="Add specific delivery notes or credit preferences..."
+                        class="w-full resize-none"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sticky Form Footer Control Bar -->
+        <ng-template #footer>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t mt-2 w-full">
+                <div class="flex items-center gap-3">
+                    <p-toggleswitch [(ngModel)]="isAddtoCustomerList" inputId="save_to_list" />
+                    <label for="save_to_list" class="text-xs font-medium text-gray-500 cursor-pointer select-none">Save
+                        directly to master customer directory</label>
+                </div>
+                <div class="flex justify-end w-full sm:w-auto">
+                    <p-button label="Add Customer & Proceed" icon="pi pi-user-plus" severity="contrast"
+                        styleClass="w-full sm:w-auto px-5" (click)="addInvoice()" />
+                </div>
+            </div>
+        </ng-template>
+    </p-dialog>
+</div>
+}
+
+<!-- Print purchase invoice  -->
+
+@if(submitOnSuccess()){
+<div class="card flex justify-center">
+    <p-dialog [(visible)]="submitOnSuccess" [modal]="true" [style]="{ width: '52rem' }"
+        styleClass="print:p-0 print:shadow-none">
+
+        <!-- Dialog Interactive Header -->
+        <ng-template #header>
+            <div class="inline-flex items-center justify-center gap-2 print:hidden">
+                <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" />
+                <span class="font-bold whitespace-nowrap text-surface-900 dark:text-surface-0">PRINT INVOICE</span>
+            </div>
+        </ng-template>
+
+        <!-- Printable Invoice Container -->
+        <div  id="print-section">
+
+            <!-- Invoice Header Segment -->
+            <div class="justify-between items-start gap-2 border-b border-surface-200 dark:border-surface-800 pb-6">
+                <div class=" flex items-center justify-center gap-2">
+
+                    <div class="flex items-center justify-center gap-2">
+                        <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" size="large" class="shadow-sm" />
                     </div>
-                    <div class="flex items-center gap-4 mb-2">
-                        <p-button label="Add" class="w-50" icon="pi pi-cart-plus" severity="contrast"
-                            (click)="addInvoice()" />
+                    <div class="items-center justify-center gap-1">
+                    <h2 class="text-xl font-bold tracking-tight text-surface-900 dark:text-surface-0 m-0">
+                        OBOADIE NYAME ADOM ENTERPRISE
+                    </h2>
+                    <label class="text-sm text-muted-color">Behind Our Lady of Fatima Junction</label>
+                    <label class="text-sm font-medium">Tel: 0531885457</label>
 
+                </div>
+                </div>
+                <div class="md:items-end gap-1 bg-surface-50 dark:bg-surface-900 p-3 rounded border border-surface-100 dark:border-surface-800 print:bg-white print:p-0 print:border-none">
+                    <label class="text-xs uppercase tracking-wider font-bold text-primary">Credit Invoice</label>
+                        <div class=" flex items-center justify-center gap-2">
+                             <label class="text-sm font-semibold">No:</label>
+                         <label class="text-surface-900 dark:text-surface-0">{{SalesInvoiceNumber}}</label>
+                        </div>
+                    <label class="text-xs text-muted-color" tracking-wider font-bold>Date: {{ invoiceDate | date: 'yyyy-MMM-dd' }}</label>
+                </div>
+            </div>
+
+            <!-- Metadata Split Grid -->
+            <div class="gap-3 my-3 text-sm">
+                <!-- Customer Dossier -->
+                <div class="gap-1.5">
+                    @if(customerName){
+                    <div class="inline-flex items-center justify-center gap-4 w-full">
+                        <label class="text-xs uppercase font-bold tracking-wide text-muted-color wd">Bill To:</label>
+                        <label class="font-bold text-base text-surface-900 dark:text-surface-0">{{customerName}}</label>
+                    </div>
+                }
+                    @if (telephoneNumber)
+                    {
+                    <div class="inline-flex items-center justify-center gap-4 w-full">
+                        <label class="text-muted-color wd" >Phone:</label>
+                        <label class="text-muted-color"> {{telephoneNumber}}</label>
+
+                    </div>
+                    }
+
+                    @if (emailAddress) {
+                    <div class="inline-flex items-center justify-center gap-4 w-full">
+                        <label class="text-muted-color wd">Email:</label>
+                        <label class="text-muted-color">{{emailAddress}}</label>
+                    </div>
+                    }
+                    @if (custerAddress) {
+                    <div class="inline-flex items-center justify-center gap-4 w-full">
+                        <label class="text-muted-color wd">Address:</label>
+                        <label class="text-muted-color">{{custerAddress}}</label>
+                    </div>
+                    }
+                </div>
+
+                <!-- Terms Metadata Matrix -->
+                <div class="md:items-end justify-end gap-4">
+                    <div class="inline-flex items-center justify-center gap-4 w-full">
+                        <label class="text-muted-color wd">Account Tier:</label>
+                        <label class="font-medium uppercase">{{customerType}}</label>
+                    </div>
+                    <div class="inline-flex items-center justify-center gap-4 w-full">
+                        <label class="text-muted-color wd">Transaction Method:</label> <label
+                            class="font-bold text-red-600 dark:text-red-400">CREDIT SALES</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Itemized Ledger Table Area -->
+            <div
+                class="border border-surface-200 dark:border-surface-800 rounded-lg overflow-hidden my-1 print:border-black">
+                <p-table [value]="creditTempData" styleClass="p-datatable-sm">
+                    <ng-template #header>
+                        <tr class="bg-surface-50 dark:bg-surface-900 print:bg-white">
+                            <th
+                                class="font-semibold text-xs py-2 px-3 text-surface-700 dark:text-surface-300 print:text-black">
+                                PID</th>
+                            <!-- <th
+                                class="font-semibold text-xs py-2 px-3 text-surface-700 dark:text-surface-300 print:text-black">
+                                Store</th> -->
+                            <th
+                                class="font-semibold text-xs py-2 px-3 text-surface-700 dark:text-surface-300 print:text-black">
+                                Product</th>
+                            <th
+                                class="font-semibold text-xs py-2 px-3 text-surface-700 dark:text-surface-300 print:text-black">
+                                Brand</th>
+                            <th class="font-semibold text-xs py-2 px-3 text-right text-surface-700 dark:text-surface-300 print:text-black"
+                                style="width: 12%">Qty</th>
+                            <th class="font-semibold text-xs py-2 px-3 text-right text-surface-700 dark:text-surface-300 print:text-black"
+                                style="width: 15%">Unit Price</th>
+                            <th class="font-semibold text-xs py-2 px-3 text-right text-surface-700 dark:text-surface-300 print:text-black"
+                                style="width: 18%">Total</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-item>
+                        <tr
+                            class="border-b border-surface-200 dark:border-surface-800 last:border-none print:border-black">
+                            <td class="py-2.5 px-3 text-sm">{{ item.purchaseid }}</td>
+                            <!-- <td class="py-2.5 px-3 text-sm text-muted-color print:text-black">{{ item.storename }}</td> -->
+                            <td
+                                class="py-2.5 px-3 text-sm font-medium text-surface-900 dark:text-surface-0 print:text-black">
+                                {{ item.name }}</td>
+                            <td class="py-2.5 px-3 text-sm text-muted-color print:text-black">{{ item.title }}</td>
+                            <td class="py-2.5 px-3 text-sm text-right font-mono">{{ item.quantity }}</td>
+                            <td class="py-2.5 px-3 text-sm text-right font-mono">{{ item.unitprice }}</td>
+                            <td
+                                class="py-2.5 px-3 text-sm text-right font-mono font-semibold text-surface-900 dark:text-surface-0 print:text-black">
+                                {{ item.totalcost }}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+                <!-- Total Summary Blocks -->
+                <div
+                    class="flex justify-end bg-surface-50 dark:bg-surface-900 p-4 border-t border-surface-200 dark:border-surface-800 print:bg-white print:border-black">
+                    <div class="flex items-center gap-6">
+                        <label class="text-sm font-bold uppercase tracking-wider text-muted-color print:text-black">Grand
+                            Total:</label>
+                        <label class="text-xl font-mono font-bold text-primary print:text-black">
+                            {{ sumTotalCart | currency: 'Ghø' }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barcode Section Layout -->
+            <div
+                class="flex justify-center my-1 py-2 bg-surface-50 dark:bg-surface-900 rounded print:bg-white print:p-0">
+                <ngx-barcode6 [bc-value]="SalesInvoiceNumber" [bc-format]="'CODE128'" [bc-display-value]="true"
+                    [bc-height]="45">
+                </ngx-barcode6>
+            </div>
+
+            <!-- Closing Signatures Grid footer -->
+            <div
+                class=" gap-3 pt-4 mt-4 border-t border-dashed border-surface-300 dark:border-surface-700 print:border-black text-sm">
+                <div class="gap-1">
+                    <label class="text-xs text-muted-color uppercase font-semibold gap 5">Issued By</label>
+                    <label class="text-xs font-mono">{{ USER_CREDENTIALS?.fullname }}</label>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <span class="text-xs text-muted-color uppercase font-semibold">Authorization / Signature</span>
+                     <br><br><br>
+                    <div class="border-b border-surface-400 dark:border-surface-600 w-44 pt-2 print:border-black">
+
+
+                        .............................
                     </div>
                 </div>
 
-            </ng-template>
-        </p-dialog>
-    </div>
-    }
-    }
+               
+            </div>
+             <div class="flex flex-col gap-1 md:items-end">
+                    <label class="text-xs text-muted-color uppercase font-semibold">Print Lifecycle Timestamp</label>
+                    <label class="text-xs font-mono">{{ invoiceDate }}</label>
+                </div>
+        </div>
 
+        <!-- Dialog Control Action Footer Panel -->
+        <p-divider styleClass="print:hidden"></p-divider>
+        <div class="flex justify-end gap-2 pt-2 print:hidden">
+            <p-button label="Dismiss" severity="secondary" [text]="true" (onClick)="submitOnSuccess.set(false)" />
+            <p-button label="Print Invoice" icon="pi pi-print" [raised]="true" severity="contrast"
+                printSectionId="print-section" ngxPrint (printCompleted)="onPrintComplete()" [useExistingCss]="true" />
+        </div>
+    </p-dialog>
 </div>
 }
 <p-toast></p-toast>

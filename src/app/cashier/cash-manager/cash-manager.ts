@@ -36,7 +36,6 @@ export class CashManager {
    USER_CREDENTIALS:Users[]|any
    storeData:any
 constructor(@Inject(PLATFORM_ID) private platformId: Object,private posservice: PosServcie, private cdr:ChangeDetectorRef, private router:Router, private routes:ActivatedRoute){
-
         if (isPlatformBrowser(this.platformId)) {
                   try {
               this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');

@@ -26,7 +26,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         border: 1px solid #e0e0e0;
         padding: 20px;
         width: 90%;
@@ -65,41 +64,28 @@
 
 }
 .client{
-    // display: block;
+     display: block;
+     width: 40%;
        font-size:clamp(1rem, 1.0vw, 1.5rem);
     flex-direction: column;
     align-items: center;
     justify-content: center;
 font-weight: bold;
-border: 1px solid rgba(0, 0, 0, 0.1);
+
     text-align: left; 
 
 }
-.client:first-child{
-    width: calc(100% - 70%);
-}
-.client:last-child{
-    width: calc(100% - 30%);
-}
+
 .total{
        font-size:clamp(.8rem, 1.2vw, 1.8rem);
        font-weight: bold;
        text-align: right;
 }
 .seperator{
-    display: flex;
     width: 100%;
     overflow: hidden;
 }
-.cp-24{
-    width: calc(100% - 48%);
-    span:first-child{
-  width: calc(100% - 70%);
-    }
-    span:last-child{
-          width: calc(100% - 30%);
-    }
-}
+
 #pmt-id{
     width: 100%;
     border: 1px solid lightgray;
@@ -107,4 +93,239 @@ border: 1px solid rgba(0, 0, 0, 0.1);
     span{
         margin: 10px;
     }
+}
+
+.receipt-header{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.section{
+    display: flex;
+
+    align-items: left;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: #f5f5f5;
+    label{
+        font-size:clamp(.8rem, 1.0vw, 1.3rem);
+        text-align: left;
+          font-weight: bold;
+          padding: 0px;
+    }
+    label:first-child{
+        font-size:clamp(.8rem, 1.0vw, 1.3rem);
+        text-align: left;
+          font-weight: bold;
+       
+              width: 40%;
+    }
+
+        label:last-child{
+        font-size:clamp(.8rem, 1.0vw, 1.3rem);
+        text-align: right;
+          font-weight: bold;
+       
+              width: 59%;
+    }
+}
+.payment-data{
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e0e0e0;
+    padding: 0px;
+    margin: 0px;
+}
+.company-info{
+    display: block;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.company-info{
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+header{
+    font-size:clamp(1.0rem, 1.3vw, 1.5rem);
+    font-weight: bold;
+}
+
+
+/* Custom enhancements for the Modern Billing View */
+.invoice-dialog .p-dialog-content {
+  padding: 1.5rem 2rem !important;
+}
+
+/* Adjust table borders to look crisp and thin */
+.invoice-dialog .p-datatable .p-datatable-thead > tr > th {
+  background: var(--p-surface-50, #f8fafc);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--p-surface-500, #64748b);
+  padding: 0.75rem 1rem;
+}
+
+.invoice-dialog .p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+}
+
+/* Custom layout variables for the popover panel */
+.modern-invoice-popover.p-popover {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid var(--p-surface-200, #e2e8f0) !important;
+  padding: 12px !important;
+}
+
+.modern-invoice-popover.p-popover::before,
+.modern-invoice-popover.p-popover::after {
+  display: none !important; /* Removes arrow pointers to make centering align beautifully */
+}
+
+
+
+
+
+
+/* --- Receipt Printer Styling --- */
+.receipt-body {
+  font-family: 'Courier New', Courier, monospace;
+  color: #000;
+  background: #fff;
+  padding: 15px;
+  max-width: 360px; /* Simulates a standard 80mm roll size */
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.receipt-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.receipt-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.company-name {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 4px 0;
+  text-transform: uppercase;
+}
+
+.company-details {
+  font-size: 11px;
+  margin: 2px 0;
+}
+
+/* Simulated Thermal Printer Dashed Lines */
+.receipt-divider {
+  border-top: 1px dashed #000;
+  margin: 10px 0;
+}
+
+.receipt-divider-double {
+  border-top: 3px double #000;
+  margin: 10px 0;
+}
+
+/* Flex rows for absolute left-to-right alignment */
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 12px;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.receipt-row .text-right {
+  text-align: right;
+  padding-left: 10px;
+}
+
+.receipt-highlight {
+  background-color: #f2f2f2;
+  padding: 2px 0;
+}
+
+.receipt-barcode-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.status-icon {
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.receipt-footer {
+  text-align: center;
+  font-size: 11px;
+}
+
+.receipt-footer p {
+  margin: 4px 0;
+}
+
+.signature-space {
+  margin: 20px 0;
+}
+
+.signature-space .line {
+  letter-spacing: 2px;
+}
+
+.print-date {
+  font-size: 10px;
+  color: #555;
+}
+
+.thank-you {
+  margin-top: 15px !important;
+  font-style: italic;
+}
+
+/* --- Optimized Print Rules --- */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #print-section, #print-section * {
+    visibility: visible;
+  }
+  #print-section {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 100%;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+  /* Remove PrimeNG background masks while printing */
+  .p-dialog, .p-component {
+    box-shadow: none !important;
+    border: none !important;
+  }
 }

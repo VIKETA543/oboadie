@@ -1,0 +1,119 @@
+
+@if(customers.length>0){
+<p-table #dt1 [value]="customers" [globalFilterFields]="['customer_number', 'telephone', 'customername', 'mobileNumber','customertype','emailaddress','remarks','is_verified','dateposted']"
+    selectionMode="single" [(selection)]="selectedCustomers" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }"
+    [rows]="5" [paginator]="true" stateStorage="session" stateKey="statedemo-session" stripedRows>
+    <ng-template #caption>
+        <p-iconfield iconPosition="left">
+            <p-inputicon>
+                <svg data-p-icon="search" />
+            </p-inputicon>
+
+            <input pInputText type="text" [value]="$any(dt1.filters['global'])?.value ?? ''"
+                (input)="filterTable($event, dt1)" placeholder="Global Search" />
+        </p-iconfield>
+    </ng-template>
+
+    <ng-template #header>
+        <tr>
+            <!-- 3. Added p-sortIcon elements to make headers visually sortable -->
+
+            <th pSortableColumn="customer_number" style="width:25%">
+                Registered Number 
+                <p-sortIcon field="customer_number" />
+            </th>
+
+            <th pSortableColumn="customername" style="width:25%">
+                Name <p-sortIcon field="customername" />
+            </th>
+
+            <th pSortableColumn="telephone" style="width:25%">
+                Telephone <p-sortIcon field="telephone" />
+            </th>
+
+            <th pSortableColumn="mobileNumber" style="width:25%">
+                Mobile <p-sortIcon field="mobileNumber" />
+            </th>
+
+            <th pSortableColumn="customertype" style="width:25%">
+                Customer Status <p-sortIcon field="customertype" />
+            </th>
+            <th pSortableColumn="emailaddress" style="width:25%">
+                Email Address <p-sortIcon field="emailaddress" />
+            </th>
+            <th pSortableColumn="remarks" style="width:25%">
+                Remarks <p-sortIcon field="remarks" />
+            </th>
+            <th pSortableColumn="is_verified" style="width:25%">
+                is_verified <p-sortIcon field="is_verified" />
+            </th>
+            <th pSortableColumn="dateposted" style="width:25%">
+                Date <p-sortIcon field="dateposted" />
+            </th>
+             <th pSortableColumn="dateposted" style="width:25%">
+               Action
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template #body let-customers>
+        <tr [pSelectableRow]="customers">
+              <td>
+                {{ customers.customer_number }}
+            </td>
+            <td>
+                {{ customers.customername }}
+            </td>
+            <td>
+                <div class="flex items-center gap-2">
+                    {{ customers.telephone }}
+                </div>
+            </td>
+            <td>
+                <div class="flex items-center gap-2">
+
+                    <span class="ml-1 align-middle">{{ customers.mobile_number }}</span>
+                </div>
+            </td>
+            <td>
+   
+                  <p-tag [value]="customers.customertype ? 'REGISTERED' : 'NOT REGISTERED'"
+                    [severity]="getSeverity1(customers.customertype)" />
+            </td>
+
+            <td>
+                {{ customers.emailaddress }}
+            </td>
+
+            <td>
+                {{ customers.remarks }}
+            </td>
+
+            <td>
+                <p-tag [value]="customers.is_verified ? 'VERIFIED' : 'NOT VERIFIED'"
+                    [severity]="getSeverity(customers.status)" />
+            </td>
+
+            <td>
+                {{ customers.dateposted | date: 'dd/MM/yyyy' }}
+
+            </td>
+            <td>
+                <p-button label="Delete"  icon="pi pi-trash" severity="danger" (onClick)="deleteCustomer(customers)" />
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+        <tr>
+            <td colspan="4">No customers found.</td>
+        </tr>
+    </ng-template>
+</p-table>
+}@else {
+       <div class="max-w-sm mx-auto">
+            <p-message severity="warn" icon="pi pi-sparkles" [closable]="true">{{ message }}</p-message>
+        </div> 
+}
+
+ <p-toast />

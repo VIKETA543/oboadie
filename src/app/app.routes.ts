@@ -58,6 +58,8 @@ import { CashierHome } from './cashier/cashier-home/cashier-home';
 import { StoreManualVerification } from './stores/store-manual-verification/store-manual-verification';
 import { StoreHome } from './stores/store-home/store-home';
 import { PriceEntry } from './price-entry/price-entry';
+import { StoreStockBalances } from './stores/store-stock-balances/store-stock-balances';
+import { Customers } from './crm/customers/customers';
 
 
 
@@ -87,7 +89,8 @@ export const routes: Routes = [
             // 
             {
                 path: 'crm-manager', component: CrmManager, children: [
-                    { path: 'create-customer', component: CreateCustomer }
+                    { path: 'create-customer', component: CreateCustomer },
+                    { path: 'customers', component: Customers },
                 ]
             },
             {
@@ -97,13 +100,13 @@ export const routes: Routes = [
                     { path: 'stockreceived', component: Stockreceived },
                     { path: 'create-products', component: CreateProducts },
                     { path: 'product-category', component: ProductCategory },
-               
+                    { path: 'store-stock-balances', component: StoreStockBalances },
                     {
                         path: 'verify-sales', component: VerifySales, children: [
                             { path: 'verify-cash-sales', component: VerifyCashSales },
                             { path: 'verify-credit-sales', component: VerifyCreditSales },
-                                    { path: 'store-home', component: StoreHome },
-                                      { path: '', redirectTo: 'store-home', pathMatch: 'full' }
+                            { path: 'store-home', component: StoreHome },
+                            { path: '', redirectTo: 'store-home', pathMatch: 'full' }
 
                         ]
                     },
@@ -111,7 +114,7 @@ export const routes: Routes = [
 
                     { path: 'stock-balances', component: StockBalances },
                     { path: 'warehouse-pull', component: WarehousePull },
-                   
+
                 ]
             },
             {
@@ -141,6 +144,7 @@ export const routes: Routes = [
                     {
                         path: 'crm-manager', component: CrmManager, children: [
                             { path: 'create-customer', component: CreateCustomer },
+                            { path: 'customers', component: Customers }
 
                         ]
                     },
@@ -187,6 +191,7 @@ export const routes: Routes = [
             { path: 'product-category', component: ProductCategory },
             { path: 'productbrand', component: Productbrand },
             { path: 'stock-request', component: StockRequest },
+            { path: 'store-stock-balances', component: StoreStockBalances },
 
 
             {
@@ -194,8 +199,8 @@ export const routes: Routes = [
                     { path: 'verify-cash-sales', component: VerifyCashSales },
                     { path: 'verify-credit-sales', component: VerifyCreditSales },
                     { path: 'store-manual-verification', component: StoreManualVerification },
-                     { path: 'store-home', component: StoreHome },
-                                      { path: '', redirectTo: 'store-home', pathMatch: 'full' }
+                    { path: 'store-home', component: StoreHome },
+                    { path: '', redirectTo: 'store-home', pathMatch: 'full' }
                 ]
             },
         ]
@@ -216,7 +221,8 @@ export const routes: Routes = [
             {
                 path: 'crm-manager', component: CrmManager, children: [
                     { path: 'create-customer', component: CreateCustomer },
-
+                    
+                    { path: 'customers', component: Customers },
                 ]
             },
             { path: 'pos-home', component: PosHome },

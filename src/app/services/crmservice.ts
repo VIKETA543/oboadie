@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root',
 })
 export class Crmservice {
-
+  
    url = environment.apiUrl;
   constructor(private http: HttpClient) {
 
@@ -72,5 +72,8 @@ setCustomerSaved(isSaved:boolean){
     return this.http.post(this.url + '/crm/postWithdrawal', data,{ headers: new HttpHeaders().set('contentType',  "application/json") });
   }
 
-  
+  deleteCustomer(data: any) {
+    return this.http.post(this.url + '/crm/deleteCustomer', data, { headers: new HttpHeaders().set('contentType', "application/json") });
+  }
+
 }

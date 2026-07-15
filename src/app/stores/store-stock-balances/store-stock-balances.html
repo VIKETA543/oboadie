@@ -1,0 +1,49 @@
+<p-table #dt [value]="stockData" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+    [paginator]="true"
+    [globalFilterFields]="['serialnumber','title', 'name', 'date']"
+    stripedRows>
+
+    <ng-template #caption>
+        <div class="flex">
+            <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt)" />
+            <span class="ware-h-header"></span>
+            <p-iconfield iconPosition="left" class="ml-auto">
+                <p-inputicon>
+                    <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                    placeholder="Search keyword" />
+            </p-iconfield>
+
+        </div>
+
+    </ng-template>
+
+    <ng-template #header>
+        <tr>
+            <th>serial</th>
+            <th>Product</th>
+            <th>Brand</th>
+            <th>Image</th>
+            <th>Stock Balance</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-stockData let-i="rowIndex">
+        <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{stockData.name}}</td>
+            <td>{{ stockData.title }}</td>
+            <th> 
+                             <p-avatar image="{{stockData.imageurl}}" shape="circle" />
+                </th>
+            <td>{{ stockData.stock_balance }}</td>
+            <td>{{stockData.date_posted|date: 'dd/MM/yyyy'}}</td>
+                <td>
+                    {{stockData.is_current ? 'VERIFIED':'NOT VERIFIED'}}
+                </td>
+        </tr>
+    </ng-template>
+</p-table>
+<p-toast />

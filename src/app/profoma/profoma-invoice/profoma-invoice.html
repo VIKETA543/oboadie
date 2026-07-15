@@ -14,6 +14,9 @@
 
 <div class="card flex justify-center">
     <p-popover #op>
+          <div class="flex flex-col gap-4">
+            <p-button icon="" label="Invoices" variant="text" [raised]="false" severity="secondary" (onClick)="returnHome()"/>
+        </div>
         <div class="flex flex-col gap-4">
             <p-button icon="" label="New Invoice" variant="text" [raised]="false" severity="secondary"
                 routerLink="new-profoma" />

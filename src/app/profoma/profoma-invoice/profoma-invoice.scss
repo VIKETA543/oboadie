@@ -1,0 +1,20 @@
+/* Style the toolbar container itself */
+:host ::ng-deep .p-toolbar {
+    background-color: #1e293b; /* Dark slate background */
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+}
+
+/* Style the CRM MANAGER text in the start section */
+:host ::ng-deep .p-toolbar span {
+    color: #f8fafc;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+}
+
+/* Optional: If you want to change the button color or hover state inside the toolbar */
+:host ::ng-deep .p-toolbar .p-button {
+    color: #94a3b8 !important;
+}

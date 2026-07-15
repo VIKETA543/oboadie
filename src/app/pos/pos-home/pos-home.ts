@@ -52,7 +52,6 @@ this.is_View.set(false)
     this.cashSalesInvoiceNumber = _t6?.invoice_number
     let data = {
       invoceNumber: this.cashSalesInvoiceNumber
-
     }
     console.log(data)
      this.posservice.verify_invoice(data).subscribe((response: any) => {
@@ -73,8 +72,7 @@ this.is_View.set(false)
             this.telephoneNumber = response?.invoice[0]?.telephone,
             this.emailAddress = response?.invoice[0]?.emailadress,
             this.address = response?.invoice[0]?.address,
-            this.invoiceDate = response?.invoice[0]?.dateposted
-            
+            this.invoiceDate = response?.invoice[0]?.dateposted 
           this.cdr.markForCheck()
           this.cdr.detectChanges()
         } else {
@@ -221,8 +219,6 @@ this.is_View.set(false)
       }
     })
   }
-
-
   cashtempData: Cashsaletemp[] | any
 
 

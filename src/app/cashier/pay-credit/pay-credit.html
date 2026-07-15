@@ -12,256 +12,356 @@
   </div>
 </div>
 
-
 @if(this.isResults()){
 <div class="card flex justify-center">
-  <p-dialog [(visible)]="isResults" [modal]="true" [style]="{ width: '50rem' }">
+  <p-dialog [(visible)]="isResults" [modal]="true" [style]="{ width: '50rem' }" styleClass="invoice-modern-dialog">
+
     <ng-template #header>
       <div class="inline-flex items-center justify-center gap-2">
-        <span class="font-bold whitespace-nowrap">INVOICE DETAILS</span>
+        <i class="pi pi-receipt text-emerald-600 text-xl"></i>
+        <span class="font-bold tracking-wide text-surface-900 dark:text-surface-50">INVOICE DETAILS</span>
       </div>
     </ng-template>
-    <div class="header">
-      <header id="main-header">OBOADIE NYAME ADOM ENTERPRISE</header>
-      <span>Behind Our Lady of Fatima Junction</span>
-      <span>Telephone: 0531885457</span>
+
+    <!-- Company Branding Header -->
+    <div
+      class="text-center p-5 bg-surface-50 dark:bg-surface-900 rounded-2xl mb-6 border border-surface-100 dark:border-surface-800">
+      <h2 class="text-xl font-extrabold text-surface-900 dark:text-surface-50 tracking-tight m-0">
+        OBOADIE NYAME ADOM ENTERPRISE
+      </h2>
+      <p class="text-sm text-surface-500 dark:text-surface-400 mt-1 mb-0">Behind Our Lady of Fatima Junction</p>
+      <p class="text-xs font-semibold text-surface-600 dark:text-surface-300 mt-1 mb-0">Telephone: 0531885457</p>
     </div>
+
+    <!-- Metadata Grid Information -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 px-1">
+      <!-- Left Side: Client Target Information -->
+      <div class="space-y-2.5">
+        <div class="flex items-center gap-2">
+          <span
+            class="text-xs font-bold text-surface-400 dark:text-surface-500 uppercase tracking-wider w-28 shrink-0">Issued
+            To:</span>
+          <span class="text-sm font-semibold text-surface-800 dark:text-surface-200">{{ invoicesum[0].customername
+            }}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span
+            class="text-xs font-bold text-surface-400 dark:text-surface-500 uppercase tracking-wider w-28 shrink-0">Telephone:</span>
+          <span class="text-sm text-surface-700 dark:text-surface-300">{{ invoicesum[0].telephone }}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span
+            class="text-xs font-bold text-surface-400 dark:text-surface-500 uppercase tracking-wider w-28 shrink-0">Address:</span>
+          <span class="text-sm text-surface-700 dark:text-surface-300">{{ invoicesum[0].address }}</span>
+        </div>
+      </div>
+
+      <!-- Right Side: Transaction System Properties -->
+      <div class="space-y-2.5 md:text-right md:border-l md:border-surface-200 md:dark:border-surface-700 md:pl-6">
         @if(salesType==='CREDIT_SALES'){
-      <div class="card flex justify-center gap-4 w-24 r-no  ">
-
-      <span class="text-surface-500 dark:text-surface-400 block ">PAYMENT NUMBER: {{paymentNumber}}</span>
-      </div>
-    }
-    <div>
-      <div class="card flex justify-center gap-4 w-24">
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Issued to:</span>
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">{{ invoicesum[0].customername }}</span>
-      </div>
-      <div class="card flex justify-center gap-4 w-24">
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Telephone:</span>
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">{{ invoicesum[0].telephone }}</span>
-      </div>
-      <div class="card flex justify-center gap-4 w-24">
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Address:</span>
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">{{ invoicesum[0].address }}</span>
-
-      </div>
-      <div class="card flex justify-center gap-4 w-24">
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Transaction Type:</span>
-        @if(salesType==='CASH_SALES'){
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client"></span>
-        }@else if(salesType==='CREDIT_SALES'){ 
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">CREDIT SALES PAYMENT</span>
-        }@else{
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">#</span>
+        <div class="flex items-center md:justify-end gap-2">
+          <span class="text-xs font-bold text-surface-400 dark:text-surface-500 uppercase tracking-wider">Payment
+            No:</span>
+          <span
+            class="text-sm font-mono font-bold bg-surface-100 dark:bg-surface-800 px-2 py-0.5 rounded text-surface-800 dark:text-surface-200">
+            {{paymentNumber}}
+          </span>
+        </div>
         }
+        <div class="flex items-center md:justify-end gap-2">
+          <span
+            class="text-xs font-bold text-surface-400 dark:text-surface-500 uppercase tracking-wider">Transaction:</span>
+          <span class="text-xs font-bold px-2.5 py-0.5 rounded-full" [ngClass]="{
+                  'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/40': salesType==='CREDIT_SALES',
+                  'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/40': salesType==='CASH_SALES'
+                }">
+            @if(salesType==='CASH_SALES'){ CASH SALES }
+            @else if(salesType==='CREDIT_SALES'){ CREDIT SALES PAYMENT }
+            @else { # }
+          </span>
+        </div>
       </div>
     </div>
-    <div [style]="{ width: '40rem' }" class="invoice-data">
 
-      <div class="card">
-        <p-table [value]="invoiceData" striped>
-          <ng-template #header>
-            <tr>
-              <th>#</th>
-              <th>Item</th>
-              <th>Type</th>
-              <th>Quantity</th>
-              <th>Unit Price</th>
-              <th>Total</th>
-            </tr>
-          </ng-template>
-          <ng-template #body let-invoiceData let-i="rowIndex">
-            <tr>
-              <td>{{i+1 }}</td>
-              <td>{{ invoiceData.name }}</td>
-              <td>{{ invoiceData.title }}</td>
-              <td>{{ invoiceData.quantity_sold }}</td>
-              <td>{{ invoiceData.unit_price }}</td>
-              <td>{{ invoiceData.total_price |currency: 'Ghø'}}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-      <div class="pmt-d">
-          <div class="card flex justify-center gap-4 ">
-               <span class="text-surface-500 dark:text-surface-400 block mb-4 total">Total:</span>
-                   <span class="text-surface-500 dark:text-surface-400 block mb-4 total">{{(invoicesum[0]?.invoice_total ||'undefined'||0) | currency: 'Ghø' }}</span>
-          </div>
-            <p-divider/>
-            <div class="card flex justify-center gap-4 ">
-               <span class="text-surface-500 dark:text-surface-400 block mb-4 total">Paid:</span>
-                   <span class="text-surface-500 dark:text-surface-400 block mb-4 total">{{(sumamountPaidData[0]?.sumpaid ||'undefined'||0) | currency: 'Ghø' }}</span>
-          </div>
-             <p-divider/>
-      <div class="card flex justify-center gap-4">
-        <span class="text-surface-500 dark:text-surface-400 block mb-4 total">Bal:</span>
-        @if(balanceData[0].invoice_total){
-              <span class="text-surface-500 dark:text-surface-400 block mb-4 total">{{(balanceData[0]?.invoice_total ||'undefined'||0) | currency: 'Ghø' }}</span>
-        }@else{
-              <span class="text-surface-500 dark:text-surface-400 block mb-4 total">{{(balanceData[0]?.balance ||'undefined'||0) | currency: 'Ghø' }}</span>
-        }
-      </div>
-            </div>
-    </div>
-    <div class="barcode-container">
-      <ngx-barcode6 [bc-value]=invoicesum[0].invoice_number [bc-format]="'CODE128'" [bc-display-value]="true">
-      </ngx-barcode6>
-    </div>
-    <ng-template #footer>
-       @if(salesType==='CREDIT_SALES'){
-      <p-toolbar>
-        <ng-template #start>
-          <p-fluid class="card flex flex-wrap gap-4">
-            <div class="flex-auto">
-              <label class="mb-2 font-bold block" for="minmaxfraction">Enter AmountGhø</label>
-              <p-inputnumber [(ngModel)]="AmountPaid" (keydown.enter)="makePayment()" (onInput)="onAmountInput($event)" inputId="minmaxfraction"
-                mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" placeholder="0.00" />
-            </div>
-          </p-fluid>
+    <!-- Items Table Block Container -->
+    <div class="border border-surface-200 dark:border-surface-700 rounded-xl overflow-hidden mb-2 shadow-sm">
+      <p-table [value]="invoiceData" striped styleClass="p-datatable-sm">
+        <ng-template #header>
+          <tr>
+            <th class="w-1 text-center">#</th>
+            <th class="text-center">Item Descripton</th>
+            <th class="text-center">Type</th>
+            <th class="text-center">Qty</th>
+            <th class="text-right">Unit Price</th>
+            <th class="text-right">Total</th>
+          </tr>
         </ng-template>
-          <ng-template #center>
-               <p-fluid class="card flex flex-wrap gap-4">
-            <div class="flex-auto">
-              <label class="mb-2 font-bold block" for="minmaxfraction">Balance</label>
-              <p-inputnumber [(ngModel)]="PaidBalance" (keydown.enter)="makePayment()" inputId="minmaxfraction"
-                mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" />
-            </div>
-          </p-fluid>
-          </ng-template>
-        <ng-template #end>
-          <p-button label="Make Payment" type='submit' [autofocus]="true" [outlined]="true" severity="success"
-            (click)="makePayment()" />
-          <p-button label="Cancel" [text]="true" severity="danger" (click)="isResults.set(false)" />
+        <ng-template #body let-item let-i="rowIndex">
+          <tr>
+            <td class="text-center text-surface-400 font-mono text-xs">{{i+1}}</td>
+            <td class="font-medium text-surface-900 dark:text-surface-50 text-center">{{ item.name }}</td>
+            <td class="text-center"><span
+                class="text-xs bg-surface-100 dark:bg-surface-800 px-2 py-0.5 rounded text-surface-600 dark:text-surface-400">{{
+                item.title }}</span></td>
+            <td class="text-center font-semibold">{{ item.quantity_sold }}</td>
+            <td class="text-right font-mono">{{ item.unit_price | number:'1.2-2' }}</td>
+            <td class="text-right font-mono font-bold text-surface-900 dark:text-surface-5">{{ item.total_price |
+              currency: 'Ghø'}}</td>
+          </tr>
         </ng-template>
-      </p-toolbar>
-    }@else {
-      
-      <span class="text-surface-500 dark:text-surface-400 block mb-4 total" severity="info">This invoice is not available for payment</span>
-    }
-    </ng-template>
-  
-  </p-dialog>
-</div>
-}
+      </p-table>
 
-@if(   this.isPaymentcomplete()){
-  <div class="card flex justify-center">
-  <p-dialog [(visible)]="isPaymentcomplete" [modal]="true" [style]="{ width: '50rem' }">
+      <!-- Balanced Financial Summary Breakdown Card Panel -->
+      <div
+        class="bg-surface-50 dark:bg-surface-900/60 p-4 border-t border-surface-200 dark:border-surface-700 flex flex-col items-end space-y-2 w-full">
 
-    <ng-template #header>
-      <div class="inline-flex items-center justify-center gap-2">
-        <span class="font-bold whitespace-nowrap">PAYMENT RECEIPT</span>
-      </div>
-    </ng-template>
-    <div id='print-section'>
-    <div class="header">
-      <header id="main-header">OBOADIE NYAME ADOM ENTERPRISE</header>
-      <span>Behind Our Lady of Fatima Junction</span>
-      <span>Telephone: 0531885457</span>
-    </div>
-         @if(salesType==='CASH_SALES'){
-    <div class="card flex justify-center gap-4 w-24 pmt-id ">
-      <span class="text-surface-500 dark:text-surface-400 block">PAYMENT NUMBER: {{paymentNumber}}</span>
-       <span class="text-surface-500 dark:text-surface-400 block">PAYMENT STATUS: {{invoicesum[0].payment_progress}}</span>
-      </div>
-    }
-    <div>
-      <div  class='seperator'>
-      <div class="card flex justify-center gap-4 w-24 cp-24 ">
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Issued to:</span>
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">{{ invoicesum[0].customername }}</span>
-      </div>
-      <div class="card flex justify-center gap-4 w-24">
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Tel/Mob:</span>
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">{{ invoicesum[0].telephone }}</span>
-      </div>
-    </div>
-    <div class='seperator'>
-      <div class="card flex justify-center gap-4 w-24 cp-24">
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Address:</span>
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">{{ invoicesum[0].address }}</span>
-
-      </div>
-      <div class="card flex justify-center gap-4 w-24 cp-24">
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">Type:</span>
-        @if(salesType==='CASH_SALES'){
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">CASH SALES</span>
-        }@else if(salesType==='CREDIT_SALES'){ 
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">CREDIT SALES</span>
-        }@else{
-        <span class="text-surface-500 dark:text-surface-400 block mb-1 client">#</span>
-        }
-      </div>
-
-      </div>
-    </div>
-    <div [style]="{ width: '40rem' }" class="invoice-data">
-
-      <div class="card">
-        <p-table [value]="invoiceData" striped>
-          <ng-template #header>
-            <tr>
-              <th>#</th>
-              <th>Item</th>
-              <th>Type</th>
-              <th>Qty</th>
-              <th>Price</th>
-              <th>Total</th>
-            </tr>
-          </ng-template>
-          <ng-template #body let-invoiceData let-i="rowIndex">
-            <tr>
-              <td>{{i+1 }}</td>
-              <td>{{ invoiceData.name }}</td>
-              <td>{{ invoiceData.title }}</td>
-              <td>{{ invoiceData.quantity_sold }}</td>
-              <td>{{ invoiceData.unit_price }}</td>
-              <td>{{ invoiceData.total_price |currency: 'Ghø'}}</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-      <div class="card flex justify-center gap-4 w-24 t-t-c">
-        <span class="text-surface-500 dark:text-surface-400 block mb-4 total">TOTAL: {{(invoicesum[0]?.invoice_total || 0) | currency: 'Ghø' }}</span>
-       <span class="text-surface-500 dark:text-surface-400 block mb-4 total">PAID: {{ (sumamountPaidData[0]?.sumpaid || 0) | currency:'Ghø' }}
-</span>
-        <span class="text-surface-500 dark:text-surface-400 block mb-4 total">Bal: {{(balanceData[0]?.balance || 0) | currency: 'Ghø' }}</span>
-      </div>
-    </div>   
-    <div class="barcode-container">
-      <ngx-barcode6 [bc-value]=invoicesum[0].invoice_number [bc-format]="'CODE128'" [bc-display-value]="true">
-      </ngx-barcode6>
-      @if(invoicesum[0]?.isinvoice_verified===true){
-        <div>
-          <i class="pi pi-verified" style="font-size: 2rem"></i>
+        <!-- Total Summary Row -->
+        <div class="flex justify-between items-center w-full max-w-xs text-sm">
+          <span class="text-surface-500 font-medium">Total:</span>
+          <span class="font-mono font-semibold text-surface-900 dark:text-surface-50 text-right min-w-[100px]">
+            {{(invoicesum[0]?.invoice_total || 0) | currency: 'Ghø' }}
+          </span>
         </div>
 
-      }@else {
-            <div>
-          <i class="pi pi-ban" style="font-size: 2rem"></i>
+        <!-- Amount Paid Row -->
+        <div class="flex justify-between items-center w-full max-w-xs text-sm">
+          <span class="text-surface-500 font-medium">Amount Paid:</span>
+          <span class="font-mono font-semibold text-emerald-600 dark:text-emerald-400 text-right min-w-[100px]">
+            {{(sumamountPaidData[0]?.sumpaid || 0) | currency: 'Ghø' }}
+          </span>
         </div>
-      }
+
+        <!-- Divider Line -->
+        <div class="w-full max-w-xs border-t border-surface-200 dark:border-surface-700 my-1"></div>
+
+        <!-- Current Balance Row -->
+        <div class="flex justify-between items-center w-full max-w-xs text-base font-bold">
+          <span class="text-surface-900 dark:text-surface-50">Current Balance:</span>
+          <span class="font-mono text-amber-600 dark:text-amber-400 text-right min-w-[100px]">
+            @if(balanceData[0].invoice_total){
+            {{(balanceData[0]?.invoice_total || 0) | currency: 'Ghø' }}
+            } @else {
+            {{(balanceData[0]?.balance || 0) | currency: 'Ghø' }}
+            }
+          </span>
+        </div>
+
+      </div>
     </div>
-  </div>
+
+    <!-- Centralized System Barcode Block -->
+    <div class="flex justify-center my-3 p-3 bg-white rounded-xl border border-surface-100 max-w-max mx-auto shadow-sm">
+      <ngx-barcode6 [bc-value]="invoicesum[0].invoice_number" [bc-format]="'CODE128'" [bc-display-value]="true">
+      </ngx-barcode6>
+    </div>
+
+    <!-- Dialog Interaction Footer Processing Layer -->
     <ng-template #footer>
-      <p-toolbar>
-          <ng-template #center>
-               <p-fluid class="card flex flex-wrap gap-4">
-             <div class="card flex flex-wrap justify-center gap-4 btn-submit">
-                <p-button label="Print" icon="pi pi-print" [raised]="true" severity="contrast"
-                    printSectionId="print-section" ngxPrint (printCompleted)="onPrintComplete()"
-                    [useExistingCss]="true" />
+      <div class="w-full pt-1">
+        @if(salesType==='CREDIT_SALES'){
+        <p-toolbar styleClass="bg-transparent border-none p-0">
+          <ng-template #start>
+            <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+              <div>
+                <label class="mb-1.5 font-bold text-xs uppercase tracking-wider text-surface-500 block text-left"
+                  for="amountPaidInput">
+                  Enter Amount Paid (Ghø)
+                </label>
+                <p-fluid>
+                  <p-inputnumber id="amountPaidInput" [(ngModel)]="AmountPaid" (keydown.enter)="makePayment()"
+                    (onInput)="onAmountInput($event)" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
+                    placeholder="0.00" class="w-full sm:w-48" />
+                </p-fluid>
+              </div>
+              <div>
+                <label class="mb-1.5 font-bold text-xs uppercase tracking-wider text-surface-500 block text-left"
+                  for="balanceInput">
+                  Remaining Balance
+                </label>
+                <p-fluid>
+                  <p-inputnumber id="balanceInput" [(ngModel)]="PaidBalance" (keydown.enter)="makePayment()"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" class="w-full sm:w-48" />
+                </p-fluid>
+              </div>
             </div>
-          </p-fluid>
+          </ng-template>
+
+          <ng-template #end>
+            <div class="flex items-center gap-3 mt-4 sm:mt-0">
+              <p-button label="Cancel" [text]="true" severity="danger" (click)="isResults.set(false)" />
+              <p-button label="Post Payment" type="submit" [autofocus]="true" severity="success" (click)="makePayment()"
+                styleClass="font-semibold px-4" />
+            </div>
           </ng-template>
         </p-toolbar>
+        } @else {
+        <div
+          class="flex items-center justify-between p-3.5 bg-surface-100 dark:bg-surface-800/60 rounded-xl text-left w-full">
+          <span class="text-xs font-medium text-surface-600 dark:text-surface-400 flex items-center gap-2">
+            <i class="pi pi-lock-open text-amber-500 text-sm"></i>
+            This standard invoice setup is currently restricted from handling payment adjustments.
+          </span>
+          <p-button label="Close View" [text]="true" severity="secondary" size="small" (click)="isResults.set(false)" />
+        </div>
+        }
+      </div>
     </ng-template>
-  
+
   </p-dialog>
 </div>
-}@else {
-    <!-- <span class="text-surface-500 dark:text-surface-400 block mb-4 total" severity="danger">Invoice verification failed</span> -->
+}
+@if(this.isPaymentcomplete()){
+<div class="card flex justify-center">
+  <!-- Dialog width restricted visually to standard receipt box proportions -->
+  <p-dialog [(visible)]="isPaymentcomplete" [modal]="true" [style]="{ width: '28rem' }" styleClass="receipt-dialog">
+
+    <ng-template #header>
+      <div class="inline-flex items-center justify-center gap-2 w-full text-center">
+        <i class="pi pi-ticket text-surface-700"></i>
+        <span class="font-bold tracking-wider text-sm">PAYMENT RECEIPT</span>
+      </div>
+    </ng-template>
+
+    <!-- Physical Thermal Print Wrapper Area -->
+    <div id='print-section' class="receipt-container">
+
+      <!-- Store Info Header Block -->
+      <div class="receipt-header">
+        <h2 class="receipt-brand">OBOADIE NYAME ADOM ENTERPRISE</h2>
+        <p class="receipt-sub">Behind Our Lady of Fatima Junction</p>
+        <p class="receipt-sub font-bold">Tel: 0531885457</p>
+      </div>
+
+      <div class="receipt-dashed-line"></div>
+
+      <!-- Transaction Properties -->
+      <div class="receipt-meta-block">
+        @if(salesType==='CASH_SALES'){
+        <div class="receipt-flex-row">
+          <span class="label">RECEIPT NO:</span>
+          <span class="val font-mono font-bold">{{paymentNumber}}</span>
+        </div>
+        <div class="receipt-flex-row">
+          <span class="label">STATUS:</span>
+          <span class="val font-bold">{{invoicesum[0].payment_progress}}</span>
+        </div>
+        }
+        <div class="receipt-flex-row">
+          <span class="label">TX TYPE:</span>
+          <span class="val font-bold">
+            @if(salesType==='CASH_SALES'){ CASH SALES }
+            @else if(salesType==='CREDIT_SALES'){ CREDIT SALES }
+            @else { # }
+          </span>
+        </div>
+      </div>
+
+      <div class="receipt-dashed-line"></div>
+
+      <!-- Customer Details Section -->
+      <div class="receipt-meta-block">
+        <div class="receipt-flex-row">
+          <span class="label">CLIENT:</span>
+          <span class="val truncate">{{ invoicesum[0].customername }}</span>
+        </div>
+        <div class="receipt-flex-row">
+          <span class="label">TEL/MOB:</span>
+          <span class="val font-mono">{{ invoicesum[0].telephone }}</span>
+        </div>
+        <div class="receipt-flex-row">
+          <span class="label">ADDRESS:</span>
+          <span class="val truncate">{{ invoicesum[0].address }}</span>
+        </div>
+      </div>
+
+      <div class="receipt-dashed-line"></div>
+
+      <!-- Items Breakdown Section -->
+      <div class="receipt-items-table">
+        <!-- Table Column Headers -->
+        <div class="table-header-row font-bold">
+          <span class="col-item">ITEM DESCRIPTION</span>
+          <span class="col-qty text-center">QTY</span>
+          <span class="col-total text-right">TOTAL</span>
+        </div>
+
+        <div class="receipt-dashed-line-light"></div>
+
+        <!-- Loop Items List -->
+        @for(item of invoiceData; track $index) {
+        <div class="table-body-row">
+          <div class="item-name-line font-medium">
+            {{ $index + 1 }}. {{ item.name }}
+            <span class="item-title-sub">({{ item.title }})</span>
+          </div>
+          <div class="item-pricing-line">
+            <span class="calc-text font-mono">{{ item.quantity_sold }} x {{ item.unit_price | number:'1.2-2' }}</span>
+            <span class="total-text font-mono font-bold text-right">{{ item.total_price | currency: 'Ghø' }}</span>
+          </div>
+        </div>
+        }
+      </div>
+
+      <div class="receipt-double-dashed-line"></div>
+
+      <!-- Financial Totals Section -->
+      <div class="receipt-totals-block font-mono">
+        <div class="receipt-flex-row text-sm">
+          <span class="label font-bold">TOTAL:</span>
+          <span class="val font-bold text-right">{{(invoicesum[0]?.invoice_total || 0) | currency: 'Ghø' }}</span>
+        </div>
+        <div class="receipt-flex-row text-sm">
+          <span class="label font-bold">PAID:</span>
+          <span class="val font-bold text-emerald-700 dark:text-emerald-400 text-right">{{
+            (sumamountPaidData[0]?.sumpaid || 0) | currency:'Ghø' }}</span>
+        </div>
+        <div class="receipt-dashed-line-light"></div>
+        <div class="receipt-flex-row text-base font-black border-highlight">
+          <span class="label">BALANCE:</span>
+          <span class="val text-right">{{(balanceData[0]?.balance || 0) | currency: 'Ghø' }}</span>
+        </div>
+      </div>
+
+      <div class="receipt-dashed-line"></div>
+
+      <!-- Barcode / System Security Section -->
+      <div class="receipt-barcode-wrap">
+        <ngx-barcode6 [bc-value]="invoicesum[0].invoice_number" [bc-format]="'CODE128'" [bc-display-value]="true">
+        </ngx-barcode6>
+
+        <div class="verification-tag flex items-center gap-1.5 font-bold justify-center mt-1">
+          @if(invoicesum[0]?.isinvoice_verified===true){
+          <i class="pi pi-verified text-emerald-600 text-base"></i>
+          <span class="text-xs uppercase text-emerald-700">System Verified</span>
+          } @else {
+          <i class="pi pi-ban text-red-600 text-base"></i>
+          <span class="text-xs uppercase text-red-700">Unverified Invoice</span>
+          }
+        </div>
+      </div>
+
+      <!-- Traditional Thermal Footer Message -->
+      <div class="receipt-footer-msg font-mono">
+        <p class="m-0">Thank You for Your Patronage!</p>
+        <p class="m-0 text-xxs tracking-tighter text-surface-400">Powered by Beacon Technology</p>
+      </div>
+
+    </div>
+
+    <!-- Action Layer -->
+    <ng-template #footer>
+      <p-toolbar styleClass="bg-transparent border-none p-0 w-full">
+        <ng-template #center>
+          <div class="flex items-center gap-2 w-full justify-center">
+            <p-button label="Close View" [text]="true" severity="secondary" (onClick)="isPaymentcomplete.set(false)" />
+            <p-button label="Print Receipt" icon="pi pi-print" [raised]="true" severity="contrast"
+              printSectionId="print-section" ngxPrint (printCompleted)="onPrintComplete()" [useExistingCss]="true" />
+          </div>
+        </ng-template>
+      </p-toolbar>
+    </ng-template>
+
+  </p-dialog>
+</div>
 }
 <p-toast />
-

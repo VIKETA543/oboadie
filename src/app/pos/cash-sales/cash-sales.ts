@@ -167,7 +167,7 @@ cutomerNumber: any
   iniCashSales = () => {
   const dbFormatAngular = formatDate(new Date(), 'yyyyMMddsshh', 'en-US');
     let randomInteger: number = this.getRandomInt(1, 1000); // Generates a random integer between 1 and 10
-    this.cashSalesInvoiceNumber = "CINV" + dbFormatAngular  + randomInteger
+    this.cashSalesInvoiceNumber = "CINV" + dbFormatAngular
     this.isInput.set(true)
     this.isInputInvoice.set(true)
 
@@ -246,9 +246,6 @@ this.mobile_number=data.mobile_number,
 this.customerType=data.customertype
 this.remarks=data.remarks
 }
-
-
-
   calcTotal = () => {
     switch (this.selectedType) {
       case 'UNIT':
@@ -302,7 +299,6 @@ this.remarks=data.remarks
                 this.message = 'Enter a valid quantity'
                 this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
               }
-
             }
 
             break;

@@ -1,115 +1,35 @@
-.sales-quotes,.sales-display{
-    max-width: calc(100% - 0%);
-    min-width:calc(100% - 50%);
-    width: calc(100% - 0%);;
+/* Custom properties to blend cleanly with PrimeNG styling layers */
+:host ::ng-deep .p-dialog-content {
+  padding-top: 0.5rem !important;
+  padding-bottom: 1.5rem !important;
+}
 
+:host ::ng-deep .p-divider {
+  margin: 1rem 0 !important;
 }
-.sales-display{
- box-shadow: 0px 0px 10px 1px lightgray;
- border: 1px solid lightgray;
-    overflow: hidden;
-    width: 55rem;
- .header{
 
-    padding: 10px ;
-    text-align: center;
-    header,span{
-        display: block;
-        width: 100%;
-            font-size: clamp(1em,1.5em,1.9em);
-                text-align: center;
-    }
- }
-}
-img{
-    width: 50px;
-    height: 50px;
-    aspect-ratio: .5;
-}
-.head{
-    padding: 10px;
-    font-size: clamp(1em,1.5em,1.9em);
-    background-color: rgb(4, 29, 102);
-    color: whitesmoke;
-}
-.customer{
-    border: 1px dotted lightgray;
-    padding: 5px;
-    // border-radius: .3em;
-    //  box-shadow: 0px 0px 10px 1px lightgray;
-    margin-left: 2px ;
-        max-width: calc(100% - 0%);
-    min-width:calc(100% - 60%);
-    width: calc(100% - 0%);
-
-
-}
-.w{
-    width: calc(100% - 60%);
-}
-.truncate-text {
-  width:5rem; /* Or any width */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.total{
-    div{
-        padding: 10px;
-          font-size: clamp(1.5em,1.8em,2.5em);
-          border-radius: .3em;
-            border: 1px solid lightgray;
-    }
-    div:first-child{
-        width: 50%;
-    }
-    
-}
-.tb{
-     border: 1px solid lightgray;
-    overflow: hidden;
-    width: fit-content;
-    margin: 10px;
-}
-// .btn-submit{
-//     width: 5rem;
-// text-align: right;
-// padding: 5px;
-
-// }
-.print-footer{
-    display: flex;
-    align-items: end;
-    margin: 0px;
-    padding: 10px;
-    background-color: rgb(62, 63, 63);
-    
+.wd{
+  width: 10rem;
+  display: block;
 }
 .header-i{
-  background-color: rgb(62, 63, 63);
-  margin-top: 10px;
-       padding: 10px;
-          font-size: clamp(1.5em,1.8em,2.5em);
-          border-radius: .3em;
-            border: 1px solid lightgray;
-            color: white;
-            font-weight: bold;
+  padding: 10px;
+  background-color: rgb(2, 23, 27);
+  color: white;
+
 }
-.section{
-    width: fit-content;
-    margin: 0px auto;
-    margin-bottom: 10px;
-    header{
-                 font-size: clamp(1.5em,1.8em,2.5em);
-                 padding: 10px;
-                 text-align: center;
-                 width: fit-content;
-    }
-    label{
-          font-size: clamp(1.2em,1.7em,2.3em);
-                 padding: 0px;
-                 text-align: center;
-                 width: 100%;
-                 display: block;
-    }
-    }
+/* Subtle fluid fade animation for selection logic dropdown toggling */
+.animate-fadeIn {
+  animation: fadeInModalElement 0.2s ease-out forwards;
+}
+
+@keyframes fadeInModalElement {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

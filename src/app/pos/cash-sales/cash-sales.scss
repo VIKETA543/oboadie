@@ -30,7 +30,6 @@ img{
 .head{
     padding: 10px;
     font-size: clamp(1em,1.5em,1.9em);
-    background-color: rgb(4, 29, 102);
     color: whitesmoke;
 }
 .customer{
@@ -142,6 +141,11 @@ padding: 5px;
         line-height: 1.6;
     }
 }
+th,td{
+    padding: 10px;
+    text-align: left;
+  font-size: clamp(.8em,1.0em,1.8em);
+}
 @media print {
   /* Hide elements you don't want on the paper (like navbars or buttons) */
   .no-print {
@@ -156,11 +160,33 @@ padding: 5px;
     background: red;
 
   }
-
+th,td{
+    padding: 10px;
+    text-align: center;
+    font-size:1.5vw
+}
   /* Force background colors and images to print */
   .highlight-box {
     background-color: #f4f4f4 !important;
     -webkit-print-color-adjust: exact; /* For Chrome/Safari */
     print-color-adjust: exact;         /* Standard */
   }
+  header, .section, .payment-data, .company-info,span, .signature, .receipt-info, .head-info, .header-segement, .total{
+    page-break-inside: avoid; /* Prevent breaking inside these elements */
+    padding: 1px;
+    margin: 0px;
+      font-size:1.5vw
+  }
+  /* src/assets/css/print-margins.css */
+@page {
+  size: A4; /* Or 'letter', 'auto', etc. */
+  margin-top: 10mm;
+  margin-bottom: 10mm;
+  margin-left: 10mm;
+  margin-right: 10mm;
+}
+
+body {
+  margin: 0;
+}
 }
