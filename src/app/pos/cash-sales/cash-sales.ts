@@ -34,6 +34,7 @@ import { PanelModule } from 'primeng/panel';
 import { Users } from '../../interface/Users';
 import { BadgeModule } from 'primeng/badge';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { Popover } from "primeng/popover";
 
 @Component({
   selector: 'cash-sales',
@@ -42,7 +43,7 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
     IconFieldModule,
     InputIconModule,
     SplitButtonModule,
-    InputTextModule, BadgeModule,Tooltip,OverlayBadgeModule,
+    InputTextModule, BadgeModule, Tooltip, OverlayBadgeModule,
     TableModule,
     ToggleSwitchModule,
     FormsModule, Divider,
@@ -52,8 +53,8 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
     DatePipe, SelectModule,
     InputNumberModule, FluidModule,
     CurrencyPipe, NgxBarcode6, NgxPrintDirective,
-  AvatarModule,
-PanelModule],
+    AvatarModule,
+    PanelModule, Popover],
   templateUrl: './cash-sales.html',
   styleUrl: './cash-sales.scss',
   providers:[],
@@ -165,6 +166,8 @@ cutomerNumber: any
 
 
   iniCashSales = () => {
+
+
   const dbFormatAngular = formatDate(new Date(), 'yyyyMMddsshh', 'en-US');
     let randomInteger: number = this.getRandomInt(1, 1000); // Generates a random integer between 1 and 10
     this.cashSalesInvoiceNumber = "CINV" + dbFormatAngular
@@ -175,7 +178,24 @@ cutomerNumber: any
     let customerid: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
     this.cutomerNumber = "CIN" + new Date().getDate() + "-" + customerid
     this.cdr.detectChanges()
+
+
   }
+initInvoiceWithNoCustomerDetails=()=>{
+this.customerType='WALK-IN'
+  const dbFormatAngular = formatDate(new Date(), 'yyyyMMddsshh', 'en-US');
+    let randomInteger: number = this.getRandomInt(1, 1000); // Generates a random integer between 1 and 10
+    this.cashSalesInvoiceNumber = "CINV" + dbFormatAngular
+    this.isInput.set(true)
+    this.isInputInvoice.set(false)
+
+
+    let customerid: number = this.getRandomInt(1, 10000000); // Generates a random integer between 1 and 10
+    this.cutomerNumber = "CIN" + new Date().getDate() + "-" + customerid
+this.addInvoice()
+}
+
+
 checked:boolean=false
 storeNumber:any
   addToCart(_t77: any) {
@@ -466,12 +486,12 @@ addInvoice=()=>{
   let data={
           cutomerNumber: this.cutomerNumber,
       invoiceNumber:this.cashSalesInvoiceNumber,
-        customerType:this.customerType,
-        customername:this.customerName,
-        telephone:this.telephoneNumber,
-        emailadress:this.emailAddress,
-        addresss:this.address,
-        dateposted:this.invoiceDate,
+        customerType:this.customerType||'',
+        customername:this.customerName||'',
+        telephone:this.telephoneNumber||'',
+        emailadress:this.emailAddress||'',
+        addresss:this.address||'',
+        dateposted:this.invoiceDate||'',
         preparedBy:this.USER_CREDENTIALS?.uac_id
   }
   this.posservice.openInvoice(data).subscribe((response:any)=>{

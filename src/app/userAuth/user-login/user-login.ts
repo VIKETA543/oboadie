@@ -81,7 +81,12 @@ export class UserLogin {
               localStorage.setItem('user', JSON.stringify(usercredential))
               console.log('The user credentials-->', response?.user)
                 localStorage.setItem('USER_CREDENTIALS', JSON.stringify(response?.user))
-              this.router.navigate(['../redirect-user'], { relativeTo: this.route })
+                if(response?.autoLogin===true){
+                        this.router.navigate(['cash-manager']);
+                }else{
+                        this.router.navigate(['../redirect-user'], { relativeTo: this.route })
+                }
+        
             } else {
               if (response?.NO_PASSWORD) {
                 this.message = response?.NO_PASSWORD

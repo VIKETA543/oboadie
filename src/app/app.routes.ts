@@ -60,6 +60,8 @@ import { StoreHome } from './stores/store-home/store-home';
 import { PriceEntry } from './price-entry/price-entry';
 import { StoreStockBalances } from './stores/store-stock-balances/store-stock-balances';
 import { Customers } from './crm/customers/customers';
+import { Users } from './userAuth/users/users';
+
 
 
 
@@ -73,7 +75,8 @@ export const routes: Routes = [
             {
                 path: 'security-manager', component: SecurityManager, children: [
                     { path: 'uacgenerator', component: UACGenerator },
-                    { path: 'department-hook', component: DepartmentHook }
+                    { path: 'department-hook', component: DepartmentHook },
+                        { path: 'users', component: Users },
                 ]
             },
             { path: 'addcartegory', component: Addcartegory },
@@ -225,8 +228,19 @@ export const routes: Routes = [
                     { path: 'customers', component: Customers },
                 ]
             },
+           {  path: 'verify-sales', component: VerifySales, children: [
+                    { path: 'verify-cash-sales', component: VerifyCashSales },
+                    { path: 'verify-credit-sales', component: VerifyCreditSales },
+                    { path: 'store-manual-verification', component: StoreManualVerification },
+                    { path: 'store-home', component: StoreHome },
+                    { path: '', redirectTo: 'store-home', pathMatch: 'full' }
+                ]
+            },
+
             { path: 'pos-home', component: PosHome },
-            { path: '', redirectTo: 'pos-home', pathMatch: 'full' }
+
+            { path: '', redirectTo: 'pos-home', pathMatch: 'full' },
+
         ]
     },
     {

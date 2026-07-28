@@ -1,11 +1,11 @@
-  <div class="card">
+<div class="card">
     <p-toolbar>
         <ng-template #start>
 
-                 <p-avatar image="assets/logo/oboadie.jpeg" class="mr-5" size="xlarge" shape="circle"/>
+            <p-avatar image="assets/logo/oboadie.jpeg" class="mr-5" size="xlarge" shape="circle" />
             <div>
-            <span class="font-bold text-lg mr-2 storename">{{userInfo[0]?.storename}}</span>
-            <h2>OBOADIE NYAME ENTERPRISE</h2>
+                <span class="font-bold text-lg mr-2 storename">{{userInfo[0]?.storename}}</span>
+                <h2>OBOADIE NYAME ENTERPRISE</h2>
             </div>
         </ng-template>
         <ng-template #center>
@@ -14,84 +14,89 @@
         <ng-template #end>
             <span class="font-bold text-lg mr-4 storename">
                 <label class="mr-2 name">{{userInfo[0]?.fullname}}</label>
-              
+
                 <!-- <i class="pi pi-cog" style="font-size: 2rem"></i> -->
-                    <p-avatar class="mr-2" size="xlarge" shape="circle" image="{{userInfo[0]?.passport_picture_url}}"
-                shape="circle" size="large" >
-       
+                <p-avatar class="mr-2" size="xlarge" shape="circle" image="{{userInfo[0]?.passport_picture_url}}"
+                    shape="circle" size="large">
+
                 </p-avatar>
             </span>
         </ng-template>
     </p-toolbar>
     <div class="pane">
-           <p-toolbar class="mb-4 bg-gray-100">
-                <ng-template #start>
-                     <div class="card flex justify-center gap-4">
-            <div class="card flex justify-center gap-4">
-      
-/>
-    </div>
-    </div>
-                </ng-template>
-                     <ng-template #end>
-                            <!-- <p-button icon="pi pi-ellipsis-v" label="Menu" class="mr-2" raised="true" severity="contrast" (onClick)="op.toggle($event)" /> -->
-                                <p-button (click)="op1.toggle($event)" icon="pi pi-ellipsis-v" label="Menu" severity="secondary" />
-            <p-button (click)="op.toggle($event)" icon="pi pi-cog" label="Admin"  severity="secondary"/>
-                     </ng-template>
-           
-           </p-toolbar>
+        <p-toolbar class="mb-4 bg-gray-100">
+            <ng-template #start>
+                <div class="card flex justify-center gap-4">
+                    <div class="card flex justify-center gap-4">
+
+                        />
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template #end>
+                <!-- <p-button icon="pi pi-ellipsis-v" label="Menu" class="mr-2" raised="true" severity="contrast" (onClick)="op.toggle($event)" /> -->
+                <p-button (click)="op1.toggle($event)" icon="pi pi-ellipsis-v" label="Menu" severity="secondary" />
+                <p-button (click)="op.toggle($event)" icon="pi pi-cog" label="Admin" severity="secondary" />
+            </ng-template>
+
+        </p-toolbar>
     </div>
 </div>
-  
- <div class="card flex justify-center">
-            <p-popover #op>
-   
-                    <div>
-                        <span class="font-medium block mb-2">Admin</span>
-                        <p-divider></p-divider>
-                         <p-button type="button" label="Account Security" (onClick)="opeSecurityManager()" styleClass="min-w-48" variant="text" severity="secondary" />
-                    </div>
-                
-                      <div>
-                        <p-divider></p-divider>
-                         <p-button type="button" label="Sign-Out" (onClick)="opeSecurityManager()" styleClass="min-w-48" variant="text" severity="secondary" />
-                    </div>
-            </p-popover>
+
+<div class="card flex justify-center">
+    <p-popover #op>
+
+        <div>
+            <span class="font-medium block mb-2">Admin</span>
+            <p-divider></p-divider>
+            <p-button type="button" label="Account Security" (onClick)="opeSecurityManager()" styleClass="min-w-48"
+                variant="text" severity="secondary" />
         </div>
 
-
-
-
- <div class="card flex justify-center">
-      
-            <p-popover #op1>
-                <div class="gap-4 w-[25rem]">
-                    <p-button icon="cedi-icon" label="Pricing" class="mr-2" routerLink="pricing"  severity="contrast" raised="false" variant="text"
-            styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-                    <p-button icon="cedi-icon" label="Manual Prices" class="mr-2" routerLink="price-entry" text
-            severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="cedi-icon" label="Manage Supplier Prices" class="mr-2" routerLink="supplierprices" raised="false" variant="text"
-            severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="wearhouse" label="Wearhouse Manager" class="mr-2" routerLink="wearhousemanager" raised="false"variant="text"
-            severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="storemanager" label="Store Manager" class="mr-2" routerLink="store-manager" raised="false" variant="text"
-            severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="storemanager" label="Stores" class="mr-2" (onClick)="openStores()"  severity="secondary" raised="false" variant="text"
-            styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="pi pi-star" label="POS Manager" class="mr-2" routerLink="pos-panager" pos-panager  raised="false" variant="text"
-            severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="pi pi-star" label="Point of Sales" class="mr-2" (onClick)="pointofsale()" 
-            severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" variant="text" />
-        <p-button icon="pi pi-star" label="Customer Management" class="mr-2" routerLink="crm-manager" raised="false" variant="text"
-            severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-        <p-button icon="pi pi-star" label="Manage Deposit" class="mr-2" routerLink="deposit-manager" raised="false" variant="text"
-            severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-
-        <p-button icon="pi pi-star" label="Cashier" class="mr-2" routerLink="cash-manager"  severity="contrast" raised="false" variant="text"
-            styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
-                </div>
-            </p-popover>
+        <div>
+            <p-divider></p-divider>
+            <p-button type="button" label="Sign-Out" (onClick)="opeSecurityManager()" styleClass="min-w-48"
+                variant="text" severity="secondary" />
         </div>
+    </p-popover>
+</div>
+
+
+
+
+<div class="card flex justify-center">
+
+    <p-popover #op1>
+        <div class="gap-4 w-[25rem]">
+            <p-button icon="cedi-icon" label="Pricing" class="mr-2" routerLink="pricing" severity="contrast"
+                raised="false" variant="text" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
+            <p-button icon="cedi-icon" label="Manual Prices" class="mr-2" routerLink="price-entry" text
+                severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
+            <p-button icon="cedi-icon" label="Manage Supplier Prices" class="mr-2" routerLink="supplierprices"
+                raised="false" variant="text" severity="contrast" styleClass="min-w-48"
+                [style]="{'justify-content': 'flex-start'}" />
+            <p-button icon="wearhouse" label="Wearhouse Manager" class="mr-2" routerLink="wearhousemanager"
+                raised="false" variant="text" severity="contrast" styleClass="min-w-48"
+                [style]="{'justify-content': 'flex-start'}" />
+            <p-button icon="storemanager" label="Store Manager" class="mr-2" routerLink="store-manager" raised="false"
+                variant="text" severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
+            <p-button icon="storemanager" label="Stores" class="mr-2" (onClick)="openStores()" severity="secondary"
+                raised="false" variant="text" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
+            <p-button icon="pi pi-star" label="POS Manager" class="mr-2" routerLink="pos-panager" pos-panager
+                raised="false" variant="text" severity="contrast" styleClass="min-w-48"
+                [style]="{'justify-content': 'flex-start'}" />
+            <p-button icon="pi pi-star" label="Point of Sales" class="mr-2" (onClick)="pointofsale()"
+                severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" variant="text" />
+            <p-button icon="pi pi-star" label="Customer Management" class="mr-2" routerLink="crm-manager" raised="false"
+                variant="text" severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
+            <p-button icon="pi pi-star" label="Manage Deposit" class="mr-2" routerLink="deposit-manager" raised="false"
+                variant="text" severity="contrast" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
+
+            <p-button icon="pi pi-star" label="Cashier" class="mr-2" routerLink="cash-manager" severity="contrast"
+                raised="false" variant="text" styleClass="min-w-48" [style]="{'justify-content': 'flex-start'}" />
+        </div>
+    </p-popover>
+</div>
 
 
 

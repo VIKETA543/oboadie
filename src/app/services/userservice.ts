@@ -58,4 +58,27 @@ export class Userservice {
       return this.http.post(this.url + '/user/resetPassword',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
   }
 
+  
+    listusers=()=>{
+      return this.http.get(this.url + '/user/listusers', { headers: new HttpHeaders().set('contentType',  "application/json") });
+  }
+
+  setUserAutoLogin=(data:any)=>{
+      return this.http.post(this.url + '/user/setUserAutoLogin',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+  }
+
+ onAccess=(data:any)=>{
+      return this.http.post(this.url + '/user/onAccess',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+  }
+
+ onApproval=(data:any)=>{
+      return this.http.post(this.url + '/user/onApproval',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+  }
+
+  
+onDeleteUser=(data:any)=>{
+      return this.http.post(this.url + '/user/onDeleteUser',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+  }
+
+  
 }

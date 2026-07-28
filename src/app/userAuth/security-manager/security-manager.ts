@@ -10,9 +10,10 @@ import { InputTextModule } from 'primeng/inputtext';
 
 import { ActivatedRoute, Router, RouterLinkWithHref, RouterOutlet } from "@angular/router";
 import { MessageService } from 'primeng/api';
+import { DividerModule } from 'primeng/divider';
 @Component({
   selector: 'security-manager',
-  imports: [ToolbarModule, IconFieldModule,InputTextModule, InputIconModule, ButtonModule, Tooltip, RouterOutlet, RouterLinkWithHref],
+  imports: [ToolbarModule, IconFieldModule,InputTextModule, InputIconModule, ButtonModule, Tooltip, RouterOutlet, RouterLinkWithHref,DividerModule],
   templateUrl: './security-manager.html',
   styleUrl: './security-manager.scss',
   providers:[MessageService],
@@ -27,4 +28,9 @@ constructor(private router:Router,private routes:ActivatedRoute){}
   gotoDepartemnt=()=>{
    return this.router.navigate(['department-hook'],{relativeTo:this.routes})
   }
+
+   onLoadusers=()=>{
+   return this.router.navigate(['users'],{relativeTo:this.routes})
+  }
+
 }

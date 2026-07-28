@@ -59,7 +59,7 @@ export class CashPayments implements OnInit {
     }
   }
 
-  selectionOption: string='USE SCANNER';
+  selectionOption: string='SCANNER';
 
   stateOptions: any[] = [{ label: 'SCANNER', value: 'USE SCANNER',handsetOnly: false,icon:'pi pi-barcode' }, { label: 'PHONE', value: 'MOBILE PHONE',handsetOnly: true }, { label: 'MANUAL', value: 'MANUAL VERIFICATION',handsetOnly: false }];
   public filteredOptions: any[] = [];
