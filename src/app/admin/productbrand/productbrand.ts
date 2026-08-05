@@ -21,6 +21,7 @@ import { ProductCategory, Group, Brand } from '../../interface/products';
 import { productservice } from '../../services/productservice';
 import { Products } from '../products/products';
 import { DividerModule } from 'primeng/divider'; 
+import { AvatarModule } from 'primeng/avatar';
 
 @Component({
   selector: 'productbrand',
@@ -43,7 +44,8 @@ import { DividerModule } from 'primeng/divider';
     PopoverModule,
     TagModule,
     CardModule,
-    DividerModule
+    DividerModule,
+    AvatarModule
   ],
   templateUrl: './productbrand.html',
   styleUrl: './productbrand.scss',

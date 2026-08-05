@@ -80,13 +80,33 @@ export class UserLogin {
               const usercredential = { UACP: response?.hook, uac_id: response?.uac_id }
               localStorage.setItem('user', JSON.stringify(usercredential))
               console.log('The user credentials-->', response?.user)
-                localStorage.setItem('USER_CREDENTIALS', JSON.stringify(response?.user))
-                if(response?.autoLogin===true){
-                        this.router.navigate(['cash-manager']);
-                }else{
-                        this.router.navigate(['../redirect-user'], { relativeTo: this.route })
+              localStorage.setItem('USER_CREDENTIALS', JSON.stringify(response?.user))
+              if (response?.autoLogin === true) {
+         
+                const redirector=response?.redirector
+                        console.log('Redirector',redirector)
+                redirector.trim()
+                switch (redirector.trim()) {
+                  case 'CASH AND PAYMENT':
+                    this.router.navigate(['cash-manager']);
+                    break;
+                  case 'POINT OF SALES':
+                    this.router.navigate(['point-of-sale']);
+                    break;
+                  case 'MAIN STORE':
+                    this.router.navigate(['main-stores']);
+                    break;
+                  case 'WAREHOUSE MANAGER':
+                    this.router.navigate(['wearhousemanager']);
+                    break;
+                  default: this.router.navigate(['../redirect-user'], { relativeTo: this.route })
+                    break;
                 }
-        
+
+              } else {
+                this.router.navigate(['../redirect-user'], { relativeTo: this.route })
+              }
+
             } else {
               if (response?.NO_PASSWORD) {
                 this.message = response?.NO_PASSWORD

@@ -237,6 +237,86 @@ max-width: 20px
     animation: slide-fade 1s;
 }
 
+// Theme variable overrides
+$dark-bg: #1e1e24;
+$dark-card-bg: #121214;
+$border-color: #3f3f46;
+$text-color: #f4f4f5;
+
+.card.gr-bar {
+  background-color: transparent !important;
+  padding: 0rem;
+  border-radius: 8px;
+  border: none;
+
+  // PrimeNG Toolbar dark styling
+  ::ng-deep p-toolbar {
+
+      background-color:#f4f4f5; 
+      border: 1px solid $border-color;
+      border-radius: 6px;
+      padding: 0.0rem 0.0rem;
+      color: $text-color;
+
+      // Flex Alignment for PrimeNG sections
+      .p-toolbar-group-start,
+      .p-toolbar-group-center,
+      .p-toolbar-group-end {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+    
+  }
+
+  // Custom Dropdown & Image styling
+  ::ng-deep p-select {
+    .p-select {
+      background-color: lighten($dark-bg, 4%);
+      border-color: $border-color;
+      color: $text-color;
+
+      &:not(.p-disabled).p-focus {
+        border-color: #6366f1; // Focus border accent
+      }
+
+      .p-select-label {
+        color: $text-color;
+      }
+    }
+
+    // Dropdown overlay menu panel
+    .p-select-overlay {
+      background-color: $dark-bg;
+      border-color: $border-color;
+      color: $text-color;
+
+      .p-select-option {
+        color: $text-color;
+
+        &:not(.p-highlight):not(.p-disabled):hover {
+          background-color: lighten($dark-bg, 8%);
+          color: #ffffff;
+        }
+
+        &.p-highlight {
+          background-color: #6366f1;
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  // Dropdown Image Sizing fix
+  .select-img {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+    background-color: #ffffff; // Soft background for transparent brand logos
+    padding: 2px;
+    border-radius: 4px;
+  }
+}
 @keyframes slide-fade {
     from {
         opacity: 0;
