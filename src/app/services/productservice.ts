@@ -114,4 +114,13 @@ authTag=(data:any)=>{
 dropProduct=(data:any)=>{
     return this.http.post(this.url + '/category/dropProduct',data,{ headers: new HttpHeaders().set('contentType', "application/json") })  
 }
+
+updateBrand=(data:any)=>{
+    return this.http.post(this.url + '/category/updateBrand',data,{ headers: new HttpHeaders().set('contentType', "application/json") })  
+}
+
+updateRole=(data:any)=>{
+    return this.http.post(this.url + '/category/updateRole',data,{ headers: new HttpHeaders().set('contentType', "application/json") })  
+}
+
 }

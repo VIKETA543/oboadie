@@ -63,6 +63,7 @@ export class UserLogin {
       if (response?.message) {
         this.message = response?.message
         this.isMessage.set(true)
+        this.loading=false
       } else {
         if (response?.wait) {
           this.message = response?.wait

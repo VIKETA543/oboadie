@@ -22,6 +22,7 @@ import { productservice } from '../../services/productservice';
 import { Products } from '../products/products';
 import { DividerModule } from 'primeng/divider'; 
 import { AvatarModule } from 'primeng/avatar';
+import { response } from 'express';
 
 @Component({
   selector: 'productbrand',
@@ -45,14 +46,64 @@ import { AvatarModule } from 'primeng/avatar';
     TagModule,
     CardModule,
     DividerModule,
-    AvatarModule
+    AvatarModule,
+    DividerModule
   ],
   templateUrl: './productbrand.html',
   styleUrl: './productbrand.scss',
   providers: [MessageService, ConfirmationService],
 })
 export class Productbrand {
+editRole(_t55: any) {
+console.log(_t55)
+let data={
+  brandid:_t55?.brandid,
+  RoleeditedText:this.RoleeditedText
+}
 
+
+this.productservice.updateRole(data).subscribe((response:any)=>{
+  if(response?.message){
+    this.message=response?.message
+     this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+  }else{
+    if(response?.success){
+       this.loadBrandData();
+       this.message=response?.message
+     this.messageService.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+    }else{
+       this.message='Unknown error has occured'
+     this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+    }
+  }
+})
+
+}
+editBrand(_t55: any) {
+  let data={
+  brandid:_t55?.brandid,
+  brandeditedText:this.brandeditedText
+}
+
+this.productservice.updateBrand(data).subscribe((response:any)=>{
+  if(response?.message){
+    this.message=response?.message
+     this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+  }else{
+    if(response?.success){
+       this.message=response?.message
+        this.loadBrandData();
+     this.messageService.add({ severity: 'success', summary: 'Success', detail: this.message, life: 5000 });
+    }else{
+       this.message='Unknown error has occured'
+     this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+    }
+  }
+})
+}
+
+isbrand_editing=signal(false)
+isrole_editing=signal(false)
        loading = signal(false);
     searchValue = signal('');
       activityValues = signal<number[]>([0, 100]);
@@ -105,7 +156,8 @@ export class Productbrand {
   }
     @ViewChild('op') op!: Popover;
   message: any
-  
+  brandeditedText:any
+  RoleeditedText:any
   productCart: ProductCategory[] | undefined;
   productList:Products[]=[];
   selectedProduct:Products[]|undefined

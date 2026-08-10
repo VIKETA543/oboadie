@@ -215,7 +215,7 @@ export const routes: Routes = [
             { path: 'credit-sales', component: CreditSales },
             { path: 'new-deposit', component: NewDeposit },
             { path: 'create-account', component: CreateAccount },
-
+               { path: 'push-stockto-stores', component: PushStocktoStores },
             {
                 path: 'profoma-invoice', component: ProfomaInvoice, children: [
                     { path: 'new-profoma', component: NewProfoma }
