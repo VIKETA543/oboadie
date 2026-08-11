@@ -29,14 +29,15 @@
                     </ng-template>
                 </p-select>
             </div>
-                     <div class="card flex justify-center gap-4">
+            <div class="card flex justify-center gap-4">
                 <label for="hook_to">All Departments</label>
-            <p-toggleswitch [(ngModel)]="hook_to_all_departments" (onChange)="isAlldepartments($event,'ALL DEPARTMENTS')">
-                <ng-template #handle let-checked="checked">
-                    <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
-                </ng-template>
-            </p-toggleswitch>
-        </div>
+                <p-toggleswitch [(ngModel)]="hook_to_all_departments"
+                    (onChange)="isAlldepartments($event,'ALL DEPARTMENTS')">
+                    <ng-template #handle let-checked="checked">
+                        <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
+                    </ng-template>
+                </p-toggleswitch>
+            </div>
 
         </div>
 
@@ -59,14 +60,14 @@
                     </ng-template>
                 </p-select>
             </div>
-                <div class="card flex justify-center gap-4">
+            <div class="card flex justify-center gap-4">
                 <label for="hook_to">All stores</label>
-            <p-toggleswitch [(ngModel)]="hook_to_all_stores" (onChange)="isAllstores($event,'ALL STORES')">
-                <ng-template #handle let-checked="checked">
-                    <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
-                </ng-template>
-            </p-toggleswitch>
-        </div>
+                <p-toggleswitch [(ngModel)]="hook_to_all_stores" (onChange)="isAllstores($event,'ALL STORES')">
+                    <ng-template #handle let-checked="checked">
+                        <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
+                    </ng-template>
+                </p-toggleswitch>
+            </div>
         </div>
 
         <div class="card flex flex-col items-center gap-5 i-p ">
@@ -103,7 +104,78 @@
     <p-divider />
     <div class="card flex flex-col items-center gap-4">
         <p-button label="CREATE HOOK" iconPos="right" (onClick)="createHook()" />
+        <p-button label="UPDATE ACCESS CODE" iconPos="right" severity="info" (onClick)="anAccessUpda()" />
     </div>
+   
+</div>
 
+
+
+<div class="justify-center">
+
+    <p-dialog [(visible)]="isAccess_update" [modal]="true" [style]="{ width: '30rem' }">
+        <ng-template #header>
+            <div class="flex items-center gap-4">
+                <p-avatar image="assets/logo/oboadie.jpeg" class="mr-5" size="xlarge" shape="circle" />
+                <div>
+                    <p class="font-semibold! text-lg! mt-0! mb-1!">Update Access Code</p>
+                </div>
+            </div>
+        </ng-template>
+
+        <div class=" gap-6">
+
+            <div class=" gap-6">
+                <div class="flex items-center gap-4">
+                    <p-avatar image="assets/logo/oboadie.jpeg" class="mr-5" size="xlarge" shape="circle" />
+                    <div>
+                        <p class="font-semibold! text-lg! mt-0! mb-1!">Select username</p>
+                        <p class="text-surface-500 dark:text-surface-400 mt-0! mb-0! text-sm!">Generate UAC and apply
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <span>Select Account</span>
+            <div class="card flex justify-center i-p ">
+                <p-select [options]="users" [(ngModel)]="selecteduser" optionLabel="fullname" [filter]="true"
+                    filterBy="fullname" [showClear]="true" placeholder="Select a user" class="w-full md:w-56"
+                    appendTo="body">
+                    <ng-template #selectedItem let-users>
+                        <div class="flex items-center gap-2">
+                            <img src="{{users.passport_picture_url}}" style="width: 18px" />
+                            <div>{{ users.fullname }}</div>
+                        </div>
+                    </ng-template>
+
+                    <ng-template let-users #item>
+                        <div class="flex items-center gap-2">
+                            <img src="{{users.passport_picture_url}}" style="width: 18px" />
+                            <div>{{ users.fullname }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+            <div class="flex flex-col gap-4">
+                <button type="button" pButton severity="info" class="w-full" (click)="generateUAC()">Generate
+                    UAC</button>
+            </div>
+
+            @if(update_uacpNumber){
+            <div class="gap-4">
+                <label pLabel for="update_uacpNumber" class="text-sm font-semibold">New Access Code</label>
+
+                <input pInputText id="update_uacpNumber" class="w-full" [(ngModel)]="update_uacpNumber" />
+            </div>
+            }
+            <p-divider/>
+            <div class="flex justify-center gap-4 w-full">
+                @if(update_uacpNumber){
+                    <button type="button" pButton severity="success" (click)="applyChanges(); isAccess_update.set(false)">Apply Changes</button>
+                }
+                <button type="button" pButton severity="danger" (click)="isAccess_update.set(false)">Cancel</button>
+                
+            </div>
+        </div>
+    </p-dialog>
 </div>
 <p-toast></p-toast>

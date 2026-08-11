@@ -45,6 +45,12 @@ export class Userservice {
   return this.http.post(this.url + '/user/submitUac',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
   }
 
+    applyUpdate=(data:any)=>{
+
+  return this.http.post(this.url + '/user/applyUpdate',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+  }
+  
+
     authrole=(data:any)=>{
 
   return this.http.post(this.url + '/user/authrole',data, { headers: new HttpHeaders().set('contentType',  "application/json") });

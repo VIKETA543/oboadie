@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -20,15 +20,50 @@ import * as CryptoJS from 'crypto-js';
 import { SelectButtonModule, SelectButtonOptionClickEvent } from 'primeng/selectbutton';
 import { CommonModule } from '@angular/common';
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
+import { Dialog } from "primeng/dialog";
+import { Avatar } from "primeng/avatar";
 @Component({
   selector: 'uacgenerator',
-  imports: [Divider,InputTextModule,FormsModule,SelectModule,SelectButtonModule,ToastModule,TextareaModule,ButtonModule,FormsModule,CommonModule,ToggleSwitchModule],
+  imports: [Divider, InputTextModule, FormsModule, SelectModule, SelectButtonModule, ToastModule, TextareaModule, ButtonModule, FormsModule, CommonModule, ToggleSwitchModule, Dialog, Avatar],
   templateUrl: './uacgenerator.html',
   styleUrl: './uacgenerator.scss',
      providers:[MessageService],
     changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class UACGenerator {
+applyChanges() {
+this.encryptedUAC=CryptoJS.AES.encrypt(this.update_uacpNumber, this.k).toString();
+let data={
+hrid:this.encryptedUAC, 
+  postedDate:new Date(), 
+  user:this.selecteduser?.uac_id, 
+  access:true
+}
+console.log(data)
+this.userservice.applyUpdate(data).subscribe((response:any)=>{
+if(response?.message){
+   this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+}else{
+  if(response?.success){
+   this.message = response?.success
+          this.messageservice.add({ severity: 'success', summary: 'Info', detail: this.message, life: 5000 });
+  }else{
+   this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Info', detail: this.message, life: 5000 });
+  }
+}
+})
+}
+
+update_uacpNumber: any;
+generateUAC() {
+this.generateHookForupdate()
+}
+anAccessUpda() {
+  this.isAccess_update.set(true)
+    this.getUsers();
+}
 isAllstores($event: ToggleSwitchChangeEvent,arg1: string) {
   let data={
     storeNumber:arg1
@@ -64,7 +99,7 @@ isAlldepartments($event: ToggleSwitchChangeEvent,arg1: string) {
     }
 })
 }
-
+isAccess_update=signal(false)
   messageservice=inject(MessageService)
   stores:Store[]=[]
   selectedstore:Store|undefined
@@ -113,7 +148,11 @@ constructor(private storeservice:StoreService,
     return this.uacpNumber= code.match(/.{1,4}/g)?.join('-') || "";
   }
  
-
+  generateHookForupdate(length: number = 16): string {
+    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const code=Array.from({ length }, () => chars[Math.floor(Math.random() * 16)]).join('');
+    return this.update_uacpNumber= code.match(/.{1,4}/g)?.join('-') || "";
+  }
 
 
 
