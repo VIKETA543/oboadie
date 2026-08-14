@@ -117,7 +117,11 @@ verify_credit_invoice=(data:any)=>{
    loadCreditPaymentReceipt=(data:any)=>{
          return this.http.post(this.url + '/pos/loadCreditPaymentReceipt', data, { headers: new HttpHeaders().set('contentType', "application/json") })
    }
-
+   
+daily_payment_history=(data:any)=>{
+         return this.http.post(this.url + '/pos/daily_payment_history', data, { headers: new HttpHeaders().set('contentType', "application/json") })
+   }
+   
    loadcreditInvoices=(data:any)=>{
          return this.http.post(this.url + '/pos/loadcreditInvoices', data, { headers: new HttpHeaders().set('contentType', "application/json") })
    }

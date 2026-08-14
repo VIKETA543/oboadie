@@ -79,6 +79,12 @@ img{
     width: 100%;
     margin: 10px;
 }
+td{
+    padding: 10px;
+    font-size: clamp(.3rem, .5vw, 1.0rem);
+    text-align: left;
+    border-bottom: 1px solid lightgray;
+}
 .btn-submit{
     width: 55rem;
 text-align: right;
@@ -176,4 +182,125 @@ border-radius:0px !important;
 :host ::ng-deep .verify-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3) !important; /* Adjust color to match 'help' severity */
+}
+.printer-container {
+  max-width: 80mm; // Limits screen preview to match receipt size
+  margin: 0 auto;
+  
+  .card {
+    background: #fff;
+    padding: 10px;
+  }
+}
+
+.printer-container {
+  max-width: 80mm; // Limits screen preview to match receipt size
+  margin: 0 auto;
+  
+  .card {
+    background: #fff;
+    padding: 10px;
+  }
+}
+$printer-width: 80mm;
+$printable-width: 72mm; // Effective printable area on 80mm rolls
+$font-mono: 'Courier New', Courier, monospace; // Monospace gives crisp thermal output
+.section {
+  width: $printer-width;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 4mm 2mm;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: $font-mono;
+  color: #000;
+border-bottom: 1px solid lightgray;
+  // Company Name Header
+  header.head-info {
+    display: block;
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1.2;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+    word-break: break-word; // Ensures long names wrap cleanly on 80mm width
+  }
+
+  // Address and Phone Labels
+  label.head-info {
+    display: block; // Labels are inline by default, changing to block stacks them
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: 2px;
+    color: #000;
+
+    // Target the phone numbers specifically (the last label)
+    &:last-of-type {
+      margin-top: 3px;
+      font-size: 10.5px; // Slightly smaller so phone numbers wrap neatly
+      letter-spacing: -0.2px; // Helps fit phone numbers cleanly
+    }
+  }
+}
+
+
+// Thermal Printer Styles
+@media print {
+  // 1. Remove browser default margins & header/footer spacing
+  @page {
+    margin: 0;
+    // Standard 80mm width paper size
+    size: 80mm auto; 
+    
+    // Use this instead if you have a 58mm printer:
+    // size: 58mm auto;
+  }
+
+  // 2. Hide surrounding layout elements if needed
+  body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+.section {
+    width: $printable-width !important;
+    padding: 2mm 0;
+    border-bottom: 1px solid lightgray;
+    header.head-info, 
+    label.head-info {
+      color: #000 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      width: 100% !important;
+      font-size: fontclamp(10px, .8rem, 14px)
+    }
+  }
+
+  // 3. Target your printer container
+  .card.printer-container {
+    // Standard printable width for 80mm rolls is roughly 72mm-80mm
+    width: 80mm; 
+    max-width: 100%;
+    
+    // Clear flex layout constraints that might shrink/skew print alignment
+    display: block !important;
+    margin: 0 auto !important;
+    padding: 0mm; // Small padding to avoid clipping paper edges
+    box-shadow: none !important;
+    border: none !important;
+
+    // Reset typography for high-density thermal printing
+    font-family: 'Courier New', Courier, monospace; // Monospace aligns receipt columns cleanly
+    font-size: 12px;
+    line-height: 1.2;
+    color: #000 !important;
+  }
+  td{
+    padding: 10px;
+    font-size: clamp(.3rem, .5vw, 1.0rem);
+    text-align: left;
+    border-bottom: 1px solid lightgray;
+}
 }

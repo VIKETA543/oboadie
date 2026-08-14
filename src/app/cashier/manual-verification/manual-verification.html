@@ -34,11 +34,17 @@
         <span class="font-bold whitespace-nowrap">INVOICE DETAILS</span>
       </div>
     </ng-template>
-    <div class="header">
-      <header id="main-header">OBOADIE NYAME ADOM ENTERPRISE</header>
-      <span>Behind Our Lady of Fatima Junction</span>
-      <span>Telephone: 0531885457</span>
-    </div>
+    <div class="receipt-info">
+        <div class="card flex flex-col items-center gap-1">
+          <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" size="xlarge" />
+          <div class="section">
+          <header class="head-info">OBOADIE NYAME ADOM ENTERPRISE</header>
+          <label class="head-info">Behind Our Lady of Fatima Junction</label>
+          <label class="head-info">0531885457/ 0246221352/ 0243247991/ 0531189830/ 0598405462</label>
+        </div>
+        </div>
+        
+      </div>
     @if(salesType==='CASH_SALES'){
     <div class="card flex justify-center gap-4 w- cp-24 ">
 
@@ -167,7 +173,7 @@
 }
 
 @if( this.isPaymentcomplete()){
-<div class="card flex justify-center">
+<div class="card flex justify-center printer-container">
 
   <p-dialog [(visible)]="isPaymentcomplete" [modal]="true" [style]="{ width: '30rem' }">
 
@@ -183,13 +189,14 @@
 
       <div class="receipt-info">
         <div class="card flex flex-col items-center gap-1">
-          <img id="srclogo" src="assets/logo/oboadie.jpeg" alt="">
-        </div>
-        <div class="section">
+          <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" size="xlarge" />
+          <div class="section">
           <header class="head-info">OBOADIE NYAME ADOM ENTERPRISE</header>
           <label class="head-info">Behind Our Lady of Fatima Junction</label>
-          <label class="head-info">0531885457</label>
+          <label class="head-info">0531885457/ 0246221352/ 0243247991/ 0531189830/ 0598405462</label>
         </div>
+        </div>
+        
       </div>
       @if(salesType==='CASH_SALES'){
       <div class="card pmt-id ">
@@ -233,13 +240,12 @@
 
         </div>
       </div>
-      <div [style]="{ width: '40rem' }" class="invoice-data">
+      <div [style]="{ maxWidth: '30rem' }" class="invoice-data">
 
-        <!-- <div class="card">
+        <div class="card">
           <p-table [value]="invoiceData" striped>
             <ng-template #header>
               <tr>
-                <th>#</th>
                 <th>Item</th>
                 <th>Type</th>
                 <th>Qty</th>
@@ -249,7 +255,6 @@
             </ng-template>
             <ng-template #body let-invoiceData let-i="rowIndex">
               <tr>
-                <td>{{i+1 }}</td>
                 <td>{{ invoiceData.name }}</td>
                 <td>{{ invoiceData.title }}</td>
                 <td>{{ invoiceData.quantity_sold }}</td>
@@ -259,12 +264,12 @@
             </ng-template>
           </p-table>
          
-        </div> -->
+        </div> 
  <p-divider></p-divider>
         <div class="card w-24">
-          <label class="text-surface-500 dark:text-surface-400 block mb-4 total w-full">SUM TOTAL:
+          <label class="text-surface-500 dark:text-surface-400 block mb-4 total w-full">TOTAL:
             {{(invoicesum[0]?.invoice_total || 0) | currency: 'Ghø' }}</label>
-          <label class="text-surface-500 dark:text-surface-400 block mb-4 total w-full">AMOUNT PAID: {{
+          <label class="text-surface-500 dark:text-surface-400 block mb-4 total w-full">PAID: {{
             (sumamountPaidData[0]?.sumpaid || 0) | currency:'Ghø' }}
           </label>
           <label class="text-surface-500 dark:text-surface-400 block mb-4 total w-full">Balance: {{(balanceData[0]?.balance || 0) |
@@ -272,7 +277,11 @@
         </div>
       </div>
       <div class="barcode-container">
-        <ngx-barcode6 [bc-value]=invoicesum[0].invoice_number [bc-format]="'CODE128'" [bc-display-value]="true">
+        <ngx-barcode6 [bc-value]=invoicesum[0].invoice_number [bc-format]="'CODE128'" [bc-display-value]="true" [bc-font-size]="13" [bc-font]="'Courier New'"
+        [bc-text-margin]="2"
+        [bc-height]="40"
+        [bc-width]="1.5"
+        [bc-element-type]="'img'">
         </ngx-barcode6>
         @if(invoicesum[0]?.isinvoice_verified===true){
         <div>

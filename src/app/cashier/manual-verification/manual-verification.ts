@@ -74,6 +74,7 @@ StartVeririfation=()=>{
 verifyInvoice=()=>{
   this.dialogVisible.set(false)
   this.loadSales()
+
 }
 
   

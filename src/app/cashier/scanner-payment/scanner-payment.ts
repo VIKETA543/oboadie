@@ -23,6 +23,10 @@ import { Users } from '../../interface/Users';
 import { ToggleSwitchChangeEvent } from 'primeng/types/toggleswitch';
 import { PopoverModule } from 'primeng/popover';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { MessageModule } from 'primeng/message';
+import { PanelModule } from 'primeng/panel';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 @Component({
   standalone: true,
   selector: 'scanner-payment',
@@ -43,7 +47,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
     CurrencyPipe,
     ToolbarModule,
     PopoverModule,
-    ToggleSwitchModule],
+    ToggleSwitchModule,MessageModule,PanelModule,IconFieldModule,InputIconModule],
   templateUrl: './scanner-payment.html',
   styleUrl: './scanner-payment.scss',
   providers: [MessageService],
@@ -58,8 +62,10 @@ export class ScannerPayment implements OnInit, OnDestroy {
   public lastScan: string = '';
   public isSuccess: boolean = false;
   public isResults = signal(false)
+  loading= signal(false)
   onInvoiceLoad = signal(false)
   invoiceData: any[] = []
+  SalesInvoices: any[]=[]
   invoicesum: any[] = []
   salesType: any
   AmountPaid: number = 0;
@@ -71,6 +77,7 @@ export class ScannerPayment implements OnInit, OnDestroy {
   USER_CREDENTIALS: Users[] | any
   dialogVisible = signal(false)
   checked_Pyment_option: boolean = false
+  totalsumSales:number=0
   constructor(private cdr: ChangeDetectorRef, private posservice: PosServcie, @Inject(PLATFORM_ID) private platformId: Object) {
 
 
@@ -78,7 +85,7 @@ export class ScannerPayment implements OnInit, OnDestroy {
       try {
         // this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
         this.USER_CREDENTIALS = JSON.parse(localStorage.getItem('USER_CREDENTIALS') || '{}');
-        console.log('User', this.USER_CREDENTIALS)
+        // console.log('User', this.USER_CREDENTIALS)
       } catch (e) {
         this.message = "Could not parse JSON from storage: " + e
       }
@@ -97,6 +104,7 @@ export class ScannerPayment implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.cdr.detectChanges()
+       this.daily_payment_history()
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -116,7 +124,6 @@ export class ScannerPayment implements OnInit, OnDestroy {
     this.lastScan = code.trim();
     this.isSuccess = true;
     this.cdr.detectChanges();
-    console.log('Hardware Scan Success:', this.lastScan);
     this.loadSales()
 
     setTimeout(() => {
@@ -128,6 +135,7 @@ export class ScannerPayment implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.scanSub.unsubscribe();
+ 
   }
 
 
@@ -160,7 +168,6 @@ export class ScannerPayment implements OnInit, OnDestroy {
                 this.balanceData = response?.invoicesum
                 this.previousBalance = response?.invoicesum[0].invoice_total
               } else {
-                console.log(paystatus)
                 this.balanceData = response?.balance
                 this.previousBalance = response?.balance[0].balance
               }
@@ -217,7 +224,6 @@ export class ScannerPayment implements OnInit, OnDestroy {
   paymentOptions = signal('none')
 
   makePayment = () => {
-     console.log('Checking data for payment options', this.paymentOptions())
     switch (this.paymentOptions()) {
 
       case 'full':
@@ -239,6 +245,7 @@ export class ScannerPayment implements OnInit, OnDestroy {
           } else {
             if (response?.success) {
               this.loadPaymentReceipt()
+              this.daily_payment_history()
               this.isResults.set(false)
               this.isPaymentcomplete.set(true)
               this.cdr.detectChanges()
@@ -251,7 +258,7 @@ export class ScannerPayment implements OnInit, OnDestroy {
         })
         break;
       case 'installment':
-        console.log('Checking data for installment payment', this.AmountPaid, this.PaidBalance)
+
          this.payment_progress = 'PART_PAYMENT'
       this.isFullpayment = false
         let part_data = {
@@ -263,13 +270,14 @@ export class ScannerPayment implements OnInit, OnDestroy {
           isFullpayment: this.isFullpayment,
           paymentNumber: this.paymentNumber
         }
-        console.log('Checking data for installment payment', part_data)
+  
         this.posservice.makePayment(part_data).subscribe((response: any) => {
           if (response?.message) {
             this.messageservice.add({ severity: 'error', summary: 'Error', detail: response.message, life: 5000 });
           } else {
             if (response?.success) {
               this.loadPaymentReceipt()
+              this.daily_payment_history()
               this.isResults.set(false)
               this.isPaymentcomplete.set(true)
               this.cdr.detectChanges()
@@ -293,13 +301,13 @@ export class ScannerPayment implements OnInit, OnDestroy {
           isFullpayment: this.isFullpayment,
           paymentNumber: this.paymentNumber
         }
-        console.log('Checking data for full payment', full_default_data)
         this.posservice.makePayment(full_default_data).subscribe((response: any) => {
           if (response?.message) {
             this.messageservice.add({ severity: 'error', summary: 'Error', detail: response.message, life: 5000 });
           } else {
             if (response?.success) {
               this.loadPaymentReceipt()
+              this.daily_payment_history()
               this.isResults.set(false)
               this.isPaymentcomplete.set(true)
               this.cdr.detectChanges()
@@ -345,6 +353,7 @@ export class ScannerPayment implements OnInit, OnDestroy {
   loadPaymentReceipt = () => {
     let data = {
       invoinceNumber: this.lastScan
+      
     }
 
     this.posservice.loadPaymentReceipt(data).subscribe((response: any) => {
@@ -385,12 +394,36 @@ export class ScannerPayment implements OnInit, OnDestroy {
 
   changeOption($event: ToggleSwitchChangeEvent) {
 
-    console.log('Switch toggled to:', $event.checked);
-
     if ($event.checked) {
 
     } else {
 
     }
+  }
+  daily_payment_history=()=>{
+    this.loading.set(true)
+    const date=new Date();
+    let data={
+      dated:date.getTime()
+    }
+    return this.posservice.daily_payment_history(data).subscribe((response:any)=>{
+         if (response?.message) {
+          this.loading.set(false)
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: response.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          this.loading.set(false)
+               this.SalesInvoices=response?.data
+          this.totalsumSales = this.SalesInvoices.reduce(
+  (sum, item) => sum + (item.invoice_total || 0), 
+  0
+);
+        } else {
+          this.loading.set(false)
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
   }
 }

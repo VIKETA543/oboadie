@@ -57,6 +57,7 @@ export class PayCredit implements OnInit {
   sumamountPaidData: any[] = []
 
   constructor(private posservice: PosServcie, private cdr: ChangeDetectorRef) {
+
     this.scanSub = this.keyStrokes$.pipe(
       // 1. Group keys together
       buffer(this.keyStrokes$.pipe(debounceTime(50))),
@@ -89,7 +90,7 @@ export class PayCredit implements OnInit {
     this.lastScan = code.trim();
     this.isSuccess = true;
     this.cdr.detectChanges();
-    console.log('Hardware Scan Success:', this.lastScan);
+
     this.loadSales()
 
     setTimeout(() => {
@@ -127,6 +128,7 @@ export class PayCredit implements OnInit {
               this.isResults.set(response?.isQuote)
               this.invoiceData = response?.invoiceitems
               this.invoicesum = response?.invoicesum
+              
               this.salesType = response?.rws
               this.sumamountPaidData=response?.sumpaid
               if (response?.balance[0].balance === "undefined") {
@@ -243,6 +245,7 @@ export class PayCredit implements OnInit {
   isPaymentcomplete = signal(false)
   loadPaymentReceipt = () => {
     let data = {
+
       invoinceNumber: this.lastScan
     }
 

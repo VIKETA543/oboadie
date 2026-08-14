@@ -147,26 +147,214 @@
   font-style: italic;
 }
 
-/* --- Strict Hardware Media Print Control --- */
+// Variables
+$primary-color: #2563eb; // Soft blue focus color
+$text-dark: #1e293b;
+$text-muted: #64748b;
+$card-bg: #ffffff;
+$border-color: #e2e8f0;
+$radius: 12px;
+
+.scanner-payment-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  box-sizing: border-box;
+
+  .status-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+
+    .card {
+      width: 100%;
+      background: $card-bg;
+      border: 1px solid $border-color;
+      border-radius: $radius;
+      padding: 1.5rem 1.25rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+
+      label {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        color: $text-dark;
+        margin-bottom: 1.25rem;
+        text-transform: uppercase;
+        animation: pulse-text 2s infinite ease-in-out;
+      }
+
+      // Targeting PrimeNG ProgressBar
+      p-progressbar {
+        display: block;
+        width: 100%;
+
+        // Deep targeting PrimeNG internal structure
+        ::ng-deep .p-progressbar {
+          background-color: #eff6ff; // Light tint behind bar
+          border-radius: 6px;
+          overflow: hidden;
+
+          .p-progressbar-value {
+            background-color: $primary-color; // Progress bar color
+          }
+        }
+      }
+    }
+
+    p {
+      font-size: 0.875rem;
+      color: $text-muted;
+      margin: 0;
+      text-align: center;
+
+      strong {
+        color: $text-dark;
+        font-weight: 600;
+        background: #f1f5f9;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: monospace; // Monospace makes barcodes/scanned values look sharp
+      }
+    }
+  }
+}
+
+// Subtle pulse animation for "WAITING FOR PAYMENT..." text
+@keyframes pulse-text {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* --- Optimized Print Rules --- */
+.printer-container {
+  max-width: 80mm; // Limits screen preview to match receipt size
+  margin: 0 auto;
+  
+  .card {
+    background: #fff;
+    padding: 10px;
+  }
+}
+
+$printer-width: 80mm;
+$printable-width: 72mm; // Effective printable area on 80mm rolls
+$font-mono: 'Courier New', Courier, monospace; // Monospace gives crisp thermal output
+
+.section {
+  width: $printer-width;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 4mm 2mm;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: $font-mono;
+  color: #000;
+border-bottom: 1px solid lightgray;
+  // Company Name Header
+  header.head-info {
+    display: block;
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1.2;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+    word-break: break-word; // Ensures long names wrap cleanly on 80mm width
+  }
+
+  // Address and Phone Labels
+  label.head-info {
+    display: block; // Labels are inline by default, changing to block stacks them
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: 2px;
+    color: #000;
+
+    // Target the phone numbers specifically (the last label)
+    &:last-of-type {
+      margin-top: 3px;
+      font-size: 10.5px; // Slightly smaller so phone numbers wrap neatly
+      letter-spacing: -0.2px; // Helps fit phone numbers cleanly
+    }
+  }
+}
+$printer-width: 80mm;
+$printable-width: 72mm; // Effective printable area on 80mm rolls
+$font-mono: 'Courier New', Courier, monospace; // Monospace gives crisp thermal output
+// Thermal Printer Styles
 @media print {
-  body * {
-    visibility: hidden !important;
-  }
-  #print-section, #print-section * {
-    visibility: visible !important;
-    color: #000000 !important;
-  }
-  #print-section {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    box-shadow: none !important;
-  }
-  /* Force system browser layout engine to hide default margin wrappers */
+  // 1. Remove browser default margins & header/footer spacing
   @page {
     margin: 0;
+    // Standard 80mm width paper size
+    size: 80mm auto; 
+    
+    // Use this instead if you have a 58mm printer:
+    // size: 58mm auto;
   }
+
+  // 2. Hide surrounding layout elements if needed
+  body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  // 3. Target your printer container
+  .card.printer-container {
+    // Standard printable width for 80mm rolls is roughly 72mm-80mm
+    width: 80mm; 
+    max-width: 100%;
+    
+    // Clear flex layout constraints that might shrink/skew print alignment
+    display: block !important;
+    margin: 0 auto !important;
+    padding: 2mm; // Small padding to avoid clipping paper edges
+    box-shadow: none !important;
+    border: none !important;
+
+    // Reset typography for high-density thermal printing
+    font-family: 'Courier New', Courier, monospace; // Monospace aligns receipt columns cleanly
+    font-size: 12px;
+    line-height: 1.2;
+    color: #000 !important;
+  }
+  .section {
+    width: $printable-width !important;
+    padding: 2mm 0;
+    border-bottom: 1px solid lightgray;
+    header.head-info, 
+    label.head-info {
+      color: #000 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+          width: 100% !important;
+     font-size: fontclamp(10px, .8rem, 14px)
+    }
+  }
+  
+  td{
+    padding: 10px;
+    font-size: clamp(.3rem, .5vw, 1.0rem);
+    text-align: left;
+    border-bottom: 1px solid lightgray;
+}
+  
 }

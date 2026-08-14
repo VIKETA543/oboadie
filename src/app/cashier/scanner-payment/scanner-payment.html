@@ -1,16 +1,94 @@
-<div class="scanner-payment-container">
-  <div class="status-card">
-    <div class="card">
-      <label>WAITING FOR PAYMENT...</label>
-      <p-progressbar mode="indeterminate" [style]="{ height: '6px' }" aria-labelledby=" Ready" />
+<div class="card flex justify-center">
+
+  <p-panel header="Daily Transaction" class="panel">
+    <div class="sales-quotes">
+      @if(SalesInvoices){
+      <p-table #dt2 [value]="SalesInvoices" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50,75,100]"
+        [loading]="loading()" [paginator]="true" [globalFilterFields]="['invoice_number','invoice_total', 'dateposted']"
+        stripedRows>
+
+        <ng-template #caption>
+
+          <p-iconfield iconPosition="left" class="ml-auto">
+            <p-inputicon>
+              <i class="pi pi-search"></i>
+            </p-inputicon>
+            <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search keyword" />
+          </p-iconfield>
+        </ng-template>
+
+        <ng-template #header>
+          <tr>
+            <th>serial</th>
+            <th>Invoice Number</th>
+            <th>Total</th>
+            <th>Date</th>
+            <th>Cashier</th>
+            <th>Sales Type</th>
+            <th>Store Verified</th>
+            <!-- <th>Action</th> -->
+          </tr>
+        </ng-template>
+        <ng-template #body let-SalesInvoices let-product let-i="rowIndex">
+          <tr>
+            <td [style]="{ width: '5rem' }">{{ i + 1 }}</td>
+            <td>{{SalesInvoices.invoice_number}}</td>
+            <td>{{ SalesInvoices.invoice_total | currency: 'Ghø' }}</td>
+            <td>{{ SalesInvoices.dateposted | date: 'yyyy-MM-dd' }}</td>
+            <td>{{SalesInvoices.isinvoice_verified ? 'VERIFIED':'NOT VERIFIED' }}</td>
+            <td>{{SalesInvoices.store_verified ? 'VERIFIED':'NOT VERIFIED' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      }@else {
+
+      <div class="card flex flex-wrap gap-4 justify-center">
+
+        <p-message severity="info">{{message}}</p-message>
+
+      </div>
+      }
     </div>
 
-    <p>Last Scan: <strong>{{ lastScan }}</strong></p>
-  </div>
-  <div>
+  </p-panel>
 
+  <div class="scanner-payment-container">
+    <div class="status-card">
+      <div class="card">
+        <label>WAITING FOR PAYMENT...</label>
+        <p-progressbar mode="indeterminate" [style]="{ height: '6px' }" aria-labelledby=" Ready" />
+      </div>
+
+      <p>Last Scan: <strong>{{ lastScan }}</strong></p>
+    </div>
+   
+     <p-divider/>
+    <div>
+      <p-panel header="SUMMARY OF PAYMENTS" class="panel">
+        
+        <div class="summary-card">
+       
+          {{ totalsumSales | currency: 'Ghø'}} 
+        </div>
+      </p-panel>
+
+   
+  
+    </div>
   </div>
+
 </div>
+
+
+
+
+
+
+
+
+
+
 @if(this.isResults()){
 <div class="card flex justify-center">
   <p-dialog [(visible)]="isResults" [modal]="true" [style]="{ width: '46rem' }" styleClass="invoice-dialog">
@@ -228,7 +306,7 @@
 </div>
 }
 @if(this.isPaymentcomplete()){
-<div class="card flex justify-center">
+<div class="card flex justify-center" class="printer-container">
 
   <p-dialog [(visible)]="isPaymentcomplete" [modal]="true" [style]="{ width: '30rem' }">
 
@@ -243,14 +321,15 @@
     <div id='print-section' class="receipt-body">
 
       <!-- Header / Company Info -->
-      <div class="receipt-header">
-        <div class="receipt-logo-wrap">
-          <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" size="xlarge" />
+      <div class="card flex flex-col items-center gap-1">
+        <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" size="xlarge" />
+        <div class="section">
+          <header class="head-info">OBOADIE NYAME ADOM ENTERPRISE</header>
+          <label class="head-info">Behind Our Lady of Fatima Junction</label>
+          <label class="head-info">0531885457/ 0246221352/ 0243247991/ 0531189830/ 0598405462</label>
         </div>
-        <h2 class="company-name">OBOADIE NYAME ADOM ENTERPRISE</h2>
-        <p class="company-details">Behind Our Lady of Fatima Junction</p>
-        <p class="company-details">Tel: +233 53 188 5457</p>
       </div>
+
 
       <div class="receipt-divider"></div>
 
@@ -288,14 +367,13 @@
           @else { # }
         </span>
       </div>
-<div class="receipt-divider-double"></div>
-      <div [style]="{ width: '40rem' }" class="invoice-data">
+      <div class="receipt-divider-double"></div>
+      <div [style]="{ maxWidth: '40rem' }" class="invoice-data ">
 
         <div class="card">
           <p-table [value]="invoiceData" striped>
             <ng-template #header>
               <tr>
-                <th>#</th>
                 <th>Item</th>
                 <th>Type</th>
                 <th>Qty</th>
@@ -305,7 +383,6 @@
             </ng-template>
             <ng-template #body let-invoiceData let-i="rowIndex">
               <tr>
-                <td>{{i+1 }}</td>
                 <td>{{ invoiceData.name }}</td>
                 <td>{{ invoiceData.title }}</td>
                 <td>{{ invoiceData.quantity_sold }}</td>
@@ -318,10 +395,6 @@
         </div>
 
       </div>
-
-
-
-
 
 
       <div class="receipt-divider-double"></div>
@@ -352,7 +425,9 @@
 
       <!-- Barcode / Status Info -->
       <div class="receipt-barcode-section">
-        <ngx-barcode6 [bc-value]="invoicesum[0].invoice_number" [bc-format]="'CODE128'" [bc-display-value]="true">
+        <ngx-barcode6 [bc-value]="invoicesum[0].invoice_number" [bc-format]="'CODE128'" [bc-display-value]="true"
+          [bc-font-size]="13" [bc-font]="'Courier New'" [bc-text-margin]="2" [bc-height]="40" [bc-width]="1.5"
+          [bc-element-type]="'img'">
         </ngx-barcode6>
 
         <div class="status-icon">
@@ -363,14 +438,6 @@
           }
         </div>
       </div>
-
-
-
-
-
-
-
-
       <div class="receipt-divider"></div>
 
       <!-- Footer Signatures -->
