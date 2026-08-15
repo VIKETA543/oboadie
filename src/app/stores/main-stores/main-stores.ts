@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { Component, inject, Inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { DrawerModule } from 'primeng/drawer';
 import { ButtonModule } from 'primeng/button';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
@@ -14,6 +14,7 @@ import { Users } from '../../interface/Users';
 import { AvatarModule } from 'primeng/avatar';
 import { PopoverModule } from 'primeng/popover';
 import { DividerModule } from 'primeng/divider';
+import { AppNav } from '../../services/app-nav';
 @Component({
   selector: 'main-stores',
   imports: [DrawerModule,
@@ -32,7 +33,7 @@ import { DividerModule } from 'primeng/divider';
   styleUrl: './main-stores.scss',
 })
 export class MainStores implements OnInit {
-
+private appNav = inject(AppNav)
  
   verifiedHistory() {
     throw new Error('Method not implemented.');
@@ -45,6 +46,7 @@ export class MainStores implements OnInit {
   credentials: any
   message: any
   userInfo: Users[] | any
+  sounce = AppNav.getNavsource()
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
     private userservice: Userservice,
     private router: Router,
@@ -82,7 +84,9 @@ export class MainStores implements OnInit {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    console.log('The source:', this.sounce)
+   }
   recieveStock = () => {
 
     this.router.navigate(['store-receive-stock'], { relativeTo: this.routes })

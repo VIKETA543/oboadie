@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AppNav } from './app-nav';
 
 
 @Injectable({
@@ -10,6 +11,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export class PosServcie {
   url = environment.apiUrl;
+  private appNav=inject(AppNav)
   constructor(private http: HttpClient) {
 
   }
@@ -163,4 +165,7 @@ daily_payment_history=(data:any)=>{
        return this.http.post(this.url + '/pos/loadotherprices', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
    }
 
+   myStores=(data:any)=>{
+       return this.http.post(this.url + '/pos/myStores', data, { headers: new HttpHeaders().set('contentType', "application/json") }) 
+   }
 }

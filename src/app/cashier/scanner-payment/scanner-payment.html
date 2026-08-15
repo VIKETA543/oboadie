@@ -36,7 +36,9 @@
             <td>{{SalesInvoices.invoice_number}}</td>
             <td>{{ SalesInvoices.invoice_total | currency: 'Ghø' }}</td>
             <td>{{ SalesInvoices.dateposted | date: 'yyyy-MM-dd' }}</td>
+           
             <td>{{SalesInvoices.isinvoice_verified ? 'VERIFIED':'NOT VERIFIED' }}</td>
+             <td>{{ SalesInvoices.sales_type }}</td>
             <td>{{SalesInvoices.store_verified ? 'VERIFIED':'NOT VERIFIED' }}</td>
           </tr>
         </ng-template>

@@ -26,6 +26,8 @@ import { NgxPrintDirective } from 'ngx-print';
 import { RouterOutlet, RouterLinkWithHref, Router, ActivatedRoute } from "@angular/router";
 import { Users } from '../../interface/Users';
 import { AvatarModule } from 'primeng/avatar';
+import { PopoverModule } from 'primeng/popover';
+import { AppNav } from '../../services/app-nav';
 
 
 @Component({
@@ -45,17 +47,21 @@ import { AvatarModule } from 'primeng/avatar';
     CheckboxModule,
     SelectModule,
     InputNumberModule, FluidModule,
-    RouterOutlet, RouterLinkWithHref, AvatarModule, NgxBarcode6, NgxPrintDirective, CurrencyPipe, CommonModule, DatePipe, Divider],
+    RouterOutlet, RouterLinkWithHref, AvatarModule, 
+    PopoverModule, NgxBarcode6, NgxPrintDirective, CurrencyPipe, CommonModule, DatePipe, Divider],
   templateUrl: './point-of-sale.html',
   styleUrl: './point-of-sale.scss',
   providers: [MessageService]
 })
 export class PointOfSale implements OnInit {
+
   private messageService = inject(MessageService)
+  private navService = inject(AppNav)
   message:any
    userInfo: Users[] | any
    USER_CREDENTIALS:Users[]|any
    storeData:any
+   myStores:any=[]
     constructor(@Inject(PLATFORM_ID) private platformId: Object,private posservice: PosServcie, private cdr:ChangeDetectorRef, private router:Router, private routes:ActivatedRoute) { 
 
         if (isPlatformBrowser(this.platformId)) {
@@ -63,7 +69,7 @@ export class PointOfSale implements OnInit {
               this.userInfo = JSON.parse(localStorage.getItem('user') || '{}');
               this.USER_CREDENTIALS=JSON.parse(localStorage.getItem('USER_CREDENTIALS') || '{}');
               this.storeData = JSON.parse(localStorage.getItem('storeData') || '{}');
-               console.log('User',this.storeData)
+              //  console.log('User',this.storeData)
             } catch (e) {
               this.message = "Could not parse JSON from storage: " + e
             }
@@ -88,4 +94,39 @@ return() {
     this.router.navigate(['credit-sales'],{relativeTo:this.routes})  
 
   }
+  listStores() {
+    let data={
+      user:this.userInfo?.uac_id
+    }
+    // console.log(data)
+    this.posservice.myStores(data).subscribe((response:any)=>{
+      if(response?.data){
+        this.myStores=response?.data
+        this.cdr.markForCheck()
+        this.cdr.detectChanges();
+        console.log(this.myStores)
+      }else{
+        this.message=response?.message
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+      }
+    })
+}
+onOpen(_t90: any) {
+console.log(_t90)
+const isAuthise:boolean=_t90?.authorise
+if(isAuthise){
+  if(_t90?.redirector.trim()==='MAIN STORE'){
+    AppNav.setNavsource('external_request')
+    this.router.navigate(['main-stores'], { relativeTo: this.routes })
+  }else{
+this.message='You are not authorise Open this Store'
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+  }
+ 
+}else{
+ this.message='Access Denied. Contact admin to grant you access'
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+}
+}
+
 }

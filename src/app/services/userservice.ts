@@ -86,5 +86,24 @@ onDeleteUser=(data:any)=>{
       return this.http.post(this.url + '/user/onDeleteUser',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
   }
 
-  
+ loadStores=()=>{
+    return this.http.get(this.url + '/user/loadStores', { headers: new HttpHeaders().set('contentType',  "application/json") });
+ } 
+
+ addStore=(data:any)=>{
+    return this.http.post(this.url + '/user/addStore',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+ } 
+
+
+  unlinkStore=(data:any)=>{
+    return this.http.post(this.url + '/user/unlinkStore',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+ } 
+
+  authAccount=(data:any)=>{
+    return this.http.post(this.url + '/user/authAccount',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+ } 
+
+   declineAccess=(data:any)=>{
+    return this.http.post(this.url + '/user/declineAccess',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+ } 
 }

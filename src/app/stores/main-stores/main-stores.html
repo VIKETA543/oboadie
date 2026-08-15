@@ -1,4 +1,6 @@
+
 <div class="card">
+    @if(sounce!=='external_request'){
     <p-toolbar>
         <ng-template #start>
 
@@ -23,6 +25,7 @@
             </span>
         </ng-template>
     </p-toolbar>
+}
     <div class="pane">
         <p-toolbar class="mb-4 bg-gray-100">
             <ng-template #start>
@@ -45,7 +48,6 @@
         </p-toolbar>
     </div>
 </div>
-
 <div class="card flex justify-center">
     <p-popover #op>
         <div class="card flex justify-center gap-4">

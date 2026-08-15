@@ -76,7 +76,7 @@ export const routes: Routes = [
                 path: 'security-manager', component: SecurityManager, children: [
                     { path: 'uacgenerator', component: UACGenerator },
                     { path: 'department-hook', component: DepartmentHook },
-                        { path: 'users', component: Users },
+                    { path: 'users', component: Users },
                 ]
             },
             { path: 'addcartegory', component: Addcartegory },
@@ -215,7 +215,7 @@ export const routes: Routes = [
             { path: 'credit-sales', component: CreditSales },
             { path: 'new-deposit', component: NewDeposit },
             { path: 'create-account', component: CreateAccount },
-               { path: 'push-stockto-stores', component: PushStocktoStores },
+            { path: 'push-stockto-stores', component: PushStocktoStores },
             {
                 path: 'profoma-invoice', component: ProfomaInvoice, children: [
                     { path: 'new-profoma', component: NewProfoma }
@@ -224,11 +224,12 @@ export const routes: Routes = [
             {
                 path: 'crm-manager', component: CrmManager, children: [
                     { path: 'create-customer', component: CreateCustomer },
-                    
+
                     { path: 'customers', component: Customers },
                 ]
             },
-           {  path: 'verify-sales', component: VerifySales, children: [
+            {
+                path: 'verify-sales', component: VerifySales, children: [
                     { path: 'verify-cash-sales', component: VerifyCashSales },
                     { path: 'verify-credit-sales', component: VerifyCreditSales },
                     { path: 'store-manual-verification', component: StoreManualVerification },
@@ -237,9 +238,33 @@ export const routes: Routes = [
                 ]
             },
 
+            {
+                path: 'main-stores', component: MainStores, children: [
+                    { path: 'store-receive-stock', component: StoreReceiveStock },
+                    { path: 'stockreceived', component: Stockreceived },
+                    { path: 'create-products', component: CreateProducts },
+                    { path: 'product-category', component: ProductCategory },
+                    { path: 'productbrand', component: Productbrand },
+                    { path: 'stock-request', component: StockRequest },
+                    { path: 'store-stock-balances', component: StoreStockBalances },
+
+
+                    {
+                        path: 'verify-sales', component: VerifySales, children: [
+                            { path: 'verify-cash-sales', component: VerifyCashSales },
+                            { path: 'verify-credit-sales', component: VerifyCreditSales },
+                            { path: 'store-manual-verification', component: StoreManualVerification },
+                            { path: 'store-home', component: StoreHome },
+                            { path: '', redirectTo: 'store-home', pathMatch: 'full' }
+                        ]
+                    },
+                ]
+            },
+
             { path: 'pos-home', component: PosHome },
 
             { path: '', redirectTo: 'pos-home', pathMatch: 'full' },
+            
 
         ]
     },

@@ -56,6 +56,8 @@ loadRecords($event: SelectChangeEvent) {
     }else{
       if(response?.data){
         this.StoreProducts=response?.data
+        this.cdr.markForCheck();
+        this.cdr.detectChanges();
         this.loading.set(false)
       }else{
         this.message='Unknown Error has occured'
