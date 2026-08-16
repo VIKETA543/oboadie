@@ -69,10 +69,10 @@
                 </span>
                 @for (item of myStores; track $index) {
             <div class="flex flex-col gap-4 w-full ">
-                <p  class="font-medium text-surface-900 dark:text-surface-0 block mb-2 w-[30rem]">
+                <!-- <p  class="font-medium text-surface-900 dark:text-surface-0 block mb-2 w-[30rem]">
                     {{item.storename}}
-                </p>
-                   <p-button icon="pi pi-building" label="Open" variant="text" pTooltip="Open the selected store" severity="info"
+                </p> -->
+                   <p-button icon="pi pi-building" label=" {{item.storename}}" variant="text" pTooltip="Open the selected store" severity="info"
                 class="mr-2" (onClick)="onOpen(item)" />
 
             </div>

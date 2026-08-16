@@ -15,6 +15,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
+import { CheckboxChangeEvent, CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'users',
@@ -31,7 +32,8 @@ import { DividerModule } from 'primeng/divider';
     InputTextModule,
     ToastModule,
     DialogModule,
-    DividerModule
+    DividerModule,
+    CheckboxModule
   ],
   templateUrl: './users.html',
   styleUrl: './users.scss',
@@ -76,6 +78,15 @@ export class Users {
         severity: "info",
         command: () => {
           this.ongetStores();
+        }
+      },
+  
+         {
+        label: 'Change Store',
+        icon: 'pi pi-building-columns',
+        severity: "info",
+        command: () => {
+          this.onChangestore()
         }
       },
     ];
@@ -171,8 +182,12 @@ isStoreAdded: any;
   USERS: any = []
   targetUser: any
   stores:any=[]
+  user_stores:any=[]
   stores_loaded=signal(false)
+  change_store=signal(false)
   searchValue = signal('');
+  change_data:any=[]
+  ischange=signal(false)
   activityValues = signal<number[]>([0,25,50,75, 100]);
   constructor(private userservice: Userservice) {
     this.listusers()
@@ -216,6 +231,56 @@ this.userservice.loadStores().subscribe((response:any)=>{
   }
 })
 }
+onChangestore=()=>{
+let data={
+  user:this.targetUser?.uac_id
+}
+  this.userservice.loadUserStores(data).subscribe((response:any)=>{
+    if(response?.data){
+    this.stores=response?.data
+      this.user_stores=response?.previous_store
+    this.change_store.set(true)
+    console.log(response)
+  }else{
+    if(response?.message){
+       this.change_store.set(false)
+              this.message = response?.messsage
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message });
+    }else{
+     this.change_store.set(false)
+              this.message = 'Unknown error has occured'
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message });
+    }
+  }
+  })
+
+}
+
+setChanges=(store:any,targetUser:any,user_stores:any,$event: CheckboxChangeEvent)=>{
+  // console.log($event.checked)
+  this.ischange.set($event.checked)
+  this.change_data={
+    user:targetUser?.uac_id,
+    new_store:store?.storenumber,
+    previous_store:user_stores[0]?.storenumber
+  }
+
+}
+
+onReplace=()=>{
+  this.userservice.replaceStore(this.change_data).subscribe((response:any)=>{
+    if(response?.success){
+      this.message = response?.success
+      this.messageservice.add({ severity: 'success', summary: 'Success', detail: this.message });
+    }else{
+      this.message = response?.messsage
+      this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message });
+    }
+  })
+}
+
+
+
 
 addStore(_t86: any,arg1: any,$event: ToggleSwitchChangeEvent) {
 

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
 import { StoreService } from '../../services/store-service';
 import { response } from 'express';
 import { MessageService } from 'primeng/api';
@@ -28,7 +28,7 @@ export class Stockreceived implements OnInit {
   message:any
   messageservice=inject(MessageService)
   loading=signal(false)
-constructor(private storeservice:StoreService){
+constructor(private storeservice:StoreService,private cdr:ChangeDetectorRef){
   this.loadStoreRecivedStock()
   this.loading.set(false)
 }
@@ -43,7 +43,10 @@ loadStoreRecivedStock=()=>{
         this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 5000 });
       } else {
         if (response?.data) {
+        
           this.stockRceivedData=response?.data
+          this.cdr.markForCheck();
+          this.cdr.detectChanges();
         } else {
           this.message = response?.message
           this.messageservice.add({ severity: 'danger', summary: 'Error', detail: this.message, life: 5000 });

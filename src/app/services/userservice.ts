@@ -106,4 +106,12 @@ onDeleteUser=(data:any)=>{
    declineAccess=(data:any)=>{
     return this.http.post(this.url + '/user/declineAccess',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
  } 
+ loadUserStores=(data:any)=>{
+    return this.http.post(this.url + '/user/loadUserStores',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+ }
+
+  replaceStore=(data:any)=>{
+    return this.http.post(this.url + '/user/replaceStore',data, { headers: new HttpHeaders().set('contentType',  "application/json") });
+ }
+
 }

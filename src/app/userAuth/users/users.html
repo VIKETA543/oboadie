@@ -32,7 +32,7 @@
                 <th>Auto Login</th>
                 <th>Access</th>
                 <th>Approval</th>
-                <th>Action</th>
+                <th><i class="pi pi-cog"></i>Settings</th>
             </tr>
         </ng-template>
         <ng-template #body let-USERS let-i="rowIndex">
@@ -100,7 +100,7 @@
 
                 <div class="flex justify-center items-center gap-2">
                     <label for="switch">Authorise</label>
-                    <p-toggleswitch  inputId="switch" (onChange)="authAccount($event,targetUser,store)" />
+                    <p-toggleswitch inputId="switch" (onChange)="authAccount($event,targetUser,store)" />
                     <label for="switch">Decline</label>
                 </div>
             </div>
@@ -109,6 +109,68 @@
         </div>
         <ng-template #footer>
             <button type="button" pButton severity="secondary" (click)="stores_loaded.set(false)">Cancel</button>
+        </ng-template>
+    </p-dialog>
+</div>
+
+
+<div class="justify-center">
+    <p-dialog [(visible)]="change_store" [modal]="true" header="" [style]="{ width: '40rem' }">
+        <ng-template #header let-stores let-i="rowIndex">
+            <div class="flex flex-col gap-2">
+                <p-avatar image="assets/logo/oboadie.jpeg" class="mr-5" size="large" shape="circle" />
+                <p>Mount Store</p>
+            </div>
+
+        </ng-template>
+        <div>
+            @if(targetUser){
+            <div class="flex items-center gap-6">
+                <p-avatar class="mr-2" size="xlarge" shape="circle" image="{{targetUser?.passport_picture_url}}"
+                    shape="circle" size="normal" />
+                <div class="flex items-center gap-4">
+                    <p class="font-semibold! text-lg! mt-0! mb-1!">{{ targetUser?.fullname }}</p>
+                    <p class="text-surface-500 dark:text-surface-400 mt-0! mb-0! text-sm!">{{ targetUser?.email_address
+                        }}</p>
+                    <p class="text-surface-500 dark:text-surface-400 mt-0! mb-0! text-sm!">{{
+                        targetUser?.prim_phone_number }}</p>
+                </div>
+            </div>
+            }
+            <p-divider />
+            <div class="flex flex-col gap-6 w-full">
+                <label pLabel for="name" class="text-sm font-semibold w-full">Current Store Details</label>
+                <div class="flex flex-col justify-center items-center gap-2 max-w-xs mx-auto w-full">
+                    <label class="flex items-center justify-between gap-12 select-none">
+                        <p class="font-semibold! text-lg! mt-0! mb-1!">Store</p>
+                        <p>{{user_stores[0]?.storename}}</p>
+                    </label>
+                </div>
+                <div class="flex flex-col justify-center items-center gap-2 max-w-xs mx-auto w-full">
+                    <label class="flex items-center justify-between gap-12 select-none">
+                        <p class="font-semibold! text-lg! mt-0! mb-1!">Assigned Department:</p>
+                        <p>{{user_stores[0]?.department}}</p>
+                    </label>
+                </div>
+            </div>
+            <p-divider />
+            @for (store of stores; track $index) {
+            <div class="flex flex-col gap-6 w-full">
+                <label pLabel for="name" class="text-sm font-semibold w-full">{{store.storename}}</label>
+
+                <div class="flex justify-center gap-4">
+                    <p-checkbox [binary]="true" (onChange)="setChanges(store,targetUser,user_stores,$event)" />
+                </div>
+
+            </div>
+
+            <p-divider />
+            }
+        </div>
+        <ng-template #footer>
+            <button type="button" pButton severity="contrast" raised="true"
+                (click)="onReplace(); change_store.set(false)" [disabled]="!ischange()">Apply</button>
+            <button type="button" pButton severity="secondary" (click)="change_store.set(false)">Cancel</button>
         </ng-template>
     </p-dialog>
 </div>
