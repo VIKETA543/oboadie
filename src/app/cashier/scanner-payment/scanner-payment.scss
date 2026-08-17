@@ -214,7 +214,10 @@ $shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06
   width: 100%;
 
 .summary-card{
-  font-size:clamp(1.0rem, 3vw, 3.5rem);
+  font-size:clamp(1.0rem, 1.5vw, 2rem);
+  font-family: 'Times New Roman','Courier New', Courier, monospace;
+  padding: 0.0rem 0rem;
+  margin: 0.0rem 0;
 }
   @media (min-width: 992px) {
     flex-direction: row;

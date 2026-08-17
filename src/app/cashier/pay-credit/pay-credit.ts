@@ -18,6 +18,10 @@ import { Toolbar } from 'primeng/toolbar';
 import { Subject, Subscription, Observable } from 'rxjs';
 import { buffer, map, filter, debounceTime } from 'rxjs/operators';
 import { PosServcie } from '../../services/pos-servcie';
+import { PanelModule } from 'primeng/panel';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   standalone:true,
@@ -31,6 +35,14 @@ import { PosServcie } from '../../services/pos-servcie';
     ButtonModule, DialogModule,
     InputTextModule, TableModule, DividerModule,
     CurrencyPipe, Toolbar,CommonModule,
+    PanelModule,
+     InputTextModule, 
+    ButtonModule, 
+    DividerModule,
+     TableModule,
+    IconFieldModule, 
+    InputIconModule, 
+    MessageModule
   ],
     providers:[MessageService],
   templateUrl: './pay-credit.html',
@@ -55,7 +67,14 @@ export class PayCredit implements OnInit {
   previousBalance: number = 0
   paymentNumber: any
   sumamountPaidData: any[] = []
+  loading= signal(false)
 
+    totalsumSales:number=0
+  sumTotalpaid = signal(0)
+  sumTotalbalance = signal(0)
+  SalesInvoices: any[]=[]
+  isOncredit=signal(false)
+  customerDetails:any
   constructor(private posservice: PosServcie, private cdr: ChangeDetectorRef) {
 
     this.scanSub = this.keyStrokes$.pipe(
@@ -72,6 +91,7 @@ export class PayCredit implements OnInit {
 
   ngOnInit(): void {
     this.cdr.detectChanges()
+      this.daily_payment_history()
   }
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -203,6 +223,7 @@ export class PayCredit implements OnInit {
       } else {
         if (response?.success) {
           this.loadPaymentReceipt()
+          this.daily_payment_history()
           this.isResults.set(false)
           this.AmountPaid=0
           this.isPaymentcomplete.set(true)
@@ -215,31 +236,6 @@ export class PayCredit implements OnInit {
       }
     })
   }
-  // verySale = () => {
-  //   let data = {
-  //     invoinceNumber: this.lastScan,
-  //     salesType: this.salesType,
-  //     payment_progress: 'NO_PAYMENT_MADE'
-  //   }
-  //   this.posservice.makePayment(data).subscribe((response: any) => {
-  //     if (response?.message) {
-  //       this.messageservice.add({ severity: 'error', summary: 'Error', detail: response.message, life: 5000 });
-  //     } else {
-  //       if (response?.success) {
-  //         this.isResults.set(false)
-  //         this.loadPaymentReceipt()
-  //         this.isPaymentcomplete.set(true)
-  //         this.cdr.detectChanges()
-  //         this.messageservice.add({ severity: 'success', summary: 'Success', detail: response.success, life: 5000 });
-  //       } else {
-  //         this.message = 'Unknown error has occured'
-  //         this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
-  //       }
-  //     }
-  //   })
-
-  // }
-
 
 
   isPaymentcomplete = signal(false)
@@ -254,7 +250,7 @@ export class PayCredit implements OnInit {
         this.messageservice.add({ severity: 'error', summary: 'Error', detail: response.message, life: 5000 });
       } else {
         if (response?.isQuote) {
-          console.log('loading receipt: ', response)
+      
           this.isPaymentcomplete.set(response?.isQuote)
           this.invoiceData = response?.invoiceitems
           this.invoicesum = response?.invoicesum
@@ -274,5 +270,49 @@ export class PayCredit implements OnInit {
   }
   onPrintComplete = () => {
     this.isPaymentcomplete.set(false)
+  }
+
+  
+  daily_payment_history=()=>{
+    this.loading.set(true)
+    const date=new Date();
+    let data={
+      dated:date.getTime()
+    }
+    return this.posservice.daily_payment_history(data).subscribe((response:any)=>{
+         if (response?.message) {
+          this.loading.set(false)
+        this.messageservice.add({ severity: 'error', summary: 'Error', detail: response.message, life: 5000 });
+      } else {
+        if (response?.data) {
+          this.loading.set(false)
+               this.SalesInvoices=response?.data
+          this.totalsumSales = this.SalesInvoices.reduce(
+  (sum, item) => sum + (item.invoice_total || 0), 
+  0
+);
+this.sumTotalpaid.set(this.SalesInvoices.reduce((sum, item) => sum + (item.amount_paid || 0), 0));
+this.sumTotalbalance.set(this.SalesInvoices.reduce((sum, item) => sum + (item.balance || 0), 0));
+
+          this.cdr.detectChanges()
+        } else {
+          this.loading.set(false)
+          this.message = response?.message
+          this.messageservice.add({ severity: 'error', summary: 'Error', detail: this.message, life: 5000 });
+        }
+      }
+    })
+  }
+ onCredit =()=>{
+    this.isOncredit.set(true)
+  }
+
+    findCredit() {
+    this.lastScan = this.customerDetails;
+ 
+
+    this.loadSales()
+
+    // Trigger your API or logic here
   }
 }

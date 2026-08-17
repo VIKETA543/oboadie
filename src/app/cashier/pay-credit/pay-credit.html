@@ -1,16 +1,111 @@
-<div class="scanner-payment-container">
-  <div class="status-card">
-    <div class="card">
-      <label>WAITING FOR PAYMENT...</label>
-      <p-progressbar mode="indeterminate" [style]="{ height: '6px' }" aria-labelledby=" Ready" />
+<div class="card flex justify-center">
+
+  <p-panel header="Daily Transaction" class="panel">
+    <div class="sales-quotes">
+      @if(SalesInvoices){
+      <p-table #dt2 [value]="SalesInvoices" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50,75,100]"
+        [loading]="loading()" [paginator]="true" [globalFilterFields]="['invoice_number','invoice_total', 'dateposted']"
+        stripedRows>
+
+        <ng-template #caption>
+          <div class="flex">
+
+            <p-iconfield iconPosition="left" class="ml-auto">
+              <p-inputicon>
+                <i class="pi pi-search"></i>
+              </p-inputicon>
+              <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')"
+                placeholder="Search keyword" />
+            </p-iconfield>
+            <div class="flex gap-2">
+              <p-button label="Find Credit Notes" [outlined]="true" icon="pi pi-shoip" (click)="onCredit()" />
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template #header>
+          <tr>
+            <th>serial</th>
+            <th>Invoice Number</th>
+            <th>Total</th>
+            <th>Amount Paid</th>
+            <th>Balance</th>
+            <th>Date</th>
+            <th>Cashier</th>
+            <th>Sales Type</th>
+            <th>Store Verified</th>
+            <!-- <th>Action</th> -->
+          </tr>
+        </ng-template>
+        <ng-template #body let-SalesInvoices let-product let-i="rowIndex">
+          <tr>
+            <td [style]="{ width: '5rem' }">{{ i + 1 }}</td>
+            <td>{{SalesInvoices.invoice_number}}</td>
+            <td>{{ SalesInvoices.invoice_total | currency: 'Ghø' }}</td>
+            <td>{{ SalesInvoices.amount_paid | currency: 'Ghø' }}</td>
+            <td>{{ SalesInvoices.balance | currency: 'Ghø' }}</td>
+            <td>{{ SalesInvoices.dateposted | date: 'yyyy-MM-dd' }}</td>
+
+            <td>{{SalesInvoices.isinvoice_verified ? 'VERIFIED':'NOT VERIFIED' }}</td>
+            <td>{{ SalesInvoices.sales_type }}</td>
+            <td>{{SalesInvoices.store_verified ? 'VERIFIED':'NOT VERIFIED' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      }@else {
+
+      <div class="card flex flex-wrap gap-4 justify-center">
+
+        <p-message severity="info">{{message}}</p-message>
+
+      </div>
+      }
     </div>
 
-    <p>Last Scan: <strong>{{ lastScan }}</strong></p>
-  </div>
-  <div>
+  </p-panel>
 
+  <div class="scanner-payment-container">
+    <div class="status-card">
+      <div class="card">
+        <label>WAITING FOR PAYMENT...</label>
+        <p-progressbar mode="indeterminate" [style]="{ height: '6px' }" aria-labelledby=" Ready" />
+      </div>
+
+      <p>Last Scan: <strong>{{ lastScan }}</strong></p>
+    </div>
+
+    <p-divider />
+    <div>
+      <p-panel header="SUMMARY OF PAYMENTS" class="panel">
+
+        <div class="summary-card card flex flex-wrap gap-1 justify-center">
+          <span class="summary-label">Total : {{ totalsumSales | currency: 'Ghø'}} </span>
+
+        </div>
+        <p-divider />
+        <div class="summary-card card flex flex-wrap gap-1 justify-center">
+          <span class="summary-label"> Paid: {{ sumTotalpaid() | currency: 'Ghø'}}</span>
+
+        </div>
+        <p-divider />
+        <div class="summary-card card flex flex-wrap gap-1 justify-center">
+          <span class="summary-label"> Balance: {{ sumTotalbalance() | currency: 'Ghø'}}</span>
+
+        </div>
+      </p-panel>
+
+
+
+    </div>
   </div>
+
 </div>
+
+
+
+
+
+
 
 @if(this.isResults()){
 <div class="card flex justify-center">
@@ -210,6 +305,7 @@
   </p-dialog>
 </div>
 }
+
 @if(this.isPaymentcomplete()){
 <div class="card flex justify-center">
   <!-- Dialog width restricted visually to standard receipt box proportions -->
@@ -230,12 +326,12 @@
         <div class="card flex flex-col items-center gap-1">
           <p-avatar image="assets/logo/oboadie.jpeg" shape="circle" size="xlarge" />
           <div class="section">
-          <header class="head-info">OBOADIE NYAME ADOM ENTERPRISE</header>
-          <label class="head-info">Behind Our Lady of Fatima Junction</label>
-          <label class="head-info">0531885457/ 0246221352/ 0243247991/ 0531189830/ 0598405462</label>
+            <header class="head-info">OBOADIE NYAME ADOM ENTERPRISE</header>
+            <label class="head-info">Behind Our Lady of Fatima Junction</label>
+            <label class="head-info">0531885457/ 0246221352/ 0243247991/ 0531189830/ 0598405462</label>
+          </div>
         </div>
-        </div>
-        
+
       </div>
       <div class="receipt-dashed-line"></div>
 
@@ -307,6 +403,11 @@
         }
       </div>
 
+
+
+
+
+      
       <div class="receipt-double-dashed-line"></div>
 
       <!-- Financial Totals Section -->
@@ -331,7 +432,10 @@
 
       <!-- Barcode / System Security Section -->
       <div class="receipt-barcode-wrap">
-        <ngx-barcode6 [bc-value]="invoicesum[0].invoice_number" [bc-format]="'CODE128'" [bc-display-value]="true">
+        <ngx-barcode6 [bc-value]="invoicesum[0].invoice_number" [bc-format]="'CODE128'" [bc-display-value]="true"
+          [bc-value]="invoicesum[0].invoice_number" [bc-format]="'CODE128'" [bc-display-value]="true" [bc-width]=".8"
+          [bc-height]="50" [bc-margin]="0" [bc-margin-top]="4" [bc-margin-bottom]="4" [bc-font-size]="12"
+          [bc-background]="'transparent'">>
         </ngx-barcode6>
 
         <div class="verification-tag flex items-center gap-1.5 font-bold justify-center mt-1">
@@ -366,6 +470,31 @@
       </p-toolbar>
     </ng-template>
 
+  </p-dialog>
+</div>
+}
+@if(this.isOncredit()){
+<div class="flex justify-center">
+  <p-dialog [(visible)]="isOncredit" [modal]="true" header="Edit Profile" [style]="{ width: '28rem' }">
+    <ng-template #header>
+      <div class="flex flex-col gap-2">
+        <p-avatar image="assets/logo/oboadie.jpeg" class="mr-5" size="large" shape="circle" />
+        <p>Find Credit</p>
+      </div>
+    </ng-template>
+    <div class="card gap-6">
+
+      <div class="card gap-5 w-full">
+        <label pLabel for="customerDetails" class="text-sm font-semibold w-full">Enter Customer Details</label>
+        <input pInputText id="customerDetails" [(ngModel)]="customerDetails" class="w-full"
+          placeholder="Enter customer Name, invoice number or phone number" />
+      </div>
+      <p-divider />
+      <div class="flex justify-end gap-4">
+        <button type="button" pButton severity="secondary" (click)="isOncredit.set(false)">Cancel</button>
+        <button type="button" pButton (click)="findCredit(); isOncredit.set(false)">Apply</button>
+      </div>
+    </div>
   </p-dialog>
 </div>
 }

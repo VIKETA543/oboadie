@@ -78,6 +78,8 @@ export class ScannerPayment implements OnInit, OnDestroy {
   dialogVisible = signal(false)
   checked_Pyment_option: boolean = false
   totalsumSales:number=0
+  sumTotalpaid = signal(0)
+  sumTotalbalance = signal(0)
   constructor(private cdr: ChangeDetectorRef, private posservice: PosServcie, @Inject(PLATFORM_ID) private platformId: Object) {
 
 
@@ -400,6 +402,7 @@ export class ScannerPayment implements OnInit, OnDestroy {
 
     }
   }
+  
   daily_payment_history=()=>{
     this.loading.set(true)
     const date=new Date();
@@ -418,6 +421,10 @@ export class ScannerPayment implements OnInit, OnDestroy {
   (sum, item) => sum + (item.invoice_total || 0), 
   0
 );
+this.sumTotalpaid.set(this.SalesInvoices.reduce((sum, item) => sum + (item.amount_paid || 0), 0));
+this.sumTotalbalance.set(this.SalesInvoices.reduce((sum, item) => sum + (item.balance || 0), 0));
+
+          this.cdr.detectChanges()
         } else {
           this.loading.set(false)
           this.message = response?.message

@@ -1,245 +1,479 @@
-/* Custom Scoped Invoice Presentation Handling */
-.invoice-modern-dialog .p-dialog-content {
-  padding: 1.5rem 2.25rem !important;
+.scanner-payment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+.barcode-container{
+    width: 60%;
+    height: 100px;
+    display:flex;
+    flex: 1;
+}
+.status-card{
+    width: 300px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 20px;
+}
+  
+.invoice-data{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+        border: 1px solid #e0e0e0;
+        padding: 20px;
+        width: 90%;
+   margin:20px auto;   
+   overflow: hidden; 
+} 
+
+.header{
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+        text-align: center;
+    label{
+        font-size:clamp(.8rem, 1.0vw, 1.3rem);
+        text-align: center;
+          font-weight: bold;
+    }
+    span{
+   font-size:clamp(1.5rem, 2vw, 2.5rem);
+        text-align: center;
+          font-weight: bold;
+          display: block;
+          width: 100%;
+    };
+    #main-header{
+        font-size:clamp(1.0rem, 1.3vw, 1.5rem);
+        font-weight: bold;
+        text-align: center;
+        span{
+            font-size:clamp(.9rem, 1.0vw, 1.2rem);
+            text-align: center;
+            display: block;
+            width: 100%
+        }
+    }
+
+}
+.client{
+     display: block;
+     width: 40%;
+       font-size:clamp(1rem, 1.0vw, 1.5rem);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+font-weight: bold;
+
+    text-align: left; 
+
 }
 
-/* Make headers inside PrimeNG's datatable match contemporary card elements */
-.invoice-modern-dialog .p-datatable .p-datatable-thead > tr > th {
+.total{
+       font-size:clamp(.8rem, 1.2vw, 1.8rem);
+       font-weight: bold;
+       text-align: right;
+}
+.seperator{
+    width: 100%;
+    overflow: hidden;
+}
+
+#pmt-id{
+    width: 100%;
+    border: 1px solid lightgray;
+    display: flex;
+    span{
+        margin: 10px;
+    }
+}
+
+.receipt-header{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.section{
+    display: flex;
+
+    align-items: left;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: #f5f5f5;
+    label{
+        font-size:clamp(.8rem, 1.0vw, 1.3rem);
+        text-align: left;
+          font-weight: bold;
+          padding: 0px;
+    }
+    label:first-child{
+        font-size:clamp(.8rem, 1.0vw, 1.3rem);
+        text-align: left;
+          font-weight: bold;
+       
+              width: 40%;
+    }
+
+        label:last-child{
+        font-size:clamp(.8rem, 1.0vw, 1.3rem);
+        text-align: right;
+          font-weight: bold;
+       
+              width: 59%;
+    }
+}
+.payment-data{
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e0e0e0;
+    padding: 0px;
+    margin: 0px;
+}
+.company-info{
+    display: block;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.company-info{
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+header{
+    font-size:clamp(1.0rem, 1.3vw, 1.5rem);
+    font-weight: bold;
+}
+
+
+/* Custom enhancements for the Modern Billing View */
+.invoice-dialog .p-dialog-content {
+  padding: 1.5rem 2rem !important;
+}
+
+/* Adjust table borders to look crisp and thin */
+.invoice-dialog .p-datatable .p-datatable-thead > tr > th {
   background: var(--p-surface-50, #f8fafc);
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--p-surface-500, #64748b);
-  padding: 0.85rem 1rem;
-  border-bottom: 1px solid var(--p-surface-200, #e2e8f0);
+  padding: 0.75rem 1rem;
 }
 
-.invoice-modern-dialog .p-datatable .p-datatable-tbody > tr > td {
-  padding: 0.85rem 1rem;
+.invoice-dialog .p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.75rem 1rem;
   font-size: 0.875rem;
-  border-bottom: 1px solid var(--p-surface-100, #f1f5f9);
 }
 
-/* Enforce fluid input layout inside toolbars */
-.invoice-modern-dialog .p-toolbar {
-  gap: 1rem;
-  flex-wrap: wrap;
+/* Custom layout variables for the popover panel */
+.modern-invoice-popover.p-popover {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid var(--p-surface-200, #e2e8f0) !important;
+  padding: 12px !important;
+}
+
+.modern-invoice-popover.p-popover::before,
+.modern-invoice-popover.p-popover::after {
+  display: none !important; /* Removes arrow pointers to make centering align beautifully */
 }
 
 
-/* --- Thermal Receipt Style Sheet --- */
-.receipt-container {
-  font-family: 'Courier New', Courier, monospace;
-  color: #000000;
-  background-color: #ffffff;
-  padding: 4px;
-  max-width: 100%;
-}
 
-.receipt-header {
-  text-align: center;
-  margin-bottom: 8px;
-}
+// SCSS Variables
+$primary-color: #3b82f6;
+$border-radius: 8px;
+$bg-card: #ffffff;
+$text-color: #334155;
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
-.receipt-brand {
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin: 0 0 4px 0;
-  line-height: 1.2;
-}
-
-.receipt-sub {
-  font-size: 11px;
-  margin: 2px 0;
-  line-height: 1.2;
-}
-
-/* Simulated Thermal Separation Cuts */
-.receipt-dashed-line {
-  border-top: 1px dashed #000000;
-  margin: 8px 0;
-}
-
-.receipt-dashed-line-light {
-  border-top: 1px dotted #555555;
-  margin: 6px 0;
-}
-
-.receipt-double-dashed-line {
-  border-top: 3px double #000000;
-  margin: 8px 0;
-}
-
-/* Row Component Alignments */
-.receipt-flex-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  font-size: 11px;
-  margin-bottom: 3px;
-}
-
-.receipt-flex-row .val {
-  text-align: right;
-  padding-left: 8px;
-}
-
-.receipt-meta-block {
-  margin: 4px 0;
-}
-
-/* Structured Layout for Items Table */
-.receipt-items-table {
-  font-size: 11px;
-}
-
-.table-header-row {
-  display: flex;
-  justify-content: space-between;
-}
-
-.table-body-row {
-  margin-bottom: 6px;
-}
-
-.item-name-line {
-  font-size: 11px;
-  text-transform: uppercase;
-  word-break: break-all;
-}
-
-.item-title-sub {
-  font-size: 10px;
-  text-transform: lowercase;
-  opacity: 0.8;
-}
-
-.item-pricing-line {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  padding-left: 12px;
-}
-.receipt-totals-block{
-    display: block;
-}
-
-.receipt-barcode-wrap {
+// Main Layout Wrapper
+.card.flex.justify-center {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 12px 0 6px 0;
-}
-
-/* Disables automatic barcode canvas blow-outs on narrow rolls */
-.receipt-barcode-wrap svg, 
-.receipt-barcode-wrap img {
-  max-width: 100% !important;
-  height: auto !important;
-}
-
-.receipt-footer-msg {
-  text-align: center;
-  font-size: 10px;
-  margin-top: 12px;
-  font-style: italic;
-}
-
-// Variables
-$primary-color: #2563eb; // Soft blue focus color
-$text-dark: #1e293b;
-$text-muted: #64748b;
-$card-bg: #ffffff;
-$border-color: #e2e8f0;
-$radius: 12px;
-
-.scanner-payment-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
+  gap: 1.5rem;
   padding: 1.5rem;
-  box-sizing: border-box;
+  max-width: calc(100% - 10%);
+  margin: 0 auto;
+  width: 100%;
+
+.summary-card{
+  font-size:clamp(1.0rem, 1.5vw, 2rem);
+  font-family: 'Times New Roman','Courier New', Courier, monospace;
+  padding: 0.0rem 0rem;
+  margin: 0.0rem 0;
+}
+  @media (min-width: 992px) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+// 1. Panel Component Styling
+:host ::ng-deep .panel {
+  flex: 1;
+  min-width: 0; // Prevents flex overflow issue on long table content
+
+  .p-panel-header {
+    background: $bg-card;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    color: $text-color;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+  }
+
+  .p-panel-content {
+    padding: 1.25rem;
+    background: $bg-card;
+    border-bottom-left-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+  }
+}
+
+// 2. Sales Quotes & Table Styling
+.sales-quotes {
+  width: 100%;
+
+  :host ::ng-deep .p-datatable {
+    // Caption & Global Search Input Alignment
+    .p-datatable-header {
+      background: transparent;
+      border: none;
+      padding-bottom: 1rem;
+      display: flex;
+      justify-content: flex-end;
+
+      .p-iconfield {
+        width: 100%;
+        max-width: 300px;
+
+        input {
+          width: 100%;
+          padding-left: 2.5rem;
+          border-radius: $border-radius;
+        }
+      }
+    }
+
+    // Table Headers
+    th {
+      background-color: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      padding: 0.75rem 1rem;
+    }
+
+    // Table Rows
+    td {
+      padding: 0.75rem 1rem;
+      color: $text-color;
+      font-size: 0.875rem;
+    }
+
+    // Pagination Styling
+    .p-paginator {
+      margin-top: 1rem;
+      border-top: 1px solid #f1f5f9;
+      background: transparent;
+    }
+  }
+}
+
+// 3. Scanner & Payment Sidebar Container
+.scanner-payment-container {
+  width: 100%;
+
+  @media (min-width: 992px) {
+    width: 320px;
+    flex-shrink: 0;
+  }
 
   .status-card {
-    width: 100%;
+    background: $bg-card;
+    border: 1px solid #e2e8f0;
+    border-radius: $border-radius;
+    padding: 1.25rem;
+    box-shadow: $shadow-sm;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 1.25rem;
+    gap: 1rem;
 
     .card {
-      width: 100%;
-      background: $card-bg;
-      border: 1px solid $border-color;
-      border-radius: $radius;
-      padding: 1.5rem 1.25rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      text-align: center;
-      box-sizing: border-box;
-      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
 
       label {
-        display: block;
-        font-size: 0.95rem;
+        font-size: 0.875rem;
         font-weight: 700;
-        letter-spacing: 0.8px;
-        color: $text-dark;
-        margin-bottom: 1.25rem;
-        text-transform: uppercase;
-        animation: pulse-text 2s infinite ease-in-out;
+        color: #0284c7; // Info blue shade
+        letter-spacing: 0.025em;
       }
 
-      // Targeting PrimeNG ProgressBar
       p-progressbar {
-        display: block;
         width: 100%;
 
-        // Deep targeting PrimeNG internal structure
         ::ng-deep .p-progressbar {
-          background-color: #eff6ff; // Light tint behind bar
-          border-radius: 6px;
-          overflow: hidden;
+          border-radius: 9999px;
+          background-color: #e0f2fe;
 
           .p-progressbar-value {
-            background-color: $primary-color; // Progress bar color
+            background-color: #0284c7;
           }
         }
       }
     }
 
     p {
-      font-size: 0.875rem;
-      color: $text-muted;
       margin: 0;
-      text-align: center;
+      font-size: 0.875rem;
+      color: #64748b;
 
       strong {
-        color: $text-dark;
+        color: $text-color;
         font-weight: 600;
-        background: #f1f5f9;
-        padding: 0.2rem 0.5rem;
-        border-radius: 4px;
-        font-family: monospace; // Monospace makes barcodes/scanned values look sharp
       }
     }
   }
 }
 
-// Subtle pulse animation for "WAITING FOR PAYMENT..." text
-@keyframes pulse-text {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+
+
+
+
+
+
+
+
+/* --- Receipt Printer Styling --- */
+.receipt-body {
+  font-family: 'Courier New', Courier, monospace;
+  color: #000;
+  background: #fff;
+  padding: 15px;
+  max-width: 360px; /* Simulates a standard 80mm roll size */
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
 }
+
+.receipt-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.receipt-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.company-name {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 4px 0;
+  text-transform: uppercase;
+}
+
+.company-details {
+  font-size: 11px;
+  margin: 2px 0;
+}
+
+/* Simulated Thermal Printer Dashed Lines */
+.receipt-divider {
+  border-top: 1px dashed #000;
+  margin: 10px 0;
+}
+
+.receipt-divider-double {
+  border-top: 3px double #000;
+  margin: 10px 0;
+}
+
+/* Flex rows for absolute left-to-right alignment */
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 12px;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.receipt-row .text-right {
+  text-align: right;
+  padding-left: 10px;
+}
+
+.receipt-highlight {
+  background-color: #f2f2f2;
+  padding: 2px 0;
+}
+
+.receipt-barcode-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.status-icon {
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.receipt-footer {
+  text-align: center;
+  font-size: 11px;
+}
+
+.receipt-footer p {
+  margin: 4px 0;
+}
+
+.signature-space {
+  margin: 20px 0;
+}
+
+.signature-space .line {
+  letter-spacing: 2px;
+}
+
+.print-date {
+  font-size: 10px;
+  color: #555;
+}
+
+.thank-you {
+  margin-top: 15px !important;
+  font-style: italic;
+}
+
+
 
 /* --- Optimized Print Rules --- */
 .printer-container {
@@ -295,66 +529,129 @@ border-bottom: 1px solid lightgray;
     }
   }
 }
-$printer-width: 80mm;
-$printable-width: 72mm; // Effective printable area on 80mm rolls
-$font-mono: 'Courier New', Courier, monospace; // Monospace gives crisp thermal output
-// Thermal Printer Styles
+
+/* --- X-PRINTER THERMAL PRINTING OPTIMIZATIONS --- */
 @media print {
-  // 1. Remove browser default margins & header/footer spacing
+  /* 1. Page Setup for Thermal Roll Paper */
   @page {
-    margin: 0;
-    // Standard 80mm width paper size
-    size: 80mm auto; 
-    
-    // Use this instead if you have a 58mm printer:
-    // size: 58mm auto;
+    size: 80mm auto; /* Use 58mm auto if using 58mm paper */
+    margin: 0mm !important; /* Removes browser header/footer dates & page numbers */
   }
 
-  // 2. Hide surrounding layout elements if needed
-  body {
-    margin: 0;
-    padding: 0;
-    background: #fff;
+  /* 2. Hide non-printable dialog controls */
+  body * {
+    visibility: hidden;
+  }
+  
+  p-dialog,
+  .p-dialog-header,
+  .p-dialog-footer,
+  p-toolbar,
+  button {
+    display: none !important;
   }
 
-  // 3. Target your printer container
-  .card.printer-container {
-    // Standard printable width for 80mm rolls is roughly 72mm-80mm
-    width: 80mm; 
-    max-width: 100%;
-    
-    // Clear flex layout constraints that might shrink/skew print alignment
-    display: block !important;
-    margin: 0 auto !important;
-    padding: 2mm; // Small padding to avoid clipping paper edges
-    box-shadow: none !important;
-    border: none !important;
+  /* 3. Force container to print clearly on X-Printer */
+  #print-section, 
+  #print-section * {
+    visibility: visible;
+  }
 
-    // Reset typography for high-density thermal printing
-    font-family: 'Courier New', Courier, monospace; // Monospace aligns receipt columns cleanly
-    font-size: 12px;
-    line-height: 1.2;
+  #print-section {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 78mm !important; /* Slightly smaller than 80mm to prevent overflow cutting */
+    margin: 0 !important;
+    padding: 4mm 2mm !important;
+    background: #fff !important;
     color: #000 !important;
+    font-family: 'Courier New', Courier, monospace !important; /* High compatibility thermal font */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
-  .section {
-    width: $printable-width !important;
-    padding: 2mm 0;
-    border-bottom: 1px solid lightgray;
-    header.head-info, 
-    label.head-info {
-      color: #000 !important;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-          width: 100% !important;
-     font-size: fontclamp(10px, .8rem, 14px)
+
+  /* 4. Thermal High-Contrast Adjustments */
+  .text-emerald-700, 
+  .text-emerald-600, 
+  .text-red-600, 
+  .text-red-700, 
+  .text-surface-400 {
+    color: #000000 !important; /* Convert color styles to pure black for clear thermal burn */
+  }
+
+  .receipt-dashed-line,
+  .receipt-dashed-line-light,
+  .receipt-double-dashed-line {
+    border-color: #000000 !important;
+  }
+
+  /* Prevent page breaks inside the item rows */
+  .table-body-row,
+  .receipt-meta-block,
+  .receipt-totals-block {
+    page-break-inside: avoid;
+  }
+
+  /* Ensure Barcode and Logos fill print width without distortion */
+  p-avatar {
+    img {
+      filter: grayscale(100%);
     }
   }
-  
-  td{
-    padding: 10px;
-    font-size: clamp(.3rem, .5vw, 1.0rem);
-    text-align: left;
-    border-bottom: 1px solid lightgray;
+
+  .receipt-barcode-wrap {
+    svg {
+      width: 100% !important;
+    }
+  }
 }
-  
+
+/* Barcode Wrapper Styling */
+.receipt-barcode-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 6px 0;
+  text-align: center;
+
+  /* Force ngx-barcode svg to scale dynamically within receipt boundaries */
+  ngx-barcode6 {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    svg {
+      max-width: 100% !important;
+      height: auto !important;
+      margin: 0 auto !important;
+    }
+  }
+}
+
+/* Print-Specific Adjustments for Thermal Output */
+@media print {
+  .receipt-barcode-wrap {
+    width: 100% !important;
+
+    ngx-barcode6 {
+      width: 100% !important;
+
+      svg {
+        /* Prevents barcode lines from blurring on low-DPI thermal heads */
+        shape-rendering: crispEdges;
+        max-width: 95% !important; /* Safety margin for print edge clipping */
+        height: auto !important;
+      }
+
+      /* Barcode value text below lines */
+      text {
+        fill: #000000 !important;
+        font-family: 'Courier New', Courier, monospace !important;
+        font-weight: bold !important;
+      }
+    }
+  }
 }

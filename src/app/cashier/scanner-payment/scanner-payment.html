@@ -23,6 +23,8 @@
             <th>serial</th>
             <th>Invoice Number</th>
             <th>Total</th>
+            <th>Amount Paid</th>
+            <th>Balance</th>
             <th>Date</th>
             <th>Cashier</th>
             <th>Sales Type</th>
@@ -35,6 +37,8 @@
             <td [style]="{ width: '5rem' }">{{ i + 1 }}</td>
             <td>{{SalesInvoices.invoice_number}}</td>
             <td>{{ SalesInvoices.invoice_total | currency: 'Ghø' }}</td>
+            <td>{{ SalesInvoices.amount_paid | currency: 'Ghø' }}</td>
+            <td>{{ SalesInvoices.balance | currency: 'Ghø' }}</td>
             <td>{{ SalesInvoices.dateposted | date: 'yyyy-MM-dd' }}</td>
            
             <td>{{SalesInvoices.isinvoice_verified ? 'VERIFIED':'NOT VERIFIED' }}</td>
@@ -69,9 +73,19 @@
     <div>
       <p-panel header="SUMMARY OF PAYMENTS" class="panel">
         
-        <div class="summary-card">
+        <div class="summary-card card flex flex-wrap gap-1 justify-center">
+          <span class="summary-label">Total:    {{ totalsumSales | currency: 'Ghø'}} </span>
        
-          {{ totalsumSales | currency: 'Ghø'}} 
+        </div>
+        <p-divider/>
+        <div class="summary-card card flex flex-wrap gap-1 justify-center">
+          <span class="summary-label"> Paid:     {{ sumTotalpaid() | currency: 'Ghø'}}</span>
+      
+        </div>
+        <p-divider/>
+        <div class="summary-card card flex flex-wrap gap-1 justify-center">
+          <span class="summary-label"> Balance:    {{ sumTotalbalance() | currency: 'Ghø'}}</span>
+       
         </div>
       </p-panel>
 
